@@ -32,6 +32,7 @@ public class ViewerPanel extends JPanel {
 	private JComboBox comboBoxContexts;
 	private ContextModel model;
 	private String modelName;
+	private TextArea constraintsPanel;
 	
 	public ViewerPanel(final ContextModel model) {
 		
@@ -64,21 +65,30 @@ public class ViewerPanel extends JPanel {
 		JLabel lblNewLabel = new JLabel("Contexts");
 		panelInfoContexts.add(lblNewLabel);
 		
+		JPanel panelInfoConstraints = new JPanel();
+		panelInfos.add(panelInfoConstraints, BorderLayout.SOUTH);
+		constraintsPanel = new TextArea();
+		constraintsPanel.setEditable(false);
+		panelInfoConstraints.add(constraintsPanel);
+		
 		comboBoxContexts = new JComboBox();
 		for(String contextNames : model.getContexts().keySet()){
 			comboBoxContexts.addItem(contextNames);
 		}
 		panelInfoContexts.add(comboBoxContexts);
 		
+		updateConstraintsPainel(model.getContexts().get(comboBoxContexts.getItemAt(0)));
+		
 		comboBoxContexts.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JComboBox comboBox = (JComboBox) e.getSource();
 				final String contextName = (String) comboBox.getSelectedItem();
 				if(contextName != null){
 					setTreeVisualization(contextName);
-				
+					
+					Context context = model.getContexts().get(contextName);
+					updateConstraintsPainel(context);
 				}
 			}
 		});
@@ -92,6 +102,21 @@ public class ViewerPanel extends JPanel {
 	/**
 	 * @return the lblResultReasoning
 	 */
+	
+	public void updateConstraintsPainel(Context context){
+		FeatureModel featureModel = model.setFeatureModel(context);
+		
+		Collection<PropositionalFormula> constraints = featureModel.getConstraints();	
+		
+		String formulas = "";
+		for (Iterator<PropositionalFormula> i = constraints.iterator(); i.hasNext(); ) {
+			PropositionalFormula constraint = i.next();
+			formulas += constraint.getFormula() + "\n";
+		}
+		
+		constraintsPanel.setText(formulas);
+	}
+	
 	public JLabel getLblResultReasoning() {
 		return lblResultReasoning;
 	}
@@ -124,26 +149,6 @@ public class ViewerPanel extends JPanel {
 		modelName = featureModel.getName();
 		tree.setModel(featureModel);
 		tree.setCellRenderer(new FeaturesTreeCellRenderer(context));
-	
-		/*
-		JPanel panelInfos = new JPanel();
-		add(panelInfos, BorderLayout.EAST);
-		panelInfos.setLayout(new BorderLayout(0, 0));
-		JPanel panelInfoConstraints = new JPanel();
-		panelInfos.add(panelInfoConstraints, BorderLayout.SOUTH);
-		TextArea constraintsPanel = new TextArea(15, 30);
-		constraintsPanel.setEditable(false);
-		panelInfoConstraints.add(constraintsPanel);
-		
-		Collection<PropositionalFormula> constraints = featureModel.getConstraints();	
-		
-		String formulas = "";
-		for (Iterator<PropositionalFormula> i = constraints.iterator(); i.hasNext(); ) {
-			PropositionalFormula constraint = i.next();
-			formulas += constraint.getFormula() + "\n";
-		}
-		
-		constraintsPanel.setText(formulas);*/
 	}
 
 }

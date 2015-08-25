@@ -584,7 +584,17 @@ public class ContextModel implements IContextModel {
 	public double xorRate() {
 		return (double)featureModelStatistics.countGroups11()/featureModelStatistics.countFeatures();
 	}
+	
+	@Override
+	public int orNumber() {
+		return featureModelStatistics.countGroups1N();
+	}
 
+	@Override
+	public int xorNumber() {
+		return featureModelStatistics.countGroups11();
+	}
+	
 	@Override
 	public double crossTreeConstraintsRate() {
 		return (double)featureModelStatistics.countFeaturesInConstraints()/featureModelStatistics.countFeatures();

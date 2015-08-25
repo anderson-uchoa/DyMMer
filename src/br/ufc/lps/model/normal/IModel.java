@@ -37,6 +37,8 @@ public interface IModel {
 	double orRate();
 	double xorRate();
 	double crossTreeConstraintsRate();
+	int orNumber();
+	int xorNumber();
 	
 	
 }

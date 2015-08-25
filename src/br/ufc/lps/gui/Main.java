@@ -591,6 +591,24 @@ public class Main extends JFrame {
 																																										});
 																																										mnNas.add(mntmXorRate);
 																																										
+																																										JMenuItem mntmOrNumber = new JMenuItem("Or Number");
+																																										mntmOrNumber.addActionListener(new ActionListener() {
+																																											public void actionPerformed(ActionEvent e) {
+																																											
+																																												currentViewer.getLblResultReasoning().setText("Or Number: " + currentViewer.getModel().orNumber());
+																																											}
+																																										});
+																																										mnNas.add(mntmOrNumber);
+																																										
+																																										JMenuItem mntmXorNumber = new JMenuItem("Xor Number");
+																																										mntmXorNumber.addActionListener(new ActionListener() {
+																																											public void actionPerformed(ActionEvent e) {
+																																											
+																																												currentViewer.getLblResultReasoning().setText("Xor Number: " + currentViewer.getModel().xorNumber());
+																																											}
+																																										});
+																																										mnNas.add(mntmXorNumber);
+																																										
 																																										mntmProductLineTotal.addActionListener(new ActionListener() {
 																																											
 																																											@Override

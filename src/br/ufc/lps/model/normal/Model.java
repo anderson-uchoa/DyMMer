@@ -267,7 +267,17 @@ public abstract class Model implements IModel{
 	public double xorRate() {
 		return (double)featureModelStatistics.countGroups11()/featureModelStatistics.countFeatures();
 	}
+	
+	@Override
+	public int orNumber() {
+		return featureModelStatistics.countGroups1N();
+	}
 
+	@Override
+	public int xorNumber() {
+		return featureModelStatistics.countGroups11();
+	}
+	
 	//TODO Medida funcional apenas para modelos sem contextos
 	@Override
 	public double crossTreeConstraintsRate() {

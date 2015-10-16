@@ -32,14 +32,14 @@ public class ExportOfficeExcel {
 	private List<ContextModel> modelsContext;
 	private List<Model> models; 
 	
-	private static final String[] METRICS = {"Non-Functional Commonality (NFC)", "Number of features (NF)", "Number of top features (NTop)",
-										"Number of leaf Features (NLeaf)", "Depth of tree Max (DT Max)", "Depth of tree Median (DT Median)", "Cognitive Complexity of a Feature Model (I)", 
-										"Feature EXtendibility (FEX)", "Flexibility of conﬁguration (FoC)", "Single Cyclic Dependent Features (SCDF)",
-										"Multiple Cyclic Dependent Features (MCDF)", "Cyclomatic complexity", "Compound Complexity",
-										"Cross-tree constraints (CTC)", "Cross-tree constraints Rate (CTCR)", "Coefﬁcient of connectivity-density (CoC)", "Number of variable features", 
-										"Number of variation points", "Single Hotspot Features", "Multiple Hotspot Features", "Rigid Nohotspot Features",
-										"Ratio of variability (RoV)", "Number of valid conﬁgurations (NVC)", "Branching Factor Max", "Branching Factor Mean", "Branching Factor Median",
-										"Or Rate", "Xor Rate"};
+	private static final String[] METRICS = {"Number of features (NF)", "Number of Optional Features (NO)", "Number of Alternative Features (NA)", "Number of Mandatory Features (NM)",	
+										"Number of top features (NTop)", "Number of leaf Features (NLeaf)", "Depth of tree Max (DT Max)", "Depth of tree Median (DT Median)",
+										"Cognitive Complexity of a Feature Model (CogC)", "Feature EXtendibility (FEX)", "Flexibility of configuration (FoC)", "Single Cyclic Dependent Features (SCDF)",
+										"Multiple Cyclic Dependent Features (MCDF)", "Cyclomatic complexity (CyC)", "Compound Complexity (ComC)", "Cross-tree constraints (CTC)", 
+										"Cross-tree constraints Rate (CTCR)", "Coeficient of connectivity-density (CoC)", "Number of variable features (NVF)", 
+										"Single Hotspot Features (SHoF)", "Multiple Hotspot Features (MHoF)", "Rigid Nohotspot Features (RNoF)", "Ratio of variability (RoV)", 
+										"Number of valid configurations (NVC)", "Branching Factor Max (BF Max)", "Branching Factor Mean (BF Mean)",
+										"Number of OR", "Number of XOR", "Or Rate", "Xor Rate", "Non-Functional Commonality (NFC)", "Number of variation points", "Branching Factor Median"};
 	
 	private static final String[] METRICS_CONTEXT = {"Number of Activated Features", "Number of Deactivated Features", "Number of Context Constraints"};
 	private static final String[] METRICS_WITHOUT_CONTEXT = {"Number of Contexts"};
@@ -86,20 +86,21 @@ public class ExportOfficeExcel {
 			
 			String modelName = model.getModelName();
 			
-			Object dataModel[] = {model.nonFunctionCommonality(), model.numberOfFeatures(), model.numberOfTopFeatures(),
+			Object dataModel[] = {model.numberOfFeatures(), model.numberOfOptionalFeatures(), model.numberOfAlternativeFeatures(), model.numberOfMandatoryFeatures(),  model.numberOfTopFeatures(),
 						  model.numberOfLeafFeatures(), model.depthOfTreeMax(),model.depthOfTreeMedian(), model.cognitiveComplexityOfFeatureModel(),
 						  model.featureExtendibility(), model.flexibilityOfConfiguration(), model.singleCyclicDependentFeatures(),
 						  model.multipleCyclicDependentFeatures(), model.cyclomaticComplexity(), model.compoundComplexity(),
 						  model.crossTreeConstraints(), model.crossTreeConstraintsRate(), model.coefficientOfConnectivityDensity(), model.numberOfVariableFeatures(),
-						  model.numberOfVariationPoints(), model.singleVariationPointsFeatures(), model.multipleVariationPointsFeatures(),
+						  model.singleVariationPointsFeatures(), model.multipleVariationPointsFeatures(),
 						  model.rigidNotVariationPointsFeatures(), model.productLineTotalVariability(), model.numberOfValidConfigurations(), 
-						  model.branchingFactorsMax(), model.branchingFactorsMean(), model.branchingFactorsMedian(), model.orRate(), model.xorRate(),model.numberOfContexts(),modelName};
+						  model.branchingFactorsMax(), model.branchingFactorsMean(), model.orNumber(), model.xorNumber(), model.orRate(),  model.xorRate(), 
+						  model.nonFunctionCommonality(), model.numberOfVariationPoints(), model.branchingFactorsMedian(), model.numberOfContexts(),modelName};
 		
 			
 			datas.add(dataModel);
 			
 		}
-		
+	
 		export(datas, fileName, false);
 	}
 	

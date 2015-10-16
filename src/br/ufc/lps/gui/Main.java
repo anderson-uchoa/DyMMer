@@ -617,7 +617,34 @@ public class Main extends JFrame {
 																																												currentViewer.getLblResultReasoning().setText("Product Line Total Variability: " + currentViewer.getModel().productLineTotalVariability());
 																																											}
 																																										});
-																																								
+																																										
+																																										JMenuItem mntmNumberofOptionalFeatures = new JMenuItem("Number of Optional Features");
+																																										mntmNumberofOptionalFeatures.addActionListener(new ActionListener() {
+																																											public void actionPerformed(ActionEvent e) {
+																																											
+																																												currentViewer.getLblResultReasoning().setText("Number of Optional Features: " + currentViewer.getModel().numberOfOptionalFeatures());
+																																											}
+																																										});
+																																										mnNas.add(mntmNumberofOptionalFeatures);
+																																										
+																																										JMenuItem mntmNumberOfMandatoryFeatures = new JMenuItem("Number of Mandatory Features");
+																																										mntmNumberOfMandatoryFeatures.addActionListener(new ActionListener() {
+																																											public void actionPerformed(ActionEvent e) {
+																																											
+																																												currentViewer.getLblResultReasoning().setText("Number of Mandatory Features: " + currentViewer.getModel().numberOfMandatoryFeatures());
+																																											}
+																																										});
+																																										mnNas.add(mntmNumberOfMandatoryFeatures);
+																																										
+																																										JMenuItem mntmNumberOfAlternativeFeatures = new JMenuItem("Number of Alternative Features");
+																																										mntmNumberOfAlternativeFeatures.addActionListener(new ActionListener() {
+																																											public void actionPerformed(ActionEvent e) {
+																																											
+																																												currentViewer.getLblResultReasoning().setText("Number of Alternative Features: " + currentViewer.getModel().numberOfAlternativeFeatures());
+																																											}
+																																										});
+																																										mnNas.add(mntmNumberOfAlternativeFeatures);
+																																										
 																																								mntmNumberOfValid.addActionListener(new ActionListener() {
 																																									public void actionPerformed(ActionEvent arg0) {
 																																														

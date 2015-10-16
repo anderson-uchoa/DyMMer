@@ -28,6 +28,8 @@ public class FeatureModelStatistics  {
 	int fgrp1n = 0;
 	
 	// Own measures
+	int fchgrp11 = 0;
+	int fchgrp1n = 0;
 	int scdf = 0;
 	int mcdf = 0;
 	
@@ -50,6 +52,8 @@ public class FeatureModelStatistics  {
 		grp1n = 0;
 		fgrp11 = 0;
 		fgrp1n = 0;
+		fchgrp11 = 0;
+		fchgrp1n = 0;
 	}
 
 	public void update() {
@@ -89,7 +93,7 @@ public class FeatureModelStatistics  {
 				int min = fg.getMin();
 				int max = fg.getMax();
 				if ( min == max && min == 1) {
-					grp11++;
+					grp11++;			
 					if(fm.isExtraConstraintVariable(node))
 						scdf++;									
 				}
@@ -103,8 +107,10 @@ public class FeatureModelStatistics  {
 				FeatureGroup fg = (FeatureGroup)node;
 				int min = fg.getMin();
 				int max = fg.getMax();
+				
 				if ( min == max && min == 1) {
-					fgrp11++;
+					fchgrp11 += fg.getChildCount();
+					fgrp11++;		
 					
 					if(fm.isExtraConstraintVariable(node))
 						scdf++;
@@ -112,6 +118,7 @@ public class FeatureModelStatistics  {
 				}
 				else if ( min == 1 && (max == -1 || max == fg.getChildCount())){
 					fgrp1n++;
+					fchgrp1n += fg.getChildCount();
 					
 					if(fm.isExtraConstraintVariable(node))
 						mcdf++;
@@ -159,6 +166,14 @@ public class FeatureModelStatistics  {
 	
 	public int countGroups1N() {
 		return this.fgrp1n;
+	}
+	
+	public int countFeaturesChildGroups11() {
+		return this.fchgrp11;
+	}
+	
+	public int countFeaturesChildGroups1N() {
+		return this.fchgrp1n;
 	}
 	
 	public int countConstraints() {

@@ -410,7 +410,7 @@ public class ContextModel implements IContextModel {
 		int groups = orFeatures + xorFeatures;
 		int constraints = featureModelStatistics.countConstraints();
 		
-		int allRelationship = mandatoryFeatures + orFeatures + xorFeatures + groups + constraints;
+		int allRelationship = constraints;
 		
 		double result = Math.pow(features, 2) + (Math.pow(mandatoryFeatures, 2) + 2*Math.pow(orFeatures, 2) + 3*Math.pow(xorFeatures, 2) + 3*Math.pow(groups, 2) + 3*Math.pow(allRelationship, 2))/9;
 		
@@ -449,9 +449,27 @@ public class ContextModel implements IContextModel {
 	@Override
 	public int numberOfVariableFeatures() {
 		
+		return featureModelStatistics.countGrouped()+featureModelStatistics.countOptional();
+	}
+	
+	@Override
+	public int numberOfOptionalFeatures() {
+		
+		return featureModelStatistics.countOptional();
+	}
+	
+	@Override
+	public int numberOfMandatoryFeatures() {
+		
+		return featureModelStatistics.countMandatory();
+	}
+	
+	@Override
+	public int numberOfAlternativeFeatures() {
+		
 		return featureModelStatistics.countGrouped();
 	}
-
+	
 	@Override
 	public int numberOfVariationPoints() {
 		
@@ -587,12 +605,12 @@ public class ContextModel implements IContextModel {
 	
 	@Override
 	public int orNumber() {
-		return featureModelStatistics.countGroups1N();
+		return featureModelStatistics.countFeaturesChildGroups1N();
 	}
 
 	@Override
 	public int xorNumber() {
-		return featureModelStatistics.countGroups11();
+		return featureModelStatistics.countFeaturesChildGroups11();
 	}
 	
 	@Override

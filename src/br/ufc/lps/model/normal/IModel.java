@@ -39,6 +39,9 @@ public interface IModel {
 	double crossTreeConstraintsRate();
 	int orNumber();
 	int xorNumber();
+	int numberOfOptionalFeatures();
+	int numberOfMandatoryFeatures();
+	int numberOfAlternativeFeatures();
 	
 	
 }

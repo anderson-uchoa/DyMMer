@@ -27,6 +27,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.data.JRXlsDataSource;
 import br.ufc.lps.gui.export.ExportOfficeExcel;
 import br.ufc.lps.model.context.FamiliarContextModel;
 import br.ufc.lps.model.context.SplotContextModel;
@@ -37,6 +39,7 @@ import br.ufc.lps.model.xml.ModelID;
 import br.ufc.lps.model.xml.XMLFamiliarModel;
 import br.ufc.lps.model.xml.XMLSplotModel;
 import br.ufc.lps.splar.core.fm.FeatureModelException;
+import br.ufc.lps.util.ReportUtils;
 
 public class Main extends JFrame {
 
@@ -49,8 +52,9 @@ public class Main extends JFrame {
 	
 	/**
 	 * Launch the application.
+	 * @throws JRException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws JRException {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -64,9 +68,11 @@ public class Main extends JFrame {
 				}
 			}
 		});
+		ReportUtils report = new ReportUtils();
+		report.fill1();
 	}
 
-		
+	 
 	/**
 	 * Create the frame.
 	 */

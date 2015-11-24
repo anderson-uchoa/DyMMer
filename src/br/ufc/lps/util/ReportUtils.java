@@ -1,110 +1,59 @@
 package br.ufc.lps.util;
 
-import java.awt.BorderLayout;
-import java.io.InputStream;
-import java.sql.Connection;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import javax.swing.JFrame;
-import net.sf.jasperreports.engine.JRDataSource;
+import java.util.Set;
+
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.swing.JRViewer;
- 
-/**
- * Classe com métodos utilitários para executar e abrir relatórios.
- *
- * @author David Buzatto
- */
+import net.sf.jasperreports.engine.JasperPrintManager;
+import net.sf.jasperreports.engine.data.JRXlsDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
+
 public class ReportUtils {
+	private static JRXlsDataSource getDataSource1() throws JRException
+	  {
+		JRXlsDataSource ds;
+	    try
+	    {
+	      String[] columnNames = new String[]{"Features Model", "NF"};
+	      int[] columnIndexes = new int[]{1, 2};
+	      ds = new JRXlsDataSource(JRLoader.getLocationInputStream("./relatorios/Full Measures Dataset - Adaptado.xls"));
+	      ds.setColumnNames(columnNames, columnIndexes);
+	      
+	      //uncomment the below line to see how sheet selection works
+//	    ds.setSheetSelection("xlsdatasource2");
+	    }
+	    catch (IOException e)
+	    {
+	      throw new JRException(e);
+	    }
+
+	    return ds;
+	  }
  
-    /**
-     * Abre um relatório usando uma conexão como datasource.
-     *
-     * @param titulo Título usado na janela do relatório.
-     * @param inputStream InputStream que contém o relatório.
-     * @param parametros Parâmetros utilizados pelo relatório.
-     * @param conexao Conexão utilizada para a execução da query.
-     * @throws JRException Caso ocorra algum problema na execução do relatório
-     */
-    public static void openReport(
-            String titulo,
-            InputStream inputStream,
-            Map parametros,
-            Connection conexao ) throws JRException {
- 
-        /*
-         * Cria um JasperPrint, que é a versão preenchida do relatório,
-         * usando uma conexão.
-         */
-        JasperPrint print = JasperFillManager.fillReport(
-                inputStream, parametros, conexao );
- 
-        // abre o JasperPrint em um JFrame
-        viewReportFrame( titulo, print );
- 
-    }
- 
-    /**
-     * Abre um relatório usando um datasource genérico.
-     *
-     * @param titulo Título usado na janela do relatório.
-     * @param inputStream InputStream que contém o relatório.
-     * @param parametros Parâmetros utilizados pelo relatório.
-     * @param dataSource Datasource a ser utilizado pelo relatório.
-     * @throws JRException Caso ocorra algum problema na execução do relatório
-     */
-    public static void openReport(
-            String titulo,
-            InputStream inputStream,
-            Map parametros,
-            JRDataSource dataSource ) throws JRException {
- 
-        /*
-         * Cria um JasperPrint, que é a versão preenchida do relatório,
-         * usando um datasource genérico.
-         */
-        JasperPrint print = JasperFillManager.fillReport(
-                inputStream, parametros, dataSource );
- 
-        // abre o JasperPrint em um JFrame
-        viewReportFrame( titulo, print );
- 
-    }
- 
-    /**
-     * Cria um JFrame para exibir o relatório representado pelo JasperPrint.
-     *
-     * @param titulo Título do JFrame.
-     * @param print JasperPrint do relatório.
-     */
-    private static void viewReportFrame( String titulo, JasperPrint print ) {
- 
-        /*
-         * Cria um JRViewer para exibir o relatório.
-         * Um JRViewer é uma JPanel.
-         */
-        JRViewer viewer = new JRViewer( print );
- 
-        // cria o JFrame
-        JFrame frameRelatorio = new JFrame( titulo );
- 
-        // adiciona o JRViewer no JFrame
-        frameRelatorio.add( viewer, BorderLayout.CENTER );
- 
-        // configura o tamanho padrão do JFrame
-        frameRelatorio.setSize( 500, 500 );
- 
-        // maximiza o JFrame para ocupar a tela toda.
-        frameRelatorio.setExtendedState( JFrame.MAXIMIZED_BOTH );
- 
-        // configura a operação padrão quando o JFrame for fechado.
-        frameRelatorio.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
- 
-        // exibe o JFrame
-        frameRelatorio.setVisible( true );
- 
-    }
+   
+	public void fill1() throws JRException
+	  {
+	    long start = System.currentTimeMillis();
+	    //Preparing parameters
+	    Map parameters = new HashMap();
+	    parameters.put("ReportTitle", "Address Report");
+	    parameters.put("DataFile", "XlsDataSource.data.xls - XLS data source");
+	    Set states = new HashSet();
+	    states.add("Active");
+	    states.add("Trial");
+	    parameters.put("IncludedStates", states);
+
+	    JasperPrint jasperPrint=JasperFillManager.fillReport("./relatorios/DyMMer.jasper", parameters, getDataSource1());
+	    JasperViewer.viewReport(jasperPrint,false);
+	    JasperPrintManager.printReport(jasperPrint,false);
+	    System.err.println("Filling time : " + (System.currentTimeMillis() - start));
+	  }
  
 }
 

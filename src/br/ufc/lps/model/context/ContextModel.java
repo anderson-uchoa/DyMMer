@@ -363,7 +363,19 @@ public class ContextModel implements IContextModel {
 		else
 			return depth-1;
 	}
-
+	
+	@Override
+	public double depthOfTreeMean() {
+		List<FeatureTreeNode> nodesAtLevel = (List<FeatureTreeNode>) featureModel.getLeaves();
+		double sumDepth = 0;
+		
+		for(FeatureTreeNode node : nodesAtLevel)	
+			sumDepth += node.getDepth();
+		
+		return (double) sumDepth/nodesAtLevel.size();
+		
+	}
+	
 	@Override
 	public int cognitiveComplexityOfFeatureModel() {
 		
@@ -658,6 +670,11 @@ public class ContextModel implements IContextModel {
 	@Override
 	public int contextAdaptationFlexibility() {
 		return numberOfContextAdaptation() + ( featureModelStatistics.countOptional()/featureModelStatistics.countFeatures());
+	}
+	
+	@Override
+	public double ratioSwitchFeatures() {
+		return (numberOfFeatures() - numberOfMandatoryFeatures() -1)/numberOfFeatures();
 	}
 	
 	

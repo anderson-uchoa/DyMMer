@@ -43,6 +43,8 @@ public interface IModel {
 	int numberOfMandatoryFeatures();
 	int numberOfAlternativeFeatures();
 	int groupingFeatures();
+	double depthOfTreeMean();
+	double ratioSwitchFeatures();
 	
 	
 }

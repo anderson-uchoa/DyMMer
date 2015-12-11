@@ -112,6 +112,10 @@ public abstract class Model implements IModel{
 		return featureModelStatistics.depth();
 	
 	}
+	
+	public double depthOfTreeMean() {	
+		return featureModelStatistics.getAverageDepth();
+	}
 
 	@Override
 	public int cognitiveComplexityOfFeatureModel() {
@@ -315,6 +319,9 @@ public abstract class Model implements IModel{
 		return (double)featureModelStatistics.countFeaturesInConstraints()/featureModelStatistics.countFeatures();
 	}
 	
-
+	@Override
+	public double ratioSwitchFeatures() {
+		return (numberOfFeatures() - numberOfMandatoryFeatures() -1)/numberOfFeatures();
+	}
 	
 }

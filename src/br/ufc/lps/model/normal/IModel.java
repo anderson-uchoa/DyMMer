@@ -29,7 +29,7 @@ public interface IModel {
 	int singleVariationPointsFeatures();
 	int multipleVariationPointsFeatures();
 	int rigidNotVariationPointsFeatures();
-	double productLineTotalVariability();
+	double ratioVariability();
 	double numberOfValidConfigurations();
 	double branchingFactorsMean();
 	int branchingFactorsMax();
@@ -42,6 +42,7 @@ public interface IModel {
 	int numberOfOptionalFeatures();
 	int numberOfMandatoryFeatures();
 	int numberOfAlternativeFeatures();
+	int groupingFeatures();
 	
 	
 }

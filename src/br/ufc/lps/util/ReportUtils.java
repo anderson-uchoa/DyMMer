@@ -7,9 +7,11 @@ import java.util.Map;
 import java.util.Set;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRXlsDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
@@ -37,8 +39,7 @@ public class ReportUtils {
 	  }
  
    
-	public void fill1() throws JRException
-	  {
+	public void fill1() throws JRException{
 	    long start = System.currentTimeMillis();
 	    //Preparing parameters
 	    Map parameters = new HashMap();
@@ -49,7 +50,10 @@ public class ReportUtils {
 	    states.add("Trial");
 	    parameters.put("IncludedStates", states);
 
+	    
+	    JasperReport jasperReport = JasperCompileManager.compileReport("./relatorios/DyMMer.jrxml");
 	    JasperPrint jasperPrint=JasperFillManager.fillReport("./relatorios/DyMMer.jasper", parameters, getDataSource1());
+	    
 	    JasperViewer.viewReport(jasperPrint,false);
 	    JasperPrintManager.printReport(jasperPrint,false);
 	    System.err.println("Filling time : " + (System.currentTimeMillis() - start));

@@ -1,54 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DyMMer" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f75335c4-abda-4f42-9e66-2144db3481f5">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DyMMer" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f75335c4-abda-4f42-9e66-2144db3481f5">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="404"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\jeffersonbarbosa\\"]]></defaultValueExpression>
+	</parameter>
 	<field name="Features Model" class="java.lang.String"/>
-	<field name="NF" class="java.lang.String"/>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
+	<field name="NF" class="java.lang.Integer"/>
+	<group name="NF">
+		<groupExpression><![CDATA[$F{NF}]]></groupExpression>
+	</group>
 	<title>
-		<band height="79" splitType="Stretch"/>
+		<band height="80" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="79" backcolor="#5D72D5" uuid="9d348537-3f61-45db-bcc3-d96e0418b011"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="79" forecolor="#FFFFFF" uuid="4103c4c6-0f3d-4f6c-89e6-48c5e5f50b64"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="35" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Measures report without context]]></text>
+			</staticText>
+		</band>
 	</title>
-	<pageHeader>
-		<band height="35" splitType="Stretch"/>
-	</pageHeader>
-	<columnHeader>
-		<band height="20" splitType="Stretch">
-			<staticText>
-				<reportElement uuid="e716103b-6315-4818-afb2-745655b0b783" x="0" y="0" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[NF]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="98d17bad-bb0d-40fd-bec0-02f77db4bf30" x="100" y="0" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[Features Model]]></text>
-			</staticText>
-		</band>
-	</columnHeader>
-	<detail>
-		<band height="20" splitType="Stretch">
-			<textField>
-				<reportElement uuid="48f3cdb7-e7e9-4db1-b89a-45b136f8c63b" x="0" y="0" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{NF}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="e542db5a-5728-4627-b3ee-f081276c58e9" x="100" y="0" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{Features Model}]]></textFieldExpression>
-			</textField>
-		</band>
-	</detail>
-	<columnFooter>
-		<band height="45" splitType="Stretch"/>
-	</columnFooter>
-	<pageFooter>
-		<band height="54" splitType="Stretch"/>
-	</pageFooter>
 	<summary>
-		<band height="42" splitType="Stretch"/>
+		<band height="720">
+			<pieChart>
+				<chart>
+					<reportElement x="0" y="0" width="555" height="720" uuid="3d5b1709-880f-45e3-910e-328a4139e16c"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<keyExpression><![CDATA[$F{NF}]]></keyExpression>
+					<valueExpression><![CDATA[$V{NF_COUNT}]]></valueExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+		</band>
 	</summary>
 </jasperReport>

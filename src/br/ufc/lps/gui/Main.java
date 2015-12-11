@@ -68,8 +68,8 @@ public class Main extends JFrame {
 				}
 			}
 		});
-		ReportUtils report = new ReportUtils();
-		report.fill1();
+		//ReportUtils report = new ReportUtils();
+		//report.fill1();
 	}
 
 	 
@@ -450,359 +450,338 @@ public class Main extends JFrame {
 		
 		JMenu mnNas = new JMenu("No specific to context");
 		mnMeasures_1.add(mnNas);
-		JMenuItem mntmNonfunctionalCommonality = new JMenuItem(
-				"Non-Functional Commonality");
-		mntmNonfunctionalCommonality.addActionListener(new ActionListener() {
+		
+		// Itens for the label "No specific to context" 
+		JMenuItem mntmnumberOfFeatures = new JMenuItem("Number of Features");
+		mnNas.add(mntmnumberOfFeatures);
+		
+		JMenuItem mntmNumberofOptionalFeatures = new JMenuItem("Number of Optional Features");
+		mnNas.add(mntmNumberofOptionalFeatures);
+		
+		JMenuItem mntmNumberOfMandatoryFeatures = new JMenuItem("Number of Mandatory Features");
+		mnNas.add(mntmNumberOfMandatoryFeatures);
+		
+		JMenuItem mntmNumberOfTop = new JMenuItem("Number of Top features");
+		mnNas.add(mntmNumberOfTop);
+		
+		JMenuItem mntmNumberOfLeaf = new JMenuItem("Number of Leaf Features");
+		mnNas.add(mntmNumberOfLeaf);
+		
+		JMenuItem mntmDepthOfTree = new JMenuItem("Depth of tree Max");
+		mnNas.add(mntmDepthOfTree);
+		
+		JMenuItem mntmMedianDepthOfTree = new JMenuItem("Depth of tree Median");
+		mnNas.add(mntmMedianDepthOfTree);
+		
+		JMenuItem mntmCognitiveComplexityOf = new JMenuItem("Cognitive Complexity of a Feature Model");
+		mnNas.add(mntmCognitiveComplexityOf);
+	
+		JMenuItem mntmFlexibilityOfConguration = new JMenuItem("Flexibility of con\uFB01guration");
+		mnNas.add(mntmFlexibilityOfConguration);
+		
+		JMenuItem mntmSingleCyclicDependent = new JMenuItem("Single Cyclic Dependent Features");
+		mnNas.add(mntmSingleCyclicDependent);
+	
+		JMenuItem mntmMultipleCyclicDependent = new JMenuItem("Multiple Cyclic Dependent Features");
+		mnNas.add(mntmMultipleCyclicDependent);
+		
+		JMenuItem mntmNewMenuItem = new JMenuItem("Feature Extendibility");
+		mnNas.add(mntmNewMenuItem);
+	
+		JMenuItem mntmCyclomaticComplexity = new JMenuItem("Cyclomatic complexity");
+		mnNas.add(mntmCyclomaticComplexity);
+	
+		JMenuItem mntmCompoundComplexity = new JMenuItem("Compound Complexity");
+		mnNas.add(mntmCompoundComplexity);
+		
+		JMenuItem mntmGroupingFeatures = new JMenuItem("Number of Grouping Features");
+		mnNas.add(mntmGroupingFeatures);
+		
+		JMenuItem mntmCrosstreeConstraintsRate = new JMenuItem("Cross-tree constraints Rate");
+		mnNas.add(mntmCrosstreeConstraintsRate);
+		
+		JMenuItem mntmCoefcientOfConnectivitydensity = new JMenuItem("Coeficient of Connectivity-Density");
+		mnNas.add(mntmCoefcientOfConnectivitydensity);
+		
+		JMenuItem mntmNumberOfVariable = new JMenuItem("Number of variable features");
+		mnNas.add(mntmNumberOfVariable);
+		
+		JMenuItem mntmSingleHotspotFeatures = new JMenuItem("Single Variation Points Features");
+		mnNas.add(mntmSingleHotspotFeatures);
+	
+		JMenuItem mntmMultipleHotspotFeatures = new JMenuItem("Multiple Variation Points Features");
+		mnNas.add(mntmMultipleHotspotFeatures);
+	
+		JMenuItem mntmRigidNoVariation = new JMenuItem("Rigid No Variation Points Features");
+		mnNas.add(mntmRigidNoVariation);
+	
+		JMenuItem mntmNumberOfValid = new JMenuItem("Number of valid Configurations");
+		mnNas.add(mntmNumberOfValid);
+	
+		JMenuItem mntmBranchingFactorMax = new JMenuItem("Branching Factors Max");
+		mnNas.add(mntmBranchingFactorMax);
+		
+		JMenuItem mntmBranchingFactorMedian = new JMenuItem("Branching Factors Median");
+		mnNas.add(mntmBranchingFactorMedian);
+		
+		JMenuItem mntmOrRate = new JMenuItem("Or Rate");
+		mnNas.add(mntmOrRate);
+		
+		JMenuItem mntmXorRate = new JMenuItem("Xor Rate");
+		mnNas.add(mntmXorRate);
+		
+		JMenuItem mntmProductLineTotal = new JMenuItem("Ratio of Variability");
+		mnNas.add(mntmProductLineTotal);
+		
+		JMenuItem mntmNonfunctionalCommonality = new JMenuItem("Non-Functional Commonality");
+		mnNas.add(mntmNonfunctionalCommonality);
+		
+		mntmnumberOfFeatures.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
+				currentViewer.getLblResultReasoning().setText("Number of Features: " + currentViewer.getModel().numberOfFeatures());				
+			}
+		});
+		
+		mntmNumberofOptionalFeatures.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {	
+				currentViewer.getLblResultReasoning().setText("Number of Optional Features: " + currentViewer.getModel().numberOfOptionalFeatures());
+			}
+		});
+		
+		mntmNumberOfMandatoryFeatures.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				currentViewer.getLblResultReasoning().setText("Number of Mandatory Features: " + currentViewer.getModel().numberOfMandatoryFeatures());
+			}
+		});
+		
+		mntmNumberOfTop.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				currentViewer.getLblResultReasoning().setText("Number of Top Features: " + currentViewer.getModel().numberOfTopFeatures());		
+			}
+		});
+		
+		mntmNumberOfLeaf.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				currentViewer.getLblResultReasoning().setText("Number of Leaf Features: " + currentViewer.getModel().numberOfLeafFeatures());
+			}
+		});
+		
+		mntmDepthOfTree.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {	
+				currentViewer.getLblResultReasoning().setText("Depth of tree: " + currentViewer.getModel().depthOfTreeMax());
+			}
+		});
+		
+		mntmMedianDepthOfTree.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				currentViewer.getLblResultReasoning().setText("Depth of tree Median: " + currentViewer.getModel().depthOfTreeMedian());
+			}
+		});
+		
+		mntmCognitiveComplexityOf.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				currentViewer.getLblResultReasoning().setText("Cognitive Complexity of a Feature Model: " + currentViewer.getModel().cognitiveComplexityOfFeatureModel());
+			}
+		});
+		
+		mntmFlexibilityOfConguration.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				currentViewer.getLblResultReasoning().setText("Flexibility of Configuration: " + currentViewer.getModel().flexibilityOfConfiguration());
+			}
+		});
+		
+		mntmSingleCyclicDependent.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				currentViewer.getLblResultReasoning().setText("Single Cyclic Dependent Features: " + currentViewer.getModel().singleCyclicDependentFeatures());	
+			}
+		});
+		
+		mntmMultipleCyclicDependent.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				currentViewer.getLblResultReasoning().setText("Multiple Cyclic Dependent Features: " + currentViewer.getModel().multipleCyclicDependentFeatures());			
+			}
+		});
+		
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				currentViewer.getLblResultReasoning().setText("Feature Extendibility: " + currentViewer.getModel().featureExtendibility());
+			}
+		});
+	
+		mntmCyclomaticComplexity.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {		
+				currentViewer.getLblResultReasoning().setText("Cyclomatic complexity: " + currentViewer.getModel().cyclomaticComplexity());
+			}
+		});
+		
+		mntmCompoundComplexity.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+					currentViewer.getLblResultReasoning().setText("Compound complexity: " + currentViewer.getModel().compoundComplexity());
+				}
+		});
+		
+		mntmGroupingFeatures.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+					currentViewer.getLblResultReasoning().setText("Grouping Features: " + currentViewer.getModel().groupingFeatures());
+				}
+		});
+		
+		mntmCrosstreeConstraintsRate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {	
+				currentViewer.getLblResultReasoning().setText("Cross-tree constraints Rate: " + currentViewer.getModel().crossTreeConstraintsRate());			
+			}
+		});
+		
+		mntmCoefcientOfConnectivitydensity.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {		
+				currentViewer.getLblResultReasoning().setText("Coeficient of Connectivity-Density: " + currentViewer.getModel().coefficientOfConnectivityDensity());
+			}
+		});
+		
+		mntmNumberOfVariable.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				currentViewer.getLblResultReasoning().setText("Number of variable features: " + currentViewer.getModel().numberOfVariableFeatures());
+			}
+		});
+		
+		mntmSingleHotspotFeatures.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {	
+				currentViewer.getLblResultReasoning().setText("Single Variation Points Features: " + currentViewer.getModel().singleVariationPointsFeatures());
+			}
+		});
+		
+		mntmMultipleHotspotFeatures.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {	
+				currentViewer.getLblResultReasoning().setText("Multiple Variation Points Features" + ": " + currentViewer.getModel().multipleVariationPointsFeatures());
+			}
+		});
+		
+		mntmRigidNoVariation.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				currentViewer.getLblResultReasoning().setText("Rigid No Variation Points Features: " + currentViewer.getModel().rigidNotVariationPointsFeatures());		
+			}
+		});
+		
+		mntmProductLineTotal.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {		
+				currentViewer.getLblResultReasoning().setText("Ratio of Variability: " + currentViewer.getModel().ratioVariability());
+			}
+		});
+		
+		mntmNumberOfValid.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {			
+				currentViewer.getLblResultReasoning().setText("Number of valid configurations: " + currentViewer.getModel().numberOfValidConfigurations());
+			}
+		});
+		
+		mntmBranchingFactorMax.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {	
+				currentViewer.getLblResultReasoning().setText("Branching Factors Max: " + currentViewer.getModel().branchingFactorsMax());
+			}
+		});
+		
+		mntmOrRate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {		
+				currentViewer.getLblResultReasoning().setText("Or Rate: " + currentViewer.getModel().orRate());
+			}
+		});
 			
+		mntmXorRate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {		
+				currentViewer.getLblResultReasoning().setText("Xor Rate: " + currentViewer.getModel().xorRate());
+			}
+		});
+		
+		mntmBranchingFactorMedian.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {		
+				currentViewer.getLblResultReasoning().setText("Branching Factors Median: " + currentViewer.getModel().branchingFactorsMedian());
+			}
+		});
+		
+		mntmNonfunctionalCommonality.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {	
 				currentViewer.getLblResultReasoning().setText("Non-Functional Commonality: " + currentViewer.getModel().nonFunctionCommonality());
 			}
 		});
-		mnNas.add(mntmNonfunctionalCommonality);
+		/*JMenuItem mntmCrosstreeConstraints = new JMenuItem(
+		"Cross-tree constraints");
+		mnNas.add(mntmCrosstreeConstraints);*/
+	
+		/*JMenuItem mntmNumberOfVariation = new JMenuItem(
+		"Number of variation points");
+		mnNas.add(mntmNumberOfVariation);*/
+	
 		
-				// Number of Features
-				JMenuItem mntmnumberOfFeatures = new JMenuItem("Number of Features");
-				mnNas.add(mntmnumberOfFeatures);
-				
-						//Number of Top Features
-						JMenuItem mntmNumberOfTop = new JMenuItem("Number of Top features");
-						mnNas.add(mntmNumberOfTop);
-						
-								JMenuItem mntmNumberOfLeaf = new JMenuItem("Number of Leaf Features");
-								mnNas.add(mntmNumberOfLeaf);
-								
-										JMenuItem mntmDepthOfTree = new JMenuItem("Depth of tree Max");
-										mnNas.add(mntmDepthOfTree);
-												
-												JMenuItem mntmDepthOfTree_1 = new JMenuItem("Depth of tree Median");
-												mntmDepthOfTree_1.addActionListener(new ActionListener() {
-													public void actionPerformed(ActionEvent e) {
-														currentViewer.getLblResultReasoning().setText("Depth of tree Median: " + currentViewer.getModel().depthOfTreeMedian());
-													}
-												});
-												mnNas.add(mntmDepthOfTree_1);
-										
-												JMenuItem mntmCognitiveComplexityOf = new JMenuItem(
-														"Cognitive Complexity of a Feature Model");
-												mnNas.add(mntmCognitiveComplexityOf);
-												
-														JMenuItem mntmNewMenuItem = new JMenuItem("Feature Extendibility");
-														mnNas.add(mntmNewMenuItem);
-														
-																JMenuItem mntmFlexibilityOfConguration = new JMenuItem(
-																		"Flexibility of con\uFB01guration");
-																mnNas.add(mntmFlexibilityOfConguration);
-																
-																		JMenuItem mntmSingleCyclicDependent = new JMenuItem(
-																				"Single Cyclic Dependent Features");
-																		mnNas.add(mntmSingleCyclicDependent);
-																		
-																				JMenuItem mntmMultipleCyclicDependent = new JMenuItem(
-																						"Multiple Cyclic Dependent Features");
-																				mnNas.add(mntmMultipleCyclicDependent);
-																				
-																						JMenuItem mntmCyclomaticComplexity = new JMenuItem(
-																								"Cyclomatic complexity");
-																						mnNas.add(mntmCyclomaticComplexity);
-																						
-																								JMenuItem mntmCompoundComplexity = new JMenuItem("Compound Complexity");
-																								mnNas.add(mntmCompoundComplexity);
-																								
-																										JMenuItem mntmCrosstreeConstraints = new JMenuItem(
-																												"Cross-tree constraints");
-																										mnNas.add(mntmCrosstreeConstraints);
-																												
-																												JMenuItem mntmCrosstreeConstraintsRate = new JMenuItem("Cross-tree constraints Rate");
-																												mntmCrosstreeConstraintsRate.addActionListener(new ActionListener() {
-																													public void actionPerformed(ActionEvent e) {
-																													
-																														currentViewer.getLblResultReasoning().setText("Cross-tree constraints Rate: " + currentViewer.getModel().crossTreeConstraintsRate());
-																													
-																													}
-																												});
-																												mnNas.add(mntmCrosstreeConstraintsRate);
-																										
-																												JMenuItem mntmCoefcientOfConnectivitydensity = new JMenuItem(
-																														"Coeficient of Connectivity-Density");
-																												mnNas.add(mntmCoefcientOfConnectivitydensity);
-																												
-																														JMenuItem mntmNumberOfVariable = new JMenuItem(
-																																"Number of variable features");
-																														mnNas.add(mntmNumberOfVariable);
-																														
-																																JMenuItem mntmNumberOfVariation = new JMenuItem(
-																																		"Number of variation points");
-																																mnNas.add(mntmNumberOfVariation);
-																																
-																																		final JMenuItem mntmSingleHotspotFeatures = new JMenuItem(
-																																				"Single Variation Points Features");
-																																		mnNas.add(mntmSingleHotspotFeatures);
-																																		
-																																				final JMenuItem mntmMultipleHotspotFeatures = new JMenuItem(
-																																						"Multiple Variation Points Features");
-																																				mnNas.add(mntmMultipleHotspotFeatures);
-																																				
-																																						JMenuItem mntmRigidNoVariation = new JMenuItem(
-																																								"Rigid No Variation Points Features");
-																																						mnNas.add(mntmRigidNoVariation);
-																																						
-																																								JMenuItem mntmNumberOfValid = new JMenuItem(
-																																										"Number of valid Configurations");
-																																								mnNas.add(mntmNumberOfValid);
-																																								
-																																										JMenuItem mntmProductLineTotal = new JMenuItem(
-																																												"Product Line Total Variability");
-																																										mnNas.add(mntmProductLineTotal);
-																																										
-																																										JMenuItem mntmBranchingFactorsMean = new JMenuItem("Branching Factors Mean");
-																																										mntmBranchingFactorsMean.addActionListener(new ActionListener() {
-																																											public void actionPerformed(ActionEvent e) {
-																																											
-																																												currentViewer.getLblResultReasoning().setText("Branching Factors Mean: " + currentViewer.getModel().branchingFactorsMean());
-																																											}
-																																										});
-																																										mnNas.add(mntmBranchingFactorsMean);
-																																										
-																																										JMenuItem mntmNewMenuItem_1 = new JMenuItem("Branching Factors Max");
-																																										mntmNewMenuItem_1.addActionListener(new ActionListener() {
-																																											public void actionPerformed(ActionEvent e) {
-																																											
-																																												currentViewer.getLblResultReasoning().setText("Branching Factors Max: " + currentViewer.getModel().branchingFactorsMax());
-																																											}
-																																										});
-																																										mnNas.add(mntmNewMenuItem_1);
-																																										
-																																										JMenuItem mntmBra = new JMenuItem("Branching Factors Median");
-																																										mntmBra.addActionListener(new ActionListener() {
-																																											public void actionPerformed(ActionEvent e) {
-																																											
-																																												currentViewer.getLblResultReasoning().setText("Branching Factors Median: " + currentViewer.getModel().branchingFactorsMedian());
-																																											}
-																																										});
-																																										mnNas.add(mntmBra);
-																																										
-																																										JMenuItem mntmOrRate = new JMenuItem("Or Rate");
-																																										mntmOrRate.addActionListener(new ActionListener() {
-																																											public void actionPerformed(ActionEvent e) {
-																																											
-																																												currentViewer.getLblResultReasoning().setText("Or Rate: " + currentViewer.getModel().orRate());
-																																											}
-																																										});
-																																										mnNas.add(mntmOrRate);
-																																										
-																																										JMenuItem mntmXorRate = new JMenuItem("Xor Rate");
-																																										mntmXorRate.addActionListener(new ActionListener() {
-																																											public void actionPerformed(ActionEvent e) {
-																																											
-																																												currentViewer.getLblResultReasoning().setText("Xor Rate: " + currentViewer.getModel().xorRate());
-																																											}
-																																										});
-																																										mnNas.add(mntmXorRate);
-																																										
-																																										JMenuItem mntmOrNumber = new JMenuItem("Or Number");
-																																										mntmOrNumber.addActionListener(new ActionListener() {
-																																											public void actionPerformed(ActionEvent e) {
-																																											
-																																												currentViewer.getLblResultReasoning().setText("Or Number: " + currentViewer.getModel().orNumber());
-																																											}
-																																										});
-																																										mnNas.add(mntmOrNumber);
-																																										
-																																										JMenuItem mntmXorNumber = new JMenuItem("Xor Number");
-																																										mntmXorNumber.addActionListener(new ActionListener() {
-																																											public void actionPerformed(ActionEvent e) {
-																																											
-																																												currentViewer.getLblResultReasoning().setText("Xor Number: " + currentViewer.getModel().xorNumber());
-																																											}
-																																										});
-																																										mnNas.add(mntmXorNumber);
-																																										
-																																										mntmProductLineTotal.addActionListener(new ActionListener() {
-																																											
-																																											@Override
-																																											public void actionPerformed(ActionEvent e) {
-																																												
-																																												currentViewer.getLblResultReasoning().setText("Product Line Total Variability: " + currentViewer.getModel().productLineTotalVariability());
-																																											}
-																																										});
-																																										
-																																										JMenuItem mntmNumberofOptionalFeatures = new JMenuItem("Number of Optional Features");
-																																										mntmNumberofOptionalFeatures.addActionListener(new ActionListener() {
-																																											public void actionPerformed(ActionEvent e) {
-																																											
-																																												currentViewer.getLblResultReasoning().setText("Number of Optional Features: " + currentViewer.getModel().numberOfOptionalFeatures());
-																																											}
-																																										});
-																																										mnNas.add(mntmNumberofOptionalFeatures);
-																																										
-																																										JMenuItem mntmNumberOfMandatoryFeatures = new JMenuItem("Number of Mandatory Features");
-																																										mntmNumberOfMandatoryFeatures.addActionListener(new ActionListener() {
-																																											public void actionPerformed(ActionEvent e) {
-																																											
-																																												currentViewer.getLblResultReasoning().setText("Number of Mandatory Features: " + currentViewer.getModel().numberOfMandatoryFeatures());
-																																											}
-																																										});
-																																										mnNas.add(mntmNumberOfMandatoryFeatures);
-																																										
-																																										JMenuItem mntmNumberOfAlternativeFeatures = new JMenuItem("Number of Alternative Features");
-																																										mntmNumberOfAlternativeFeatures.addActionListener(new ActionListener() {
-																																											public void actionPerformed(ActionEvent e) {
-																																											
-																																												currentViewer.getLblResultReasoning().setText("Number of Alternative Features: " + currentViewer.getModel().numberOfAlternativeFeatures());
-																																											}
-																																										});
-																																										mnNas.add(mntmNumberOfAlternativeFeatures);
-																																										
-																																								mntmNumberOfValid.addActionListener(new ActionListener() {
-																																									public void actionPerformed(ActionEvent arg0) {
-																																														
-																																										currentViewer.getLblResultReasoning().setText("Number of valid configurations: " + currentViewer.getModel().numberOfValidConfigurations());
-																																									}
-																																								});
-																																						mntmRigidNoVariation.addActionListener(new ActionListener() {
-																																							
-																																							@Override
-																																							public void actionPerformed(ActionEvent e) {
-																																								currentViewer.getLblResultReasoning().setText("Rigid No Variation Points Features: " + currentViewer.getModel().rigidNotVariationPointsFeatures());
-																																								
-																																							}
-																																						});
-																																				mntmMultipleHotspotFeatures.addActionListener(new ActionListener() {
-																																					
-																																					@Override
-																																					public void actionPerformed(ActionEvent e) {
-																																						
-																																						currentViewer.getLblResultReasoning().setText("Multiple Variation Points Features" + ": " + currentViewer.getModel().multipleVariationPointsFeatures());
-																																					}
-																																				});
-																																		mntmSingleHotspotFeatures.addActionListener(new ActionListener() {
-																																			
-																																			@Override
-																																			public void actionPerformed(ActionEvent e) {
-																																				
-																																				currentViewer.getLblResultReasoning().setText("Single Variation Points Features: " + currentViewer.getModel().singleVariationPointsFeatures());
-																																			}
-																																		});
-																																mntmNumberOfVariation.addActionListener(new ActionListener() {
-																																	
-																																	@Override
-																																	public void actionPerformed(ActionEvent e) {
-																																		
-																																		currentViewer.getLblResultReasoning().setText("Number of variation points: " + currentViewer.getModel().numberOfVariationPoints());
-																																	}
-																																});
-																														mntmNumberOfVariable.addActionListener(new ActionListener() {
-																															
-																															@Override
-																															public void actionPerformed(ActionEvent e) {
-																																
-																																currentViewer.getLblResultReasoning().setText("Number of variable features: " + currentViewer.getModel().numberOfVariableFeatures());
-																															}
-																														});
-																												mntmCoefcientOfConnectivitydensity.addActionListener(new ActionListener() {
-																													
-																													@Override
-																													public void actionPerformed(ActionEvent arg0) {
-																														
-																														currentViewer.getLblResultReasoning().setText("Coeficient of Connectivity-Density: " + currentViewer.getModel().coefficientOfConnectivityDensity());
-																													}
-																												});
-																										mntmCrosstreeConstraints.addActionListener(new ActionListener() {
-																											
-																											@Override
-																											public void actionPerformed(ActionEvent e) {
-																												
-																												currentViewer.getLblResultReasoning().setText("Cross-tree Constraints: " + currentViewer.getModel().crossTreeConstraints());
-																											}
-																										});
-																								mntmCompoundComplexity.addActionListener(new ActionListener() {
-																									
-																									@Override
-																									public void actionPerformed(ActionEvent arg0) {
-																										
-																										currentViewer.getLblResultReasoning().setText("Compound complexity: " + currentViewer.getModel().compoundComplexity());
-																									}
-																								});
-																						mntmCyclomaticComplexity.addActionListener(new ActionListener() {
-																							
-																							@Override
-																							public void actionPerformed(ActionEvent e) {
-																								
-																								currentViewer.getLblResultReasoning().setText("Cyclomatic complexity: " + currentViewer.getModel().cyclomaticComplexity());
-																							}
-																						});
-																				mntmMultipleCyclicDependent.addActionListener(new ActionListener() {
-																					
-																					@Override
-																					public void actionPerformed(ActionEvent e) {
-																						currentViewer.getLblResultReasoning().setText("Multiple Cyclic Dependent Features: " + currentViewer.getModel().multipleCyclicDependentFeatures());
-																						
-																					}
-																				});
-																		mntmSingleCyclicDependent.addActionListener(new ActionListener() {
-																			
-																			@Override
-																			public void actionPerformed(ActionEvent e) {
-																				currentViewer.getLblResultReasoning().setText("Single Cyclic Dependent Features: " + currentViewer.getModel().singleCyclicDependentFeatures());
-																				
-																			}
-																		});
-																mntmFlexibilityOfConguration.addActionListener(new ActionListener() {
-																	
-																	@Override
-																	public void actionPerformed(ActionEvent e) {
-																		
-																		currentViewer.getLblResultReasoning().setText("Flexibility of Configuration: " + currentViewer.getModel().flexibilityOfConfiguration());
-																	}
-																});
-														mntmNewMenuItem.addActionListener(new ActionListener() {
-															
-															@Override
-															public void actionPerformed(ActionEvent e) {
-																
-																currentViewer.getLblResultReasoning().setText("Feature Extendibility: " + currentViewer.getModel().featureExtendibility());
-															}
-														});
-												mntmCognitiveComplexityOf.addActionListener(new ActionListener() {
-													
-													@Override
-													public void actionPerformed(ActionEvent e) {
-														
-														currentViewer.getLblResultReasoning().setText("Cognitive Complexity of a Feature Model: " + currentViewer.getModel().cognitiveComplexityOfFeatureModel());
-													}
-												});
-										mntmDepthOfTree.addActionListener(new ActionListener() {
-											
-											@Override
-											public void actionPerformed(ActionEvent e) {
-												
-												currentViewer.getLblResultReasoning().setText("Depth of tree: " + currentViewer.getModel().depthOfTreeMax());
-											}
-										});
-								mntmNumberOfLeaf.addActionListener(new ActionListener() {
-									
-									@Override
-									public void actionPerformed(ActionEvent e) {
-										
-										currentViewer.getLblResultReasoning().setText("Number of Leaf Features: " + currentViewer.getModel().numberOfLeafFeatures());
-									}
-								});
-						mntmNumberOfTop.addActionListener(new ActionListener() {
-							
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								currentViewer.getLblResultReasoning().setText("Number of Top Features: " + currentViewer.getModel().numberOfTopFeatures());
-								
-							}
-						});
-				mntmnumberOfFeatures.addActionListener(new ActionListener() {
-					
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						currentViewer.getLblResultReasoning().setText("Number of Features: " + currentViewer.getModel().numberOfFeatures());				
-					}
-				});
+	
+		/*JMenuItem mntmBranchingFactorsMean = new JMenuItem("Branching Factors Mean");
+		mntmBranchingFactorsMean.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				currentViewer.getLblResultReasoning().setText("Branching Factors Mean: " + currentViewer.getModel().branchingFactorsMean());
+			}
+		});
+		mnNas.add(mntmBranchingFactorsMean);*/
+	
+	
+		/*JMenuItem mntmOrNumber = new JMenuItem("Or Number");
+		mntmOrNumber.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				currentViewer.getLblResultReasoning().setText("Or Number: " + currentViewer.getModel().orNumber());
+			}
+		});
+		mnNas.add(mntmOrNumber);
 		
+		JMenuItem mntmXorNumber = new JMenuItem("Xor Number");
+		mntmXorNumber.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				currentViewer.getLblResultReasoning().setText("Xor Number: " + currentViewer.getModel().xorNumber());
+			}
+		});
+		mnNas.add(mntmXorNumber);*/
+	
+		/*JMenuItem mntmNumberOfAlternativeFeatures = new JMenuItem("Number of Alternative Features");
+		mntmNumberOfAlternativeFeatures.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				currentViewer.getLblResultReasoning().setText("Number of Alternative Features: " + currentViewer.getModel().numberOfAlternativeFeatures());
+			}
+		});
+		mnNas.add(mntmNumberOfAlternativeFeatures);*/
+
+		/*mntmNumberOfVariation.addActionListener(new ActionListener() {		
+			@Override
+			public void actionPerformed(ActionEvent e) {			
+				currentViewer.getLblResultReasoning().setText("Number of variation points: " + currentViewer.getModel().numberOfVariationPoints());
+			}
+		});*/
+
+		/*mntmCrosstreeConstraints.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {			
+				currentViewer.getLblResultReasoning().setText("Cross-tree Constraints: " + currentViewer.getModel().crossTreeConstraints());
+			}
+		});*/
+	
 		JMenu mnWithoutContext = new JMenu("Specific to context");
 		mnMeasures_1.add(mnWithoutContext);
 		
@@ -819,31 +798,28 @@ public class Main extends JFrame {
 		mnWithoutContext.add(mntmNumberOfContextConstraints);
 		mntmNumberOfContextConstraints.addActionListener(new ActionListener() {
 			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
+		@Override
+		public void actionPerformed(ActionEvent e) {		
 				currentViewer.getLblResultReasoning().setText("Number of Context Constraints: " + currentViewer.getModel().numberContextConstraints());
 			}
 		});
-		mntmNumberOfDeactivated.addActionListener(new ActionListener() {
-			
+		
+		mntmNumberOfDeactivated.addActionListener(new ActionListener() {	
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
 				currentViewer.getLblResultReasoning().setText("Number of Deactivated Features: " + currentViewer.getModel().numberDeactivatedFeatures());
 			}
 		});
-		mntmNumberOfActivated.addActionListener(new ActionListener() {
-			
+		
+		mntmNumberOfActivated.addActionListener(new ActionListener() {	
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				
+			public void actionPerformed(ActionEvent e) {				
 				currentViewer.getLblResultReasoning().setText("Number of Activated Features: " + currentViewer.getModel().numberActivatedFeatures());
 			}
 		});
+		
 		mntmNumberOfContexts.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
+			public void actionPerformed(ActionEvent arg0) {		
 				currentViewer.getLblResultReasoning().setText("Number of Contexts: " + currentViewer.getModel().numberOfContexts());				
 			}
 		});

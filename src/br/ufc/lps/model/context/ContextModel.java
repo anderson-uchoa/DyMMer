@@ -400,19 +400,22 @@ public class ContextModel implements IContextModel {
 		return featureModelStatistics.countConstraints();
 	}
 
+	public int groupingFeatures() {	
+		return numberOfFeatures() - numberOfLeafFeatures();
+	}
+	
 	@Override
 	public double compoundComplexity() {
 		
 		int features = featureModelStatistics.countFeatures();
 		int mandatoryFeatures = featureModelStatistics.countMandatory();
-		int orFeatures = featureModelStatistics.countGroups1N();
-		int xorFeatures = featureModelStatistics.countGroups11();
-		int groups = orFeatures + xorFeatures;
-		int constraints = featureModelStatistics.countConstraints();
+		int orFeatures = featureModelStatistics.countGrouped1n();
+		int xorFeatures = featureModelStatistics.countGrouped11();
+		int ngf = groupingFeatures();
+		int constraints = cyclomaticComplexity();
 		
-		int allRelationship = constraints;
-		
-		double result = Math.pow(features, 2) + (Math.pow(mandatoryFeatures, 2) + 2*Math.pow(orFeatures, 2) + 3*Math.pow(xorFeatures, 2) + 3*Math.pow(groups, 2) + 3*Math.pow(allRelationship, 2))/9;
+		int allRelationship = constraints + ngf;
+		double result = Math.pow(features, 2) + (Math.pow(mandatoryFeatures, 2) + 2*Math.pow(orFeatures, 2) + 3*Math.pow(xorFeatures, 2) + 3*Math.pow(ngf, 2) + 3*Math.pow(allRelationship, 2))/9;
 		
 		return result;
 	}
@@ -426,7 +429,7 @@ public class ContextModel implements IContextModel {
 	@Override
 	public double coefficientOfConnectivityDensity() {
 				
-		if ( featureModel.countConstraints() == 0 )
+		/*if ( featureModel.countConstraints() == 0 )
 			return 0;
 		
 		CNFFormula cnf = new CNFFormula();
@@ -442,7 +445,8 @@ public class ContextModel implements IContextModel {
 				cnf.addClauses(pf.toCNFClauses());
 		}
 		
-		return (cnf == null) ? 0 : cnf.getClauseDensity();
+		return (cnf == null) ? 0 : cnf.getClauseDensity();*/
+		return (double)(featureModelStatistics.countFeatures()-1)/featureModelStatistics.countFeatures();
 		
 	}
 
@@ -496,9 +500,18 @@ public class ContextModel implements IContextModel {
 	}
 
 	@Override
-	public double productLineTotalVariability() {
+	public double ratioVariability() {
+		Collection<FeatureTreeNode> nodes = new ArrayList<FeatureTreeNode>();
+		nodes = featureModel.getNodes();
+		double sum = 0;
 		
-		return numberOfValidConfigurations()/(Math.pow(2, numberOfFeatures()));
+		for(FeatureTreeNode node : nodes)
+			sum += node.getChildCount();		
+		
+		
+		return sum/(nodes.size()-numberOfLeafFeatures());
+		
+		//return numberOfValidConfigurations()/(Math.pow(2, numberOfFeatures()));
 	}
 
 	@Override

@@ -32,14 +32,14 @@ public class ExportOfficeExcel {
 	private List<ContextModel> modelsContext;
 	private List<Model> models; 
 	
-	private static final String[] METRICS = {"Number of features (NF)", "Number of Optional Features (NO)", "Number of Alternative Features (NA)", "Number of Mandatory Features (NM)",	
+	private static final String[] METRICS = {"Number of features (NF)", "Number of Optional Features (NO)", "Number of Mandatory Features (NM)",	
 										"Number of top features (NTop)", "Number of leaf Features (NLeaf)", "Depth of tree Max (DT Max)", "Depth of tree Median (DT Median)",
 										"Cognitive Complexity of a Feature Model (CogC)", "Feature EXtendibility (FEX)", "Flexibility of configuration (FoC)", "Single Cyclic Dependent Features (SCDF)",
-										"Multiple Cyclic Dependent Features (MCDF)", "Cyclomatic complexity (CyC)", "Compound Complexity (ComC)", "Cross-tree constraints (CTC)", 
-										"Cross-tree constraints Rate (CTCR)", "Coeficient of connectivity-density (CoC)", "Number of variable features (NVF)", 
+										"Multiple Cyclic Dependent Features (MCDF)", "Cyclomatic complexity (CyC)", "Compound Complexity (ComC)", "Grouping Features (NGF)", "Cross-tree constraints (CTC)", 
+										"Coeficient of connectivity-density (CoC)", "Number of variable features (NVF)", 
 										"Single Hotspot Features (SHoF)", "Multiple Hotspot Features (MHoF)", "Rigid Nohotspot Features (RNoF)", "Ratio of variability (RoV)", 
-										"Number of valid configurations (NVC)", "Branching Factor Max (BF Max)", "Branching Factor Mean (BF Mean)",
-										"Number of OR", "Number of XOR", "Or Rate", "Xor Rate", "Non-Functional Commonality (NFC)", "Number of variation points", "Branching Factor Median"};
+										"Number of valid configurations (NVC)", "Branching Factor Max (BF Max)",
+										"Or Rate", "Xor Rate", "Non-Functional Commonality (NFC)", "Branching Factor Median"};
 	
 	private static final String[] METRICS_CONTEXT = {"Number of Activated Features", "Number of Deactivated Features", "Number of Context Constraints"};
 	private static final String[] METRICS_WITHOUT_CONTEXT = {"Number of Contexts"};
@@ -86,15 +86,15 @@ public class ExportOfficeExcel {
 			
 			String modelName = model.getModelName();
 			
-			Object dataModel[] = {model.numberOfFeatures(), model.numberOfOptionalFeatures(), model.numberOfAlternativeFeatures(), model.numberOfMandatoryFeatures(),  model.numberOfTopFeatures(),
+			Object dataModel[] = {model.numberOfFeatures(), model.numberOfOptionalFeatures(), model.numberOfMandatoryFeatures(),  model.numberOfTopFeatures(),
 						  model.numberOfLeafFeatures(), model.depthOfTreeMax(),model.depthOfTreeMedian(), model.cognitiveComplexityOfFeatureModel(),
 						  model.featureExtendibility(), model.flexibilityOfConfiguration(), model.singleCyclicDependentFeatures(),
-						  model.multipleCyclicDependentFeatures(), model.cyclomaticComplexity(), model.compoundComplexity(),
-						  model.crossTreeConstraints(), model.crossTreeConstraintsRate(), model.coefficientOfConnectivityDensity(), model.numberOfVariableFeatures(),
+						  model.multipleCyclicDependentFeatures(), model.cyclomaticComplexity(), model.compoundComplexity(), model.groupingFeatures(),
+						  model.crossTreeConstraintsRate(), model.coefficientOfConnectivityDensity(), model.numberOfVariableFeatures(),
 						  model.singleVariationPointsFeatures(), model.multipleVariationPointsFeatures(),
-						  model.rigidNotVariationPointsFeatures(), model.productLineTotalVariability(), model.numberOfValidConfigurations(), 
-						  model.branchingFactorsMax(), model.branchingFactorsMean(), model.orNumber(), model.xorNumber(), model.orRate(),  model.xorRate(), 
-						  model.nonFunctionCommonality(), model.numberOfVariationPoints(), model.branchingFactorsMedian(), model.numberOfContexts(),modelName};
+						  model.rigidNotVariationPointsFeatures(), model.ratioVariability(), model.numberOfValidConfigurations(), 
+						  model.branchingFactorsMax(), model.orRate(),  model.xorRate(), 
+						  model.nonFunctionCommonality(), model.branchingFactorsMedian(), model.numberOfContexts(),modelName};
 		
 			
 			datas.add(dataModel);
@@ -123,11 +123,11 @@ public class ExportOfficeExcel {
 				Object dataModelContext[] = {modelContext.nonFunctionCommonality(), modelContext.numberOfFeatures(), modelContext.numberOfTopFeatures(),
 						modelContext.numberOfLeafFeatures(), modelContext.depthOfTreeMax(),modelContext.depthOfTreeMedian(), modelContext.cognitiveComplexityOfFeatureModel(),
 						modelContext.featureExtendibility(), modelContext.flexibilityOfConfiguration(), modelContext.singleCyclicDependentFeatures(),
-						modelContext.multipleCyclicDependentFeatures(), modelContext.cyclomaticComplexity(), modelContext.compoundComplexity(),
+						modelContext.multipleCyclicDependentFeatures(), modelContext.cyclomaticComplexity(), modelContext.compoundComplexity(), modelContext.groupingFeatures(),
 						modelContext.crossTreeConstraints(), modelContext.crossTreeConstraintsRate(), modelContext.coefficientOfConnectivityDensity(), modelContext.numberOfVariableFeatures(),
 						modelContext.numberOfVariationPoints(), modelContext.singleVariationPointsFeatures(), modelContext.multipleVariationPointsFeatures(),
-						modelContext.rigidNotVariationPointsFeatures(), modelContext.productLineTotalVariability(), modelContext.numberOfValidConfigurations(),
-						modelContext.branchingFactorsMax(), modelContext.branchingFactorsMean(), modelContext.branchingFactorsMedian(), modelContext.orRate(), modelContext.xorRate(),
+						modelContext.rigidNotVariationPointsFeatures(), modelContext.ratioVariability(), modelContext.numberOfValidConfigurations(),
+						modelContext.branchingFactorsMax(), modelContext.branchingFactorsMedian(), modelContext.orRate(), modelContext.xorRate(),
 						modelContext.numberActivatedFeatures(), modelContext.numberDeactivatedFeatures(), modelContext.numberContextConstraints(), contextName};
 						
 				datas.add(dataModelContext);

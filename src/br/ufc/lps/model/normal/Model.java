@@ -1,5 +1,7 @@
 package br.ufc.lps.model.normal;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
@@ -146,6 +148,10 @@ public abstract class Model implements IModel{
 		
 		return featureModelStatistics.countConstraints();
 	}
+	
+	public int groupingFeatures() {	
+		return featureModelStatistics.countConstraints();
+	}
 
 	@Override
 	public double compoundComplexity() {
@@ -173,7 +179,7 @@ public abstract class Model implements IModel{
 	@Override
 	public double coefficientOfConnectivityDensity() {
 				
-		return featureModelStatistics.getECClauseDensity();
+		return (double)(featureModelStatistics.countFeatures()-1)/featureModelStatistics.countFeatures();
 		
 	}
 
@@ -227,10 +233,17 @@ public abstract class Model implements IModel{
 	}
 
 	@Override
-	public double productLineTotalVariability() {
+	public double ratioVariability() {
+		Collection<FeatureTreeNode> nodes = new ArrayList<FeatureTreeNode>();
+		nodes = featureModel.getNodes();
+		double sum = 0;
 		
+		for(FeatureTreeNode node : nodes)
+			sum += node.getChildCount();		
+				
+		return sum/(nodes.size()-numberOfLeafFeatures());
 		
-		return numberOfValidConfigurations()/(Math.pow(2, numberOfFeatures()));
+		//return numberOfValidConfigurations()/(Math.pow(2, numberOfFeatures()));
 	}
 
 	@Override

@@ -175,6 +175,11 @@ public abstract class Model implements IModel{
 	}
 
 	@Override
+	public int crossTreeConstraintsVariables() {
+		return featureModelStatistics.countFeaturesInConstraints();
+	}
+	
+	@Override
 	public int crossTreeConstraints() {
 					
 		return featureModelStatistics.countConstraints();
@@ -295,22 +300,22 @@ public abstract class Model implements IModel{
 
 	@Override
 	public double orRate() {
-		return (double)featureModelStatistics.countGroups1N()/featureModelStatistics.countFeatures();
+		return (double)featureModelStatistics.countFeaturesChildGroups1N()/featureModelStatistics.countFeatures();
 	}
 
 	@Override
 	public double xorRate() {
-		return (double)featureModelStatistics.countGroups11()/featureModelStatistics.countFeatures();
+		return (double)featureModelStatistics.countFeaturesChildGroups11()/featureModelStatistics.countFeatures();
 	}
 	
 	@Override
-	public int orNumber() {
-		return featureModelStatistics.countFeaturesChildGroups1N();
+	public int numberOfGroupsOR() {
+		return featureModelStatistics.countGroups1N();
 	}
 
 	@Override
-	public int xorNumber() {
-		return featureModelStatistics.countFeaturesChildGroups11();
+	public int numberOfGroupsXOR() {
+		return featureModelStatistics.countGroups11();
 	}
 	
 	//TODO Medida funcional apenas para modelos sem contextos

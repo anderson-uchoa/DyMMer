@@ -37,14 +37,14 @@ public interface IModel {
 	double orRate();
 	double xorRate();
 	double crossTreeConstraintsRate();
-	int orNumber();
-	int xorNumber();
+	int numberOfGroupsOR();
+	int numberOfGroupsXOR();
 	int numberOfOptionalFeatures();
 	int numberOfMandatoryFeatures();
 	int numberOfAlternativeFeatures();
 	int groupingFeatures();
 	double depthOfTreeMean();
 	double ratioSwitchFeatures();
-	
+	int crossTreeConstraintsVariables();
 	
 }

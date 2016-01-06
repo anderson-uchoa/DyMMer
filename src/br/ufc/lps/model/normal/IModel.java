@@ -37,6 +37,8 @@ public interface IModel {
 	double orRate();
 	double xorRate();
 	double crossTreeConstraintsRate();
+	double connectivityDependencyGraphRate();
+	double numberFeaturesReferencedConstraintsMean();
 	int numberOfGroupsOR();
 	int numberOfGroupsXOR();
 	int numberOfOptionalFeatures();

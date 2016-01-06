@@ -180,18 +180,30 @@ public abstract class Model implements IModel{
 	}
 	
 	@Override
-	public int crossTreeConstraints() {
-					
+	public int crossTreeConstraints() {					
 		return featureModelStatistics.countConstraints();
 	}
-
+	
 	@Override
-	public double coefficientOfConnectivityDensity() {
-				
-		return (double)(featureModelStatistics.countFeatures()-1)/featureModelStatistics.countFeatures();
-		
+	public double connectivityDependencyGraphRate(){
+		return (double)(featureModelStatistics.countAllConstraintsVariables() - featureModelStatistics.countConstraints())/numberOfFeatures();
 	}
-
+	
+	@Override
+	public double numberFeaturesReferencedConstraintsMean() {
+		if(featureModelStatistics.getConstraintsVariablesReferenced() != 0){
+			return (double)(featureModelStatistics.countConstraintVars() - featureModelStatistics.countConstraints())/featureModelStatistics.getConstraintsVariablesReferenced();
+		}
+		else
+			return 0;
+	}
+	
+	@Override
+	public double coefficientOfConnectivityDensity() {			
+		return (double)(featureModelStatistics.countFeatures()-1)/featureModelStatistics.countFeatures();	
+	}
+	
+	
 	@Override
 	public int numberOfVariableFeatures() {
 		

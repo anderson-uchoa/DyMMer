@@ -643,13 +643,13 @@ public class ContextModel implements IContextModel {
 
 	@Override
 	public double connectivityDependencyGraphRate() {
-		return (double)(featureModelStatistics.countAllConstraintsVariables() - featureModelStatistics.countConstraints())/numberOfFeatures();
+		return (double)featureModelStatistics.getConstraintsVariablesReference()/numberOfFeatures();
 	}
 	
 	@Override
 	public double numberFeaturesReferencedConstraintsMean() {
-		if(featureModelStatistics.getConstraintsVariablesReferenced() != 0){
-			return (double)(featureModelStatistics.countConstraintVars() - featureModelStatistics.countConstraints())/featureModelStatistics.getConstraintsVariablesReferenced();
+		if(featureModelStatistics.countConstraints() != 0){
+			return (double)featureModelStatistics.getConstraintsVariablesReferenced()/featureModelStatistics.countConstraints();
 		}
 		else
 			return 0;

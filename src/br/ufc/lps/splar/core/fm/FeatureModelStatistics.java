@@ -208,8 +208,8 @@ public class FeatureModelStatistics  {
 		return fm.getConstraintsVariablesReferenced();
 	}
 	
-	public int countAllConstraintsVariables(){
-		return fm.countAllConstraintsVariablesSet();
+	public int getConstraintsVariablesReference(){
+		return fm.getConstraintsVariablesReference();
 	}
 	/*
 	 * **********************

@@ -625,16 +625,22 @@ public abstract class FeatureModel extends DefaultTreeModel implements FeatureMo
 		return variables.size();
 	}
 	
-	//return all variables 
-	public int countAllConstraintsVariablesSet() {
-		int sum =0;
+	//return features that reference other feature
+	public int getConstraintsVariablesReference() {
+		Set<BooleanVariableInterface> variables = new LinkedHashSet<BooleanVariableInterface>();
 		if ( constraints != null ) {
 			for(Iterator<PropositionalFormula> it = constraints.values().iterator() ; it.hasNext() ; ) {
 				PropositionalFormula c = it.next();
-				sum += c.getVariables().size();
+				Iterator<BooleanVariable> it2 = c.getVariables().iterator();
+				while(it2.hasNext()){
+					BooleanVariableInterface var = it2.next();
+					if(!variables.contains(var) && it2.hasNext())
+						variables.add(var);
+				}
 			}
 		}
-		return sum;
+		
+		return variables.size();
 	}
 	/**
 	 * Get the feature model's nodes

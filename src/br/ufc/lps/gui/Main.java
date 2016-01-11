@@ -27,8 +27,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.data.JRXlsDataSource;
 import br.ufc.lps.gui.export.ExportOfficeExcel;
 import br.ufc.lps.model.context.FamiliarContextModel;
 import br.ufc.lps.model.context.SplotContextModel;
@@ -54,7 +52,7 @@ public class Main extends JFrame {
 	 * Launch the application.
 	 * @throws JRException 
 	 */
-	public static void main(String[] args) throws JRException {
+	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {

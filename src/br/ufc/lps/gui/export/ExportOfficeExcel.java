@@ -33,11 +33,11 @@ public class ExportOfficeExcel {
 	private List<Model> models; 
 	
 	private static final String[] METRICS = {"Number of features (NF)", "Number of Optional Features (NO)", "Number of Mandatory Features (NM)",	
-										"Number of top features (NTop)", "Number of leaf Features (NLeaf)", "Depth of tree Max (DT Max)", "Depth of tree Median (DT Median)",
+										"Number of top features (NTop)", "Number of leaf Features (NLeaf)", "Depth of tree Max (DT Max)", "Depth of tree Mean (DT Mean)", "Depth of tree Median (DT Median)",
 										"Cognitive Complexity of a Feature Model (CogC)", "Feature EXtendibility (FEX)", "Flexibility of configuration (FoC)", "Single Cyclic Dependent Features (SCDF)",
 										"Multiple Cyclic Dependent Features (MCDF)", "Cyclomatic complexity (CyC)", "Compound Complexity (ComC)", "Grouping Features (NGF)", "Cross-tree constraints Variables(CTCV)", 
-										"Cross-tree constraints (CTC)", "Coeficient of connectivity-density (CoC)", "Number of variable features (NVF)", 
-										"Single Hotspot Features (SHoF)", "Multiple Hotspot Features (MHoF)", "Rigid Nohotspot Features (RNoF)", "Ratio of variability (RoV)", 
+										"Cross-tree constraints (CTC)", "Connectivity of the Dependency Graph Rate (Rcon)", "Number of Features Referenced in Constraints Mean (Rden)", "Coeficient of connectivity-density (CoC)", 
+										"Number of variable features (NVF)", "Single Hotspot Features (SHoF)", "Multiple Hotspot Features (MHoF)", "Rigid Nohotspot Features (RNoF)", "Ratio of variability (RoV)", 
 										"Number of valid configurations (NVC)", "Branching Factor Max (BF Max)", "Branching Factor Median",
 										"Number Groups Or (NGOr)", "Number Groups XOR (NGXOr)", "Or Rate", "Xor Rate", "Non-Functional Commonality (NFC)"};
 	
@@ -55,8 +55,7 @@ public class ExportOfficeExcel {
 	private void createModels(){
 		
 		
-		for(int i = 0; i < files.length; i++){
-							
+		for(int i = 0; i < files.length; i++){		
 			//models.add(i, new SplotModel(files[i].getAbsolutePath()));
 			modelsContext.add(i,new SplotContextModel(files[i].getAbsolutePath()));
 		}
@@ -87,11 +86,11 @@ public class ExportOfficeExcel {
 			String modelName = model.getModelName();
 			
 			Object dataModel[] = {model.numberOfFeatures(), model.numberOfOptionalFeatures(), model.numberOfMandatoryFeatures(),  model.numberOfTopFeatures(),
-						  model.numberOfLeafFeatures(), model.depthOfTreeMax(),model.depthOfTreeMedian(), model.cognitiveComplexityOfFeatureModel(),
+						  model.numberOfLeafFeatures(), model.depthOfTreeMax(), model.depthOfTreeMean(), model.depthOfTreeMedian(), model.cognitiveComplexityOfFeatureModel(),
 						  model.featureExtendibility(), model.flexibilityOfConfiguration(), model.singleCyclicDependentFeatures(),
 						  model.multipleCyclicDependentFeatures(), model.cyclomaticComplexity(), model.compoundComplexity(), model.groupingFeatures(),
-						  model.crossTreeConstraintsVariables(), model.crossTreeConstraintsRate(), model.coefficientOfConnectivityDensity(), model.numberOfVariableFeatures(),
-						  model.singleVariationPointsFeatures(), model.multipleVariationPointsFeatures(),
+						  model.crossTreeConstraintsVariables(), model.crossTreeConstraintsRate(), model.connectivityDependencyGraphRate(), model.numberFeaturesReferencedConstraintsMean(),
+						  model.coefficientOfConnectivityDensity(), model.numberOfVariableFeatures(), model.singleVariationPointsFeatures(), model.multipleVariationPointsFeatures(),
 						  model.rigidNotVariationPointsFeatures(), model.ratioVariability(), model.numberOfValidConfigurations(), 
 						  model.branchingFactorsMax(),  model.branchingFactorsMedian(), model.numberOfGroupsOR(), model.numberOfGroupsXOR(), model.orRate(),  model.xorRate(), 
 						  model.nonFunctionCommonality(), model.numberOfContexts(),modelName};
@@ -121,7 +120,7 @@ public class ExportOfficeExcel {
 				modelContext.setFeatureModel(contexts.getValue());
 				String contextName = modelContext.getModelName() + " (" + contexts.getKey() + ")";
 				Object dataModelContext[] = {modelContext.nonFunctionCommonality(), modelContext.numberOfFeatures(), modelContext.numberOfTopFeatures(),
-						modelContext.numberOfLeafFeatures(), modelContext.depthOfTreeMax(),modelContext.depthOfTreeMedian(), modelContext.cognitiveComplexityOfFeatureModel(),
+						modelContext.numberOfLeafFeatures(), modelContext.depthOfTreeMax(), modelContext.depthOfTreeMean(), modelContext.depthOfTreeMedian(), modelContext.cognitiveComplexityOfFeatureModel(),
 						modelContext.featureExtendibility(), modelContext.flexibilityOfConfiguration(), modelContext.singleCyclicDependentFeatures(),
 						modelContext.multipleCyclicDependentFeatures(), modelContext.cyclomaticComplexity(), modelContext.compoundComplexity(), modelContext.groupingFeatures(),
 						modelContext.crossTreeConstraintsVariables(), modelContext.crossTreeConstraints(), modelContext.crossTreeConstraintsRate(), modelContext.coefficientOfConnectivityDensity(), modelContext.numberOfVariableFeatures(),

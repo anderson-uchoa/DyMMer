@@ -236,8 +236,7 @@ public class Main extends JFrame {
 				if(returnValue == JFileChooser.APPROVE_OPTION){
 					
 					File files[] = fileChooser.getSelectedFiles();
-					
-					if(files.length > 50){
+					if(files.length > 500){
 						JOptionPane.showMessageDialog(Main.this, "Please, do not choose more than 50 model files.", "Exceeded!", JOptionPane.WARNING_MESSAGE);
 						return;
 					}

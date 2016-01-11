@@ -366,14 +366,7 @@ public class ContextModel implements IContextModel {
 	
 	@Override
 	public double depthOfTreeMean() {
-		List<FeatureTreeNode> nodesAtLevel = (List<FeatureTreeNode>) featureModel.getLeaves();
-		double sumDepth = 0;
-		
-		for(FeatureTreeNode node : nodesAtLevel)	
-			sumDepth += node.getDepth();
-		
-		return (double) sumDepth/nodesAtLevel.size();
-		
+		return featureModelStatistics.getAverageDepth();
 	}
 	
 	@Override
@@ -648,6 +641,20 @@ public class ContextModel implements IContextModel {
 		return (double)featureModelStatistics.countFeaturesInConstraints()/featureModelStatistics.countFeatures();
 	}
 
+	@Override
+	public double connectivityDependencyGraphRate() {
+		return (double)featureModelStatistics.getConstraintsVariablesReference()/numberOfFeatures();
+	}
+	
+	@Override
+	public double numberFeaturesReferencedConstraintsMean() {
+		if(featureModelStatistics.countConstraints() != 0){
+			return (double)featureModelStatistics.getConstraintsVariablesReferenced()/featureModelStatistics.countConstraints();
+		}
+		else
+			return 0;
+	}
+	
 	@Override
 	public int numberOfContextAffectingProductConfiguration() {
 

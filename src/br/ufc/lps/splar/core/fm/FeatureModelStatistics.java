@@ -70,7 +70,7 @@ public class FeatureModelStatistics  {
 			
 		
 			childrenStatistics.addValue(node.getChildCount());
-			
+
 			if(fm.isExtraConstraintVariable(node))
 				featureInConstraintCount++;
 			
@@ -204,6 +204,13 @@ public class FeatureModelStatistics  {
 		return featureInConstraintCount;
 	}
 	
+	public int getConstraintsVariablesReferenced(){
+		return fm.getConstraintsVariablesReferenced();
+	}
+	
+	public int getConstraintsVariablesReference(){
+		return fm.getConstraintsVariablesReference();
+	}
 	/*
 	 * **********************
 	 */

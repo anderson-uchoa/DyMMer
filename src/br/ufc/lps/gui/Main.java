@@ -800,6 +800,9 @@ public class Main extends JFrame {
 		JMenuItem mntmdesactivatedFeaturesByContextAdaptation = new JMenuItem("Desactivated features by context adaptation");
 		mnWithoutContext.add(mntmdesactivatedFeaturesByContextAdaptation);
 		
+		JMenuItem mntmnonContextFeatures = new JMenuItem("Non Context Features");
+		mnWithoutContext.add(mntmnonContextFeatures);
+		
 		mntmNumberOfContextConstraints.addActionListener(new ActionListener() {	
 			@Override
 			public void actionPerformed(ActionEvent e) {		
@@ -836,6 +839,12 @@ public class Main extends JFrame {
 		mntmdesactivatedFeaturesByContextAdaptation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {		
 				currentViewer.getLblResultReasoning().setText("DFCA: " + currentViewer.getModel().desactivatedFeaturesByContextAdaptation());				
+			}
+		});
+		
+		mntmnonContextFeatures.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {		
+				currentViewer.getLblResultReasoning().setText("NCF: " + currentViewer.getModel().nonContextFeatures());				
 			}
 		});
 	}

@@ -3,6 +3,7 @@ package br.ufc.lps.model.context;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -594,25 +595,30 @@ public class ContextModel implements IContextModel {
 		return currentContext.getConstraints().size();
 	}
 	
-	public double nonContextFeatures() {
-		ArrayList<String> active_features = new ArrayList<String>();
-		int[] count = new int[numberOfContexts()];
-		int id;
+	public int nonContextFeatures() {
+		Map<String, Integer> count = new HashMap<String, Integer>();
+		String id_feature;
 		
 		for(Context context : contexts.values()){
-			id =0;
 			for(Resolution resolution : context.getResolutions()){
-				if(resolution.getStatus() && !active_features.contains(resolution.getIdFeature())){
-					active_features.add(resolution.getIdFeature());
-					count[id]++; 	
-				}
-				id++;
+				id_feature = resolution.getIdFeature();
+				if(resolution.getStatus())
+					if (count.containsKey(id_feature))
+						count.put(id_feature, count.get(id_feature)+1);
+					else{
+						count.put(id_feature, 1);
+					}
 			}
 		}
 		
-		//for(int j =0; j < )
-		return 0;
-		//return (double)count/numberOfContexts();
+		//criar outro método
+		int sum = 0;
+		for (Integer value: count.values()) {
+			if(value == numberOfContexts())
+				sum ++;
+		}
+		
+		return sum;
 	}
 	
 	//-1 devido ao contexto Default

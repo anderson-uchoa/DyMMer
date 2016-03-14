@@ -65,19 +65,19 @@ public class ViewerPanel extends JPanel {
 		JLabel lblNewLabel = new JLabel("Contexts");
 		panelInfoContexts.add(lblNewLabel);
 		
-		JPanel panelInfoConstraints = new JPanel();
+		/*JPanel panelInfoConstraints = new JPanel();
 		panelInfos.add(panelInfoConstraints, BorderLayout.SOUTH);
 		constraintsPanel = new TextArea();
 		constraintsPanel.setEditable(false);
 		panelInfoConstraints.add(constraintsPanel);
-		
+		*/
 		comboBoxContexts = new JComboBox();
 		for(String contextNames : model.getContexts().keySet()){
 			comboBoxContexts.addItem(contextNames);
 		}
 		panelInfoContexts.add(comboBoxContexts);
 		
-		updateConstraintsPainel(model.getContexts().get(comboBoxContexts.getItemAt(0)));
+		//updateConstraintsPainel(model.getContexts().get(comboBoxContexts.getItemAt(0)));
 		
 		comboBoxContexts.addActionListener(new ActionListener() {
 			@Override
@@ -88,14 +88,12 @@ public class ViewerPanel extends JPanel {
 					setTreeVisualization(contextName);
 					
 					Context context = model.getContexts().get(contextName);
-					updateConstraintsPainel(context);
+					//updateConstraintsPainel(context);
 				}
 			}
 		});
-		
 		String contextName = (String) comboBoxContexts.getItemAt(0);
 		setTreeVisualization(contextName);
-		
 		
 	}
 	
@@ -103,7 +101,7 @@ public class ViewerPanel extends JPanel {
 	 * @return the lblResultReasoning
 	 */
 	
-	public void updateConstraintsPainel(Context context){
+	/*public void updateConstraintsPainel(Context context){
 		FeatureModel featureModel = model.setFeatureModel(context);
 		
 		Collection<PropositionalFormula> constraints = featureModel.getConstraints();	
@@ -115,7 +113,7 @@ public class ViewerPanel extends JPanel {
 		}
 		
 		constraintsPanel.setText(formulas);
-	}
+	}*/
 	
 	public JLabel getLblResultReasoning() {
 		return lblResultReasoning;

@@ -793,11 +793,17 @@ public class Main extends JFrame {
 		
 		JMenuItem mntmNumberOfContextConstraints = new JMenuItem("Number of Context Constraints");
 		mnWithoutContext.add(mntmNumberOfContextConstraints);
-		mntmNumberOfContextConstraints.addActionListener(new ActionListener() {
-			
-		@Override
-		public void actionPerformed(ActionEvent e) {		
-				currentViewer.getLblResultReasoning().setText("Number of Context Constraints: " + currentViewer.getModel().numberContextConstraints());
+		
+		JMenuItem mntmactivatedFeaturesByContextAdaptation = new JMenuItem("Activated features by context adaptation");
+		mnWithoutContext.add(mntmactivatedFeaturesByContextAdaptation);
+		
+		JMenuItem mntmdesactivatedFeaturesByContextAdaptation = new JMenuItem("Desactivated features by context adaptation");
+		mnWithoutContext.add(mntmdesactivatedFeaturesByContextAdaptation);
+		
+		mntmNumberOfContextConstraints.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {		
+					currentViewer.getLblResultReasoning().setText("Number of Context Constraints: " + currentViewer.getModel().numberContextConstraints());
 			}
 		});
 		
@@ -818,6 +824,18 @@ public class Main extends JFrame {
 		mntmNumberOfContexts.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {		
 				currentViewer.getLblResultReasoning().setText("Number of Contexts: " + currentViewer.getModel().numberOfContexts());				
+			}
+		});
+		
+		mntmactivatedFeaturesByContextAdaptation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {		
+				currentViewer.getLblResultReasoning().setText("AFCA: " + currentViewer.getModel().activatedFeaturesByContextAdaptation());				
+			}
+		});
+		
+		mntmdesactivatedFeaturesByContextAdaptation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {		
+				currentViewer.getLblResultReasoning().setText("DFCA: " + currentViewer.getModel().desactivatedFeaturesByContextAdaptation());				
 			}
 		});
 	}

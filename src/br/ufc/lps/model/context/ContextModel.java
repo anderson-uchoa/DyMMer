@@ -541,6 +541,18 @@ public class ContextModel implements IContextModel {
 		return count;
 	}
 	
+	public double activatedFeaturesByContextAdaptation() {
+		int count =0;
+		for(Context context : contexts.values()){
+			for(Resolution resolution : context.getResolutions()){
+				if(resolution.getStatus())
+					count++;
+			}
+		}
+		
+		return (double)count/numberOfContexts();
+	}
+	
 	public int numberActivatedFeatures(){
 		
 		int count = 0;
@@ -552,6 +564,18 @@ public class ContextModel implements IContextModel {
 		
 		return count;
 		
+	}
+	
+	public double desactivatedFeaturesByContextAdaptation() {
+		int count =0;
+		for(Context context : contexts.values()){
+			for(Resolution resolution : context.getResolutions()){
+				if(!resolution.getStatus())
+					count++;
+			}
+		}
+		
+		return (double)count/numberOfContexts();
 	}
 	
 	public int numberDeactivatedFeatures(){
@@ -568,6 +592,27 @@ public class ContextModel implements IContextModel {
 	public int numberContextConstraints(){
 		
 		return currentContext.getConstraints().size();
+	}
+	
+	public double nonContextFeatures() {
+		ArrayList<String> active_features = new ArrayList<String>();
+		int[] count = new int[numberOfContexts()];
+		int id;
+		
+		for(Context context : contexts.values()){
+			id =0;
+			for(Resolution resolution : context.getResolutions()){
+				if(resolution.getStatus() && !active_features.contains(resolution.getIdFeature())){
+					active_features.add(resolution.getIdFeature());
+					count[id]++; 	
+				}
+				id++;
+			}
+		}
+		
+		//for(int j =0; j < )
+		return 0;
+		//return (double)count/numberOfContexts();
 	}
 	
 	//-1 devido ao contexto Default

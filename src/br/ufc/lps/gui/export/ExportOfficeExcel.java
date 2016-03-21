@@ -41,7 +41,8 @@ public class ExportOfficeExcel {
 										"Number of valid configurations (NVC)", "Branching Factor Max (BF Max)", "Branching Factor Median",
 										"Number Groups Or (NGOr)", "Number Groups XOR (NGXOr)", "Or Rate", "Xor Rate", "Non-Functional Commonality (NFC)"};
 	
-	private static final String[] METRICS_CONTEXT = {"Number of Activated Features", "Number of Deactivated Features", "Number of Context Constraints"};
+	private static final String[] METRICS_CONTEXT = {"Number of Activated Features", "Number of Deactivated Features", "Number of Context Constraints", "Activated features by context adaptation (AFCA)",
+		"Desactivated features by context adaptation (DFCA)", "Non Context Features (NCF)"};
 	private static final String[] METRICS_WITHOUT_CONTEXT = {"Number of Contexts"};
 	
 	public ExportOfficeExcel(File files[]) {
@@ -119,15 +120,15 @@ public class ExportOfficeExcel {
 				
 				modelContext.setFeatureModel(contexts.getValue());
 				String contextName = modelContext.getModelName() + " (" + contexts.getKey() + ")";
-				Object dataModelContext[] = {modelContext.nonFunctionCommonality(), modelContext.numberOfFeatures(), modelContext.numberOfTopFeatures(),
-						modelContext.numberOfLeafFeatures(), modelContext.depthOfTreeMax(), modelContext.depthOfTreeMean(), modelContext.depthOfTreeMedian(), modelContext.cognitiveComplexityOfFeatureModel(),
-						modelContext.featureExtendibility(), modelContext.flexibilityOfConfiguration(), modelContext.singleCyclicDependentFeatures(),
-						modelContext.multipleCyclicDependentFeatures(), modelContext.cyclomaticComplexity(), modelContext.compoundComplexity(), modelContext.groupingFeatures(),
-						modelContext.crossTreeConstraintsVariables(), modelContext.crossTreeConstraints(), modelContext.crossTreeConstraintsRate(), modelContext.coefficientOfConnectivityDensity(), modelContext.numberOfVariableFeatures(),
-						modelContext.numberOfVariationPoints(), modelContext.singleVariationPointsFeatures(), modelContext.multipleVariationPointsFeatures(),
-						modelContext.rigidNotVariationPointsFeatures(), modelContext.ratioVariability(), modelContext.numberOfValidConfigurations(),
-						modelContext.branchingFactorsMax(), modelContext.branchingFactorsMedian(), modelContext.orRate(), modelContext.xorRate(),
-						modelContext.numberActivatedFeatures(), modelContext.numberDeactivatedFeatures(), modelContext.numberContextConstraints(), contextName};
+				Object dataModelContext[] = {modelContext.numberOfFeatures(), modelContext.numberOfOptionalFeatures(), modelContext.numberOfMandatoryFeatures(), modelContext.numberOfTopFeatures(), 
+						modelContext.numberOfLeafFeatures(), modelContext.depthOfTreeMax(), modelContext.depthOfTreeMean(),  modelContext.depthOfTreeMedian(), modelContext.cognitiveComplexityOfFeatureModel(),
+						modelContext.featureExtendibility(), modelContext.flexibilityOfConfiguration(), modelContext.singleCyclicDependentFeatures(), modelContext.multipleCyclicDependentFeatures(),
+						modelContext.cyclomaticComplexity(), modelContext.compoundComplexity(), modelContext.groupingFeatures(), modelContext.crossTreeConstraintsVariables(), modelContext.crossTreeConstraintsRate(),
+						modelContext.connectivityDependencyGraphRate(), modelContext.numberFeaturesReferencedConstraintsMean(), modelContext.coefficientOfConnectivityDensity(), modelContext.numberOfVariableFeatures(),
+						modelContext.singleVariationPointsFeatures(), modelContext.multipleVariationPointsFeatures(), modelContext.rigidNotVariationPointsFeatures(), modelContext.ratioVariability(),
+						modelContext.numberOfValidConfigurations(), modelContext.branchingFactorsMax(), modelContext.branchingFactorsMedian(), modelContext.numberOfGroupsOR(), modelContext.numberOfGroupsXOR(), 
+						modelContext.orRate(),  modelContext.xorRate(), modelContext.nonFunctionCommonality(), modelContext.numberActivatedFeatures(), modelContext.numberDeactivatedFeatures(),
+						modelContext.numberContextConstraints(), modelContext.activatedFeaturesByContextAdaptation(), modelContext.desactivatedFeaturesByContextAdaptation(), modelContext.nonContextFeatures(), contextName};
 						
 				datas.add(dataModelContext);
 				

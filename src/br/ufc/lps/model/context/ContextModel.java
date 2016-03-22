@@ -533,100 +533,6 @@ public class ContextModel implements IContextModel {
 		return 0;
 	}
 	
-	private int countActiveFeatures(Collection<FeatureTreeNode> features){
-		int count = 0;
-		for(FeatureTreeNode feature : features)
-			if(FeatureTreeNode.isActiveHierarchy(feature))
-				count++;
-		
-		return count;
-	}
-	
-	public double activatedFeaturesByContextAdaptation() {
-		int count =0;
-		for(Context context : contexts.values()){
-			for(Resolution resolution : context.getResolutions()){
-				if(resolution.getStatus())
-					count++;
-			}
-		}
-		
-		return (double)count/numberOfContexts();
-	}
-	
-	public int numberActivatedFeatures(){
-		
-		int count = 0;
-		
-		for(Resolution resolution : currentContext.getResolutions()){
-			if(resolution.getStatus())
-				count++;
-		}
-		
-		return count;
-		
-	}
-	
-	public double desactivatedFeaturesByContextAdaptation() {
-		int count =0;
-		for(Context context : contexts.values()){
-			for(Resolution resolution : context.getResolutions()){
-				if(!resolution.getStatus())
-					count++;
-			}
-		}
-		
-		return (double)count/numberOfContexts();
-	}
-	
-	public int numberDeactivatedFeatures(){
-		int count = 0;
-		
-		for(Resolution resolution : currentContext.getResolutions()){
-			if(!resolution.getStatus())
-				count++;
-		}
-		
-		return count;
-	}
-	
-	public int numberContextConstraints(){
-		
-		return currentContext.getConstraints().size();
-	}
-	
-	public int nonContextFeatures() {
-		Map<String, Integer> count = new HashMap<String, Integer>();
-		String id_feature;
-		
-		for(Context context : contexts.values()){
-			for(Resolution resolution : context.getResolutions()){
-				id_feature = resolution.getIdFeature();
-				if(resolution.getStatus())
-					if (count.containsKey(id_feature))
-						count.put(id_feature, count.get(id_feature)+1);
-					else{
-						count.put(id_feature, 1);
-					}
-			}
-		}
-		
-		//criar outro método
-		int sum = 0;
-		for (Integer value: count.values()) {
-			if(value == numberOfContexts())
-				sum ++;
-		}
-		
-		return sum;
-	}
-	
-	//-1 devido ao contexto Default
-	public int numberOfContexts(){
-		return contexts.size()-1;
-	}
-	
-
 	@Override
 	public FeatureModel getFeatureModel() {
 		return featureModel;
@@ -739,6 +645,135 @@ public class ContextModel implements IContextModel {
 	public double ratioSwitchFeatures() {
 		return (numberOfFeatures() - numberOfMandatoryFeatures() -1)/numberOfFeatures();
 	}
+	
+	private int countActiveFeatures(Collection<FeatureTreeNode> features){
+		int count = 0;
+		for(FeatureTreeNode feature : features)
+			if(FeatureTreeNode.isActiveHierarchy(feature))
+				count++;
+		
+		return count;
+	}
+	
+	public double activatedFeaturesByContextAdaptation() {
+		int count =0;
+		for(Context context : contexts.values()){
+			for(Resolution resolution : context.getResolutions()){
+				if(resolution.getStatus())
+					count++;
+			}
+		}
+		
+		return (double)count/numberOfContexts();
+	}
+	
+	public int numberActivatedFeatures(){
+		
+		int count = 0;
+		
+		for(Resolution resolution : currentContext.getResolutions()){
+			if(resolution.getStatus())
+				count++;
+		}
+		
+		return count;
+		
+	}
+	
+	public double desactivatedFeaturesByContextAdaptation() {
+		int count =0;
+		for(Context context : contexts.values()){
+			for(Resolution resolution : context.getResolutions()){
+				if(!resolution.getStatus())
+					count++;
+			}
+		}
+		
+		return (double)count/numberOfContexts();
+	}
+	
+	public int numberDeactivatedFeatures(){
+		int count = 0;
+		
+		for(Resolution resolution : currentContext.getResolutions()){
+			if(!resolution.getStatus())
+				count++;
+		}
+		
+		return count;
+	}
+	
+	public int numberContextConstraints(){
+		
+		return currentContext.getConstraints().size();
+	}
+	
+	public int contextFeatures() {
+		ArrayList<String> deactivated_fetures =  getAllDeactivatedFeatures();	
+		int root = 1;
+
+		return featureModel.countNodes() - root - deactivated_fetures.size();
+	}
+	
+	public int contextFeaturesContraints() {
+		ArrayList<String> activated_fetures = getAllActivatedFeatures();
+		ArrayList<String> deactivated_fetures = getAllDeactivatedFeatures();
+		ArrayList<FeatureTreeNode> variables = featureModelStatistics.getFeaturesInConstraints();
+		
+		int variable_neutral =0;
+		int variable_activated = 0;
+		
+		for(FeatureTreeNode feature : variables){
+			if(activated_fetures.contains(feature.getID()))
+				variable_activated++;		
+			else if(!activated_fetures.contains(feature.getID()) && !deactivated_fetures.contains(feature.getID()))
+				variable_neutral++;	
+				
+		}	
+		
+		return variable_activated + variable_neutral;
+	}
+	
+	public ArrayList<String> getAllDeactivatedFeatures() {
+		ArrayList<String> deactivated_fetures = new ArrayList<String>();
+		String id_feature;
+		
+		for(Context context : contexts.values()){
+			for(Resolution resolution : context.getResolutions()){
+				id_feature = resolution.getIdFeature();
+				if(!resolution.getStatus())
+					if(!deactivated_fetures.contains(id_feature))
+						deactivated_fetures.add(id_feature);			
+			}
+		}	
+		
+		return deactivated_fetures;
+	}
+	
+	
+	public ArrayList<String> getAllActivatedFeatures() {
+		ArrayList<String> activated_fetures = new ArrayList<String>();
+		String id_feature;
+		
+		for(Context context : contexts.values()){
+			for(Resolution resolution : context.getResolutions()){
+				id_feature = resolution.getIdFeature();
+				if(resolution.getStatus())
+					if(!activated_fetures.contains(id_feature))
+						activated_fetures.add(id_feature);			
+			}
+		}	
+		
+		return activated_fetures;
+	}
+	
+	//-1 devido ao contexto Default
+	public int numberOfContexts(){
+		return contexts.size()-1;
+	}
+	
+
+	
 	
 	
 	

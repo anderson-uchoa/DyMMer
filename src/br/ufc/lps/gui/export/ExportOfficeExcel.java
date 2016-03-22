@@ -128,7 +128,7 @@ public class ExportOfficeExcel {
 						modelContext.singleVariationPointsFeatures(), modelContext.multipleVariationPointsFeatures(), modelContext.rigidNotVariationPointsFeatures(), modelContext.ratioVariability(),
 						modelContext.numberOfValidConfigurations(), modelContext.branchingFactorsMax(), modelContext.branchingFactorsMedian(), modelContext.numberOfGroupsOR(), modelContext.numberOfGroupsXOR(), 
 						modelContext.orRate(),  modelContext.xorRate(), modelContext.nonFunctionCommonality(), modelContext.numberActivatedFeatures(), modelContext.numberDeactivatedFeatures(),
-						modelContext.numberContextConstraints(), modelContext.activatedFeaturesByContextAdaptation(), modelContext.desactivatedFeaturesByContextAdaptation(), modelContext.nonContextFeatures(), contextName};
+						modelContext.numberContextConstraints(), modelContext.activatedFeaturesByContextAdaptation(), modelContext.desactivatedFeaturesByContextAdaptation(), modelContext.contextFeatures(), contextName};
 						
 				datas.add(dataModelContext);
 				

@@ -488,6 +488,9 @@ public class Main extends JFrame {
 		JMenuItem mntmCyclomaticComplexity = new JMenuItem("Cyclomatic complexity");
 		mnNas.add(mntmCyclomaticComplexity);
 	
+		JMenuItem mntmVariableCrosstreeConstraintsRate = new JMenuItem("Variable Cross tree Constraints");
+		mnNas.add(mntmVariableCrosstreeConstraintsRate);
+		
 		JMenuItem mntmCompoundComplexity = new JMenuItem("Compound Complexity");
 		mnNas.add(mntmCompoundComplexity);
 		
@@ -620,6 +623,14 @@ public class Main extends JFrame {
 				currentViewer.getLblResultReasoning().setText("Cyclomatic complexity: " + currentViewer.getModel().cyclomaticComplexity());
 			}
 		});
+		
+		mntmVariableCrosstreeConstraintsRate.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {		
+				currentViewer.getLblResultReasoning().setText("Variable Cross tree Constraints: " + currentViewer.getModel().crossTreeConstraintsVariables());
+			}
+		});
+		
 		
 		mntmCompoundComplexity.addActionListener(new ActionListener() {
 			@Override
@@ -800,8 +811,11 @@ public class Main extends JFrame {
 		JMenuItem mntmdesactivatedFeaturesByContextAdaptation = new JMenuItem("Desactivated features by context adaptation");
 		mnWithoutContext.add(mntmdesactivatedFeaturesByContextAdaptation);
 		
-		JMenuItem mntmnonContextFeatures = new JMenuItem("Non Context Features");
-		mnWithoutContext.add(mntmnonContextFeatures);
+		JMenuItem mntmContextFeatures = new JMenuItem("Context Features");
+		mnWithoutContext.add(mntmContextFeatures);
+		
+		JMenuItem mntmContextFeaturesContraints = new JMenuItem("Context Features in Conntraints");
+		mnWithoutContext.add(mntmContextFeaturesContraints);
 		
 		mntmNumberOfContextConstraints.addActionListener(new ActionListener() {	
 			@Override
@@ -842,9 +856,15 @@ public class Main extends JFrame {
 			}
 		});
 		
-		mntmnonContextFeatures.addActionListener(new ActionListener() {
+		mntmContextFeatures.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {		
-				currentViewer.getLblResultReasoning().setText("NCF: " + currentViewer.getModel().nonContextFeatures());				
+				currentViewer.getLblResultReasoning().setText("CF: " + currentViewer.getModel().contextFeatures());				
+			}
+		});
+		
+		mntmContextFeaturesContraints.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {		
+				currentViewer.getLblResultReasoning().setText("CFC: " + currentViewer.getModel().contextFeaturesContraints());				
 			}
 		});
 	}

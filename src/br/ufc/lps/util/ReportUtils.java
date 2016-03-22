@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
+/*
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -15,9 +15,9 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRXlsDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
-
+*/
 public class ReportUtils {
-	private static JRXlsDataSource getDataSource1() throws JRException
+	/*private static JRXlsDataSource getDataSource1() throws JRException
 	  {
 		JRXlsDataSource ds;
 	    try
@@ -57,7 +57,7 @@ public class ReportUtils {
 	    JasperViewer.viewReport(jasperPrint,false);
 	    JasperPrintManager.printReport(jasperPrint,false);
 	    System.err.println("Filling time : " + (System.currentTimeMillis() - start));
-	  }
+	  }*/
  
 }
 

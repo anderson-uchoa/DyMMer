@@ -1,5 +1,6 @@
 package br.ufc.lps.splar.core.fm;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +35,7 @@ public class FeatureModelStatistics  {
 	int mcdf = 0;
 	
 	DescriptiveStatistics childrenStatistics = new DescriptiveStatistics();
-	int featureInConstraintCount;
+	ArrayList<FeatureTreeNode> feature_in_constraints = new ArrayList<FeatureTreeNode>();
 	
 	public FeatureModelStatistics(FeatureModel fm) {
 		this.fm = fm;
@@ -72,7 +73,7 @@ public class FeatureModelStatistics  {
 			childrenStatistics.addValue(node.getChildCount());
 
 			if(fm.isExtraConstraintVariable(node))
-				featureInConstraintCount++;
+				feature_in_constraints.add(node);
 			
 			
 			if ( node instanceof RootNode ) {
@@ -201,7 +202,11 @@ public class FeatureModelStatistics  {
 	}
 
 	public int countFeaturesInConstraints(){
-		return featureInConstraintCount;
+		return feature_in_constraints.size();
+	}
+	
+	public ArrayList<FeatureTreeNode> getFeaturesInConstraints(){
+		return feature_in_constraints;
 	}
 	
 	public int getConstraintsVariablesReferenced(){

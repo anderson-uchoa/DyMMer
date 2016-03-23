@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.naming.OperationNotSupportedException;
 import javax.xml.parsers.DocumentBuilder;
@@ -24,6 +26,7 @@ import br.ufc.lps.contextaware.Context;
 import br.ufc.lps.contextaware.Resolution;
 import br.ufc.lps.model.ModelFactory;
 import br.ufc.lps.splar.core.constraints.BooleanVariable;
+import br.ufc.lps.splar.core.constraints.BooleanVariableInterface;
 import br.ufc.lps.splar.core.constraints.CNFFormula;
 import br.ufc.lps.splar.core.constraints.PropositionalFormula;
 import br.ufc.lps.splar.core.fm.FeatureModel;
@@ -716,22 +719,26 @@ public class ContextModel implements IContextModel {
 	}
 	
 	public int contextFeaturesContraints() {
-		ArrayList<String> activated_fetures = getAllActivatedFeatures();
-		ArrayList<String> deactivated_fetures = getAllDeactivatedFeatures();
-		ArrayList<FeatureTreeNode> variables = featureModelStatistics.getFeaturesInConstraints();
-		
-		int variable_neutral =0;
-		int variable_activated = 0;
-		
-		for(FeatureTreeNode feature : variables){
-			if(activated_fetures.contains(feature.getID()))
-				variable_activated++;		
-			else if(!activated_fetures.contains(feature.getID()) && !deactivated_fetures.contains(feature.getID()))
-				variable_neutral++;	
-				
+		ArrayList<FeatureTreeNode> feature_in_constraints = new ArrayList<FeatureTreeNode>();
+	
+		for(Context context : contexts.values()){
+			if(context.getName() != "default"){
+				FeatureModel fm = context.getFeatureModel();
+			
+				for( Iterator<FeatureTreeNode> it = fm.nodesIterator(); it.hasNext();) {
+					FeatureTreeNode node = it.next();
+					if(node.isActiveInContext()){
+						if(fm.isExtraConstraintVariable(node)){
+							if(!feature_in_constraints.contains(node)){
+								feature_in_constraints.add(node);
+							}
+						}
+					}
+				}
+			}
 		}	
 		
-		return variable_activated + variable_neutral;
+		return feature_in_constraints.size();
 	}
 	
 	public ArrayList<String> getAllDeactivatedFeatures() {

@@ -30,6 +30,7 @@ import br.ufc.lps.splar.core.constraints.BooleanVariable;
 import br.ufc.lps.splar.core.constraints.BooleanVariableInterface;
 import br.ufc.lps.splar.core.constraints.PropositionalFormula;
 import br.ufc.lps.splar.core.fm.FeatureModel;
+import br.ufc.lps.splar.core.fm.FeatureTreeNode;
 
 public class ViewerPanel extends JPanel {
 
@@ -119,12 +120,20 @@ public class ViewerPanel extends JPanel {
 			
 			for(Iterator<BooleanVariable> it2 = variables.iterator(); it2.hasNext() ; ) {
 				BooleanVariable variable = it2.next();
-				if(variable.getState() == false){
-					constraints+="~";
+				
+				if(featureModel.getNodeByID(variable.getName()).getValue() != 0){
+					if(!FeatureTreeNode.isActiveHierarchy(featureModel.getNodeByID(variable.getName()))){
+						continue;
+					}
+					
+					if(variable.getState() == false){
+						constraints+="~";
+					}
+
+					constraints += featureModel.getNodeByID(variable.getName()).getName();
+					if(it2.hasNext())
+						constraints += " or ";
 				}
-				constraints += featureModel.getNodeByID(variable.getName()).getName();
-				if(it2.hasNext())
-					constraints += " or ";
 			}
 			constraints +="\n";
 		}

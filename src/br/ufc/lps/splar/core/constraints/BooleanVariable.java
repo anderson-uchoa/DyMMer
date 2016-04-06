@@ -32,6 +32,10 @@ public class BooleanVariable implements BooleanVariableInterface {
 		this.state = state;
 	}
 	
+	public boolean getState() {
+		return state;
+	}
+	
 	public boolean isPositive() {
 		return state;
 	}

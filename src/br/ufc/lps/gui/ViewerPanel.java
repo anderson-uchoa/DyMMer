@@ -1,13 +1,17 @@
 package br.ufc.lps.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -22,6 +26,8 @@ import br.ufc.lps.contextaware.Context;
 import br.ufc.lps.gui.list.ConstraintsListModel;
 import br.ufc.lps.gui.tree.FeaturesTreeCellRenderer;
 import br.ufc.lps.model.context.ContextModel;
+import br.ufc.lps.splar.core.constraints.BooleanVariable;
+import br.ufc.lps.splar.core.constraints.BooleanVariableInterface;
 import br.ufc.lps.splar.core.constraints.PropositionalFormula;
 import br.ufc.lps.splar.core.fm.FeatureModel;
 
@@ -65,19 +71,19 @@ public class ViewerPanel extends JPanel {
 		JLabel lblNewLabel = new JLabel("Contexts");
 		panelInfoContexts.add(lblNewLabel);
 		
-		/*JPanel panelInfoConstraints = new JPanel();
+		JPanel panelInfoConstraints = new JPanel();
 		panelInfos.add(panelInfoConstraints, BorderLayout.SOUTH);
 		constraintsPanel = new TextArea();
 		constraintsPanel.setEditable(false);
 		panelInfoConstraints.add(constraintsPanel);
-		*/
+		
 		comboBoxContexts = new JComboBox();
 		for(String contextNames : model.getContexts().keySet()){
 			comboBoxContexts.addItem(contextNames);
 		}
 		panelInfoContexts.add(comboBoxContexts);
 		
-		//updateConstraintsPainel(model.getContexts().get(comboBoxContexts.getItemAt(0)));
+		updateConstraintsPainel(model.getContexts().get(comboBoxContexts.getItemAt(0)));
 		
 		comboBoxContexts.addActionListener(new ActionListener() {
 			@Override
@@ -88,7 +94,7 @@ public class ViewerPanel extends JPanel {
 					setTreeVisualization(contextName);
 					
 					Context context = model.getContexts().get(contextName);
-					//updateConstraintsPainel(context);
+					updateConstraintsPainel(context);
 				}
 			}
 		});
@@ -101,19 +107,30 @@ public class ViewerPanel extends JPanel {
 	 * @return the lblResultReasoning
 	 */
 	
-	/*public void updateConstraintsPainel(Context context){
-		FeatureModel featureModel = model.setFeatureModel(context);
+	public void updateConstraintsPainel(Context context){
+		FeatureModel featureModel = context.getFeatureModel();
+		String constraints = "";	
+		Collection<BooleanVariable> variables = new ArrayList<BooleanVariable>();
+		Collection<PropositionalFormula> formulas = featureModel.getConstraints();
 		
-		Collection<PropositionalFormula> constraints = featureModel.getConstraints();	
-		
-		String formulas = "";
-		for (Iterator<PropositionalFormula> i = constraints.iterator(); i.hasNext(); ) {
-			PropositionalFormula constraint = i.next();
-			formulas += constraint.getFormula() + "\n";
+		for(Iterator<PropositionalFormula> it = formulas.iterator(); it.hasNext() ; ) {
+			PropositionalFormula formula = it.next();
+			variables = formula.getVariables();
+			
+			for(Iterator<BooleanVariable> it2 = variables.iterator(); it2.hasNext() ; ) {
+				BooleanVariable variable = it2.next();
+				if(variable.getState() == false){
+					constraints+="~";
+				}
+				constraints += featureModel.getNodeByID(variable.getName()).getName();
+				if(it2.hasNext())
+					constraints += " or ";
+			}
+			constraints +="\n";
 		}
 		
-		constraintsPanel.setText(formulas);
-	}*/
+		constraintsPanel.setText(constraints);
+	}
 	
 	public JLabel getLblResultReasoning() {
 		return lblResultReasoning;

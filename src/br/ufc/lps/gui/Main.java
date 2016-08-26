@@ -7,9 +7,18 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import com.google.gson.reflect.TypeToken;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -26,7 +35,22 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import br.ufc.lps.conexao.ClientHttp;
+import br.ufc.lps.conexao.SchemeXml;
 import br.ufc.lps.gui.export.ExportOfficeExcel;
 import br.ufc.lps.model.context.FamiliarContextModel;
 import br.ufc.lps.model.context.SplotContextModel;
@@ -38,15 +62,16 @@ import br.ufc.lps.model.xml.XMLFamiliarModel;
 import br.ufc.lps.model.xml.XMLSplotModel;
 import br.ufc.lps.splar.core.fm.FeatureModelException;
 import br.ufc.lps.util.ReportUtils;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 public class Main extends JFrame {
 
-	
+	private static String pt = "";
 	private JTabbedPane tabbedPane;
 	//Identifica o viewer atual para definir o modelo em quest�o a ser utilizado nas metricas
 	private ViewerPanel currentViewer;
 	private JMenu mnMeasures_1;
-	
 	
 	/**
 	 * Launch the application.
@@ -56,8 +81,6 @@ public class Main extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					
-										
 					Main frame = new Main();
 					frame.setVisible(true);
 					
@@ -77,8 +100,6 @@ public class Main extends JFrame {
 	public Main() {
 		
 		initXMLmodels();
-	
-
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 640, 480);
@@ -101,6 +122,8 @@ public class Main extends JFrame {
 				
 			}
 		});
+		
+		iniciarCampos();
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -144,8 +167,10 @@ public class Main extends JFrame {
 				int returnValue = fileChooser.showOpenDialog(null);
 				if(returnValue == JFileChooser.APPROVE_OPTION){
 					
+					//MUDANÇA DE CAMINHO
 					String path = fileChooser.getSelectedFile().getAbsolutePath();
 					final ViewerPanel viewer = new ViewerPanel(new SplotContextModel(path));
+					
 					currentViewer = viewer;
 					SwingUtilities.invokeLater(new Runnable() {
 						
@@ -395,18 +420,92 @@ public class Main extends JFrame {
 							btnClose.addActionListener(new MyCloseActionHandler(tabName+time));
 						}
 					});
-					
-					
-					
-					
-					
 				}
 			}
 		});
 		
+	}
+	
+	public void abrirArquivosDoRepositorio(File file){
 		
+		//MUDANÇA DE CAMINHO
+		String path = file.getAbsolutePath();
+		final ViewerPanel viewer = new ViewerPanel(new SplotContextModel(path));
 		
-		
+		currentViewer = viewer;
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				mnMeasures_1.setEnabled(true);
+				
+				String tabName = viewer.getModelName();
+				long time = System.currentTimeMillis();
+				
+				tabbedPane.addTab(tabName+time, viewer);	
+				
+				int index = tabbedPane.indexOfTab(tabName+time);
+				JPanel pnlTab = new JPanel(new GridBagLayout());
+				pnlTab.setOpaque(false);
+				JLabel lblTitle = new JLabel(tabName);
+				JButton btnClose = new JButton("x");
+
+				GridBagConstraints gbc = new GridBagConstraints();
+				gbc.gridx = 0;
+				gbc.gridy = 0;
+				gbc.weightx = 1;
+
+				pnlTab.add(lblTitle, gbc);
+
+				gbc.gridx++;
+				gbc.weightx = 0;
+				pnlTab.add(btnClose, gbc);
+
+				tabbedPane.setTabComponentAt(index, pnlTab);
+
+				btnClose.addActionListener(new MyCloseActionHandler(tabName+time));
+				
+				Main.this.repaint();
+			}
+		});
+	}
+	
+	private void iniciarCampos(){
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				mnMeasures_1.setEnabled(true);
+				String tabName = "Repositório de Modelos";
+				long time = System.currentTimeMillis();
+				
+				ViewerPanelResultFeatures a = new ViewerPanelResultFeatures(null, Main.this);
+				
+				tabbedPane.addTab(tabName+time, a);	
+				
+				int index = tabbedPane.indexOfTab(tabName+time);
+				JPanel pnlTab = new JPanel(new GridBagLayout());
+				pnlTab.setOpaque(false);
+				JLabel lblTitle = new JLabel(tabName);
+				//JButton btnClose = new JButton("x");
+
+				GridBagConstraints gbc = new GridBagConstraints();
+				gbc.gridx = 0;
+				gbc.gridy = 0;
+				gbc.weightx = 1;
+
+				pnlTab.add(lblTitle, gbc);
+
+				gbc.gridx++;
+				gbc.weightx = 0;
+				//pnlTab.add(btnClose, gbc);
+
+				tabbedPane.setTabComponentAt(index, pnlTab);
+
+				//btnClose.addActionListener(new MyCloseActionHandler(tabName+time));
+			}
+		});
+
 	}
 
 	private void initXMLmodels() {

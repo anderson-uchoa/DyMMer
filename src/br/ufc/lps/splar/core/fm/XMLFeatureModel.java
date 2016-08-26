@@ -183,7 +183,7 @@ public class XMLFeatureModel extends FeatureModel {
 		try {
 			while( line != null ) {
 				
-				//Faz o tratamento de cada linha extraindo informações do nodo: se é mandatorio, opcional, agrupado, group e suas informações como id e nome
+				//Faz o tratamento de cada linha extraindo informaï¿½ï¿½es do nodo: se ï¿½ mandatorio, opcional, agrupado, group e suas informaï¿½ï¿½es como id e nome
 				FeatureTreeNode node = parseNode(line);
 
 				while ( processedNodes.contains(node) ) {
@@ -192,7 +192,7 @@ public class XMLFeatureModel extends FeatureModel {
 
 				processedNodes.add(node);
 				
-				//Verifica a quantidade de tabulações no inicio de cada linha
+				//Verifica a quantidade de tabulaï¿½ï¿½es no inicio de cada linha
 				int level = countTabs(line);
 				//	System.out.println(line);
 				//System.out.println("Tabs: " + level);
@@ -238,7 +238,7 @@ public class XMLFeatureModel extends FeatureModel {
 			throw e1;
 		}
 		catch( Exception e2 ) {
-			throw new FeatureModelException("Error parsing Feature Tree on line '" + line.trim() + "': " + e2.toString());
+			throw new FeatureModelException("Ã‰ AKI ? Error parsing Feature Tree on line '" + line.trim() + "': " + e2.toString());
 		}
 		
 		return rootNode;

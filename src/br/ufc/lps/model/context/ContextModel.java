@@ -82,11 +82,6 @@ public class ContextModel implements IContextModel {
 		
 		parseXMLToGetContexts();
 		createFeatureModelByContext();
-		
-		
-		
-		
-			
 	}
 	
 	public FeatureModel setFeatureModel(Context context){

@@ -45,6 +45,8 @@ public class ViewerPanel extends JPanel {
 		
 		this.model = model;
 		
+		//this.model.getFeatureModel().dumpXML();
+		
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLayout(new BorderLayout(0, 0));
 		

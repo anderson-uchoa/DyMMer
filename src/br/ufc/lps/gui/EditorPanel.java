@@ -376,28 +376,20 @@ public class EditorPanel extends JPanel {
 		
 		JScrollPane scrollPane_1 = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panel.add(scrollPane_1, BorderLayout.CENTER);
-		
-		
-			
 	}
 
 	public String getModelName() {
 		
 		return model.getModelName();
 	}
-
-	
 	
 	private MouseListener getMouseListener() {
 	    return new MouseAdapter() {
 
 	    	@Override
 	        public void mousePressed(MouseEvent event) {
-	            			
 	    		super.mousePressed(event);
-	    					
 	        }
-	    		    	
 	    	
 	    	@Override
 	    	public void mouseReleased(MouseEvent event) {
@@ -425,7 +417,6 @@ public class EditorPanel extends JPanel {
 		                }
 		                
 					}else if(event.getSource() == list){
-						
 						
 						selectedConstraintIndex = list.locationToIndex(event.getPoint());
 						list.setSelectedIndex(selectedConstraintIndex);
@@ -468,9 +459,6 @@ public class EditorPanel extends JPanel {
 		JMenuItem setActive = new JMenuItem("Set as active node");
 		JMenuItem setDeactive = new JMenuItem("Set as deactive node");
 		JMenuItem takeOffContext = new JMenuItem("Take it off from context");
-		
-		
-		
 		JMenuItem addConstraintPositive = new JMenuItem("Add to Constraint as Positive");
 		JMenuItem addConstraintNegative = new JMenuItem("Add to Constraint as Negative");
 		
@@ -484,8 +472,6 @@ public class EditorPanel extends JPanel {
 					return;
 				
 				changeStatusFeature(true, "Selected Feature is already activated");
-				
-				
 			}
 
 			
@@ -501,8 +487,6 @@ public class EditorPanel extends JPanel {
 					return;
 				
 				changeStatusFeature(false, "Selected Feature is already deactivated");
-			
-				
 			}
 		});
 		menu.add(setDeactive);

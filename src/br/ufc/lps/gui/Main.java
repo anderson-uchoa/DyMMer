@@ -343,8 +343,7 @@ public class Main extends JFrame {
 		mnMeasures_1.setEnabled(false);
 
 		constructMeasuresMenuItem(mnMeasures_1);
-		
-				
+
 		JMenu mnEditor = new JMenu("Editor");
 		menuBar.add(mnEditor);
 		
@@ -359,7 +358,6 @@ public class Main extends JFrame {
 					
 					@Override
 					public String getDescription() {
-						// TODO Auto-generated method stub
 						return null;
 					}
 					
@@ -573,12 +571,7 @@ public void editarArquivosDoRepositorio(SchemeXml schemeXml){
 
 	        int index = tabbedPane.indexOfTab(getTabName());
 	        if (index >= 0) {
-
 	            tabbedPane.removeTabAt(index);
-	            // It would probably be worthwhile getting the source
-	            // casting it back to a JButton and removing
-	            // the action handler reference ;)
-
 	        }
 
 	    }

@@ -6,8 +6,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import br.ufc.lps.conexao.constantes.Conexao;
@@ -45,7 +48,7 @@ public class ControladorXml{
 		if(resultado==null)
 			return null;
 		
-		java.lang.reflect.Type listType = new TypeToken<ArrayList<SchemeXml>>(){}.getType();
+		Type listType = new TypeToken<ArrayList<SchemeXml>>(){}.getType();
 		
 		return gson.fromJson(resultado, listType);
 	}
@@ -53,17 +56,14 @@ public class ControladorXml{
 	public boolean save(SchemeXml xml){
 		
 		RequestBody requestBody;
+		FormBody.Builder builder = new FormBody.Builder()
+				.add("xml", xml.getXml());
 		
 		if(xml.get_id()!=null)
-			requestBody = new FormBody.Builder()
-				.add("xml", xml.getXml())
-				.add("id", xml.get_id())
+				builder.add("id", xml.get_id())
 				.build();
-		else{
-			requestBody = new FormBody.Builder()
-				.add("xml", xml.getXml())
-				.build();
-		}
+		
+		requestBody = builder.build();
 		
 		Request request = new Request.Builder()
 		    .url(Conexao.url)
@@ -79,8 +79,10 @@ public class ControladorXml{
 	
 	public static File createFileFromXml(String xml){
 		
+		String myRandom = UUID.randomUUID().toString();
+		
 		try {
-			File file = File.createTempFile("feature", ".xml");
+			File file = File.createTempFile("feature"+myRandom, ".xml");
 			   
 			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 		    bw.write(xml);

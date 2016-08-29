@@ -47,6 +47,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import br.ufc.lps.conexao.SchemeXml;
 import br.ufc.lps.contextaware.Constraint;
 import br.ufc.lps.contextaware.Context;
 import br.ufc.lps.contextaware.Literal;
@@ -103,7 +104,7 @@ public class EditorPanel extends JPanel {
 	 * @param model 
 	 */
 	
-	public EditorPanel(IModel model, int modelID, String pathModelFile) {
+	public EditorPanel(IModel model, int modelID, String pathModelFile, SchemeXml schemeXml) {
 		setLayout(new BorderLayout(0, 0));
 		
 		constraints = new HashMap<String, String>();
@@ -117,7 +118,6 @@ public class EditorPanel extends JPanel {
 		
 		this.model = model;
 		resolutions = new ArrayList<Resolution>();
-		
 		
 		tree = new JTree();
 		tree.setModel(new FeatureModelTree(model.getFeatureModel().getRoot()));

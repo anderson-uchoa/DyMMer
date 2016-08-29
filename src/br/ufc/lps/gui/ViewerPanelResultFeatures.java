@@ -30,6 +30,8 @@ import br.ufc.lps.conexao.ClientHttp;
 import br.ufc.lps.conexao.ControladorXml;
 import br.ufc.lps.conexao.SchemeXml;
 import br.ufc.lps.model.context.ContextModel;
+import br.ufc.lps.model.normal.IModel;
+import br.ufc.lps.model.normal.SplotModel;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -44,6 +46,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 	private ControladorXml controladorXml;
 	private List<SchemeXml> listaItens;
 	private Main main;
+	private JTable tabela;
 	
 	public ViewerPanelResultFeatures(final ContextModel model, final Main main) {
 		
@@ -54,20 +57,35 @@ public class ViewerPanelResultFeatures extends JPanel {
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLayout(new BorderLayout(0, 0));
 		
+		//TABELA
 		JPanel painelTabela = new JPanel();
 		add(painelTabela, BorderLayout.CENTER);
 		painelTabela.setLayout(new GridLayout(0, 1, 0, 0));
 		
+		//BOTAO ABRIR
 		JPanel painelOpcoes = new JPanel();
 		add(painelOpcoes, BorderLayout.EAST);
 		painelOpcoes.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		JPanel painelBotaoOpen = new JPanel();
+		painelOpcoes.add(painelBotaoOpen, BorderLayout.NORTH);
+		painelBotaoOpen.setLayout(new GridLayout(3, 0, 0, 0));
+		
 		JButton open = new JButton("Abrir");
+		
+		painelBotaoOpen.add(open);
+		
+		JButton editar = new JButton("Editar");
+		
+		painelBotaoOpen.add(editar);
 	
-		painelOpcoes.add(open);
+		JButton refresh = new JButton("Recarregar");
+		
+		painelBotaoOpen.add(refresh);
 		
 		mDefaultTableModel = new DefaultTableModel(new String[][]{}, colunas);
 		
-		JTable tabela = new JTable(mDefaultTableModel);
+		tabela = new JTable(mDefaultTableModel);
 		JScrollPane barraRolagem = new JScrollPane(tabela);
 		
 		painelTabela.add(barraRolagem);
@@ -80,7 +98,30 @@ public class ViewerPanelResultFeatures extends JPanel {
 				if(selecao > -1){
 					SchemeXml selecionado = listaItens.get(selecao);
 					File file = ControladorXml.createFileFromXml(selecionado.getXml());
-					main.abrirArquivosDoRepositorio(file);
+					selecionado.setFile(file);
+					main.abrirArquivosDoRepositorio(selecionado);
+				}
+			}
+		});
+		
+		refresh.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				carregarItens();
+			}
+		});
+		
+		editar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int selecao = tabela.getSelectedRow();
+				if(selecao > -1){
+					SchemeXml selecionado = listaItens.get(selecao);
+					File file = ControladorXml.createFileFromXml(selecionado.getXml());
+					selecionado.setFile(file);
+					main.editarArquivosDoRepositorio(selecionado);
 				}
 			}
 		});
@@ -91,10 +132,12 @@ public class ViewerPanelResultFeatures extends JPanel {
 	
 	private void carregarItens(){
 		listaItens = controladorXml.get();
-		
+		mDefaultTableModel.setRowCount(0);
 		if(listaItens!=null)
 			for(SchemeXml sc : listaItens){
-				mDefaultTableModel.addRow(new String[]{sc.get_id()});
+				File file = ControladorXml.createFileFromXml(sc.getXml());
+				IModel model = new SplotModel(file.getAbsolutePath());
+				mDefaultTableModel.addRow(new String[]{model.getModelName()});
 			}
 		
 	}
@@ -111,10 +154,6 @@ public class ViewerPanelResultFeatures extends JPanel {
 	    file.getAbsolutePath();
 		*/
 	
-	private void salvarItem(File file){
-		SchemeXml schemeXml = new SchemeXml();
-		controladorXml.save(schemeXml);
-	}
 	
 	public static void main(String[] args) {
 		

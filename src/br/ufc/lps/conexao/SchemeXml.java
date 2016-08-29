@@ -1,9 +1,12 @@
 package br.ufc.lps.conexao;
 
+import java.io.File;
+
 public class SchemeXml {
 	
 	private String xml;
 	private String _id;
+	private File file;
 
 	public String getXml() {
 		return xml;
@@ -20,6 +23,13 @@ public class SchemeXml {
 	public void set_id(String _id) {
 		this._id = _id;
 	}
-	
+
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
+	}
 	
 }

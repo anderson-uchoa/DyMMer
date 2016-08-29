@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -13,6 +14,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -21,6 +23,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
 
+import br.ufc.lps.conexao.ControladorXml;
+import br.ufc.lps.conexao.SchemeXml;
 import br.ufc.lps.contextaware.Constraint;
 import br.ufc.lps.contextaware.Context;
 import br.ufc.lps.gui.list.ConstraintsListModel;
@@ -41,11 +45,9 @@ public class ViewerPanel extends JPanel {
 	private String modelName;
 	private TextArea constraintsPanel;
 	
-	public ViewerPanel(final ContextModel model) {
+	public ViewerPanel(final ContextModel model, File file, SchemeXml schemeXml) {
 		
 		this.model = model;
-		
-		//this.model.getFeatureModel().dumpXML();
 		
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLayout(new BorderLayout(0, 0));
@@ -86,6 +88,24 @@ public class ViewerPanel extends JPanel {
 		}
 		panelInfoContexts.add(comboBoxContexts);
 		
+		if(schemeXml==null){
+			JButton botaoSalvar = new JButton("Salvar");
+			
+			panelInfoContexts.add(botaoSalvar);
+			
+			botaoSalvar.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					
+					String xml = ControladorXml.createXmlFromFile(file);
+					SchemeXml scheme = new SchemeXml();
+					scheme.setXml(xml);
+					ControladorXml.getInstance().save(scheme);
+				}
+			});
+		}
+		
 		updateConstraintsPainel(model.getContexts().get(comboBoxContexts.getItemAt(0)));
 		
 		comboBoxContexts.addActionListener(new ActionListener() {
@@ -105,10 +125,8 @@ public class ViewerPanel extends JPanel {
 		setTreeVisualization(contextName);
 		
 	}
+
 	
-	/**
-	 * @return the lblResultReasoning
-	 */
 	
 	public void updateConstraintsPainel(Context context){
 		FeatureModel featureModel = context.getFeatureModel();
@@ -147,16 +165,10 @@ public class ViewerPanel extends JPanel {
 		return lblResultReasoning;
 	}
 
-	/**
-	 * @return the model
-	 */
 	public ContextModel getModel() {
 		return model;
 	}
 
-	/**
-	 * @return the modelName
-	 */
 	public String getModelName() {
 		return modelName;
 	}

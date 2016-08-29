@@ -169,7 +169,7 @@ public class Main extends JFrame {
 					
 					//MUDANÇA DE CAMINHO
 					String path = fileChooser.getSelectedFile().getAbsolutePath();
-					final ViewerPanel viewer = new ViewerPanel(new SplotContextModel(path));
+					final ViewerPanel viewer = new ViewerPanel(new SplotContextModel(path), fileChooser.getSelectedFile(), null);
 					
 					currentViewer = viewer;
 					SwingUtilities.invokeLater(new Runnable() {
@@ -386,7 +386,7 @@ public class Main extends JFrame {
 					
 					String path = fileChooser.getSelectedFile().getAbsolutePath();
 					IModel model = new SplotModel(path);
-					final EditorPanel editor = new EditorPanel(model, ModelID.SPLOT_MODEL.getId(), path);
+					final EditorPanel editor = new EditorPanel(model, ModelID.SPLOT_MODEL.getId(), path, null);
 					
 					SwingUtilities.invokeLater(new Runnable() {
 						
@@ -426,11 +426,11 @@ public class Main extends JFrame {
 		
 	}
 	
-	public void abrirArquivosDoRepositorio(File file){
+	public void abrirArquivosDoRepositorio(SchemeXml schemeXml){
 		
 		//MUDANÇA DE CAMINHO
-		String path = file.getAbsolutePath();
-		final ViewerPanel viewer = new ViewerPanel(new SplotContextModel(path));
+		String path = schemeXml.getFile().getAbsolutePath();
+		final ViewerPanel viewer = new ViewerPanel(new SplotContextModel(path), null, schemeXml);
 		
 		currentViewer = viewer;
 		SwingUtilities.invokeLater(new Runnable() {
@@ -469,6 +469,50 @@ public class Main extends JFrame {
 			}
 		});
 	}
+	
+public void editarArquivosDoRepositorio(SchemeXml schemeXml){
+		
+		//MUDANÇA DE CAMINHO
+		String path = schemeXml.getFile().getAbsolutePath();
+		final EditorPanel viewer = new EditorPanel(new SplotModel(path), ModelID.SPLOT_MODEL.getId(), path, schemeXml);
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				mnMeasures_1.setEnabled(true);
+				
+				String tabName = viewer.getModelName();
+				long time = System.currentTimeMillis();
+				
+				tabbedPane.addTab(tabName+time, viewer);	
+				
+				int index = tabbedPane.indexOfTab(tabName+time);
+				JPanel pnlTab = new JPanel(new GridBagLayout());
+				pnlTab.setOpaque(false);
+				JLabel lblTitle = new JLabel(tabName);
+				JButton btnClose = new JButton("x");
+
+				GridBagConstraints gbc = new GridBagConstraints();
+				gbc.gridx = 0;
+				gbc.gridy = 0;
+				gbc.weightx = 1;
+
+				pnlTab.add(lblTitle, gbc);
+
+				gbc.gridx++;
+				gbc.weightx = 0;
+				pnlTab.add(btnClose, gbc);
+
+				tabbedPane.setTabComponentAt(index, pnlTab);
+
+				btnClose.addActionListener(new MyCloseActionHandler(tabName+time));
+				
+				Main.this.repaint();
+			}
+		});
+	}
+
 	
 	private void iniciarCampos(){
 		SwingUtilities.invokeLater(new Runnable() {

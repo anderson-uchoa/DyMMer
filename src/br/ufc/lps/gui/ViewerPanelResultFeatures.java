@@ -47,6 +47,11 @@ public class ViewerPanelResultFeatures extends JPanel {
 	private List<SchemeXml> listaItens;
 	private Main main;
 	private JTable tabela;
+	private JButton open;
+	private JButton editar;
+	private JButton deletar;
+	private JButton listarMedidas;
+	private JButton refresh;
 	
 	public ViewerPanelResultFeatures(final ContextModel model, final Main main) {
 		
@@ -69,17 +74,25 @@ public class ViewerPanelResultFeatures extends JPanel {
 		
 		JPanel painelBotaoOpen = new JPanel();
 		painelOpcoes.add(painelBotaoOpen, BorderLayout.NORTH);
-		painelBotaoOpen.setLayout(new GridLayout(3, 0, 0, 0));
+		painelBotaoOpen.setLayout(new GridLayout(5, 0, 0, 0));
 		
-		JButton open = new JButton("Abrir");
+		open = new JButton("Abrir");
 		
 		painelBotaoOpen.add(open);
 		
-		JButton editar = new JButton("Editar");
+		editar = new JButton("Editar");
 		
 		painelBotaoOpen.add(editar);
-	
-		JButton refresh = new JButton("Recarregar");
+		
+		deletar = new JButton("Deletar");
+		
+		painelBotaoOpen.add(deletar);
+
+		listarMedidas = new JButton("Listar Medidas");
+		
+		painelBotaoOpen.add(listarMedidas);
+		
+		refresh = new JButton("Recarregar");
 		
 		painelBotaoOpen.add(refresh);
 		
@@ -89,6 +102,33 @@ public class ViewerPanelResultFeatures extends JPanel {
 		JScrollPane barraRolagem = new JScrollPane(tabela);
 		
 		painelTabela.add(barraRolagem);
+		
+		deletar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int selecao = tabela.getSelectedRow();
+				if(selecao > -1){
+					SchemeXml selecionado = listaItens.get(selecao);
+					if(controladorXml.delete(selecionado)){
+						System.out.println("deletado com sucesso!");
+						carregarItens();
+					}
+				}
+			}
+		});
+		
+		listarMedidas.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int selecao = tabela.getSelectedRow();
+				if(selecao > -1){
+					SchemeXml selecionado = listaItens.get(selecao);
+					System.out.println(selecionado.toString());
+				}
+			}
+		});
 		
 		open.addActionListener(new ActionListener() {
 			
@@ -130,16 +170,29 @@ public class ViewerPanelResultFeatures extends JPanel {
 		carregarItens();			
 	}
 	
+	private void setBotoes(boolean status){
+		open.setEnabled(status);
+		listarMedidas.setEnabled(status);
+		editar.setEnabled(status);
+		deletar.setEnabled(status);
+	}
+	
 	private void carregarItens(){
 		listaItens = controladorXml.get();
 		mDefaultTableModel.setRowCount(0);
 		if(listaItens!=null)
-			for(SchemeXml sc : listaItens){
-				File file = ControladorXml.createFileFromXml(sc.getXml());
-				IModel model = new SplotModel(file.getAbsolutePath());
-				mDefaultTableModel.addRow(new String[]{model.getModelName()});
+			
+			if(listaItens.size() > 0){
+				for(SchemeXml sc : listaItens){
+					File file = ControladorXml.createFileFromXml(sc.getXml());
+					IModel model = new SplotModel(file.getAbsolutePath());
+					mDefaultTableModel.addRow(new String[]{model.getModelName()});
+				}
+				setBotoes(true);
+			} else {
+				setBotoes(false);
 			}
-		
+				
 	}
 		
 		/*

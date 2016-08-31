@@ -1,7 +1,6 @@
 package br.ufc.lps.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
@@ -10,9 +9,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -25,13 +21,10 @@ import javax.swing.border.EmptyBorder;
 
 import br.ufc.lps.conexao.ControladorXml;
 import br.ufc.lps.conexao.SchemeXml;
-import br.ufc.lps.contextaware.Constraint;
 import br.ufc.lps.contextaware.Context;
-import br.ufc.lps.gui.list.ConstraintsListModel;
 import br.ufc.lps.gui.tree.FeaturesTreeCellRenderer;
 import br.ufc.lps.model.context.ContextModel;
 import br.ufc.lps.splar.core.constraints.BooleanVariable;
-import br.ufc.lps.splar.core.constraints.BooleanVariableInterface;
 import br.ufc.lps.splar.core.constraints.PropositionalFormula;
 import br.ufc.lps.splar.core.fm.FeatureModel;
 import br.ufc.lps.splar.core.fm.FeatureTreeNode;
@@ -44,10 +37,12 @@ public class ViewerPanel extends JPanel {
 	private ContextModel model;
 	private String modelName;
 	private TextArea constraintsPanel;
+	private Main main;
 	
-	public ViewerPanel(final ContextModel model, File file, SchemeXml schemeXml) {
+	public ViewerPanel(final ContextModel model, File file, SchemeXml schemeXml, Main main) {
 		
 		this.model = model;
+		this.main = main;
 		
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLayout(new BorderLayout(0, 0));
@@ -97,11 +92,10 @@ public class ViewerPanel extends JPanel {
 				
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					
-					String xml = ControladorXml.createXmlFromFile(file);
-					SchemeXml scheme = new SchemeXml();
-					scheme.setXml(xml);
-					ControladorXml.getInstance().save(scheme);
+					boolean resultado = ControladorXml.salvarXMLRepositorio(file, schemeXml);
+					if(resultado){
+						botaoSalvar.setEnabled(false);
+					}
 				}
 			});
 		}
@@ -115,7 +109,6 @@ public class ViewerPanel extends JPanel {
 				final String contextName = (String) comboBox.getSelectedItem();
 				if(contextName != null){
 					setTreeVisualization(contextName);
-					
 					Context context = model.getContexts().get(contextName);
 					updateConstraintsPainel(context);
 				}
@@ -125,8 +118,6 @@ public class ViewerPanel extends JPanel {
 		setTreeVisualization(contextName);
 		
 	}
-
-	
 	
 	public void updateConstraintsPainel(Context context){
 		FeatureModel featureModel = context.getFeatureModel();

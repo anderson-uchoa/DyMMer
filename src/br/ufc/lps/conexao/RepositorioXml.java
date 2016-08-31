@@ -13,22 +13,26 @@ private OkHttpClient http;
 		this.http = okHttpClient;
 	}
 	
-	public String get(Request request){
+	public String getStringBody(Request request){
 		try {
 			Response response = http.newCall(request).execute();
-			//System.out.println(response.code());
-			return response.body().string();
+			System.out.println(response.code());
+			String bodyString = response.body().string();
+			response.close();
+			return bodyString;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 	
-	public boolean save(Request request){
+	public boolean code200(Request request){
 		try {
 			Response response = http.newCall(request).execute();
-			//System.out.println(response.code());
-			return response.code()==200;
+			System.out.println(response.code());
+			response.close();
+			boolean status = response.code()==200;
+			return status;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;

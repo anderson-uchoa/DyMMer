@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import br.ufc.lps.conexao.ControladorXml;
 import br.ufc.lps.conexao.SchemeXml;
 import br.ufc.lps.contextaware.Constraint;
 import br.ufc.lps.contextaware.Context;
@@ -78,7 +80,6 @@ public class EditorPanel extends JPanel {
 	private IModel model;
 	private JTextField textFieldNewContext;
 	private JTree tree;
-	
 	private FeatureTreeNode selectedNode;
 	private JTextArea txtMessageText;
 	private JButton btnNewContext;
@@ -86,11 +87,8 @@ public class EditorPanel extends JPanel {
 	private Context defaultContext;
 	private List<Resolution> resolutions;
 	private JTextField txtAddTheFeatures;
-	
 	private Map<String, String> constraints;
 	private List<Literal> constraintLiterals;
-	
-	
 	private JList list;
 	private ConstraintsListModel constraintsListModel;
 	private int selectedConstraintIndex;
@@ -98,15 +96,15 @@ public class EditorPanel extends JPanel {
 	private int constraintNumber;
 	private Integer modelID;
 	private String pathModelFile;
-	
+	private Main main;
 	/**
 	 * Create the panel.
 	 * @param model 
 	 */
 	
-	public EditorPanel(IModel model, int modelID, String pathModelFile, SchemeXml schemeXml) {
+	public EditorPanel(IModel model, int modelID, String pathModelFile, SchemeXml schemeXml, Main main) {
 		setLayout(new BorderLayout(0, 0));
-		
+		this.main = main;
 		constraints = new HashMap<String, String>();
 		constraintLiterals = new ArrayList<Literal>();
 		constraintsList = new ArrayList<Constraint>();
@@ -151,6 +149,7 @@ public class EditorPanel extends JPanel {
 		panelNewContext.add(lblBlankSpace);
 		
 		btnNewContext = new JButton("Add");
+		
 		btnNewContext.addActionListener(new ActionListener() {
 			
 			@Override
@@ -219,9 +218,8 @@ public class EditorPanel extends JPanel {
 				}
 			}
 		});
+		
 		panelNewContext.add(btnNewContext);
-		
-		
 		
 		
 		JPanel panelMessage = new JPanel();
@@ -253,6 +251,19 @@ public class EditorPanel extends JPanel {
 		JLabel lblConstraint = new JLabel("Constraint:");
 		lblConstraint.setHorizontalAlignment(SwingConstants.CENTER);
 		panelConstraint.add(lblConstraint);
+		
+		JButton jbuttonSalvar = new JButton("Salvar no Repositório");
+		jbuttonSalvar.setHorizontalAlignment(SwingConstants.CENTER);
+		panelConstraint.add(jbuttonSalvar);
+		
+		jbuttonSalvar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				File file = new File(pathModelFile);
+				Boolean resultado = ControladorXml.salvarXMLRepositorio(file, schemeXml);
+			}
+		});
 		
 		
 		txtAddTheFeatures = new JTextField();

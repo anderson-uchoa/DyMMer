@@ -327,7 +327,6 @@ public class ContextModel implements IContextModel {
 
 	@Override
 	public int numberOfFeatures() {
-		
 		return featureModelStatistics.countFeatures();
 	}
 
@@ -382,7 +381,7 @@ public class ContextModel implements IContextModel {
 
 	@Override
 	public double flexibilityOfConfiguration() {
-		
+		if(featureModelStatistics.countOptional() == 0) return 0;
 		return (double)featureModelStatistics.countOptional() / featureModelStatistics.countFeatures();
 	}
 
@@ -426,7 +425,6 @@ public class ContextModel implements IContextModel {
 
 	@Override
 	public int crossTreeConstraints() {
-					
 		return featureModelStatistics.countConstraints();
 	}
 
@@ -450,6 +448,7 @@ public class ContextModel implements IContextModel {
 		}
 		
 		return (cnf == null) ? 0 : cnf.getClauseDensity();*/
+		if((featureModelStatistics.countFeatures()-1) <= 0) return 0;
 		return (double)(featureModelStatistics.countFeatures()-1)/featureModelStatistics.countFeatures();
 		
 	}
@@ -661,7 +660,7 @@ public class ContextModel implements IContextModel {
 					count++;
 			}
 		}
-		
+		if(count == 0) return count;
 		return (double)count/numberOfContexts();
 	}
 	
@@ -686,7 +685,7 @@ public class ContextModel implements IContextModel {
 					count++;
 			}
 		}
-		
+		if(count == 0) return count;
 		return (double)count/numberOfContexts();
 	}
 	

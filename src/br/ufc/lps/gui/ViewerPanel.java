@@ -19,11 +19,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
 
-import br.ufc.lps.conexao.ControladorXml;
-import br.ufc.lps.conexao.SchemeXml;
 import br.ufc.lps.contextaware.Context;
 import br.ufc.lps.gui.tree.FeaturesTreeCellRenderer;
 import br.ufc.lps.model.context.ContextModel;
+import br.ufc.lps.repositorio.ControladorXml;
+import br.ufc.lps.repositorio.SchemeXml;
 import br.ufc.lps.splar.core.constraints.BooleanVariable;
 import br.ufc.lps.splar.core.constraints.PropositionalFormula;
 import br.ufc.lps.splar.core.fm.FeatureModel;
@@ -116,6 +116,7 @@ public class ViewerPanel extends JPanel {
 		});
 		String contextName = (String) comboBoxContexts.getItemAt(0);
 		setTreeVisualization(contextName);
+		this.main.expandAllNodes(tree, 0, tree.getRowCount());
 		
 	}
 	

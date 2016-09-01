@@ -48,8 +48,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-import br.ufc.lps.conexao.ControladorXml;
-import br.ufc.lps.conexao.SchemeXml;
 import br.ufc.lps.contextaware.Constraint;
 import br.ufc.lps.contextaware.Context;
 import br.ufc.lps.contextaware.Literal;
@@ -60,6 +58,8 @@ import br.ufc.lps.gui.tree.FeatureModelTree;
 import br.ufc.lps.gui.tree.FeaturesTreeCellRenderer;
 import br.ufc.lps.model.ModelFactory;
 import br.ufc.lps.model.normal.IModel;
+import br.ufc.lps.repositorio.ControladorXml;
+import br.ufc.lps.repositorio.SchemeXml;
 import br.ufc.lps.splar.core.constraints.BooleanVariable;
 import br.ufc.lps.splar.core.constraints.CNFClause;
 import br.ufc.lps.splar.core.constraints.PropositionalFormula;
@@ -387,6 +387,8 @@ public class EditorPanel extends JPanel {
 		
 		JScrollPane scrollPane_1 = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panel.add(scrollPane_1, BorderLayout.CENTER);
+
+		this.main.expandAllNodes(tree, 0, tree.getRowCount());
 	}
 
 	public String getModelName() {

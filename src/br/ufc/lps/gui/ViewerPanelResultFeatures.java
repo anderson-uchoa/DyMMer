@@ -17,21 +17,24 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import br.ufc.lps.conexao.ClientHttp;
-import br.ufc.lps.conexao.ControladorXml;
-import br.ufc.lps.conexao.SchemeXml;
+
 import br.ufc.lps.model.context.ContextModel;
 import br.ufc.lps.model.normal.IModel;
 import br.ufc.lps.model.normal.SplotModel;
+import br.ufc.lps.repositorio.ClientHttp;
+import br.ufc.lps.repositorio.ControladorXml;
+import br.ufc.lps.repositorio.SchemeXml;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -52,6 +55,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 	private JButton deletar;
 	private JButton listarMedidas;
 	private JButton refresh;
+	private JLabel labelMensagens;
 	
 	public ViewerPanelResultFeatures(final ContextModel model, final Main main) {
 		
@@ -67,14 +71,23 @@ public class ViewerPanelResultFeatures extends JPanel {
 		add(painelTabela, BorderLayout.CENTER);
 		painelTabela.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		//BOTAO ABRIR
+		//TABELA
+		JPanel painelMensagens = new JPanel();
+		add(painelMensagens, BorderLayout.SOUTH);
+		painelMensagens.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		labelMensagens = new JLabel();
+		painelMensagens.add(labelMensagens);
+		
+		//Painel de opções
 		JPanel painelOpcoes = new JPanel();
 		add(painelOpcoes, BorderLayout.EAST);
 		painelOpcoes.setLayout(new GridLayout(0, 1, 0, 0));
-		
+
+		//BOTAO ABRIR
 		JPanel painelBotaoOpen = new JPanel();
 		painelOpcoes.add(painelBotaoOpen, BorderLayout.NORTH);
-		painelBotaoOpen.setLayout(new GridLayout(5, 0, 0, 0));
+		painelBotaoOpen.setLayout(new GridLayout(7, 0, 0, 0));
 		
 		open = new JButton("Abrir");
 		
@@ -88,9 +101,17 @@ public class ViewerPanelResultFeatures extends JPanel {
 		
 		painelBotaoOpen.add(deletar);
 
-		listarMedidas = new JButton("Listar Medidas");
+		listarMedidas = new JButton("Comparar Contextos de um modelo");
 		
 		painelBotaoOpen.add(listarMedidas);
+		
+		JButton button = new JButton("Comparar Features entre modelos");
+		
+		painelBotaoOpen.add(button);
+		
+		JButton button2 = new JButton("Evolucao entre contextos");
+		
+		painelBotaoOpen.add(button2);
 		
 		refresh = new JButton("Recarregar");
 		
@@ -125,7 +146,27 @@ public class ViewerPanelResultFeatures extends JPanel {
 				int selecao = tabela.getSelectedRow();
 				if(selecao > -1){
 					SchemeXml selecionado = listaItens.get(selecao);
-					System.out.println(selecionado.toString());
+					ViewerPanelResultFeatures.this.main.iniciarCampos3(selecionado);
+				}
+			}
+		});
+		
+		button.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ViewerPanelResultFeatures.this.main.iniciarCampos2(listaItens);
+			}
+		});
+		
+		button2.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int selecao = tabela.getSelectedRow();
+				if(selecao > -1){
+					SchemeXml selecionado = listaItens.get(selecao);
+					ViewerPanelResultFeatures.this.main.iniciarCampos4(selecionado);
 				}
 			}
 		});
@@ -166,7 +207,6 @@ public class ViewerPanelResultFeatures extends JPanel {
 			}
 		});
 	
-		//salvarItem(null);
 		carregarItens();			
 	}
 	
@@ -180,42 +220,20 @@ public class ViewerPanelResultFeatures extends JPanel {
 	private void carregarItens(){
 		listaItens = controladorXml.get();
 		mDefaultTableModel.setRowCount(0);
-		if(listaItens!=null)
-			
+		if(listaItens!=null){
 			if(listaItens.size() > 0){
 				for(SchemeXml sc : listaItens){
 					File file = ControladorXml.createFileFromXml(sc.getXml());
 					IModel model = new SplotModel(file.getAbsolutePath());
 					mDefaultTableModel.addRow(new String[]{model.getModelName()});
 				}
-				setBotoes(true);
+					setBotoes(true);
 			} else {
 				setBotoes(false);
 			}
+		}else{
+			labelMensagens.setText("Ocorreu algum problema na conexão");
+		}
 				
 	}
-		
-		/*
-		String xml = modelos.getLista().get(0).getXml();
-		
-		File file = File.createTempFile("feature", ".xml");
-	    
-		BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-	    bw.write(xml);
-	    bw.close();
-	    
-	    file.getAbsolutePath();
-		*/
-	
-	
-	public static void main(String[] args) {
-		
-		JFrame a = new JFrame();
-		a.setLocationRelativeTo(null);
-		a.setSize(500, 500);
-		a.add(new ViewerPanelResultFeatures(null, null));
-		a.setVisible(true);
-		
-	}
-
 }

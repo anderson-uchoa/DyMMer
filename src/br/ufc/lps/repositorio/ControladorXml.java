@@ -1,4 +1,4 @@
-package br.ufc.lps.conexao;
+package br.ufc.lps.repositorio;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -16,10 +16,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import br.ufc.lps.conexao.constantes.Conexao;
 import br.ufc.lps.contextaware.Context;
 import br.ufc.lps.model.context.ContextModel;
 import br.ufc.lps.model.context.SplotContextModel;
+import br.ufc.lps.repositorio.constantes.Conexao;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -145,6 +145,7 @@ public class ControladorXml{
 		
 		model.setFeatureModel(model.getContexts().get(ContextModel.DEFAULT_CONTEXT));	
 		
+		scheme.setNameXml(model.getModelName());
 		scheme.setNumberOfFeatures(model.numberOfFeatures());
 		scheme.setNumberOfOptionalFeatures(model.numberOfOptionalFeatures());
 		scheme.setNumberOfMandatoryFeatures(model.numberOfMandatoryFeatures());

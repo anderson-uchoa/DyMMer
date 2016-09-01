@@ -1,4 +1,4 @@
-package br.ufc.lps.conexao;
+package br.ufc.lps.repositorio;
 
 import java.io.IOException;
 

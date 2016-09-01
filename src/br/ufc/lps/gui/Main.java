@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -20,12 +21,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
+import javax.swing.JTree;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 
-import br.ufc.lps.conexao.SchemeXml;
+import br.ufc.lps.gui.charts.BarChart;
+import br.ufc.lps.gui.charts.LineContexts;
+import br.ufc.lps.gui.charts.PieFeatures;
 import br.ufc.lps.gui.export.ExportOfficeExcel;
 import br.ufc.lps.model.context.SplotContextModel;
 import br.ufc.lps.model.normal.IModel;
@@ -33,6 +39,7 @@ import br.ufc.lps.model.normal.SplotModel;
 import br.ufc.lps.model.xml.ModelID;
 import br.ufc.lps.model.xml.XMLFamiliarModel;
 import br.ufc.lps.model.xml.XMLSplotModel;
+import br.ufc.lps.repositorio.SchemeXml;
 
 public class Main extends JFrame {
 
@@ -49,6 +56,13 @@ public class Main extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+				    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+				        if ("Nimbus".equals(info.getName())) {
+				            UIManager.setLookAndFeel(info.getClassName());
+				            break;
+				        }
+				    }
+					
 					Main frame = new Main();
 					frame.setVisible(true);
 					
@@ -415,10 +429,131 @@ public class Main extends JFrame {
 		});
 
 	}
+	
+	public void iniciarCampos2( List<SchemeXml>  lista){
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				mnMeasures_1.setEnabled(true);
+				String tabName = "Número de Features";
+				long time = System.currentTimeMillis();
+				
+				JPanel a = PieFeatures.createDemoPanel(lista);
+				
+				tabbedPane.addTab(tabName+time, a);	
+				
+				int index = tabbedPane.indexOfTab(tabName+time);
+				JPanel pnlTab = new JPanel(new GridBagLayout());
+				pnlTab.setOpaque(false);
+				JLabel lblTitle = new JLabel(tabName);
+				JButton btnClose = new JButton("x");
 
+				GridBagConstraints gbc = new GridBagConstraints();
+				gbc.gridx = 0;
+				gbc.gridy = 0;
+				gbc.weightx = 1;
+
+				pnlTab.add(lblTitle, gbc);
+
+				gbc.gridx++;
+				gbc.weightx = 0;
+				pnlTab.add(btnClose, gbc);
+
+				tabbedPane.setTabComponentAt(index, pnlTab);
+
+				btnClose.addActionListener(new MyCloseActionHandler(tabName+time));
+			}
+		});
+
+	}
+	public void iniciarCampos3( SchemeXml  schema){
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				mnMeasures_1.setEnabled(true);
+				String tabName = "Comparação Contextos";
+				long time = System.currentTimeMillis();
+				
+				JPanel a = BarChart.createChart(schema);
+				
+				tabbedPane.addTab(tabName+time, a);	
+				
+				int index = tabbedPane.indexOfTab(tabName+time);
+				JPanel pnlTab = new JPanel(new GridBagLayout());
+				pnlTab.setOpaque(false);
+				JLabel lblTitle = new JLabel(tabName);
+				JButton btnClose = new JButton("x");
+
+				GridBagConstraints gbc = new GridBagConstraints();
+				gbc.gridx = 0;
+				gbc.gridy = 0;
+				gbc.weightx = 1;
+
+				pnlTab.add(lblTitle, gbc);
+
+				gbc.gridx++;
+				gbc.weightx = 0;
+				pnlTab.add(btnClose, gbc);
+
+				tabbedPane.setTabComponentAt(index, pnlTab);
+
+				btnClose.addActionListener(new MyCloseActionHandler(tabName+time));
+			}
+		});
+
+	}
+	public void iniciarCampos4( SchemeXml  schema){
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				mnMeasures_1.setEnabled(true);
+				String tabName = "Comparação Contextos";
+				long time = System.currentTimeMillis();
+				
+				JPanel a = LineContexts.createChart(schema);
+				
+				tabbedPane.addTab(tabName+time, a);	
+				
+				int index = tabbedPane.indexOfTab(tabName+time);
+				JPanel pnlTab = new JPanel(new GridBagLayout());
+				pnlTab.setOpaque(false);
+				JLabel lblTitle = new JLabel(tabName);
+				JButton btnClose = new JButton("x");
+
+				GridBagConstraints gbc = new GridBagConstraints();
+				gbc.gridx = 0;
+				gbc.gridy = 0;
+				gbc.weightx = 1;
+
+				pnlTab.add(lblTitle, gbc);
+
+				gbc.gridx++;
+				gbc.weightx = 0;
+				pnlTab.add(btnClose, gbc);
+
+				tabbedPane.setTabComponentAt(index, pnlTab);
+
+				btnClose.addActionListener(new MyCloseActionHandler(tabName+time));
+			}
+		});
+
+	}
 	private void initXMLmodels() {
 		new XMLSplotModel();
 		new XMLFamiliarModel();
+	}
+	
+	public void expandAllNodes(JTree tree, int startingIndex, int rowCount){
+	    for(int i=startingIndex;i<rowCount;++i){
+	        tree.expandRow(i);
+	    }
+
+	    if(tree.getRowCount()!=rowCount){
+	        expandAllNodes(tree, rowCount, tree.getRowCount());
+	    }
 	}
 
 	public class MyCloseActionHandler implements ActionListener {

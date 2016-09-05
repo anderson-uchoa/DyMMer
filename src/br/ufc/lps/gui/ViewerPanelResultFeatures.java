@@ -4,41 +4,23 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.sql.Blob;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import br.ufc.lps.model.context.ContextModel;
 import br.ufc.lps.model.normal.IModel;
 import br.ufc.lps.model.normal.SplotModel;
-import br.ufc.lps.repositorio.ClientHttp;
 import br.ufc.lps.repositorio.ControladorXml;
 import br.ufc.lps.repositorio.SchemeXml;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 
 public class ViewerPanelResultFeatures extends JPanel {
 	
@@ -71,13 +53,13 @@ public class ViewerPanelResultFeatures extends JPanel {
 		add(painelTabela, BorderLayout.CENTER);
 		painelTabela.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		//TABELA
+		//MENSAGENS
 		JPanel painelMensagens = new JPanel();
 		add(painelMensagens, BorderLayout.SOUTH);
-		painelMensagens.setLayout(new GridLayout(0, 1, 0, 0));
+		painelMensagens.setLayout(new GridLayout(2, 1, 0, 0));
 		
 		labelMensagens = new JLabel();
-		painelMensagens.add(labelMensagens);
+		//painelMensagens.add(labelMensagens);
 		
 		//Painel de opções
 		JPanel painelOpcoes = new JPanel();
@@ -103,15 +85,15 @@ public class ViewerPanelResultFeatures extends JPanel {
 
 		listarMedidas = new JButton("Comparar Contextos de um modelo");
 		
-		painelBotaoOpen.add(listarMedidas);
+		painelMensagens.add(listarMedidas);
 		
 		JButton button = new JButton("Comparar Features entre modelos");
 		
-		painelBotaoOpen.add(button);
+		painelMensagens.add(button);
 		
 		JButton button2 = new JButton("Evolucao entre contextos");
 		
-		painelBotaoOpen.add(button2);
+		painelMensagens.add(button2);
 		
 		refresh = new JButton("Recarregar");
 		
@@ -120,6 +102,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 		mDefaultTableModel = new DefaultTableModel(new String[][]{}, colunas);
 		
 		tabela = new JTable(mDefaultTableModel);
+		
 		JScrollPane barraRolagem = new JScrollPane(tabela);
 		
 		painelTabela.add(barraRolagem);
@@ -130,12 +113,16 @@ public class ViewerPanelResultFeatures extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				int selecao = tabela.getSelectedRow();
 				if(selecao > -1){
-					SchemeXml selecionado = listaItens.get(selecao);
-					if(controladorXml.delete(selecionado)){
-						System.out.println("deletado com sucesso!");
-						carregarItens();
+					int resp = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir esse modelo?");
+					if(resp == JOptionPane.YES_OPTION){
+						SchemeXml selecionado = listaItens.get(selecao);
+						if(controladorXml.delete(selecionado)){
+							System.out.println("deletado com sucesso!");
+							carregarItens();
+						}
 					}
-				}
+				}else
+					mensagemSelecionarLinha();
 			}
 		});
 		
@@ -146,8 +133,9 @@ public class ViewerPanelResultFeatures extends JPanel {
 				int selecao = tabela.getSelectedRow();
 				if(selecao > -1){
 					SchemeXml selecionado = listaItens.get(selecao);
-					ViewerPanelResultFeatures.this.main.iniciarCampos3(selecionado);
-				}
+					ViewerPanelResultFeatures.this.main.ComparacaoContextos(selecionado);
+				}else
+					mensagemSelecionarLinha();
 			}
 		});
 		
@@ -155,7 +143,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ViewerPanelResultFeatures.this.main.iniciarCampos2(listaItens);
+				ViewerPanelResultFeatures.this.main.numeroDeFeatures(listaItens);
 			}
 		});
 		
@@ -166,8 +154,9 @@ public class ViewerPanelResultFeatures extends JPanel {
 				int selecao = tabela.getSelectedRow();
 				if(selecao > -1){
 					SchemeXml selecionado = listaItens.get(selecao);
-					ViewerPanelResultFeatures.this.main.iniciarCampos4(selecionado);
-				}
+					ViewerPanelResultFeatures.this.main.comparacaoContextosLine(selecionado);
+				}else
+					mensagemSelecionarLinha();
 			}
 		});
 		
@@ -181,7 +170,8 @@ public class ViewerPanelResultFeatures extends JPanel {
 					File file = ControladorXml.createFileFromXml(selecionado.getXml());
 					selecionado.setFile(file);
 					main.abrirArquivosDoRepositorio(selecionado);
-				}
+				}else
+					mensagemSelecionarLinha();
 			}
 		});
 		
@@ -203,7 +193,8 @@ public class ViewerPanelResultFeatures extends JPanel {
 					File file = ControladorXml.createFileFromXml(selecionado.getXml());
 					selecionado.setFile(file);
 					main.editarArquivosDoRepositorio(selecionado);
-				}
+				}else
+					mensagemSelecionarLinha();
 			}
 		});
 	
@@ -217,7 +208,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 		deletar.setEnabled(status);
 	}
 	
-	private void carregarItens(){
+	public void carregarItens(){
 		listaItens = controladorXml.get();
 		mDefaultTableModel.setRowCount(0);
 		if(listaItens!=null){
@@ -235,5 +226,9 @@ public class ViewerPanelResultFeatures extends JPanel {
 			labelMensagens.setText("Ocorreu algum problema na conexão");
 		}
 				
+	}
+	
+	private void mensagemSelecionarLinha(){
+		JOptionPane.showMessageDialog(null, "Selecione um modelo na tabela");
 	}
 }

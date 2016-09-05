@@ -95,6 +95,8 @@ public class ViewerPanel extends JPanel {
 					boolean resultado = ControladorXml.salvarXMLRepositorio(file, schemeXml);
 					if(resultado){
 						botaoSalvar.setEnabled(false);
+						JOptionPane.showMessageDialog(null, "Salvo com sucesso!");
+						ViewerPanel.this.main.recarregarListaFeatures();
 					}
 				}
 			});

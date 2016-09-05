@@ -32,6 +32,7 @@ import javax.swing.filechooser.FileFilter;
 import br.ufc.lps.gui.charts.BarChart;
 import br.ufc.lps.gui.charts.LineContexts;
 import br.ufc.lps.gui.charts.PieFeatures;
+import br.ufc.lps.gui.charts.TreeMap;
 import br.ufc.lps.gui.export.ExportOfficeExcel;
 import br.ufc.lps.model.context.SplotContextModel;
 import br.ufc.lps.model.normal.IModel;
@@ -44,9 +45,9 @@ import br.ufc.lps.repositorio.SchemeXml;
 public class Main extends JFrame {
 
 	private JTabbedPane tabbedPane;
-	//Identifica o viewer atual para definir o modelo em quest�o a ser utilizado nas metricas
 	private ViewerPanel currentViewer;
 	private JMenu mnMeasures_1;
+	private ViewerPanelResultFeatures viewMain;
 	
 	/**
 	 * Launch the application.
@@ -71,8 +72,6 @@ public class Main extends JFrame {
 				}
 			}
 		});
-		//ReportUtils report = new ReportUtils();
-		//report.fill1();
 	}
 
 	 
@@ -85,6 +84,7 @@ public class Main extends JFrame {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 640, 480);
+		setLocationRelativeTo(null);
 
 		tabbedPane = new JTabbedPane();
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
@@ -109,7 +109,7 @@ public class Main extends JFrame {
 			}
 		});
 		
-		iniciarCampos();
+		iniciarMainViewPanel();
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -333,7 +333,6 @@ public class Main extends JFrame {
 				}
 			}
 		});
-		
 	}
 	
 	public void abrirArquivosDoRepositorio(SchemeXml schemeXml){
@@ -392,7 +391,13 @@ public class Main extends JFrame {
 		createTab(viewer, viewer.getModelName());
 	}
 	
-	private void iniciarCampos(){
+	public void recarregarListaFeatures(){
+		if(viewMain!=null){
+			viewMain.carregarItens();
+		}
+	}
+	
+	private void iniciarMainViewPanel(){
 		SwingUtilities.invokeLater(new Runnable() {
 			
 			@Override
@@ -402,7 +407,7 @@ public class Main extends JFrame {
 				long time = System.currentTimeMillis();
 				
 				ViewerPanelResultFeatures a = new ViewerPanelResultFeatures(null, Main.this);
-				
+				viewMain = a;
 				tabbedPane.addTab(tabName+time, a);	
 				
 				int index = tabbedPane.indexOfTab(tabName+time);
@@ -425,12 +430,13 @@ public class Main extends JFrame {
 				tabbedPane.setTabComponentAt(index, pnlTab);
 
 				//btnClose.addActionListener(new MyCloseActionHandler(tabName+time));
+			
 			}
 		});
 
 	}
 	
-	public void iniciarCampos2( List<SchemeXml>  lista){
+	public void numeroDeFeatures( List<SchemeXml>  lista){
 		SwingUtilities.invokeLater(new Runnable() {
 			
 			@Override
@@ -467,7 +473,7 @@ public class Main extends JFrame {
 		});
 
 	}
-	public void iniciarCampos3( SchemeXml  schema){
+	public void ComparacaoContextos( SchemeXml  schema){
 		SwingUtilities.invokeLater(new Runnable() {
 			
 			@Override
@@ -504,7 +510,7 @@ public class Main extends JFrame {
 		});
 
 	}
-	public void iniciarCampos4( SchemeXml  schema){
+	public void comparacaoContextosLine( SchemeXml  schema){
 		SwingUtilities.invokeLater(new Runnable() {
 			
 			@Override
@@ -541,6 +547,46 @@ public class Main extends JFrame {
 		});
 
 	}
+	
+	public void iniciarCampos5(){
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				mnMeasures_1.setEnabled(true);
+				String tabName = "Comparação Contextos";
+				long time = System.currentTimeMillis();
+				
+				JPanel a = TreeMap.demo();
+				
+				tabbedPane.addTab(tabName+time, a);	
+				
+				int index = tabbedPane.indexOfTab(tabName+time);
+				JPanel pnlTab = new JPanel(new GridBagLayout());
+				pnlTab.setOpaque(false);
+				JLabel lblTitle = new JLabel(tabName);
+				JButton btnClose = new JButton("x");
+
+				GridBagConstraints gbc = new GridBagConstraints();
+				gbc.gridx = 0;
+				gbc.gridy = 0;
+				gbc.weightx = 1;
+
+				pnlTab.add(lblTitle, gbc);
+
+				gbc.gridx++;
+				gbc.weightx = 0;
+				pnlTab.add(btnClose, gbc);
+
+				tabbedPane.setTabComponentAt(index, pnlTab);
+
+				btnClose.addActionListener(new MyCloseActionHandler(tabName+time));
+			}
+		});
+
+	}
+	
+	
 	private void initXMLmodels() {
 		new XMLSplotModel();
 		new XMLFamiliarModel();

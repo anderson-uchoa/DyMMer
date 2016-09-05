@@ -97,6 +97,7 @@ public class EditorPanel extends JPanel {
 	private Integer modelID;
 	private String pathModelFile;
 	private Main main;
+	private JButton jbuttonSalvar;
 	/**
 	 * Create the panel.
 	 * @param model 
@@ -170,8 +171,7 @@ public class EditorPanel extends JPanel {
 						Document doc = db.parse(EditorPanel.this.pathModelFile);
 					
 						Element rootEle = doc.getDocumentElement();
-										
-				
+												
 						rootEle.appendChild(WriteXMLmodel.getContext(doc, textFieldNewContext.getText(), EditorPanel.this.resolutions, new ArrayList<String>(constraints.values())));
 						
 						Transformer transformer = TransformerFactory.newInstance().newTransformer();
@@ -248,13 +248,13 @@ public class EditorPanel extends JPanel {
 		JSeparator separator = new JSeparator();
 		panelConstraint.add(separator);
 		
+		jbuttonSalvar = new JButton("Salvar no Repositório");
+		jbuttonSalvar.setHorizontalAlignment(SwingConstants.CENTER);
+		panelConstraint.add(jbuttonSalvar);
+		
 		JLabel lblConstraint = new JLabel("Constraint:");
 		lblConstraint.setHorizontalAlignment(SwingConstants.CENTER);
 		panelConstraint.add(lblConstraint);
-		
-		JButton jbuttonSalvar = new JButton("Salvar no Repositório");
-		jbuttonSalvar.setHorizontalAlignment(SwingConstants.CENTER);
-		panelConstraint.add(jbuttonSalvar);
 		
 		jbuttonSalvar.addActionListener(new ActionListener() {
 			
@@ -262,6 +262,10 @@ public class EditorPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				File file = new File(pathModelFile);
 				Boolean resultado = ControladorXml.salvarXMLRepositorio(file, schemeXml);
+				if(resultado){
+					JOptionPane.showMessageDialog(null, "Salvo com sucesso!");
+					EditorPanel.this.main.recarregarListaFeatures();
+				}
 			}
 		});
 		

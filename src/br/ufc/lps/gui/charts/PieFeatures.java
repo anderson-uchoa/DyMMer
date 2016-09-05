@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.DatasetGroup;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 
@@ -18,7 +19,7 @@ public class PieFeatures{
 
 		  DefaultPieDataset dataset = new DefaultPieDataset( );
 		  for(SchemeXml s : lista){
-		      dataset.setValue( s.getNameXml() , new Double( s.getNumberOfFeatures() ) );  
+			  dataset.setValue( s.getNameXml()+" = "+s.getNumberOfFeatures() , new Double( s.getNumberOfFeatures() ) );
 		  }
 		  return dataset;         
 	   }

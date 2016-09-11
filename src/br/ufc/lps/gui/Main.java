@@ -23,11 +23,15 @@ import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
+import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import br.ufc.lps.gui.charts.BarChart;
 import br.ufc.lps.gui.charts.LineContexts;
@@ -41,6 +45,7 @@ import br.ufc.lps.model.xml.ModelID;
 import br.ufc.lps.model.xml.XMLFamiliarModel;
 import br.ufc.lps.model.xml.XMLSplotModel;
 import br.ufc.lps.repositorio.SchemeXml;
+import br.ufc.lps.splar.core.fm.FeatureTreeNode;
 
 public class Main extends JFrame {
 
@@ -66,6 +71,19 @@ public class Main extends JFrame {
 					
 					Main frame = new Main();
 					frame.setVisible(true);
+					
+					NimbusLookAndFeel laf = new NimbusLookAndFeel();
+					
+					UIDefaults defs = laf.getDefaults();
+					defs.put("Tree.drawHorizontalLines", true);
+					defs.put("Tree.drawVerticalLines", true);
+					defs.put("Tree.linesStyle", "Angled");
+
+					try {
+					    UIManager.setLookAndFeel(laf);
+					} catch (UnsupportedLookAndFeelException e) {
+					    //Error handling code
+					}
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -473,6 +491,7 @@ public class Main extends JFrame {
 		});
 
 	}
+
 	public void ComparacaoContextos( SchemeXml  schema){
 		SwingUtilities.invokeLater(new Runnable() {
 			
@@ -510,6 +529,7 @@ public class Main extends JFrame {
 		});
 
 	}
+
 	public void comparacaoContextosLine( SchemeXml  schema){
 		SwingUtilities.invokeLater(new Runnable() {
 			
@@ -586,22 +606,19 @@ public class Main extends JFrame {
 
 	}
 	
-	
 	private void initXMLmodels() {
 		new XMLSplotModel();
 		new XMLFamiliarModel();
 	}
 	
 	public void expandAllNodes(JTree tree, int startingIndex, int rowCount){
-	    for(int i=startingIndex;i<rowCount;++i){
+		for(int i=startingIndex;i<rowCount;++i)
 	        tree.expandRow(i);
-	    }
 
-	    if(tree.getRowCount()!=rowCount){
+	    if(tree.getRowCount()!=rowCount)
 	        expandAllNodes(tree, rowCount, tree.getRowCount());
-	    }
 	}
-
+	
 	public class MyCloseActionHandler implements ActionListener {
 
 	    private String tabName;

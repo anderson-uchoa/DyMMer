@@ -37,7 +37,6 @@ public class FeaturesTreeCellRenderer extends DefaultTreeCellRenderer {
 		FeatureTreeNode treeNode = (FeatureTreeNode) value;
 		boolean status = true;
 		boolean inContext = false;
-		
 		for(Resolution resolution : context.getResolutions()){
 			if(resolution.getIdFeature().equalsIgnoreCase(treeNode.getID())){
 				status = resolution.getStatus();

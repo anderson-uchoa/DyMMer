@@ -22,6 +22,6 @@
 	<classpathentry kind="lib" path="libs/gson-2.7.jar"/>
 	<classpathentry kind="lib" path="libs/commons-lang3-3.4.jar"/>
 	<classpathentry kind="lib" path="libs/jgraph.jar"/>
-	<classpathentry kind="lib" path="/home/loopback/prefuse.jar"/>
+	<classpathentry kind="lib" path="libs/prefuse.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

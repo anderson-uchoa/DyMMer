@@ -12,15 +12,14 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -30,8 +29,9 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import br.ufc.lps.contextaware.Context;
-import br.ufc.lps.gui.charts.TreeView;
 import br.ufc.lps.gui.tree.FeaturesTreeCellRenderer;
+import br.ufc.lps.gui.tree.FeaturesTreePerfuse;
+import br.ufc.lps.gui.tree.FeaturesTreeViewPerfuse;
 import br.ufc.lps.model.context.ContextModel;
 import br.ufc.lps.repositorio.ControladorXml;
 import br.ufc.lps.repositorio.SchemeXml;
@@ -42,12 +42,8 @@ import br.ufc.lps.splar.core.fm.FeatureTreeNode;
 import prefuse.Constants;
 import prefuse.Visualization;
 import prefuse.controls.ControlAdapter;
-import prefuse.data.Node;
 import prefuse.data.Table;
 import prefuse.data.Tree;
-import prefuse.data.parser.DataParseException;
-import prefuse.data.parser.DataParser;
-import prefuse.data.parser.ParserFactory;
 import prefuse.util.FontLib;
 import prefuse.util.ui.JFastLabel;
 import prefuse.util.ui.JSearchPanel;
@@ -64,33 +60,28 @@ public class ViewerPanel extends JPanel {
 	private Main main;
 	private Tree treeP;
 	private JScrollPane scrollPane;
-    public static final String INT = "Int";
-    public static final String INTEGER = "Integer";
-    public static final String LONG = "Long";
-    public static final String FLOAT = "Float";
-    public static final String REAL = "Real";
-    public static final String STRING = "String";
-    public static final String DATE = "Date";
-    public static final String CATEGORY = "Category";
-   
-   // prefuse-specific allowed types
-   public static final String BOOLEAN = "Boolean";
-   public static final String DOUBLE = "Double";
-private Table table;
-	 private ParserFactory m_pf = ParserFactory.getDefaultFactory();
+	private JPanel panelBotoesLayoutTree;
+	private JPanel panelTreePerfuse;
+   	private Table table;
 	
+	private void inicializarTreePerfuse(){
+		this.treeP = new Tree();
+		this.table = this.treeP.getNodeTable();
+		
+		
+		table.addColumn("name", String.class);
+		
+		table.addColumn("image", ImageIcon.class);
+		
+		table.addColumn("ativa", boolean.class);
+	}
+   	
  	public ViewerPanel(final ContextModel model, File file, SchemeXml schemeXml, Main main) {
 		
 		this.model = model;
 		this.main = main;
-		this.treeP = new Tree();
-		this.table = this.treeP.getNodeTable();
-		Class t = parseType("String");
 		
-		table.addColumn("name", t);
-		Class t2 = Boolean.class;
-		
-		table.addColumn("ativa", boolean.class);
+		inicializarTreePerfuse();
 		
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLayout(new BorderLayout(0, 0));
@@ -114,11 +105,30 @@ private Table table;
 		scrollPane = new JScrollPane(tree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panelTrees.add(scrollPane, BorderLayout.CENTER);
 		
+		//PAINEL ONDE FICARÀ O BOTÃO PARA MODIFICAR TIPO DE ÁRVORE
 		JPanel panelBotoesTree = new JPanel();
 		panelBotoesTree.setLayout(new GridLayout(1, 0));
 		panelTrees.add(panelBotoesTree, BorderLayout.NORTH);
 		
-		JButton butaoMudarLayout1 = new JButton(">");
+		
+		panelBotoesLayoutTree = new JPanel();
+		panelBotoesTree.setLayout(new GridLayout(1, 0));
+		
+		JButton butaoMudarLayoutM = new JButton("Mudar tipo de arvore");
+		butaoMudarLayoutM.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(scrollPane.getViewport().getView().equals(tree))
+					scrollPane.getViewport().setView(panelTreePerfuse);
+				else
+					scrollPane.getViewport().setView(tree);
+			}
+		});
+		
+		JLabel textoMudancaLayout = new JLabel("Modificar Layout: ");
+		
+		JButton butaoMudarLayout1 = new JButton("Left Right");
 		butaoMudarLayout1.addActionListener(new ActionListener() {
 			
 			@Override
@@ -127,19 +137,7 @@ private Table table;
 			}
 		});
 		
-		JButton butaoMudarLayoutM = new JButton("Mudar tipo de arvore");
-		butaoMudarLayoutM.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(scrollPane.getViewport().getView().equals(tree))
-					scrollPane.getViewport().setView(tview);
-				else
-					scrollPane.getViewport().setView(tree);
-			}
-		});
-		
-		JButton butaoMudarLayout2 = new JButton("<");
+		JButton butaoMudarLayout2 = new JButton("Right Left");
 		butaoMudarLayout2.addActionListener(new ActionListener() {
 			
 			@Override
@@ -149,7 +147,7 @@ private Table table;
 			}
 		});
 		
-		JButton butaoMudarLayout3 = new JButton("v");
+		JButton butaoMudarLayout3 = new JButton("Top Bottom");
 		butaoMudarLayout3.addActionListener(new ActionListener() {
 			
 			@Override
@@ -157,7 +155,7 @@ private Table table;
 				tview.setOrientationAction(Constants.ORIENT_TOP_BOTTOM);
 			}
 		});
-		JButton butaoMudarLayout4 = new JButton("^");
+		JButton butaoMudarLayout4 = new JButton("Bottom Top");
 		butaoMudarLayout4.addActionListener(new ActionListener() {
 			
 			@Override
@@ -166,10 +164,12 @@ private Table table;
 			}
 		});
 		panelBotoesTree.add(butaoMudarLayoutM);
-		panelBotoesTree.add(butaoMudarLayout1);
-		panelBotoesTree.add(butaoMudarLayout2);
-		panelBotoesTree.add(butaoMudarLayout3);
-		panelBotoesTree.add(butaoMudarLayout4);
+		
+		panelBotoesLayoutTree.add(textoMudancaLayout);
+		panelBotoesLayoutTree.add(butaoMudarLayout1);
+		panelBotoesLayoutTree.add(butaoMudarLayout2);
+		panelBotoesLayoutTree.add(butaoMudarLayout3);
+		panelBotoesLayoutTree.add(butaoMudarLayout4);
 		
 		JPanel panelInfos = new JPanel();
 		add(panelInfos, BorderLayout.EAST);
@@ -228,8 +228,6 @@ private Table table;
 		});
 		String contextName = (String) comboBoxContexts.getItemAt(0);
 		setTreeVisualization(contextName);
-		this.main.expandAllNodes(tree, 0, tree.getRowCount());
-		
 	}
 	
 	public void updateConstraintsPainel(Context context){
@@ -276,68 +274,7 @@ private Table table;
 	public String getModelName() {
 		return modelName;
 	}
-
-	public FeatureTreeNode readAllNodes(Node pai, FeatureTreeNode a){
-		
-		if(pai==null)
-			pai = this.treeP.addNode();
-		
-		if(a.getChildCount() > 0){
-			for (int i = 0; i < a.getChildCount(); i++) {
-				FeatureTreeNode f = (FeatureTreeNode) a.getChildAt(i); 
-				Node node = this.treeP.addChild(pai);
-				FeatureTreeNode fe = readAllNodes(node, f);
-				
-				if(fe!=null){
-				Object val;
-				try {
-					val = parse(fe.getName(), this.table.getColumnType("name"));
-					node.set("name", val);
-					node.set("ativa", fe.isActiveInContext());
-					
-					//node.setString("tipo", fe.getName());
-				} catch (DataParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				}
-				
-			}
-			return a;
-		}else{
-			return a;
-		}
-	}
-	
-	protected Class parseType(String type) {
-        type = Character.toUpperCase(type.charAt(0)) +
-               type.substring(1).toLowerCase();
-        if ( type.equals(INT) || type.equals(INTEGER) ) {
-            return int.class;
-        } else if ( type.equals(LONG) ) {
-            return long.class;
-        } else if ( type.equals(FLOAT) ) {
-            return float.class;
-        } else if ( type.equals(DOUBLE) || type.equals(REAL)) {
-            return double.class;
-        } else if ( type.equals(BOOLEAN) ) {
-            return boolean.class;
-        } else if ( type.equals(STRING) ) {
-            return String.class;
-        } else if ( type.equals(DATE) ) {
-            return Date.class;
-        } else {
-            throw new RuntimeException("Unrecognized data type: "+type);
-        }
-    }
-    
-	  protected Object parse(String s, Class type)
-	            throws DataParseException
-	        {
-	            DataParser dp = m_pf.getParser(type);
-	            return dp.parse(s);
-	        }
-	
+ 
 	private void setTreeVisualization(final String contextName) {
 		
 		if(model.getContexts().isEmpty()){
@@ -352,26 +289,30 @@ private Table table;
 		modelName = featureModel.getName();
 		tree.setModel(featureModel);
 		tree.setCellRenderer(new FeaturesTreeCellRenderer(context));
-		readAllNodes(null,model.getFeatureModel().getRoot());
+		main.expandAllNodes(tree, 0, tree.getRowCount());
 		
-		JPanel a = panelTreePerfuse(this.treeP, "name");
-		scrollPane.getViewport().setView(a);
+		inicializarTreePerfuse();
+			
+		FeaturesTreePerfuse.readAllNodes(context, treeP, null ,model.getFeatureModel().getRoot());
+		
+		panelTreePerfuse = panelTreePerfuse(treeP, "name", "image");
+		scrollPane.getViewport().setView(panelTreePerfuse);
 	}
 	
-	private TreeView tview;
+   private FeaturesTreeViewPerfuse tview;
 	
-   public JPanel panelTreePerfuse(Tree t, final String label) {
+   public JPanel panelTreePerfuse(Tree t, String label, String image) {
         Color BACKGROUND = Color.WHITE;
         Color FOREGROUND = Color.BLACK;
             
-        tview = new TreeView(t, label);
+        tview = new FeaturesTreeViewPerfuse(t, label, image);
         
         tview.setBackground(BACKGROUND);
         tview.setForeground(FOREGROUND);
         
         // create a search panel for the tree map
         JSearchPanel search = new JSearchPanel(tview.getVisualization(),
-            TreeView.treeNodes, Visualization.SEARCH_ITEMS, label, true, true);
+            FeaturesTreeViewPerfuse.treeNodes, Visualization.SEARCH_ITEMS, label, true, true);
         search.setShowResultCount(true);
         search.setBorder(BorderFactory.createEmptyBorder(5,5,4,0));
         search.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 11));
@@ -409,6 +350,7 @@ private Table table;
         panel.setForeground(FOREGROUND);
         panel.add(tview, BorderLayout.CENTER);
         panel.add(box, BorderLayout.SOUTH);
+        panel.add(panelBotoesLayoutTree, BorderLayout.NORTH);
         return panel;
     }
 	  

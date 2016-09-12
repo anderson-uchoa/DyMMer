@@ -15,6 +15,7 @@ public class FeatureTreeNode extends DefaultMutableTreeNode implements BooleanVa
 	public static final int UNKNOWN    = -1;
 	public static final int DESELECTED = 0;
 	public static final int SELECTED   = 1;
+	public boolean ativa = false;
 	
 	/*
 	 * Context-Aware
@@ -57,6 +58,10 @@ public class FeatureTreeNode extends DefaultMutableTreeNode implements BooleanVa
 	
 	public boolean isActiveInContext() {
 		return isActiveInContext;
+	}
+	
+	public void setValue(int value){
+		this.value = value;
 	}
 
 	public void setActiveInContext(boolean isActiveInContext) {

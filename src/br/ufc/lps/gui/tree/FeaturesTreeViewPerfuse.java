@@ -1,7 +1,8 @@
-package br.ufc.lps.gui.charts;
+package br.ufc.lps.gui.tree;
 
 import java.awt.event.ActionEvent;
 import java.awt.geom.Point2D;
+import java.util.Date;
 
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
@@ -50,28 +51,44 @@ import prefuse.visual.sort.TreeDepthItemSorter;
  * @version 1.0
  * @author <a href="http://jheer.org">jeffrey heer</a>
  */
-public class TreeView extends Display {
+public class FeaturesTreeViewPerfuse extends Display {
 
-    public static final String TREE_CHI = "/chi-ontology.xml.gz";
+	public static final String INT = "Int";
+    public static final String INTEGER = "Integer";
+    public static final String LONG = "Long";
+    public static final String FLOAT = "Float";
+    public static final String REAL = "Real";
+    public static final String STRING = "String";
+    public static final String DATE = "Date";
+    public static final String CATEGORY = "Category";
+   
+    // prefuse-specific allowed types
+    public static final String BOOLEAN = "Boolean";
+   	public static final String DOUBLE = "Double";
+   	
+	public static final String TREE_CHI = "/chi-ontology.xml.gz";
     private static final String tree = "tree";
     public static final String treeNodes = "tree.nodes";
     private static final String treeEdges = "tree.edges";
     private LabelRenderer m_nodeRenderer;
     private EdgeRenderer m_edgeRenderer;
     private String m_label = "label";
-    private int m_orientation = Constants.ORIENT_TOP_BOTTOM;
+    private String m_image = "image";
+    private int m_orientation = Constants.ORIENT_LEFT_RIGHT;
     
-    public TreeView(Tree t, String label) {
+    public FeaturesTreeViewPerfuse(Tree t, String label, String image) {
         super(new Visualization());
         m_label = label;
+        m_image = image;
 
         m_vis.add(tree, t);
         
-        m_nodeRenderer = new LabelRenderer(m_label);
+        m_nodeRenderer = new LabelRenderer(m_label, m_image);
         m_nodeRenderer.setRenderType(AbstractShapeRenderer.RENDER_TYPE_FILL);
         m_nodeRenderer.setHorizontalAlignment(Constants.LEFT);
         m_nodeRenderer.setRoundedCorner(8,8);
         m_edgeRenderer = new EdgeRenderer(Constants.EDGE_TYPE_LINE);
+        
         
         DefaultRendererFactory rf = new DefaultRendererFactory(m_nodeRenderer);
         rf.add(new InGroupPredicate(treeEdges), m_edgeRenderer);
@@ -261,6 +278,28 @@ public class TreeView extends Display {
         }
     }
     
+    public static Class parseType(String type) {
+        type = Character.toUpperCase(type.charAt(0)) +
+               type.substring(1).toLowerCase();
+        if ( type.equals(INT) || type.equals(INTEGER) ) {
+            return int.class;
+        } else if ( type.equals(LONG) ) {
+            return long.class;
+        } else if ( type.equals(FLOAT) ) {
+            return float.class;
+        } else if ( type.equals(DOUBLE) || type.equals(REAL)) {
+            return double.class;
+        } else if ( type.equals(BOOLEAN) ) {
+            return boolean.class;
+        } else if ( type.equals(STRING) ) {
+            return String.class;
+        } else if ( type.equals(DATE) ) {
+            return Date.class;
+        } else {
+            throw new RuntimeException("Unrecognized data type: "+type);
+        }
+    }
+    
     public class AutoPanAction extends Action {
         private Point2D m_start = new Point2D.Double();
         private Point2D m_end   = new Point2D.Double();
@@ -325,12 +364,6 @@ public class TreeView extends Display {
         }
         
         public int getColor(VisualItem item) {
-        	if(item.canGetBoolean("ativa")){
-        		Boolean a  = item.getBoolean("ativa");
-        		System.out.println(a);
-        	}else{
-        		System.out.println("n posso");
-        	}
             if ( m_vis.isInGroup(item, Visualization.SEARCH_ITEMS) )
                 return ColorLib.rgb(255,190,190);
             else if ( m_vis.isInGroup(item, Visualization.FOCUS_ITEMS) )

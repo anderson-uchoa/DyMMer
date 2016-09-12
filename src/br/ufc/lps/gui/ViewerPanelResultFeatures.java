@@ -224,6 +224,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 			}
 		}else{
 			labelMensagens.setText("Ocorreu algum problema na conexão");
+			JOptionPane.showMessageDialog(null, "Ocorreu algum problema na conexão");
 		}
 				
 	}

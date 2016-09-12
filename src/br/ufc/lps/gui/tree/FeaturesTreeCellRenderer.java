@@ -45,14 +45,16 @@ public class FeaturesTreeCellRenderer extends DefaultTreeCellRenderer {
 			}
 		}
 		
-		if(!inContext)
+		if(!inContext){
 			setIcon(normalFeatureIcon);
-		else{
+		}else{
 			
-			if (status) 
+			if (status) {
 				setIcon(activateFeatureIcon);
-			else
+			}
+			else{
 				setIcon(deactivateFeatureIcon);
+			}
 			
 		}
 		

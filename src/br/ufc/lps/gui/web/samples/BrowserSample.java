@@ -27,7 +27,7 @@ public class BrowserSample {
         frame.setSize(700, 500);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        System.out.println("Present Project Directory : "+ System.getProperty("user.dir")+"/html/html.html");
-        browser.loadURL("File://"+System.getProperty("user.dir")+"/html/pie.html");
+        browser.loadURL("File://"+System.getProperty("user.dir")+"/html/pie-customTooltips.html");
+        //browser.loadURL("File://"+System.getProperty("user.dir")+"/html/line.html");
     }
 }

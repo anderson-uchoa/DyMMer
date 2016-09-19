@@ -329,7 +329,7 @@ public class ViewerPanel extends JPanel {
 				}
 				*/
 			}
-			fpc.bindRestrict(this.treeP, a);
+			//fpc.bindRestrict(this.treeP, a);
 			System.out.println("--------------");
 		}
 		

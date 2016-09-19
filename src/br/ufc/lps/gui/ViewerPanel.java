@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.List;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,7 +31,7 @@ import javax.swing.border.EmptyBorder;
 
 import br.ufc.lps.contextaware.Context;
 import br.ufc.lps.gui.tree.FeaturesTreeCellRenderer;
-import br.ufc.lps.gui.tree.FeaturesTreePerfuse;
+import br.ufc.lps.gui.tree.FeaturesTreePerfuseControl;
 import br.ufc.lps.gui.tree.FeaturesTreeViewPerfuse;
 import br.ufc.lps.model.context.ContextModel;
 import br.ufc.lps.repositorio.ControladorXml;
@@ -63,17 +64,15 @@ public class ViewerPanel extends JPanel {
 	private JPanel panelBotoesLayoutTree;
 	private JPanel panelTreePerfuse;
    	private Table table;
+    private FeaturesTreeViewPerfuse tview;
 	
 	private void inicializarTreePerfuse(){
 		this.treeP = new Tree();
 		this.table = this.treeP.getNodeTable();
 		
-		
 		table.addColumn("name", String.class);
-		
 		table.addColumn("image", ImageIcon.class);
-		
-		table.addColumn("ativa", boolean.class);
+		table.addColumn("id", String.class);
 	}
    	
  	public ViewerPanel(final ContextModel model, File file, SchemeXml schemeXml, Main main) {
@@ -292,14 +291,58 @@ public class ViewerPanel extends JPanel {
 		main.expandAllNodes(tree, 0, tree.getRowCount());
 		
 		inicializarTreePerfuse();
-			
-		FeaturesTreePerfuse.readAllNodes(context, treeP, null ,model.getFeatureModel().getRoot());
 		
+		FeaturesTreePerfuseControl fpc = new FeaturesTreePerfuseControl();
+		fpc.getTree(context, treeP, null ,model.getFeatureModel().getRoot());
+		
+		Collection<BooleanVariable> variables = new ArrayList<BooleanVariable>();
+		Collection<PropositionalFormula> formulas = featureModel.getConstraints();
+		
+		for(Iterator<PropositionalFormula> it = formulas.iterator(); it.hasNext() ; ) {
+			PropositionalFormula formula = it.next();
+			variables = formula.getVariables();
+			
+			System.out.println("-------------");
+			
+			java.util.List<String> a = new ArrayList();
+			
+			for(Iterator<BooleanVariable> it2 = variables.iterator(); it2.hasNext() ; ) {
+				BooleanVariable variable = it2.next();
+				
+				a.add(variable.getID());
+		
+				
+		
+				/*	
+				if(featureModel.getNodeByID(variable.getName()).getValue() != 0){
+					if(!FeatureTreeNode.isActiveHierarchy(featureModel.getNodeByID(variable.getName()))){
+						continue;
+					}
+					
+					if(variable.getState() == false){
+						constraints+="~";
+					}
+
+					constraints += featureModel.getNodeByID(variable.getName()).getName();
+					if(it2.hasNext())
+						constraints += " or ";
+				}
+				*/
+			}
+			fpc.bindRestrict(this.treeP, a);
+			System.out.println("--------------");
+		}
+		
+		//for (Iterator iterator = fpc.getLista().keySet().iterator(); iterator.hasNext();) {
+			//String type = (String) iterator.next();
+			//System.out.println("adicionado: "+type);
+	//	}
+		
+	
 		panelTreePerfuse = panelTreePerfuse(treeP, "name", "image");
 		scrollPane.getViewport().setView(panelTreePerfuse);
-	}
 	
-   private FeaturesTreeViewPerfuse tview;
+	}
 	
    public JPanel panelTreePerfuse(Tree t, String label, String image) {
         Color BACKGROUND = Color.WHITE;

@@ -24,8 +24,6 @@ import br.ufc.lps.repositorio.SchemeXml;
 
 public class ViewerPanelResultFeatures extends JPanel {
 	
-	private List<SchemeXml> modelos;
-	private ContextModel model;
 	private static String colunas[] = {"Nome"};
 	private DefaultTableModel mDefaultTableModel;
 	private ControladorXml controladorXml;
@@ -39,10 +37,9 @@ public class ViewerPanelResultFeatures extends JPanel {
 	private JButton refresh;
 	private JLabel labelMensagens;
 	
-	public ViewerPanelResultFeatures(final ContextModel model, final Main main) {
+	public ViewerPanelResultFeatures(final Main main) {
 		
 		controladorXml = new ControladorXml();
-		this.model = model;
 		this.main = main;
 		
 		setBorder(new EmptyBorder(5, 5, 5, 5));

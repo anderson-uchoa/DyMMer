@@ -23,5 +23,11 @@
 	<classpathentry kind="lib" path="libs/commons-lang3-3.4.jar"/>
 	<classpathentry kind="lib" path="libs/jgraph.jar"/>
 	<classpathentry kind="lib" path="libs/prefuse.jar"/>
+	<classpathentry kind="lib" path="libs/jxbrowser-6.7.jar"/>
+	<classpathentry kind="lib" path="libs/jxbrowser-linux32-6.7.jar"/>
+	<classpathentry kind="lib" path="libs/jxbrowser-linux64-6.7.jar"/>
+	<classpathentry kind="lib" path="libs/jxbrowser-mac-6.7.jar"/>
+	<classpathentry kind="lib" path="libs/jxbrowser-win-6.7.jar"/>
+	<classpathentry kind="lib" path="libs/license.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -2,7 +2,6 @@ package br.ufc.lps.gui.tree;
 
 import java.awt.event.ActionEvent;
 import java.awt.geom.Point2D;
-import java.util.Date;
 
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
@@ -61,12 +60,9 @@ public class FeaturesTreeViewPerfuse extends Display {
     public static final String STRING = "String";
     public static final String DATE = "Date";
     public static final String CATEGORY = "Category";
-   
-    // prefuse-specific allowed types
     public static final String BOOLEAN = "Boolean";
    	public static final String DOUBLE = "Double";
    	
-	public static final String TREE_CHI = "/chi-ontology.xml.gz";
     private static final String tree = "tree";
     public static final String treeNodes = "tree.nodes";
     private static final String treeEdges = "tree.edges";
@@ -96,7 +92,6 @@ public class FeaturesTreeViewPerfuse extends Display {
                
         // colors
         ItemAction nodeColor = new NodeColorAction(treeNodes);
-       // ItemAction nodeColor2 = new NodeColorAction2(treeNodes);
         
         ItemAction textColor = new ColorAction(treeNodes,
                 VisualItem.TEXTCOLOR, ColorLib.rgb(0,0,0));
@@ -278,28 +273,6 @@ public class FeaturesTreeViewPerfuse extends Display {
         }
     }
     
-    public static Class parseType(String type) {
-        type = Character.toUpperCase(type.charAt(0)) +
-               type.substring(1).toLowerCase();
-        if ( type.equals(INT) || type.equals(INTEGER) ) {
-            return int.class;
-        } else if ( type.equals(LONG) ) {
-            return long.class;
-        } else if ( type.equals(FLOAT) ) {
-            return float.class;
-        } else if ( type.equals(DOUBLE) || type.equals(REAL)) {
-            return double.class;
-        } else if ( type.equals(BOOLEAN) ) {
-            return boolean.class;
-        } else if ( type.equals(STRING) ) {
-            return String.class;
-        } else if ( type.equals(DATE) ) {
-            return Date.class;
-        } else {
-            throw new RuntimeException("Unrecognized data type: "+type);
-        }
-    }
-    
     public class AutoPanAction extends Action {
         private Point2D m_start = new Point2D.Double();
         private Point2D m_end   = new Point2D.Double();
@@ -339,24 +312,6 @@ public class FeaturesTreeViewPerfuse extends Display {
             }
         }
     }
-    
-	/*public static class NodeColorAction2 extends ColorAction {
-	        
-	        public NodeColorAction2(String group) {
-	            super(group, VisualItem.FILLCOLOR);
-	        }
-	        
-	        public int getColor(VisualItem item) {	 
-	        	 System.out.println("allow");
-	        	 if(item.canGet("feature", FeatureTreeNode.class)){
-	        		 FeatureTreeNode a = (FeatureTreeNode)item.get("feature");
-	        		 //System.out.println(a.getName());
-	        	 }
-	        		 return ColorLib.rgba(209,67,67,0);
-	        }	
-	        
-	    }*/
-    
     public static class NodeColorAction extends ColorAction {
         
         public NodeColorAction(String group) {

@@ -424,7 +424,7 @@ public class Main extends JFrame {
 				String tabName = "Repositório de Modelos";
 				long time = System.currentTimeMillis();
 				
-				ViewerPanelResultFeatures a = new ViewerPanelResultFeatures(null, Main.this);
+				ViewerPanelResultFeatures a = new ViewerPanelResultFeatures(Main.this);
 				viewMain = a;
 				tabbedPane.addTab(tabName+time, a);	
 				

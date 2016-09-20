@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,6 +35,7 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import br.ufc.lps.gui.charts.BarChart;
+import br.ufc.lps.gui.charts.BrowserController;
 import br.ufc.lps.gui.charts.LineContexts;
 import br.ufc.lps.gui.charts.PieFeatures;
 import br.ufc.lps.gui.charts.TreeMap;
@@ -53,6 +55,7 @@ public class Main extends JFrame {
 	private ViewerPanel currentViewer;
 	private JMenu mnMeasures_1;
 	private ViewerPanelResultFeatures viewMain;
+	private BrowserController mBrowserController;
 	
 	/**
 	 * Launch the application.
@@ -68,16 +71,17 @@ public class Main extends JFrame {
 				            break;
 				        }
 				    }
-					
-					Main frame = new Main();
-					frame.setVisible(true);
-					
+				    
+
 					NimbusLookAndFeel laf = new NimbusLookAndFeel();
 					
 					UIDefaults defs = laf.getDefaults();
 					defs.put("Tree.drawHorizontalLines", true);
 					defs.put("Tree.drawVerticalLines", true);
 					defs.put("Tree.linesStyle", "Angled");
+					
+					Main frame = new Main();
+					frame.setVisible(true);
 
 					try {
 					    UIManager.setLookAndFeel(laf);
@@ -106,7 +110,7 @@ public class Main extends JFrame {
 
 		tabbedPane = new JTabbedPane();
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
-		
+		mBrowserController = new BrowserController();
 		
 		tabbedPane.addChangeListener(new ChangeListener() {
 			
@@ -401,6 +405,43 @@ public class Main extends JFrame {
 		});
 	}
 	
+	private void createTab(JComponent panel, String nameTab){
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				mnMeasures_1.setEnabled(true);
+			
+				long time = System.currentTimeMillis();
+				
+				tabbedPane.addTab(nameTab+time, panel);	
+				
+				int index = tabbedPane.indexOfTab(nameTab+time);
+				JPanel pnlTab = new JPanel(new GridBagLayout());
+				pnlTab.setOpaque(false);
+				JLabel lblTitle = new JLabel(nameTab);
+				JButton btnClose = new JButton("x");
+
+				GridBagConstraints gbc = new GridBagConstraints();
+				gbc.gridx = 0;
+				gbc.gridy = 0;
+				gbc.weightx = 1;
+
+				pnlTab.add(lblTitle, gbc);
+
+				gbc.gridx++;
+				gbc.weightx = 0;
+				pnlTab.add(btnClose, gbc);
+
+				tabbedPane.setTabComponentAt(index, pnlTab);
+
+				btnClose.addActionListener(new MyCloseActionHandler(nameTab+time));
+				
+				Main.this.repaint();
+			}
+		});
+	}
+	
 	public void editarArquivosDoRepositorio(SchemeXml schemeXml){
 		
 		String path = schemeXml.getFile().getAbsolutePath();
@@ -455,157 +496,22 @@ public class Main extends JFrame {
 	}
 	
 	public void numeroDeFeatures( List<SchemeXml>  lista){
-		SwingUtilities.invokeLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				mnMeasures_1.setEnabled(true);
-				String tabName = "Número de Features";
-				long time = System.currentTimeMillis();
-				
-				JPanel a = PieFeatures.createDemoPanel(lista);
-				
-				tabbedPane.addTab(tabName+time, a);	
-				
-				int index = tabbedPane.indexOfTab(tabName+time);
-				JPanel pnlTab = new JPanel(new GridBagLayout());
-				pnlTab.setOpaque(false);
-				JLabel lblTitle = new JLabel(tabName);
-				JButton btnClose = new JButton("x");
-
-				GridBagConstraints gbc = new GridBagConstraints();
-				gbc.gridx = 0;
-				gbc.gridy = 0;
-				gbc.weightx = 1;
-
-				pnlTab.add(lblTitle, gbc);
-
-				gbc.gridx++;
-				gbc.weightx = 0;
-				pnlTab.add(btnClose, gbc);
-
-				tabbedPane.setTabComponentAt(index, pnlTab);
-
-				btnClose.addActionListener(new MyCloseActionHandler(tabName+time));
-			}
-		});
-
+		JPanel a = PieFeatures.createDemoPanel(lista);
+		createTab(a, "Número de Features");
 	}
 
 	public void ComparacaoContextos( SchemeXml  schema){
-		SwingUtilities.invokeLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				mnMeasures_1.setEnabled(true);
-				String tabName = "Comparação Contextos";
-				long time = System.currentTimeMillis();
-				
-				JPanel a = BarChart.createChart(schema);
-				
-				tabbedPane.addTab(tabName+time, a);	
-				
-				int index = tabbedPane.indexOfTab(tabName+time);
-				JPanel pnlTab = new JPanel(new GridBagLayout());
-				pnlTab.setOpaque(false);
-				JLabel lblTitle = new JLabel(tabName);
-				JButton btnClose = new JButton("x");
-
-				GridBagConstraints gbc = new GridBagConstraints();
-				gbc.gridx = 0;
-				gbc.gridy = 0;
-				gbc.weightx = 1;
-
-				pnlTab.add(lblTitle, gbc);
-
-				gbc.gridx++;
-				gbc.weightx = 0;
-				pnlTab.add(btnClose, gbc);
-
-				tabbedPane.setTabComponentAt(index, pnlTab);
-
-				btnClose.addActionListener(new MyCloseActionHandler(tabName+time));
-			}
-		});
-
+		String tabName = "Comparação Contextos";
+		JComponent a = mBrowserController.getBar(schema);//BarChart.createChart(schema);
+		createTab(a, tabName);
 	}
 
 	public void comparacaoContextosLine( SchemeXml  schema){
-		SwingUtilities.invokeLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				mnMeasures_1.setEnabled(true);
-				String tabName = "Comparação Contextos";
-				long time = System.currentTimeMillis();
-				
-				JPanel a = LineContexts.createChart(schema);
-				
-				tabbedPane.addTab(tabName+time, a);	
-				
-				int index = tabbedPane.indexOfTab(tabName+time);
-				JPanel pnlTab = new JPanel(new GridBagLayout());
-				pnlTab.setOpaque(false);
-				JLabel lblTitle = new JLabel(tabName);
-				JButton btnClose = new JButton("x");
-
-				GridBagConstraints gbc = new GridBagConstraints();
-				gbc.gridx = 0;
-				gbc.gridy = 0;
-				gbc.weightx = 1;
-
-				pnlTab.add(lblTitle, gbc);
-
-				gbc.gridx++;
-				gbc.weightx = 0;
-				pnlTab.add(btnClose, gbc);
-
-				tabbedPane.setTabComponentAt(index, pnlTab);
-
-				btnClose.addActionListener(new MyCloseActionHandler(tabName+time));
-			}
-		});
-
+		String tabName = "Comparação Contextos";
+		JPanel a = LineContexts.createChart(schema);
+		createTab(a, tabName);
 	}
-	
-	public void iniciarCampos5(){
-		SwingUtilities.invokeLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				mnMeasures_1.setEnabled(true);
-				String tabName = "Comparação Contextos";
-				long time = System.currentTimeMillis();
-				
-				JPanel a = TreeMap.demo();
-				
-				tabbedPane.addTab(tabName+time, a);	
-				
-				int index = tabbedPane.indexOfTab(tabName+time);
-				JPanel pnlTab = new JPanel(new GridBagLayout());
-				pnlTab.setOpaque(false);
-				JLabel lblTitle = new JLabel(tabName);
-				JButton btnClose = new JButton("x");
 
-				GridBagConstraints gbc = new GridBagConstraints();
-				gbc.gridx = 0;
-				gbc.gridy = 0;
-				gbc.weightx = 1;
-
-				pnlTab.add(lblTitle, gbc);
-
-				gbc.gridx++;
-				gbc.weightx = 0;
-				pnlTab.add(btnClose, gbc);
-
-				tabbedPane.setTabComponentAt(index, pnlTab);
-
-				btnClose.addActionListener(new MyCloseActionHandler(tabName+time));
-			}
-		});
-
-	}
-	
 	private void initXMLmodels() {
 		new XMLSplotModel();
 		new XMLFamiliarModel();

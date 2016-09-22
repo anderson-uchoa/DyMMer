@@ -32,14 +32,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
-import javax.swing.tree.DefaultMutableTreeNode;
 
-import br.ufc.lps.gui.charts.BarChart;
-import br.ufc.lps.gui.charts.BrowserController;
-import br.ufc.lps.gui.charts.LineContexts;
-import br.ufc.lps.gui.charts.PieFeatures;
-import br.ufc.lps.gui.charts.TreeMap;
 import br.ufc.lps.gui.export.ExportOfficeExcel;
+import br.ufc.lps.gui.visualization.browser.BrowserController;
+import br.ufc.lps.gui.visualization.jchart.PieFeatures;
 import br.ufc.lps.model.context.SplotContextModel;
 import br.ufc.lps.model.normal.IModel;
 import br.ufc.lps.model.normal.SplotModel;
@@ -47,7 +43,6 @@ import br.ufc.lps.model.xml.ModelID;
 import br.ufc.lps.model.xml.XMLFamiliarModel;
 import br.ufc.lps.model.xml.XMLSplotModel;
 import br.ufc.lps.repositorio.SchemeXml;
-import br.ufc.lps.splar.core.fm.FeatureTreeNode;
 
 public class Main extends JFrame {
 
@@ -496,20 +491,18 @@ public class Main extends JFrame {
 	}
 	
 	public void numeroDeFeatures( List<SchemeXml>  lista){
-		JPanel a = PieFeatures.createDemoPanel(lista);
+		JComponent a = BrowserController.getPie(lista);
 		createTab(a, "Número de Features");
 	}
 
 	public void ComparacaoContextos( SchemeXml  schema){
-		String tabName = "Comparação Contextos";
-		JComponent a = mBrowserController.getBar(schema);//BarChart.createChart(schema);
-		createTab(a, tabName);
+		JComponent a = BrowserController.getBar(schema);//BarChart.createChart(schema);
+		createTab(a, "Comparação Contextos Bar");
 	}
 
-	public void comparacaoContextosLine( SchemeXml  schema){
-		String tabName = "Comparação Contextos";
-		JPanel a = LineContexts.createChart(schema);
-		createTab(a, tabName);
+	public void comparacaoContextosLine( SchemeXml schema){
+		JComponent a = BrowserController.getLine(schema);//LineContexts.createChart(schema);
+		createTab(a, "Comparação Contextos Line");
 	}
 
 	private void initXMLmodels() {

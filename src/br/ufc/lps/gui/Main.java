@@ -35,7 +35,6 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 import br.ufc.lps.gui.export.ExportOfficeExcel;
 import br.ufc.lps.gui.visualization.browser.BrowserController;
-import br.ufc.lps.gui.visualization.jchart.PieFeatures;
 import br.ufc.lps.model.context.SplotContextModel;
 import br.ufc.lps.model.normal.IModel;
 import br.ufc.lps.model.normal.SplotModel;
@@ -50,12 +49,7 @@ public class Main extends JFrame {
 	private ViewerPanel currentViewer;
 	private JMenu mnMeasures_1;
 	private ViewerPanelResultFeatures viewMain;
-	private BrowserController mBrowserController;
 	
-	/**
-	 * Launch the application.
-	 * @throws JRException 
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -105,7 +99,6 @@ public class Main extends JFrame {
 
 		tabbedPane = new JTabbedPane();
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
-		mBrowserController = new BrowserController();
 		
 		tabbedPane.addChangeListener(new ChangeListener() {
 			
@@ -363,43 +356,6 @@ public class Main extends JFrame {
 		
 	}
 	
-	private void createTab(JPanel panel, String nameTab){
-		SwingUtilities.invokeLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				mnMeasures_1.setEnabled(true);
-			
-				long time = System.currentTimeMillis();
-				
-				tabbedPane.addTab(nameTab+time, panel);	
-				
-				int index = tabbedPane.indexOfTab(nameTab+time);
-				JPanel pnlTab = new JPanel(new GridBagLayout());
-				pnlTab.setOpaque(false);
-				JLabel lblTitle = new JLabel(nameTab);
-				JButton btnClose = new JButton("x");
-
-				GridBagConstraints gbc = new GridBagConstraints();
-				gbc.gridx = 0;
-				gbc.gridy = 0;
-				gbc.weightx = 1;
-
-				pnlTab.add(lblTitle, gbc);
-
-				gbc.gridx++;
-				gbc.weightx = 0;
-				pnlTab.add(btnClose, gbc);
-
-				tabbedPane.setTabComponentAt(index, pnlTab);
-
-				btnClose.addActionListener(new MyCloseActionHandler(nameTab+time));
-				
-				Main.this.repaint();
-			}
-		});
-	}
-	
 	private void createTab(JComponent panel, String nameTab){
 		SwingUtilities.invokeLater(new Runnable() {
 			
@@ -468,7 +424,6 @@ public class Main extends JFrame {
 				JPanel pnlTab = new JPanel(new GridBagLayout());
 				pnlTab.setOpaque(false);
 				JLabel lblTitle = new JLabel(tabName);
-				//JButton btnClose = new JButton("x");
 
 				GridBagConstraints gbc = new GridBagConstraints();
 				gbc.gridx = 0;
@@ -479,12 +434,8 @@ public class Main extends JFrame {
 
 				gbc.gridx++;
 				gbc.weightx = 0;
-				//pnlTab.add(btnClose, gbc);
 
 				tabbedPane.setTabComponentAt(index, pnlTab);
-
-				//btnClose.addActionListener(new MyCloseActionHandler(tabName+time));
-			
 			}
 		});
 
@@ -495,14 +446,24 @@ public class Main extends JFrame {
 		createTab(a, "Número de Features");
 	}
 
+	public void bubble( List<SchemeXml>  lista){
+		JComponent a = BrowserController.getBubble(lista);
+		createTab(a, "Profundidade Máxima da Árvore e Número de Features Folhas dos modelos");
+	}
+
 	public void ComparacaoContextos( SchemeXml  schema){
-		JComponent a = BrowserController.getBar(schema);//BarChart.createChart(schema);
-		createTab(a, "Comparação Contextos Bar");
+		JComponent a = BrowserController.getBar(schema);
+		createTab(a, "Comparação Contextos Radar");
 	}
 
 	public void comparacaoContextosLine( SchemeXml schema){
-		JComponent a = BrowserController.getLine(schema);//LineContexts.createChart(schema);
+		JComponent a = BrowserController.getLine(schema);
 		createTab(a, "Comparação Contextos Line");
+	}
+	
+	public void abrirMedidas( SchemeXml schema){
+		JComponent a = new ViewerPanelResulMeasures(this, schema);
+		createTab(a, "Medidas das Features");
 	}
 
 	private void initXMLmodels() {
@@ -536,9 +497,7 @@ public class Main extends JFrame {
 	        if (index >= 0) {
 	            tabbedPane.removeTabAt(index);
 	        }
-
 	    }
-
 	}   
 
 

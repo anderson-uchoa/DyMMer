@@ -40,23 +40,23 @@ public class SchemeXml {
 	@Expose
 	private Integer cyclomaticComplexity;
 	@Expose
-	private Integer variableCrosstreeConstraints;
+	private Integer variableCrosstreeConstraints;//
 	@Expose
 	private Double compoundComplexity;
 	@Expose
 	private Integer numberOfGroupingFeatures;
 	@Expose
-	private Double crossTreeConstraintsRate;
+	private Double crossTreeConstraintsRate;//
 	@Expose
 	private Double coeficientOfConnectivityDensity;
 	@Expose
 	private Integer numberOfVariableFeatures;
 	@Expose
-	private Integer singleVariationPointsFeatures;
+	private Integer singleVariationPointsFeatures;//
 	@Expose
-	private Integer multipleVariationPointsFeatures;
+	private Integer multipleVariationPointsFeatures;//
 	@Expose
-	private Integer rigidNoVariationPointsFeatures;
+	private Integer rigidNoVariationPointsFeatures;//
 	@Expose
 	private Double numberOfValidConfigurations;
 	@Expose

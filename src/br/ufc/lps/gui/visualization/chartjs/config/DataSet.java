@@ -1,7 +1,5 @@
 package br.ufc.lps.gui.visualization.chartjs.config;
 
-import java.util.List;
-
 public class DataSet {
 	private String fillColor;
 	private String strokeColor;
@@ -11,7 +9,6 @@ public class DataSet {
     private Boolean fill;
 	private Integer lineTension;
 	private String pointStrokeColor;
-	private List<Double> data;
 	
 	public Boolean getFill() {
 		return fill;
@@ -61,12 +58,4 @@ public class DataSet {
 	public void setPointStrokeColor(String pointStrokeColor) {
 		this.pointStrokeColor = pointStrokeColor;
 	}
-	public List<Double> getData() {
-		return data;
-	}
-	public void setData(List<Double> data) {
-		this.data = data;
-	}
-	
-	
 }

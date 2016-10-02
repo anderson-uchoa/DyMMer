@@ -7,7 +7,14 @@ public class DataSetBar extends br.ufc.lps.gui.visualization.chartjs.config.Data
 	private List<String> backgroundColor;
 	private List<String> hoverBackgroundColor;
 	private List<String> borderColor;
+	private List<Double> data;
 	
+	public List<Double> getData() {
+		return data;
+	}
+	public void setData(List<Double> data) {
+		this.data = data;
+	}
 	public List<String> getHoverBackgroundColor() {
 		return hoverBackgroundColor;
 	}

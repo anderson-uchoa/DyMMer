@@ -43,7 +43,7 @@ public class ControladorXml{
 		return controladorXml = new ControladorXml();
 	}
 	
-	public List<SchemeXml> get(){
+	public List<SchemeXml> getXml(){
 		
 		Request request = new Request.Builder()
 			      .url(Conexao.url)
@@ -123,6 +123,7 @@ public class ControladorXml{
 			    sb.append(line);
 			    sb.append("\n");
 			}
+			br.close();
 			
 			return sb.toString().trim();
 			
@@ -150,8 +151,11 @@ public class ControladorXml{
 		scheme.setNumberOfOptionalFeatures(model.numberOfOptionalFeatures());
 		scheme.setNumberOfMandatoryFeatures(model.numberOfMandatoryFeatures());
 		scheme.setNumberOfTopFeatures(model.numberOfTopFeatures());
+		
 		scheme.setNumberOfLeafFeatures(model.numberOfLeafFeatures());
+		
 		scheme.setDepthOfTreeMax(model.depthOfTreeMax());
+		
 		scheme.setDepthOfTreeMedian(model.depthOfTreeMedian());
 		scheme.setCognitiveComplexityOfAFeatureModel(model.cognitiveComplexityOfFeatureModel());
 		scheme.setFlexibilityOfConfiguration(model.flexibilityOfConfiguration());

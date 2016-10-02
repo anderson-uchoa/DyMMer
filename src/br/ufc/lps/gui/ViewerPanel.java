@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.List;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -65,6 +64,9 @@ public class ViewerPanel extends JPanel {
 	private JPanel panelTreePerfuse;
    	private Table table;
     private FeaturesTreeViewPerfuse tview;
+    private JPanel panelSelecionada;
+    private JPanel panelTree;
+    private boolean primeira = true;
 	
 	private void inicializarTreePerfuse(){
 		this.treeP = new Tree();
@@ -101,14 +103,19 @@ public class ViewerPanel extends JPanel {
 		add(panelTrees, BorderLayout.CENTER);
 		
 		tree = new JTree();
-		scrollPane = new JScrollPane(tree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		
+		//Painel para a arvore;
+		panelTree = new JPanel();
+		panelTree.setLayout(new GridLayout(1,0));
+		panelTree.add(tree);
+
+		scrollPane = new JScrollPane(panelTree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panelTrees.add(scrollPane, BorderLayout.CENTER);
 		
 		//PAINEL ONDE FICARÀ O BOTÃO PARA MODIFICAR TIPO DE ÁRVORE
 		JPanel panelBotoesTree = new JPanel();
 		panelBotoesTree.setLayout(new GridLayout(1, 0));
 		panelTrees.add(panelBotoesTree, BorderLayout.NORTH);
-		
 		
 		panelBotoesLayoutTree = new JPanel();
 		panelBotoesTree.setLayout(new GridLayout(1, 0));
@@ -118,10 +125,14 @@ public class ViewerPanel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(scrollPane.getViewport().getView().equals(tree))
+				if(scrollPane.getViewport().getView().equals(panelTree)){
 					scrollPane.getViewport().setView(panelTreePerfuse);
-				else
-					scrollPane.getViewport().setView(tree);
+					panelSelecionada = panelTreePerfuse;
+				}
+				else{
+					scrollPane.getViewport().setView(panelTree);
+					panelSelecionada = panelTree;
+				}
 			}
 		});
 		
@@ -340,11 +351,23 @@ public class ViewerPanel extends JPanel {
 		
 	
 		panelTreePerfuse = panelTreePerfuse(treeP, "name", "image");
-		scrollPane.getViewport().setView(panelTreePerfuse);
-	
+		
+		if(panelSelecionada!=null && !panelSelecionada.equals(panelTree))
+			panelSelecionada = panelTreePerfuse;	
+		else
+			panelSelecionada = panelTree;
+		
+		if(!primeira)
+			scrollPane.getViewport().setView(panelSelecionada);
+		else{
+			scrollPane.getViewport().setView(panelTreePerfuse);
+			panelSelecionada = panelTreePerfuse;
+		}
+		primeira = false;
+		//scrollPane.repaint();
 	}
 	
-   public JPanel panelTreePerfuse(Tree t, String label, String image) {
+	public JPanel panelTreePerfuse(Tree t, String label, String image) {
         Color BACKGROUND = Color.WHITE;
         Color FOREGROUND = Color.BLACK;
             

@@ -1,6 +1,7 @@
 package br.ufc.lps.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,6 +36,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 	private JButton deletar;
 	private JButton listarMedidas;
 	private JButton refresh;
+	private JButton medidas;
 	private JLabel labelMensagens;
 	
 	public ViewerPanelResultFeatures(final Main main) {
@@ -88,9 +90,17 @@ public class ViewerPanelResultFeatures extends JPanel {
 		
 		painelMensagens.add(button);
 		
-		JButton button2 = new JButton("Evolucao entre contextos");
+		JButton button2 = new JButton("Evolução entre contextos");
 		
 		painelMensagens.add(button2);
+		
+		JButton button3 = new JButton("Profundidade Máxima da Árvore e Número de Features Folhas dos modelos");
+		
+		painelMensagens.add(button3);
+		
+		medidas = new JButton("Medidas");
+		
+		painelBotaoOpen.add(medidas);
 		
 		refresh = new JButton("Recarregar");
 		
@@ -99,7 +109,6 @@ public class ViewerPanelResultFeatures extends JPanel {
 		mDefaultTableModel = new DefaultTableModel(new String[][]{}, colunas);
 		
 		tabela = new JTable(mDefaultTableModel);
-		
 		JScrollPane barraRolagem = new JScrollPane(tabela);
 		
 		painelTabela.add(barraRolagem);
@@ -157,6 +166,14 @@ public class ViewerPanelResultFeatures extends JPanel {
 			}
 		});
 		
+		button3.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ViewerPanelResultFeatures.this.main.bubble(listaItens);
+			}
+		});
+		
 		open.addActionListener(new ActionListener() {
 			
 			@Override
@@ -177,6 +194,19 @@ public class ViewerPanelResultFeatures extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				carregarItens();
+			}
+		});
+		
+		medidas.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int selecao = tabela.getSelectedRow();
+				if(selecao > -1){
+					SchemeXml selecionado = listaItens.get(selecao);
+					main.abrirMedidas(selecionado);
+				}else
+					mensagemSelecionarLinha();
 			}
 		});
 		
@@ -206,7 +236,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 	}
 	
 	public void carregarItens(){
-		listaItens = controladorXml.get();
+		listaItens = controladorXml.getXml();
 		mDefaultTableModel.setRowCount(0);
 		if(listaItens!=null){
 			if(listaItens.size() > 0){

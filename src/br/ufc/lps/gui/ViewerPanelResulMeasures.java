@@ -1,8 +1,10 @@
 package br.ufc.lps.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -34,15 +36,19 @@ public class ViewerPanelResulMeasures extends JPanel {
 		setLayout(new BorderLayout(0, 0));
 		
 		JPanel painelTabela = new JPanel();
-		add(painelTabela, BorderLayout.CENTER);
-		painelTabela.setLayout(new GridLayout(0, 1, 0, 0));
+		painelTabela.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		mDefaultTableModel = new DefaultTableModel(new String[][]{}, colunas);
 		tabela = new JTable(mDefaultTableModel);
-		JScrollPane barraRolagem = new JScrollPane(tabela, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		painelTabela.add(tabela);
 		
-		painelTabela.add(barraRolagem);
-	
+		for(int i=0; i < colunas.length; i++)
+			tabela.getColumnModel().getColumn(i).setMinWidth(250);
+		
+		JScrollPane barraRolagem = new JScrollPane(painelTabela);
+		barraRolagem.setColumnHeaderView(tabela.getTableHeader());
+		
+		add(barraRolagem);
 		carregarItens(xml);			
 	}
 	

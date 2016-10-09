@@ -21,10 +21,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import br.ufc.lps.contextaware.Constraint;
-import br.ufc.lps.contextaware.Context;
-import br.ufc.lps.contextaware.Resolution;
 import br.ufc.lps.model.ModelFactory;
+import br.ufc.lps.model.contextaware.Constraint;
+import br.ufc.lps.model.contextaware.Context;
+import br.ufc.lps.model.contextaware.Resolution;
 import br.ufc.lps.splar.core.constraints.BooleanVariable;
 import br.ufc.lps.splar.core.constraints.BooleanVariableInterface;
 import br.ufc.lps.splar.core.constraints.CNFFormula;

@@ -8,9 +8,9 @@ import java.util.Map;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
-import br.ufc.lps.contextaware.Context;
-import br.ufc.lps.contextaware.Resolution;
 import br.ufc.lps.model.context.ContextModel;
+import br.ufc.lps.model.contextaware.Context;
+import br.ufc.lps.model.contextaware.Resolution;
 import br.ufc.lps.splar.core.constraints.CNFClause;
 import br.ufc.lps.splar.core.constraints.CNFFormula;
 import br.ufc.lps.splar.core.constraints.PropositionalFormula;

@@ -1,11 +1,12 @@
 package br.ufc.lps.splar.core.fm;
 
+import br.ufc.lps.controller.features.TypeFeature;
+
 public class GroupedFeature extends FeatureTreeNode {
 
-	private boolean isOptional = false;
-	
-	public GroupedFeature(  String id, String name, IFNodeRenderer nodeRenderer ) {		
+	public GroupedFeature( String id, String name, IFNodeRenderer nodeRenderer ) {		
 		super(id,name,nodeRenderer);
+		setTypeFeature(TypeFeature.GROUPED_FEATURE);
 	}
 	
 	public FeatureGroup getGroup() {

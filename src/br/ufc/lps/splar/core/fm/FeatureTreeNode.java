@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import br.ufc.lps.controller.features.TypeFeature;
 import br.ufc.lps.splar.core.constraints.BooleanVariableInterface;
 
 public class FeatureTreeNode extends DefaultMutableTreeNode implements BooleanVariableInterface, Cloneable {
@@ -16,6 +17,7 @@ public class FeatureTreeNode extends DefaultMutableTreeNode implements BooleanVa
 	public static final int DESELECTED = 0;
 	public static final int SELECTED   = 1;
 	public boolean ativa = false;
+	private TypeFeature typeFeature;
 	
 	/*
 	 * Context-Aware
@@ -60,6 +62,14 @@ public class FeatureTreeNode extends DefaultMutableTreeNode implements BooleanVa
 		return isActiveInContext;
 	}
 	
+	public void setTypeFeature(TypeFeature typeFeature) {
+		this.typeFeature = typeFeature;
+	}
+	
+	public TypeFeature getTypeFeature() {
+		return typeFeature;
+	}
+
 	public void setValue(int value){
 		this.value = value;
 	}

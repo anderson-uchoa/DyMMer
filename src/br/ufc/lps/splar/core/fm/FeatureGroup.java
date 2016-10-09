@@ -1,5 +1,6 @@
 package br.ufc.lps.splar.core.fm;
 
+import br.ufc.lps.controller.features.TypeFeature;
 
 public class FeatureGroup extends FeatureTreeNode {
 
@@ -10,6 +11,11 @@ public class FeatureGroup extends FeatureTreeNode {
 		super(id,name,nodeRenderer);
 		this.min = min;
 		this.max = max;
+		
+		super.setTypeFeature(TypeFeature.GROUP_XOR);	
+		if (max == -1) {
+			super.setTypeFeature(TypeFeature.GROUP_OR);
+		}
 	}
 	
 	public int getMin() {
@@ -19,6 +25,8 @@ public class FeatureGroup extends FeatureTreeNode {
 	public int getMax() {
 		return max;
 	}
+	
+	
 
 	public String getDescription() {
 		String name = "";

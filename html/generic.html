@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="utf-8" />
+        <title>Chart.js demo</title>
+        <script src="js/jquery-3.1.0.min.js"></script>
+        <script src="js/Chart.min.js"></script>
+    </head>
+    <body>
+      <div style="width:100%;">
+        <canvas id="buyers"></canvas>
+      </dib>
+    </body>
+    <script>
+        var ctx = document.getElementById('buyers').getContext('2d');
+
+        function preencherGrafico(config){
+          var arr_from_json = JSON.parse( config );
+          window.myLine = new Chart(ctx, arr_from_json);
+        }
+    </script>
+</html>

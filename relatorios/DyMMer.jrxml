@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DyMMer" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f75335c4-abda-4f42-9e66-2144db3481f5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="404"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\jeffersonbarbosa\\"]]></defaultValueExpression>
+	</parameter>
+	<field name="Features Model" class="java.lang.String"/>
+	<field name="NF" class="java.lang.Integer"/>
+	<group name="NF">
+		<groupExpression><![CDATA[$F{NF}]]></groupExpression>
+	</group>
+	<title>
+		<band height="80" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="79" backcolor="#5D72D5" uuid="9d348537-3f61-45db-bcc3-d96e0418b011"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="79" forecolor="#FFFFFF" uuid="4103c4c6-0f3d-4f6c-89e6-48c5e5f50b64"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="35" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Measures report without context]]></text>
+			</staticText>
+		</band>
+	</title>
+	<summary>
+		<band height="720">
+			<pieChart>
+				<chart>
+					<reportElement x="0" y="0" width="555" height="720" uuid="3d5b1709-880f-45e3-910e-328a4139e16c"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<keyExpression><![CDATA[$F{NF}]]></keyExpression>
+					<valueExpression><![CDATA[$V{NF_COUNT}]]></valueExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+		</band>
+	</summary>
+</jasperReport>

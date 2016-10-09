@@ -31,6 +31,7 @@ public class MenuFactory {
 	public MenuFactory(EditorPanel editorPanel, FeatureTreeNode featureTreeNode) {
 		this.editorPanel = editorPanel;
 		this.featureTreeNode = featureTreeNode;
+		
 	}
 	
 	

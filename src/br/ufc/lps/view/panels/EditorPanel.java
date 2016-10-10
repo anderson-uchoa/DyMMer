@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -65,6 +66,7 @@ import br.ufc.lps.splar.core.fm.FeatureGroup;
 import br.ufc.lps.splar.core.fm.FeatureModel;
 import br.ufc.lps.splar.core.fm.FeatureModelException;
 import br.ufc.lps.splar.core.fm.FeatureTreeNode;
+import br.ufc.lps.splar.core.fm.SolitaireFeature;
 import br.ufc.lps.splar.core.heuristics.FTPreOrderSortedECTraversalHeuristic;
 import br.ufc.lps.splar.core.heuristics.VariableOrderingHeuristic;
 import br.ufc.lps.splar.core.heuristics.VariableOrderingHeuristicsManager;
@@ -72,26 +74,27 @@ import br.ufc.lps.splar.plugins.reasoners.bdd.javabdd.FMReasoningWithBDD;
 import br.ufc.lps.view.Main;
 import br.ufc.lps.view.export.WriteXMLmodel;
 import br.ufc.lps.view.list.ConstraintsListModel;
+
 import br.ufc.lps.view.trees.FeatureModelTree;
 import br.ufc.lps.view.trees.FeaturesTreeCellRenderer;
 
-public class EditorPanel extends JPanel implements ActionListener{
+public class EditorPanel extends JPanel implements ActionListener {
 
 	protected static final String BASE_NAME_CONSTRAINT = "contextConstraint";
 	private IModel model;
 	private JTextField textFieldNewContext;
-	private JTree tree;
+	public JTree tree;
 	private FeatureTreeNode selectedNode;
 	private JTextArea txtMessageText;
 	private JButton btnNewContext;
 	private JLabel lblNewContext;
 	private Context defaultContext;
-	private List<Resolution> resolutions;
+	public List<Resolution> resolutions;
 	private JTextField txtAddTheFeatures;
 	private Map<String, String> constraints;
 	private List<Literal> constraintLiterals;
 	private JList list;
-	private ConstraintsListModel constraintsListModel;
+	public ConstraintsListModel constraintsListModel;
 	private int selectedConstraintIndex;
 	private List<Constraint> constraintsList;
 	private int constraintNumber;
@@ -99,96 +102,96 @@ public class EditorPanel extends JPanel implements ActionListener{
 	private String pathModelFile;
 	private Main main;
 	private JButton jbuttonSalvar;
-	
-	private MenuFactory menuFactory;
-	
+	JPopupMenu menu;
+
 	/**
 	 * Create the panel.
-	 * @param model 
+	 * 
+	 * @param model
 	 */
-	
-	
-	
+
 	public EditorPanel(IModel model, int modelID, String pathModelFile, SchemeXml schemeXml, Main main) {
 		setLayout(new BorderLayout(0, 0));
 		this.main = main;
 		constraints = new HashMap<String, String>();
 		constraintLiterals = new ArrayList<Literal>();
 		constraintsList = new ArrayList<Constraint>();
-		
+        menu = new JPopupMenu();
+        
 		constraintNumber = 0;
-		
+
 		this.modelID = modelID;
 		this.pathModelFile = pathModelFile;
-		
+
 		this.model = model;
 		resolutions = new ArrayList<Resolution>();
-		
+
 		tree = new JTree();
-		
+
 		tree.setModel(new FeatureModelTree(model.getFeatureModel().getRoot()));
-	
+
 		tree.setEditable(true);
 		tree.setComponentPopupMenu(getComponentPopupMenu());
 		tree.addMouseListener(getMouseListener());
-		
+
 		defaultContext = new Context("default", resolutions, null);
 		tree.setCellRenderer(new FeaturesTreeCellRenderer(defaultContext));
-		
-		JScrollPane scrollPane = new JScrollPane(tree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+		JScrollPane scrollPane = new JScrollPane(tree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		add(scrollPane, BorderLayout.CENTER);
-		
+
 		JPanel panelInfos = new JPanel();
 		add(panelInfos, BorderLayout.EAST);
 		panelInfos.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel panelNewContext = new JPanel();
 		panelInfos.add(panelNewContext, BorderLayout.NORTH);
 		panelNewContext.setLayout(new GridLayout(0, 2, 0, 0));
-		
+
 		lblNewContext = new JLabel("New context");
 		panelNewContext.add(lblNewContext);
-		
+
 		textFieldNewContext = new JTextField();
 		textFieldNewContext.setToolTipText("New context's name");
 		panelNewContext.add(textFieldNewContext);
 		textFieldNewContext.setColumns(10);
-		
+
 		JLabel lblBlankSpace = new JLabel("");
 		panelNewContext.add(lblBlankSpace);
-		
+
 		btnNewContext = new JButton("Add");
-		
+
 		btnNewContext.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				if(textFieldNewContext.getText().equals("")){
+
+				if (textFieldNewContext.getText().equals("")) {
 					txtMessageText.setText("Please, type the context name.");
 					lblNewContext.setForeground(Color.RED);
 					textFieldNewContext.requestFocus();
-				}else{
-					
+				} else {
+
 					DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-					
-							
+
 					try {
-					
+
 						DocumentBuilder db = dbf.newDocumentBuilder();
 						Document doc = db.parse(EditorPanel.this.pathModelFile);
-					
+
 						Element rootEle = doc.getDocumentElement();
-												
-						rootEle.appendChild(WriteXMLmodel.getContext(doc, textFieldNewContext.getText(), EditorPanel.this.resolutions, new ArrayList<String>(constraints.values())));
-						
+
+						rootEle.appendChild(WriteXMLmodel.getContext(doc, textFieldNewContext.getText(),
+								EditorPanel.this.resolutions, new ArrayList<String>(constraints.values())));
+
 						Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			            transformer.setOutputProperty(OutputKeys.INDENT, "yes"); 
-			            DOMSource source = new DOMSource(doc);
-			            StreamResult console = new StreamResult(new FileOutputStream(EditorPanel.this.pathModelFile));
-			            transformer.transform(source, console);
-			            
-			            textFieldNewContext.setText("");
+						transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+						DOMSource source = new DOMSource(doc);
+						StreamResult console = new StreamResult(new FileOutputStream(EditorPanel.this.pathModelFile));
+						transformer.transform(source, console);
+
+						textFieldNewContext.setText("");
 						constraintLiterals.clear();
 						constraints.clear();
 						constraintsList.clear();
@@ -196,13 +199,13 @@ public class EditorPanel extends JPanel implements ActionListener{
 						txtAddTheFeatures.setText("");
 						resolutions.clear();
 						txtMessageText.setText("None for while...");
-						constraintNumber = 0;				
-						
-						
+						constraintNumber = 0;
+
 						tree.repaint();
 						tree.updateUI();
-						JOptionPane.showMessageDialog(EditorPanel.this, "Your context has been saved. Now, open the file to see it.");
-						
+						JOptionPane.showMessageDialog(EditorPanel.this,
+								"Your context has been saved. Now, open the file to see it.");
+
 					} catch (SAXException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -222,148 +225,145 @@ public class EditorPanel extends JPanel implements ActionListener{
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					
+
 				}
 			}
 		});
-		
+
 		panelNewContext.add(btnNewContext);
-		
-		
+
 		JPanel panelMessage = new JPanel();
 		panelInfos.add(panelMessage, BorderLayout.SOUTH);
 		panelMessage.setLayout(new GridLayout(0, 1, 0, 0));
-		
+
 		JLabel lblMessageTitle = new JLabel("Message:");
 		lblMessageTitle.setHorizontalAlignment(SwingConstants.LEFT);
 		panelMessage.add(lblMessageTitle);
-		
+
 		txtMessageText = new JTextArea();
 		txtMessageText.setText("None for while...");
 		txtMessageText.setLineWrap(true);
 		txtMessageText.setEditable(false);
 		txtMessageText.setBackground(SystemColor.menu);
 		panelMessage.add(txtMessageText);
-		
+
 		JPanel panel = new JPanel();
 		panelInfos.add(panel, BorderLayout.CENTER);
 		panel.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel panelConstraint = new JPanel();
 		panel.add(panelConstraint, BorderLayout.NORTH);
 		panelConstraint.setLayout(new GridLayout(0, 1, 0, 0));
-		
+
 		JSeparator separator = new JSeparator();
 		panelConstraint.add(separator);
-		
+
 		jbuttonSalvar = new JButton("Salvar no Repositório");
 		jbuttonSalvar.setHorizontalAlignment(SwingConstants.CENTER);
 		panelConstraint.add(jbuttonSalvar);
-		
+
 		JLabel lblConstraint = new JLabel("Constraint:");
 		lblConstraint.setHorizontalAlignment(SwingConstants.CENTER);
 		panelConstraint.add(lblConstraint);
-		
+
 		jbuttonSalvar.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				File file = new File(pathModelFile);
 				Boolean resultado = ControladorXml.salvarXMLRepositorio(file, schemeXml);
-				if(resultado){
+				if (resultado) {
 					JOptionPane.showMessageDialog(null, "Salvo com sucesso!");
 					EditorPanel.this.main.recarregarListaFeatures();
 				}
 			}
 		});
-		
-		
+
 		txtAddTheFeatures = new JTextField();
 		txtAddTheFeatures.setText("Add the features...");
 		txtAddTheFeatures.setEditable(false);
 		txtAddTheFeatures.setColumns(10);
-		
-		JScrollPane scrollPane_2 = new JScrollPane(txtAddTheFeatures, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+		JScrollPane scrollPane_2 = new JScrollPane(txtAddTheFeatures, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panelConstraint.add(scrollPane_2);
-		
-				
+
 		JPanel panel_1 = new JPanel();
 		panelConstraint.add(panel_1);
-		
+
 		JButton btnRemoveConstraint = new JButton("Remove Constraint");
 		panel_1.add(btnRemoveConstraint);
-		
+
 		btnRemoveConstraint.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
+
 				txtAddTheFeatures.setText("");
 				constraintLiterals.clear();
 			}
 		});
-		
+
 		JButton btnAddConstraint = new JButton("Add Constraint");
 		panel_1.add(btnAddConstraint);
-		
+
 		btnAddConstraint.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
-				if(constraintLiterals.size() < 2){
+
+				if (constraintLiterals.size() < 2) {
 					txtMessageText.setText("Constraints must have at least two features.");
 					return;
 				}
-				
+
 				Constraint newConstraint = new Constraint(constraintNumber, txtAddTheFeatures.getText());
 				constraintNumber++;
 				constraintsList.add(newConstraint);
-				constraintsListModel.update();		
-				
+				constraintsListModel.update();
+
 				StringBuilder clauseConstraint = new StringBuilder();
-				
+
 				Literal literal = constraintLiterals.get(0);
 				String idFeature = literal.getFeature().getID();
 				clauseConstraint.append(literal.isState() ? idFeature : "~" + idFeature);
-				
-				for(int i = 1; i < constraintLiterals.size(); i++){
+
+				for (int i = 1; i < constraintLiterals.size(); i++) {
 					String variable = null;
 					Literal tempLiteral = constraintLiterals.get(i);
-					
-					if(tempLiteral.isState())
+
+					if (tempLiteral.isState())
 						variable = tempLiteral.getFeature().getID();
 					else
 						variable = "~" + tempLiteral.getFeature().getID();
-				
+
 					clauseConstraint.append(" or " + variable);
 				}
-				
+
 				String constraintName = BASE_NAME_CONSTRAINT + String.valueOf(newConstraint.getId());
 				constraints.put(constraintName, clauseConstraint.toString());
-				
-					
+
 				constraintLiterals.clear();
 				txtAddTheFeatures.setText("");
 				System.out.println(clauseConstraint.toString());
-				
-				
-				
+
 				FeatureModel otherModel = createFeatureModel();
-				
+
 				System.out.println("STRINGS CONSTRAINTS: ");
 				CNFClauseParser parser = new CNFClauseParser();
-				for(Entry<String, String> constsString : constraints.entrySet()){
-					
+				for (Entry<String, String> constsString : constraints.entrySet()) {
+
 					System.out.println(constsString.getKey() + ": " + constsString.getValue());
-										
+
 					CNFClause clause = null;
 					try {
 						clause = parser.parse(constsString.getValue());
-										
-//						otherModel.addConstraint(new PropositionalFormula(constsString.getKey(), clause.toString2()));
+
+						// otherModel.addConstraint(new
+						// PropositionalFormula(constsString.getKey(),
+						// clause.toString2()));
 						otherModel.addConstraint(new PropositionalFormula(constsString.getKey(), clause.toString()));
-						
+
 					} catch (CNFClauseParseException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -371,395 +371,375 @@ public class EditorPanel extends JPanel implements ActionListener{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
-					
-					
+
 				}
-		
-				
-				System.out.println("Size model's constraints: "+ otherModel.getConstraints().size());
-				
+
+				System.out.println("Size model's constraints: " + otherModel.getConstraints().size());
+
 				boolean consistency = isModelConsistent(otherModel);
-				
-				
-			
-				if(consistency)
+
+				if (consistency)
 					System.out.println("CONSISTENT");
 				else
 					System.out.println("NOT CONSISTENT");
-				
-				
+
 			}
 		});
-		
+
 		constraintsListModel = new ConstraintsListModel(constraintsList);
 		list = new JList<String>(constraintsListModel);
 		list.setComponentPopupMenu(getComponentPopupMenuConstraintsList());
 		list.addMouseListener(getMouseListener());
-		
-		JScrollPane scrollPane_1 = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+		JScrollPane scrollPane_1 = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panel.add(scrollPane_1, BorderLayout.CENTER);
 
 		this.main.expandAllNodes(tree, 0, tree.getRowCount());
 	}
 
 	public String getModelName() {
-		
+
 		return model.getModelName();
 	}
-	
-	private MouseListener getMouseListener() {
-	    return new MouseAdapter() {
 
-	    	@Override
-	        public void mousePressed(MouseEvent event) {
-	    		super.mousePressed(event);
-	        }
-	    	
-	    	@Override
-	    	public void mouseReleased(MouseEvent event) {
-	    		// TODO Auto-generated method stub
-	    		super.mouseReleased(event);
-	    	
-	    		System.out.println("Mouse event");
+	private MouseListener getMouseListener() {
+		return new MouseAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent event) {
+				super.mousePressed(event);
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent event) {
+				// TODO Auto-generated method stub
+				super.mouseReleased(event);
+
+				System.out.println("Mouse event");
 				System.out.println(event.getButton());
-				
-				if(event.getButton() == MouseEvent.BUTTON3){
-	               
+
+				if (event.getButton() == MouseEvent.BUTTON3) {
+
 					System.out.println("BUTTON 3");
-					
-					if(event.getSource() == tree){
-					
+
+					if (event.getSource() == tree) {
+
 						System.out.println("Arvore");
-						
+
 						TreePath pathForLocation = tree.getPathForLocation(event.getPoint().x, event.getPoint().y);
-		                if(pathForLocation != null){
-		                	System.out.println("NOT NULL");
-		                    selectedNode = (FeatureTreeNode) pathForLocation.getLastPathComponent();
-		                } else{
-		                	System.out.println("NULL");
-		                    selectedNode = null;
-		                }
-		                
-					}else if(event.getSource() == list){
-						
+						if (pathForLocation != null) {
+							System.out.println("NOT NULL");
+
+							selectedNode = (FeatureTreeNode) pathForLocation.getLastPathComponent();
+
+								menu = MenuFactory.getIntance(EditorPanel.this, selectedNode).verificarMenuDeSelecao(selectedNode.getTypeFeature());
+					
+								 menu.show(tree ,event.getPoint().x,event.getPoint().y);
+							
+								if (menu == null){
+									
+									System.out.println("null");
+								}
+							System.out.println(selectedNode.getTypeFeature());
+
+						} else {
+							System.out.println("NULL");
+							selectedNode = null;
+						}
+
+					} else if (event.getSource() == list) {
+
 						selectedConstraintIndex = list.locationToIndex(event.getPoint());
 						list.setSelectedIndex(selectedConstraintIndex);
 						System.out.println(String.valueOf(selectedConstraintIndex));
-						
+
 					}
-	            }
-	    	}
-	    };
+				}
+			}
+		};
 	}
-	
+
 	private JPopupMenu getComponentPopupMenuConstraintsList() {
-		
+
 		JPopupMenu menu = new JPopupMenu();
 		JMenuItem removeConstraint = new JMenuItem("Remove Constraint");
-		
+
 		removeConstraint.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
+
 				int idConstraint = constraintsList.get(selectedConstraintIndex).getId();
 				constraintsList.remove(selectedConstraintIndex);
 				constraintsListModel.update();
-				
+
 				constraints.remove(BASE_NAME_CONSTRAINT + String.valueOf(idConstraint));
 				System.out.println("Removed: " + String.valueOf(idConstraint));
 			}
 		});
-		
+
 		menu.add(removeConstraint);
-		
+
 		return menu;
 	}
-	
-	@Override
-	public JPopupMenu getComponentPopupMenu() {
-		
-		return MenuFactory.getIntance(selectedNode).verificarMenuDeSelecao(selectedNode.getTypeFeature());
-		
-		/*JPopupMenu menu = new JPopupMenu();
-		
-		JMenuItem setActive = new JMenuItem("Set as active node");
-		JMenuItem setDeactive = new JMenuItem("Set as deactive node");
-		JMenuItem takeOffContext = new JMenuItem("Take it off from context");
-		JMenuItem addConstraintPositive = new JMenuItem("Add to Constraint as Positive");
-		JMenuItem addConstraintNegative = new JMenuItem("Add to Constraint as Negative");
-		
-		setActive.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("SetActivee:" + selectedNode.getName());
-				
-				if(isFeatureGroup(selectedNode))
-					return;
-				
-				changeStatusFeature(true, "Selected Feature is already activated");
-			}
-
-			
-		});
-		menu.add(setActive);
-		
-		setDeactive.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				if(isFeatureGroup(selectedNode))
-					return;
-				
-				changeStatusFeature(false, "Selected Feature is already deactivated");
-			}
-		});
-		menu.add(setDeactive);
-		
-		takeOffContext.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-			
-				if(isFeatureGroup(selectedNode))
-					return;
-				
-				Resolution resolution = new Resolution(selectedNode.getID(), null, false);
-				resolutions.remove(resolution);
-				tree.repaint();
-				tree.updateUI();
-				
-				removeFromContextConstraint(selectedNode);
-				constraintsListModel.update();
-			}
-		});
-		menu.add(takeOffContext);
-		
-		JSeparator separator = new JSeparator();
-		menu.add(separator);
-		
-		
-		addConstraintPositive.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				
-				if(isFeatureGroup(selectedNode))
-					return;
-					
-				Literal literal = new Literal(selectedNode, true);
-				
-				addToConstraint(literal);
-			}
-		});
-		menu.add(addConstraintPositive);
-		
-		addConstraintNegative.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				
-				if(isFeatureGroup(selectedNode))
-					return;
-				
-				Literal literal = new Literal(selectedNode, false);
-				addToConstraint(literal);
-			}
-		});
-		menu.add(addConstraintNegative);
-		
-		return menu;
-		*/
-	}
 
 
-	protected void removeFromContextConstraint(FeatureTreeNode selectedNode) {
-		
+
+	public void removeFromContextConstraint(FeatureTreeNode selectedNode) {
+
 		List<Constraint> constraintsToRemove = new ArrayList<Constraint>();
-		
-		
-		for(int i = 0; i < constraintsList.size(); i++){
+
+		for (int i = 0; i < constraintsList.size(); i++) {
 			Constraint constr = constraintsList.get(i);
-			
-			if(constr.getClause().contains(selectedNode.getName())){
+
+			if (constr.getClause().contains(selectedNode.getName())) {
 				constraintsToRemove.add(constr);
 			}
 		}
-		
-		for(int i = 0; i < constraintsToRemove.size(); i++){
+
+		for (int i = 0; i < constraintsToRemove.size(); i++) {
 			constraintsList.remove(constraintsToRemove.get(i));
 			constraints.remove(BASE_NAME_CONSTRAINT + String.valueOf(constraintsToRemove.get(i).getId()));
 		}
-		
-		
+
 	}
 
-	protected void addToConstraint(Literal literal) {
-		
-		
-		
+	public void addToConstraint(Literal literal) {
+
 		String toAdd = null;
-		
-		if(literal.isState())
+
+		if (literal.isState())
 			toAdd = literal.getFeature().getName();
 		else
 			toAdd = "~" + literal.getFeature().getName();
-		
-		if(constraintLiterals.isEmpty()){
+
+		if (constraintLiterals.isEmpty()) {
 			txtAddTheFeatures.setText("");
 			txtAddTheFeatures.setText(toAdd);
-		}else
+		} else
 			txtAddTheFeatures.setText(txtAddTheFeatures.getText() + " V " + toAdd);
-		
-		constraintLiterals.add(literal);
-		
-	}
 
+		constraintLiterals.add(literal);
+
+	}
 
 	public boolean isFeatureGroup(FeatureTreeNode node) {
-		if(node instanceof FeatureGroup){
-			txtMessageText.setText("Feature Group can not be selected. Please, select its parent feature: \"" + ((FeatureTreeNode)selectedNode.getParent()).getName() + "\".");
+		if (node instanceof FeatureGroup) {
+			txtMessageText.setText("Feature Group can not be selected. Please, select its parent feature: \""
+					+ ((FeatureTreeNode) selectedNode.getParent()).getName() + "\".");
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	public void changeStatusFeature(boolean actualStatus, String message) {
-		
+
 		Resolution resolution = new Resolution(selectedNode.getID(), selectedNode.getName(), actualStatus);
-		if(!resolutions.contains(resolution)){
+		if (!resolutions.contains(resolution)) {
 			resolutions.add(resolution);
-		
+
 			tree.repaint();
 			tree.updateUI();
-		
-			System.out.println("Had not");	
-		}else{
-			
+
+			System.out.println("Had not");
+		} else {
+
 			int index = resolutions.indexOf(resolution);
 			Resolution res = resolutions.get(index);
-			if(res.getStatus() != actualStatus){
+			if (res.getStatus() != actualStatus) {
 				res.setStatus(actualStatus);
 				txtMessageText.setText("Selected Feature status changed.");
 				tree.repaint();
 				tree.updateUI();
-				
-			}else
+
+			} else
 				txtMessageText.setText(message);
 		}
 	}
-	
+
 	/*
-	 * Cria um novo feature model e retira os n�s e restri��es que n�o compoem o contexto para repassar na cria��o do BDD
+	 * Cria um novo feature model e retira os n�s e restri��es que n�o compoem o
+	 * contexto para repassar na cria��o do BDD
 	 */
-	private FeatureModel createFeatureModel(){
-		
-		//Cria um novo modelo
-		FeatureModel otherModel = (FeatureModel)ModelFactory.getInstance().createModel(modelID, pathModelFile);
-		
+	private FeatureModel createFeatureModel() {
+
+		// Cria um novo modelo
+		FeatureModel otherModel = (FeatureModel) ModelFactory.getInstance().createModel(modelID, pathModelFile);
+
 		try {
 			otherModel.loadModel();
 		} catch (FeatureModelException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		//Configura os n�s que n�o far�o parte do modelo no devido contexto
+
+		// Configura os n�s que n�o far�o parte do modelo no devido contexto
 		Map<String, Boolean> status = new HashMap<String, Boolean>();
-		for(Resolution resolution : resolutions){
+		for (Resolution resolution : resolutions) {
 			status.put(resolution.getIdFeature(), resolution.getStatus());
 		}
-		
-		for(Map.Entry<String, FeatureTreeNode> node : otherModel.getNodesMap().entrySet()){
-			
+
+		for (Map.Entry<String, FeatureTreeNode> node : otherModel.getNodesMap().entrySet()) {
+
 			String idNode = node.getKey();
-			if(status.containsKey(idNode) && status.get(idNode) == false)
+			if (status.containsKey(idNode) && status.get(idNode) == false)
 				node.getValue().setActiveInContext(false);
-			
+
 		}
-		
-		//Busca os n�s que ser�o deletados conforme sejam desativados pelo modelo
+
+		// Busca os n�s que ser�o deletados conforme sejam desativados pelo
+		// modelo
 		List<FeatureTreeNode> nodesToDelete = new ArrayList<FeatureTreeNode>();
-		
-		for(FeatureTreeNode node : otherModel.getNodes()){
-			if(!node.isActiveInContext()){
-				
-				
-				
-				if(!nodesToDelete.contains(node)){
+
+		for (FeatureTreeNode node : otherModel.getNodes()) {
+			if (!node.isActiveInContext()) {
+
+				if (!nodesToDelete.contains(node)) {
 					nodesToDelete.add(node);
-				
+
 					otherModel.getSubtreeNodes(node, nodesToDelete);
 				}
 			}
 		}
-		
-		
-		//Busca as constraints que possuem n�s que n�o fazem parte do modelo
+
+		// Busca as constraints que possuem n�s que n�o fazem parte do modelo
 		List<PropositionalFormula> constraintsToDelete = new ArrayList<PropositionalFormula>();
-		
-		for(PropositionalFormula constraint : otherModel.getConstraints()){
-			for(BooleanVariable variable : constraint.getVariables()){
+
+		for (PropositionalFormula constraint : otherModel.getConstraints()) {
+			for (BooleanVariable variable : constraint.getVariables()) {
 				FeatureTreeNode auxNode = new FeatureTreeNode(variable.getID(), null, null);
-				if(nodesToDelete.contains(auxNode)){
+				if (nodesToDelete.contains(auxNode)) {
 					constraintsToDelete.add(constraint);
 					break;
 				}
 			}
 		}
-		
-		
-		//Deleta os n�s da arvore
-		for(FeatureTreeNode node : nodesToDelete){
+
+		// Deleta os n�s da arvore
+		for (FeatureTreeNode node : nodesToDelete) {
 			otherModel.removeNodeFromParent(node);
-			
+
 		}
-		
-		
-		//Deleta todos os n�s e constraints registrados
+
+		// Deleta todos os n�s e constraints registrados
 		otherModel.getNodes().removeAll(nodesToDelete);
 		otherModel.getConstraints().removeAll(constraintsToDelete);
-		
+
 		return otherModel;
-		
+
 	}
-	
-	private boolean isModelConsistent(FeatureModel model){
-		
+
+	private boolean isModelConsistent(FeatureModel model) {
+
 		try {
-			
+
 			// create BDD variable order heuristic
-			new FTPreOrderSortedECTraversalHeuristic("Pre-CL-MinSpan", model, FTPreOrderSortedECTraversalHeuristic.FORCE_SORT);		
-			VariableOrderingHeuristic heuristic = VariableOrderingHeuristicsManager.createHeuristicsManager().getHeuristic("Pre-CL-MinSpan");
-			
+			new FTPreOrderSortedECTraversalHeuristic("Pre-CL-MinSpan", model,
+					FTPreOrderSortedECTraversalHeuristic.FORCE_SORT);
+			VariableOrderingHeuristic heuristic = VariableOrderingHeuristicsManager.createHeuristicsManager()
+					.getHeuristic("Pre-CL-MinSpan");
+
 			// Creates the BDD reasoner
 			FMReasoningWithBDD bddReasoner = new FMReasoningWithBDD(model, heuristic, 50000, 50000, 60000, "pre-order");
-					
+
 			// Initialize the reasoner (BDD is created at this moment)
-			
+
 			bddReasoner.init();
-			
+
 			return bddReasoner.isConsistent();
-			
-		
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return false;
-		
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+
+		if (e.getActionCommand().equals("setActive")) {
+
+			System.out.println("SetActivee:" + selectedNode.getName());
+
+			if (isFeatureGroup(selectedNode))
+				return;
+
+			changeStatusFeature(true, "Selected Feature is already activated");
+
+		} else if (e.getActionCommand().equals("setDeactive")) {
+
+			if (isFeatureGroup(selectedNode))
+				return;
+
+			changeStatusFeature(false, "Selected Feature is already deactivated");
+
+		} else if (e.getActionCommand().equals("takeOffContext")) {
+
+			if (isFeatureGroup(selectedNode))
+				return;
+
+			Resolution resolution = new Resolution(selectedNode.getID(), null, false);
+			resolutions.remove(resolution);
+			tree.repaint();
+			tree.updateUI();
+
+			removeFromContextConstraint(selectedNode);
+			constraintsListModel.update();
+
+		} else if (e.getActionCommand().equals("addConstraintPositive")) {
+
+			if (isFeatureGroup(selectedNode))
+				return;
+
+			Literal literal = new Literal(selectedNode, true);
+
+			addToConstraint(literal);
+
+		} else if (e.getActionCommand().equals("addConstraintNegative")) {
+
+			if (isFeatureGroup(selectedNode))
+				return;
+
+			Literal literal = new Literal(selectedNode, false);
+			addToConstraint(literal);
+
+		} else if (e.getActionCommand().equals("addOptionalFeature")) {
+
+			String nome = JOptionPane.showInputDialog("digite o nome da feature");
+			selectedNode.add(new SolitaireFeature(true, UUID.randomUUID().toString(), nome, null));
+			tree.repaint();
+			tree.updateUI();
+			
+			
+		} else if (e.getActionCommand().equals("addMandatoryFeature")) {
+
+			String nome = JOptionPane.showInputDialog("digite o nome da feature");
+			selectedNode.add(new SolitaireFeature(false, UUID.randomUUID().toString(), nome, null));
+			tree.repaint();
+			tree.updateUI();			
+			
+		} else if (e.getActionCommand().equals("addXORGroup")) {
+
+			selectedNode.add(new FeatureGroup(UUID.randomUUID().toString(), null, 1, 1, null));
+			tree.repaint();
+			tree.updateUI();
+			
+		} else if (e.getActionCommand().equals("addORGroup")) {
+
+			selectedNode.add(new FeatureGroup(UUID.randomUUID().toString(), null, 1, -1, null));
+			tree.repaint();
+			tree.updateUI();
+		} else {
+			
+			selectedNode.removeFromParent();
+			tree.updateUI();
+
+		}
 	}
 
 }

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -74,6 +75,10 @@ import br.ufc.lps.view.export.WriteXMLmodel;
 import br.ufc.lps.view.list.ConstraintsListModel;
 import br.ufc.lps.view.trees.FeatureModelTree;
 import br.ufc.lps.view.trees.FeaturesTreeCellRenderer;
+import prefuse.data.Node;
+import prefuse.data.Table;
+import prefuse.data.Tree;
+import prefuse.data.parser.DataParseException;
 
 public class EditorPanel extends JPanel implements ActionListener{
 
@@ -100,14 +105,62 @@ public class EditorPanel extends JPanel implements ActionListener{
 	private Main main;
 	private JButton jbuttonSalvar;
 	
-	private MenuFactory menuFactory;
-	
 	/**
 	 * Create the panel.
 	 * @param model 
 	 */
 	
+	private String getNextId(FeatureTreeNode pai){
+		String id;
+		
+		if(pai == null)
+			return null;
+		
+		int quantidadeFilhos = pai.getChildCount();
+		
+		if(quantidadeFilhos > 0){
+			int idMaior = 1;
+			for(int i=0; i < quantidadeFilhos; i++){
+				FeatureTreeNode filho = (FeatureTreeNode) pai.getChildAt(i);
+				String idFilho = filho.getID();
+				String [] idParticionado = idFilho.split("_");
+				String ultimoItemId = idParticionado[idParticionado.length-1];
+				try{
+					int ultimoValor = Integer.parseInt(ultimoItemId);
+					if(ultimoValor > idMaior)
+						idMaior = ultimoValor;
+				}catch (Exception e) {
+					System.err.println("MODELO MAL FORMADO");
+					return null;
+				}
+			}
+			id = pai.getID()+"_"+(idMaior+1);
+		}else{
+			id = pai.getID()+"_"+1;
+		}	
+		return id;
+	}
 	
+	String aaa = "";
+		
+	public void getTree(FeatureTreeNode feature, int nivelMaximo){
+		if(feature == null)
+			return;
+		
+		
+		if(feature.getChildCount() > 0){
+			for(int i=0; i < feature.getChildCount(); i++){
+				FeatureTreeNode filha = (FeatureTreeNode)feature.getChildAt(i);
+				
+				for(int j=0; j < nivelMaximo - feature.getDepth(); j++){
+					aaa+="\t";
+				}	
+				aaa+=filha.toString()+"("+filha.getID()+")"+"nivel:"+filha.getDepth()+"\n";
+				getTree(filha, nivelMaximo);
+				
+			}
+		}
+	}
 	
 	public EditorPanel(IModel model, int modelID, String pathModelFile, SchemeXml schemeXml, Main main) {
 		setLayout(new BorderLayout(0, 0));
@@ -179,7 +232,17 @@ public class EditorPanel extends JPanel implements ActionListener{
 						Document doc = db.parse(EditorPanel.this.pathModelFile);
 					
 						Element rootEle = doc.getDocumentElement();
-												
+						
+						FeatureModelTree a = new FeatureModelTree((FeatureTreeNode)tree.getModel().getRoot());
+						String saida = "";
+						
+						FeatureTreeNode root = (FeatureTreeNode)tree.getModel().getRoot();
+						
+						//System.out.println("SAIDA:"+saida);
+						getTree(root, root.getDepth());
+						
+						System.out.println(aaa);
+						
 						rootEle.appendChild(WriteXMLmodel.getContext(doc, textFieldNewContext.getText(), EditorPanel.this.resolutions, new ArrayList<String>(constraints.values())));
 						
 						Transformer transformer = TransformerFactory.newInstance().newTransformer();
@@ -228,7 +291,6 @@ public class EditorPanel extends JPanel implements ActionListener{
 		});
 		
 		panelNewContext.add(btnNewContext);
-		
 		
 		JPanel panelMessage = new JPanel();
 		panelInfos.add(panelMessage, BorderLayout.SOUTH);
@@ -402,6 +464,7 @@ public class EditorPanel extends JPanel implements ActionListener{
 
 		this.main.expandAllNodes(tree, 0, tree.getRowCount());
 	}
+	
 
 	public String getModelName() {
 		
@@ -435,7 +498,9 @@ public class EditorPanel extends JPanel implements ActionListener{
 						TreePath pathForLocation = tree.getPathForLocation(event.getPoint().x, event.getPoint().y);
 		                if(pathForLocation != null){
 		                	System.out.println("NOT NULL");
+		                	
 		                    selectedNode = (FeatureTreeNode) pathForLocation.getLastPathComponent();
+		                    System.out.println(getNextId(selectedNode));
 		                } else{
 		                	System.out.println("NULL");
 		                    selectedNode = null;
@@ -480,9 +545,9 @@ public class EditorPanel extends JPanel implements ActionListener{
 	@Override
 	public JPopupMenu getComponentPopupMenu() {
 		
-		return MenuFactory.getIntance(selectedNode).verificarMenuDeSelecao(selectedNode.getTypeFeature());
+		//return MenuFactory.getIntance(selectedNode).verificarMenuDeSelecao(selectedNode.getTypeFeature());
 		
-		/*JPopupMenu menu = new JPopupMenu();
+		JPopupMenu menu = new JPopupMenu();
 		
 		JMenuItem setActive = new JMenuItem("Set as active node");
 		JMenuItem setDeactive = new JMenuItem("Set as deactive node");
@@ -572,7 +637,7 @@ public class EditorPanel extends JPanel implements ActionListener{
 		menu.add(addConstraintNegative);
 		
 		return menu;
-		*/
+		
 	}
 
 
@@ -629,7 +694,6 @@ public class EditorPanel extends JPanel implements ActionListener{
 	}
 	
 	public void changeStatusFeature(boolean actualStatus, String message) {
-		
 		Resolution resolution = new Resolution(selectedNode.getID(), selectedNode.getName(), actualStatus);
 		if(!resolutions.contains(resolution)){
 			resolutions.add(resolution);

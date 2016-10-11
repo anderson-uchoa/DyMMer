@@ -1,14 +1,31 @@
 package br.ufc.lps.controller.browser;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import javax.swing.JComponent;
+
+import org.apache.poi.poifs.property.Child;
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.events.ConsoleEvent;
+import com.teamdev.jxbrowser.chromium.events.ConsoleListener;
 import com.teamdev.jxbrowser.chromium.events.FinishLoadingEvent;
 import com.teamdev.jxbrowser.chromium.events.LoadAdapter;
+import com.teamdev.jxbrowser.chromium.events.RenderEvent;
+import com.teamdev.jxbrowser.chromium.events.RenderListener;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
 import br.ufc.lps.model.visualization.chartjs.config.AxesSet;
@@ -25,10 +42,12 @@ import br.ufc.lps.model.visualization.chartjs.config.types.bar.DataSetBar;
 import br.ufc.lps.model.visualization.chartjs.config.types.bubble.DataBubble;
 import br.ufc.lps.model.visualization.chartjs.config.types.bubble.DataSetBubble;
 import br.ufc.lps.model.visualization.chartjs.config.types.line.DataSetLine;
+import br.ufc.lps.model.visualization.d3.config.Children;
+import br.ufc.lps.model.visualization.d3.config.Config;
 import br.ufc.lps.repositorio.MedidasContexto;
 import br.ufc.lps.repositorio.SchemeXml;
 
-public class BrowserController {
+public class BrowserController{
        
        public static JComponent getBar(SchemeXml scheme){
     	   Browser browser = new Browser();
@@ -392,5 +411,255 @@ public class BrowserController {
     	   
     	   return new BrowserView(browser);
        }
+     
+       public static JComponent getD3(List<SchemeXml> scheme){
+    	   Browser browser = new Browser();
 
+    	   Config config = new Config();
+    	   Children c = new Children();
+    	   c.setName("Nleaf x DTMax (largura x profundidade)");
+    	   config.setRoot(c);
+    	   
+    	   List<Children> NleafXDTMax = new ArrayList<>();
+    	   Children nLeaf = new Children();
+    	   nLeaf.setName("Nleaf");
+    	   NleafXDTMax.add(nLeaf);
+    	   Children dTMax = new Children();
+    	   dTMax.setName("DTMax");
+    	   NleafXDTMax.add(dTMax);
+    	   c.setChildren(NleafXDTMax);
+    	   
+    	   List<Children> listaNleaf = new ArrayList<>();
+    	   nLeaf.setChildren(listaNleaf);
+    	   List<Children> listaDTMax = new ArrayList<>();
+    	   dTMax.setChildren(listaDTMax);
+    	   
+    	   for(int i=0; i < scheme.size(); i++){
+    		   Children addC = new Children();
+    		   SchemeXml sch = scheme.get(i);
+			   addC.setName(sch.getNameXml());
+			   
+    		   int nlf = sch.getNumberOfLeafFeatures();
+    		   int dtm = sch.getDepthOfTreeMax();
+    		   if(nlf > dtm){
+    			   addC.setSize(nlf);
+    			   listaNleaf.add(addC);
+    		   }else{
+    			   addC.setSize(dtm);
+    			   listaDTMax.add(addC);
+    		   }
+    	   }
+    	   Children aaa = new Children();
+    	   aaa.setSize(45);
+    	   aaa.setName("suhasua");
+		   listaDTMax.add(aaa);
+		   
+		   Children aaab = new Children();
+    	   aaab.setSize(10);
+    	   aaab.setName("suheuh");
+		   listaDTMax.add(aaab);
+    	   
+    	   
+    	   
+    	   Gson g = new Gson();
+    	   String saida = g.toJson(config);
+    	   
+    	   System.out.println(saida);
+    	   
+    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/d3.html");
+    	   browser.addLoadListener(new LoadAdapter() {
+               @Override
+               public void onFinishLoadingFrame(FinishLoadingEvent event) {
+                   if (event.isMainFrame()) {
+                       event.getBrowser().executeJavaScript("receber('"+saida+"')");
+                   }
+               }
+           });
+    	   browser.addConsoleListener(new ConsoleListener() {
+			
+			@Override
+			public void onMessage(ConsoleEvent arg0) {
+				// TODO Auto-generated method stub
+				System.out.println(arg0.getMessage());
+				
+			}
+		});
+    	   
+    	   return new BrowserView(browser);
+       }
+      
+       public static JComponent getD3Bubble(List<SchemeXml> scheme){
+    	   Browser browser = new Browser();
+    	   
+    	   
+    	   Config config = new Config();
+    	   Children c = new Children();
+    	   c.setName("Nleaf x DTMax (largura x profundidade)");
+    	   config.setRoot(c);
+    	   
+    	   List<Children> NleafXDTMax = new ArrayList<>();
+    	   Children nLeaf = new Children();
+    	   nLeaf.setName("Nleaf");
+    	   NleafXDTMax.add(nLeaf);
+    	   Children dTMax = new Children();
+    	   dTMax.setName("DTMax");
+    	   NleafXDTMax.add(dTMax);
+    	   c.setChildren(NleafXDTMax);
+    	   
+    	   List<Children> listaNleaf = new ArrayList<>();
+    	   nLeaf.setChildren(listaNleaf);
+    	   List<Children> listaDTMax = new ArrayList<>();
+    	   dTMax.setChildren(listaDTMax);
+    	   
+    	   for(int i=0; i < scheme.size(); i++){
+    		   Children addC = new Children();
+    		   SchemeXml sch = scheme.get(i);
+			   addC.setName(sch.getNameXml());
+			   
+    		   int nlf = sch.getNumberOfLeafFeatures();
+    		   int dtm = sch.getDepthOfTreeMax();
+    		   if(nlf > dtm){
+    			   addC.setSize(nlf);
+    			   listaNleaf.add(addC);
+    		   }else{
+    			   addC.setSize(dtm);
+    			   listaDTMax.add(addC);
+    		   }
+    	   }
+    	   Children aaa = new Children();
+    	   aaa.setSize(45);
+    	   aaa.setName("suhasua");
+		   listaDTMax.add(aaa);
+		   
+		   Children aaab = new Children();
+    	   aaab.setSize(10);
+    	   aaab.setName("suheuh");
+		   listaDTMax.add(aaab);
+    	   
+    	   
+    	   
+    	   Gson g = new Gson();
+    	   String saida = g.toJson(config);
+    	   
+    	   System.out.println(saida);
+    	   
+    	   
+    	    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/d3Bubble.html");
+    	   browser.addLoadListener(new LoadAdapter() {
+               @Override
+               public void onFinishLoadingFrame(FinishLoadingEvent event) {
+                   if (event.isMainFrame()) {
+                       event.getBrowser().executeJavaScript("receber('"+saida+"')");
+                   }
+               }
+           });
+    	   browser.addConsoleListener(new ConsoleListener() {
+			
+			@Override
+			public void onMessage(ConsoleEvent arg0) {
+				// TODO Auto-generated method stub
+				System.out.println(arg0.getMessage());
+				
+			}
+		});
+    	   
+    	   return new BrowserView(browser);
+       }
+        
+       public static JComponent getD3Tree(List<SchemeXml> scheme){
+    	   Browser browser = new Browser();
+    	  
+    	   Config config = new Config();
+    	   Children c = new Children();
+    	   c.setName("Nleaf x DTMax (largura x profundidade)");
+    	   config.setRoot(c);
+    	   
+    	   List<Children> NleafXDTMax = new ArrayList<>();
+    	   Children nLeaf = new Children();
+    	   nLeaf.setName("Nleaf");
+    	   NleafXDTMax.add(nLeaf);
+    	   Children dTMax = new Children();
+    	   dTMax.setName("DTMax");
+    	   NleafXDTMax.add(dTMax);
+    	   c.setChildren(NleafXDTMax);
+    	   
+    	   List<Children> listaNleaf = new ArrayList<>();
+    	   nLeaf.setChildren(listaNleaf);
+    	   List<Children> listaDTMax = new ArrayList<>();
+    	   dTMax.setChildren(listaDTMax);
+    	   
+    	   for(int i=0; i < scheme.size(); i++){
+    		   Children addC = new Children();
+    		   SchemeXml sch = scheme.get(i);
+			   addC.setName(sch.getNameXml());
+			   
+    		   int nlf = sch.getNumberOfLeafFeatures();
+    		   int dtm = sch.getDepthOfTreeMax();
+    		   if(nlf > dtm){
+    			   addC.setSize(nlf);
+    			   listaNleaf.add(addC);
+    		   }else{
+    			   addC.setSize(dtm);
+    			   listaDTMax.add(addC);
+    		   }
+    	   }
+    	   Children aaa = new Children();
+    	   aaa.setSize(45);
+    	   aaa.setName("suhasua");
+		   listaDTMax.add(aaa);
+		   
+		   Children aaab = new Children();
+    	   aaab.setSize(10);
+    	   aaab.setName("suheuh");
+		   listaDTMax.add(aaab);
+    	   
+    	   
+    	   
+    	   Gson g = new Gson();
+    	   String saida = g.toJson(config);
+    	   
+    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/d3Tree.html");
+    	   browser.addLoadListener(new LoadAdapter() {
+               @Override
+               public void onFinishLoadingFrame(FinishLoadingEvent event) {
+                   if (event.isMainFrame()) {
+                       event.getBrowser().executeJavaScript("receber('"+saida+"')");
+                   }
+               }
+           });
+    	   
+    	   browser.addConsoleListener(new ConsoleListener() {
+			
+			@Override
+			public void onMessage(ConsoleEvent arg0) {
+				// TODO Auto-generated method stub
+				System.out.println(arg0.getMessage());
+				
+			}
+		});
+    	   return new BrowserView(browser);
+    	   
+       }
+       
+       public static String getJSON(String arquivo){
+    	   JsonElement jsonObject;
+   		//Cria o parse de tratamento
+   		JsonParser parser = new JsonParser();
+   		try {
+			jsonObject = parser.parse(new FileReader("html/"+arquivo));
+			return jsonObject.toString();
+		} catch (JsonIOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonSyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+   		return null;
+    	   
+       }
+ 
 }

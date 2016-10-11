@@ -118,8 +118,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 		constraints = new HashMap<String, String>();
 		constraintLiterals = new ArrayList<Literal>();
 		constraintsList = new ArrayList<Constraint>();
-        menu = new JPopupMenu();
-        
+		menu = new JPopupMenu();
+
 		constraintNumber = 0;
 
 		this.modelID = modelID;
@@ -435,14 +435,15 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 							selectedNode = (FeatureTreeNode) pathForLocation.getLastPathComponent();
 
-								menu = MenuFactory.getIntance(EditorPanel.this, selectedNode).verificarMenuDeSelecao(selectedNode.getTypeFeature());
-					
-								 menu.show(tree ,event.getPoint().x,event.getPoint().y);
-							
-								if (menu == null){
-									
-									System.out.println("null");
-								}
+							menu = MenuFactory.getIntance(EditorPanel.this, selectedNode)
+									.verificarMenuDeSelecao(selectedNode.getTypeFeature());
+
+							menu.show(tree, event.getPoint().x, event.getPoint().y);
+
+							if (menu == null) {
+
+								System.out.println("null");
+							}
 							System.out.println(selectedNode.getTypeFeature());
 
 						} else {
@@ -485,8 +486,6 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 		return menu;
 	}
-
-
 
 	public void removeFromContextConstraint(FeatureTreeNode selectedNode) {
 
@@ -537,16 +536,16 @@ public class EditorPanel extends JPanel implements ActionListener {
 	}
 
 	private boolean modifyOthers(FeatureTreeNode node) {
-		if(node.getTypeFeature() == TypeFeature.GROUPED_FEATURE){
-			GroupedFeature fea =  (GroupedFeature) node;
+		if (node.getTypeFeature() == TypeFeature.GROUPED_FEATURE) {
+			GroupedFeature fea = (GroupedFeature) node;
 			FeatureGroup pai = (FeatureGroup) fea.getParent();
-			
-			if(pai!=null){	
-				if(pai.getMax() == 1){
+
+			if (pai != null) {
+				if (pai.getMax() == 1) {
 					int quantidadeDeFilhos = pai.getChildCount();
-					for(int i = 0; i < quantidadeDeFilhos; i++){
-						GroupedFeature featureG = ((GroupedFeature)pai.getChildAt(i));
-						if(!featureG.equals(fea)){
+					for (int i = 0; i < quantidadeDeFilhos; i++) {
+						GroupedFeature featureG = ((GroupedFeature) pai.getChildAt(i));
+						if (!featureG.equals(fea)) {
 							desactivateAllChild(featureG);
 							selectedNode = featureG;
 							changeStatusFeature(false, "mudanca");
@@ -557,19 +556,17 @@ public class EditorPanel extends JPanel implements ActionListener {
 		}
 		return false;
 	}
-	
-	
-	private void desactivateAllChild(FeatureTreeNode node){
-		if(node!=null && node.getChildCount() > 0){
-			for(int i=0; i < node.getChildCount(); i++){
-				desactivateAllChild(((FeatureTreeNode)node.getChildAt(i)));
-				selectedNode = (((FeatureTreeNode)node.getChildAt(i)));
+
+	private void desactivateAllChild(FeatureTreeNode node) {
+		if (node != null && node.getChildCount() > 0) {
+			for (int i = 0; i < node.getChildCount(); i++) {
+				desactivateAllChild(((FeatureTreeNode) node.getChildAt(i)));
+				selectedNode = (((FeatureTreeNode) node.getChildAt(i)));
 				changeStatusFeature(false, "Change Status");
 			}
 		}
 	}
-	
-	
+
 	public void changeStatusFeature(boolean actualStatus, String message) {
 
 		Resolution resolution = new Resolution(selectedNode.getID(), selectedNode.getName(), actualStatus);
@@ -706,11 +703,10 @@ public class EditorPanel extends JPanel implements ActionListener {
 				return;
 
 			FeatureTreeNode atual = selectedNode;
-			
+
 			modifyOthers(selectedNode);
 			selectedNode = atual;
-			
-			
+
 			changeStatusFeature(true, "Selected Feature is already activated");
 
 		} else if (e.getActionCommand().equals("setDeactive")) {
@@ -756,28 +752,27 @@ public class EditorPanel extends JPanel implements ActionListener {
 			selectedNode.add(new SolitaireFeature(true, UUID.randomUUID().toString(), nome, null));
 			tree.repaint();
 			tree.updateUI();
-			
-			
+
 		} else if (e.getActionCommand().equals("addMandatoryFeature")) {
 
 			String nome = JOptionPane.showInputDialog("digite o nome da feature");
 			selectedNode.add(new SolitaireFeature(false, UUID.randomUUID().toString(), nome, null));
 			tree.repaint();
-			tree.updateUI();			
-			
+			tree.updateUI();
+
 		} else if (e.getActionCommand().equals("addXORGroup")) {
 
 			selectedNode.add(new FeatureGroup(UUID.randomUUID().toString(), null, 1, 1, null));
 			tree.repaint();
 			tree.updateUI();
-			
+
 		} else if (e.getActionCommand().equals("addORGroup")) {
 
 			selectedNode.add(new FeatureGroup(UUID.randomUUID().toString(), null, 1, -1, null));
 			tree.repaint();
 			tree.updateUI();
 		} else {
-			
+
 			selectedNode.removeFromParent();
 			tree.updateUI();
 

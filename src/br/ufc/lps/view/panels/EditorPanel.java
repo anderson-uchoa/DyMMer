@@ -49,6 +49,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import br.ufc.lps.controller.features.TypeFeature;
 import br.ufc.lps.controller.xml.ControladorXml;
 import br.ufc.lps.model.ModelFactory;
 import br.ufc.lps.model.contextaware.Constraint;
@@ -66,6 +67,7 @@ import br.ufc.lps.splar.core.fm.FeatureGroup;
 import br.ufc.lps.splar.core.fm.FeatureModel;
 import br.ufc.lps.splar.core.fm.FeatureModelException;
 import br.ufc.lps.splar.core.fm.FeatureTreeNode;
+import br.ufc.lps.splar.core.fm.GroupedFeature;
 import br.ufc.lps.splar.core.fm.SolitaireFeature;
 import br.ufc.lps.splar.core.heuristics.FTPreOrderSortedECTraversalHeuristic;
 import br.ufc.lps.splar.core.heuristics.VariableOrderingHeuristic;
@@ -534,6 +536,40 @@ public class EditorPanel extends JPanel implements ActionListener {
 		return false;
 	}
 
+	private boolean modifyOthers(FeatureTreeNode node) {
+		if(node.getTypeFeature() == TypeFeature.GROUPED_FEATURE){
+			GroupedFeature fea =  (GroupedFeature) node;
+			FeatureGroup pai = (FeatureGroup) fea.getParent();
+			
+			if(pai!=null){	
+				if(pai.getMax() == 1){
+					int quantidadeDeFilhos = pai.getChildCount();
+					for(int i = 0; i < quantidadeDeFilhos; i++){
+						GroupedFeature featureG = ((GroupedFeature)pai.getChildAt(i));
+						if(!featureG.equals(fea)){
+							desactivateAllChild(featureG);
+							selectedNode = featureG;
+							changeStatusFeature(false, "mudanca");
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	
+	private void desactivateAllChild(FeatureTreeNode node){
+		if(node!=null && node.getChildCount() > 0){
+			for(int i=0; i < node.getChildCount(); i++){
+				desactivateAllChild(((FeatureTreeNode)node.getChildAt(i)));
+				selectedNode = (((FeatureTreeNode)node.getChildAt(i)));
+				changeStatusFeature(false, "Change Status");
+			}
+		}
+	}
+	
+	
 	public void changeStatusFeature(boolean actualStatus, String message) {
 
 		Resolution resolution = new Resolution(selectedNode.getID(), selectedNode.getName(), actualStatus);
@@ -669,6 +705,12 @@ public class EditorPanel extends JPanel implements ActionListener {
 			if (isFeatureGroup(selectedNode))
 				return;
 
+			FeatureTreeNode atual = selectedNode;
+			
+			modifyOthers(selectedNode);
+			selectedNode = atual;
+			
+			
 			changeStatusFeature(true, "Selected Feature is already activated");
 
 		} else if (e.getActionCommand().equals("setDeactive")) {

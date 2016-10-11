@@ -62,8 +62,8 @@ public class MenuFactory {
 			return showMenuOptionalFeature();
 		
 		case GROUPED_FEATURE:
-			break;	
-			
+			return showMenuGroupedFeature();
+		
 		default:
 		
 	}
@@ -148,6 +148,8 @@ public class MenuFactory {
 		JMenuItem takeOffContext = new JMenuItem("Take it off from context");
 		JMenuItem addConstraintPositive = new JMenuItem("Add to Constraint as Positive");
 		JMenuItem addConstraintNegative = new JMenuItem("Add to Constraint as Negative");
+		JMenuItem addOptionalFeature = new JMenuItem("Add a Optional Feature");
+		JMenuItem addMandatoryFeature = new JMenuItem("Add a Mandatory Feature");
 		JMenuItem addXORGroup = new JMenuItem("Add a XOR Group");	
 		JMenuItem addORGroup = new JMenuItem("Add a OR Group");	
 		
@@ -168,6 +170,9 @@ public class MenuFactory {
 		takeOffContext.addActionListener(editorPanel);
 		addConstraintPositive.addActionListener(editorPanel);
 		addConstraintNegative.addActionListener(editorPanel);
+		
+		addOptionalFeature.addActionListener(editorPanel);
+		addMandatoryFeature.addActionListener(editorPanel);
 		addXORGroup.addActionListener(editorPanel);
 		addORGroup.addActionListener(editorPanel);	
 
@@ -178,7 +183,8 @@ public class MenuFactory {
 		menu.add(takeOffContext);
 	
 		menu.add(separator);
-		
+		menu.add(addOptionalFeature);
+		menu.add(addMandatoryFeature);
 		menu.add(addXORGroup);
 		menu.add(addORGroup);
 		menu.add(remove);
@@ -193,7 +199,6 @@ public class MenuFactory {
 	}
 	
 	public JPopupMenu showMenuMandatoryFeature(){
-	
 		JPopupMenu menu = new JPopupMenu();
 
 		JSeparator separator = new JSeparator();
@@ -204,6 +209,8 @@ public class MenuFactory {
 		JMenuItem takeOffContext = new JMenuItem("Take it off from context");
 		JMenuItem addConstraintPositive = new JMenuItem("Add to Constraint as Positive");
 		JMenuItem addConstraintNegative = new JMenuItem("Add to Constraint as Negative");
+		JMenuItem addOptionalFeature = new JMenuItem("Add a Optional Feature");
+		JMenuItem addMandatoryFeature = new JMenuItem("Add a Mandatory Feature");
 		JMenuItem addXORGroup = new JMenuItem("Add a XOR Group");	
 		JMenuItem addORGroup = new JMenuItem("Add a OR Group");	
 		
@@ -224,6 +231,9 @@ public class MenuFactory {
 		takeOffContext.addActionListener(editorPanel);
 		addConstraintPositive.addActionListener(editorPanel);
 		addConstraintNegative.addActionListener(editorPanel);
+		
+		addOptionalFeature.addActionListener(editorPanel);
+		addMandatoryFeature.addActionListener(editorPanel);
 		addXORGroup.addActionListener(editorPanel);
 		addORGroup.addActionListener(editorPanel);	
 
@@ -232,14 +242,16 @@ public class MenuFactory {
 		menu.add(setActive);
 		menu.add(setDeactive);
 		menu.add(takeOffContext);
-
+	
 		menu.add(separator);
-		
+		menu.add(addOptionalFeature);
+		menu.add(addMandatoryFeature);
 		menu.add(addXORGroup);
 		menu.add(addORGroup);
 		menu.add(remove);
-
+		
 		menu.add(separator);
+		
 		menu.add(addConstraintNegative);
 		menu.add(addConstraintPositive);
 		
@@ -329,6 +341,53 @@ public class MenuFactory {
 	
 		return menu;
 		
+	}
+	
+	public JPopupMenu showMenuGroupedFeature(){
+
+		JPopupMenu menu = new JPopupMenu();
+
+		JSeparator separator = new JSeparator();
+		
+		JMenuItem setActive = new JMenuItem("Set as active node");
+		JMenuItem setDeactive = new JMenuItem("Set as deactive node");
+
+		JMenuItem takeOffContext = new JMenuItem("Take it off from context");
+		JMenuItem addConstraintPositive = new JMenuItem("Add to Constraint as Positive");
+		JMenuItem addConstraintNegative = new JMenuItem("Add to Constraint as Negative");
+		
+		JMenuItem remove = new JMenuItem("Remove");	
+		
+		setActive.setActionCommand("setActive");
+		setDeactive.setActionCommand("setDeactive");
+		takeOffContext.setActionCommand("takeOffContext");
+		addConstraintPositive.setActionCommand("addConstraintPositive");
+		addConstraintNegative.setActionCommand("addConstraintNegative");
+		
+		remove.setActionCommand("remove");	
+		
+		setActive.addActionListener(editorPanel);
+		setDeactive.addActionListener(editorPanel);
+		takeOffContext.addActionListener(editorPanel);
+		addConstraintPositive.addActionListener(editorPanel);
+		addConstraintNegative.addActionListener(editorPanel);
+		
+		remove.addActionListener(editorPanel);	
+	
+		menu.add(setActive);
+		menu.add(setDeactive);
+		menu.add(takeOffContext);
+	
+		menu.add(separator);
+		
+		menu.add(remove);
+		
+		menu.add(separator);
+		
+		menu.add(addConstraintNegative);
+		menu.add(addConstraintPositive);
+		
+		return menu;
 	}
 	
 }

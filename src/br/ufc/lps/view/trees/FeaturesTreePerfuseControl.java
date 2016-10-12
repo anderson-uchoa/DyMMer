@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 
 import br.ufc.lps.model.contextaware.Context;
 import br.ufc.lps.model.contextaware.Resolution;
+import br.ufc.lps.splar.core.fm.FeatureGroup;
 import br.ufc.lps.splar.core.fm.FeatureTreeNode;
 import prefuse.data.Node;
 import prefuse.data.Table;
@@ -102,15 +103,24 @@ public class FeaturesTreePerfuseControl {
 					
 					listaDeNosArvore.put(fe.getID(), node);
 					
-					if(!inContext){
-						node.set("image", new ImageIcon("images/normal.png"));
-					}else{
-						
-						if (status) {
-							node.set("image", new ImageIcon("images/activate.png"));
+					if (fe instanceof FeatureGroup) {
+
+						if (((FeatureGroup) fe).getMax() == 1) {
+							node.set("image", new ImageIcon("images/xor.png"));
+						} else {
+							node.set("image", new ImageIcon("images/or.png"));
 						}
-						else{
-							node.set("image", new ImageIcon("images/deactivate.png"));
+					}else{
+						if(!inContext){
+							node.set("image", new ImageIcon("images/normal.png"));
+						}else{
+							
+							if (status) {
+								node.set("image", new ImageIcon("images/activate.png"));
+							}
+							else{
+								node.set("image", new ImageIcon("images/deactivate.png"));
+							}
 						}
 					}
 					

@@ -469,6 +469,21 @@ public class Main extends JFrame {
 		JComponent a = new ViewerPanelResulMeasures(this, schema);
 		createTab(a, "Medidas das Features");
 	}
+	
+	public void abrirD3( List<SchemeXml> schema){
+		JComponent a = BrowserController.getD3(schema);
+		createTab(a, "teste");
+	}
+	
+	public void abrirD3Tree( List<SchemeXml> schema){
+		JComponent a = BrowserController.getD3Tree(schema);
+		createTab(a, "teste");
+	}
+	
+	public void abrirD3Bubble( List<SchemeXml> schema){
+		JComponent a = BrowserController.getD3Bubble(schema);
+		createTab(a, "teste");
+	}
 
 	private void initXMLmodels() {
 		new XMLSplotModel();

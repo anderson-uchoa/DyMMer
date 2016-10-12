@@ -122,4 +122,68 @@ constraint_3:_r_13_15 or ~_r_36_37_40
 <constraint>_r_35 or ~_r_36</constraint>
 </constraints>
 </context>
+<context name="asd">
+<resolution feature="Mode4" id="_r_1_2_3_4" status="true"/>
+<constraints/>
+</context>
+<context name="asd">
+<resolution feature="Mode4" id="_r_1_2_3_4" status="true"/>
+<constraints/>
+</context>
+<context name="xcv">
+<resolution feature="MeasuringMode" id="_r_1_2" status="true"/>
+<constraints/>
+</context>
+<context name="a">
+<resolution feature="MeasuringMode" id="_r_1_2" status="true"/>
+<constraints/>
+</context>
+<context name="asd">
+<resolution feature="Mode3" id="_r_1_2_3_5" status="true"/>
+<constraints/>
+</context>
+<context name="saf">
+<resolution feature="Mode2" id="_r_1_2_3_6" status="true"/>
+<constraints/>
+</context>
+<context name="asd">
+<resolution feature="Mode3" id="_r_1_2_3_5" status="true"/>
+<constraints/>
+</context>
+<context name="asd">
+<resolution feature="Mode4" id="_r_1_2_3_4" status="true"/>
+<constraints/>
+</context>
+<context name="v">
+<resolution feature="Mode4" id="_r_1_2_3_4" status="true"/>
+<constraints/>
+</context>
+<context name="v">
+<resolution feature="DCUTypeParameter" id="_r_13" status="true"/>
+<constraints/>
+</context>
+<context name="b">
+<constraints/>
+</context>
+<context name="a">
+<constraints/>
+</context>
+<context name="weer">
+<constraints/>
+</context>
+<context name="a">
+<constraints/>
+</context>
+<context name="vv">
+<constraints/>
+</context>
+<context name="v">
+<constraints/>
+</context>
+<context name="v">
+<constraints/>
+</context>
+<context name="n">
+<constraints/>
+</context>
 </feature_model>

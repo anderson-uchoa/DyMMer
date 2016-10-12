@@ -99,6 +99,18 @@ public class ViewerPanelResultFeatures extends JPanel {
 		
 		painelMensagens.add(button3);
 		
+		JButton button4 = new JButton("d3");
+		
+		painelMensagens.add(button4);
+
+		JButton button5 = new JButton("d3 Tree");
+		
+		painelMensagens.add(button5);
+		
+		JButton button6 = new JButton("d3 Bubble Circle");
+		
+		painelMensagens.add(button6);
+		
 		medidas = new JButton("Medidas");
 		
 		painelBotaoOpen.add(medidas);
@@ -172,6 +184,30 @@ public class ViewerPanelResultFeatures extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				ViewerPanelResultFeatures.this.main.bubble(listaItens);
+			}
+		});
+		
+		button4.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ViewerPanelResultFeatures.this.main.abrirD3(listaItens);
+			}
+		});
+		
+		button5.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ViewerPanelResultFeatures.this.main.abrirD3Tree(listaItens);
+			}
+		});
+		
+		button6.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ViewerPanelResultFeatures.this.main.abrirD3Bubble(listaItens);
 			}
 		});
 		

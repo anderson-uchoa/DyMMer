@@ -466,7 +466,7 @@ public class BrowserController{
     	   
     	   System.out.println(saida);
     	   
-    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/d3.html");
+    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/treeMapTitle.html");
     	   browser.addLoadListener(new LoadAdapter() {
                @Override
                public void onFinishLoadingFrame(FinishLoadingEvent event) {
@@ -544,7 +544,7 @@ public class BrowserController{
     	   System.out.println(saida);
     	   
     	   
-    	    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/d3Bubble.html");
+    	    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/treeMapTitle.html");
     	   browser.addLoadListener(new LoadAdapter() {
                @Override
                public void onFinishLoadingFrame(FinishLoadingEvent event) {
@@ -613,12 +613,10 @@ public class BrowserController{
     	   aaab.setName("suheuh");
 		   listaDTMax.add(aaab);
     	   
-    	   
-    	   
     	   Gson g = new Gson();
     	   String saida = g.toJson(config);
     	   
-    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/d3Tree.html");
+    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/treeMapTitle.html");
     	   browser.addLoadListener(new LoadAdapter() {
                @Override
                public void onFinishLoadingFrame(FinishLoadingEvent event) {

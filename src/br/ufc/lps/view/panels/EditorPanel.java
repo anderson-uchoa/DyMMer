@@ -51,6 +51,7 @@ import org.xml.sax.SAXException;
 
 import com.teamdev.jxbrowser.chromium.bo;
 
+import br.ufc.lps.controller.features.ControllerFeatures;
 import br.ufc.lps.controller.features.TypeFeature;
 import br.ufc.lps.controller.xml.ControladorXml;
 import br.ufc.lps.model.ModelFactory;
@@ -212,15 +213,13 @@ public class EditorPanel extends JPanel implements ActionListener {
 						Element rootEle = doc.getDocumentElement();
 
 						FeatureModelTree a = new FeatureModelTree((FeatureTreeNode)tree.getModel().getRoot());
-						String saida = "";
 						
 						FeatureTreeNode root = (FeatureTreeNode)tree.getModel().getRoot();
 						
-						//System.out.println("SAIDA:"+saida);
-						getTree(root, root.getDepth());
+						ControllerFeatures aa = new ControllerFeatures(root);
+						aa.drawTree(root);
 						
-						System.out.println(aaa);
-						
+						System.out.println(aa.getArvoreDesenhada());
 						
 						rootEle.appendChild(WriteXMLmodel.getContext(doc, textFieldNewContext.getText(),
 								EditorPanel.this.resolutions, new ArrayList<String>(constraints.values())));
@@ -465,62 +464,6 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 		this.main.expandAllNodes(tree, 0, tree.getRowCount());
 	}
-
-	
-	private String getNextId(FeatureTreeNode pai){
-		String id;
-		
-		if(pai == null)
-			return null;
-		
-		int quantidadeFilhos = pai.getChildCount();
-		
-		if(quantidadeFilhos > 0){
-			int idMaior = 1;
-			for(int i=0; i < quantidadeFilhos; i++){
-				FeatureTreeNode filho = (FeatureTreeNode) pai.getChildAt(i);
-				String idFilho = filho.getID();
-				String [] idParticionado = idFilho.split("_");
-				String ultimoItemId = idParticionado[idParticionado.length-1];
-				try{
-					int ultimoValor = Integer.parseInt(ultimoItemId);
-					if(ultimoValor > idMaior)
-						idMaior = ultimoValor;
-				}catch (Exception e) {
-					System.err.println("MODELO MAL FORMADO");
-					return null;
-				}
-			}
-			id = pai.getID()+"_"+(idMaior+1);
-		}else{
-			id = pai.getID()+"_"+1;
-		}	
-		return id;
-	}
-	
-	String aaa = "";
-		
-	public void getTree(FeatureTreeNode feature, int nivelMaximo){
-		if(feature == null)
-			return;
-		
-		
-		if(feature.getChildCount() > 0){
-			for(int i=0; i < feature.getChildCount(); i++){
-				FeatureTreeNode filha = (FeatureTreeNode)feature.getChildAt(i);
-				
-				for(int j=0; j < nivelMaximo - feature.getDepth(); j++){
-					aaa+="\t";
-				}	
-				aaa+=filha.toString()+"("+filha.getID()+")"+"nivel:"+filha.getDepth()+"\n";
-				getTree(filha, nivelMaximo);
-				
-			}
-		}
-	}
-	
-	
-	
 	
 	public String getModelName() {
 

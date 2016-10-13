@@ -123,7 +123,7 @@ public class Main extends JFrame {
 			}
 		});
 		
-		iniciarMainViewPanel();
+		
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -347,6 +347,9 @@ public class Main extends JFrame {
 				}
 			}
 		});
+		
+		iniciarMainViewPanel();
+		
 	}
 	
 	public void abrirArquivosDoRepositorio(SchemeXml schemeXml){

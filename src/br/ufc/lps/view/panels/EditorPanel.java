@@ -144,8 +144,16 @@ public class EditorPanel extends JPanel implements ActionListener {
 		tree.setComponentPopupMenu(getComponentPopupMenu());
 		tree.addMouseListener(getMouseListener());
 
+		treeRnf.setModel(new FeatureModelTree(model.getFeatureModel().getRoot()));
+
+		treeRnf.setEditable(true);
+		treeRnf.setComponentPopupMenu(getComponentPopupMenu());
+		treeRnf.addMouseListener(getMouseListener());
+
+		
 		defaultContext = new Context("default", resolutions, null);
 		tree.setCellRenderer(new FeaturesTreeCellRenderer(defaultContext));
+		treeRnf.setCellRenderer(new FeaturesTreeCellRenderer(defaultContext));
 
 		JPanel panelTree = new JPanel(new BorderLayout());
 		panelTree.add(tree, BorderLayout.CENTER);

@@ -230,7 +230,13 @@ public class ViewerPanelResultFeatures extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				carregarItens();
+				new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						carregarItens();		
+					}
+				}).start();	
 			}
 		});
 		
@@ -261,8 +267,12 @@ public class ViewerPanelResultFeatures extends JPanel {
 					mensagemSelecionarLinha();
 			}
 		});
-	
-		carregarItens();			
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				carregarItens();		
+			}
+		}).start();	
 	}
 	
 	private void setBotoes(boolean status){
@@ -272,7 +282,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 		deletar.setEnabled(status);
 	}
 	
-	public void carregarItens(){
+	public synchronized void carregarItens(){
 		listaItens = controladorXml.getXml();
 		mDefaultTableModel.setRowCount(0);
 		if(listaItens!=null){

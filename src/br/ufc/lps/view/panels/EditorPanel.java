@@ -49,6 +49,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import com.teamdev.jxbrowser.chromium.bo;
+
 import br.ufc.lps.controller.features.TypeFeature;
 import br.ufc.lps.controller.xml.ControladorXml;
 import br.ufc.lps.model.ModelFactory;
@@ -86,6 +88,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 	private IModel model;
 	private JTextField textFieldNewContext;
 	public JTree tree;
+	public JTree treeRnf;
+	public JTree treeAdaptation;
 	private FeatureTreeNode selectedNode;
 	private JTextArea txtMessageText;
 	private JButton btnNewContext;
@@ -102,6 +106,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 	private int constraintNumber;
 	private Integer modelID;
 	private String pathModelFile;
+	private Boolean treeRnfAdicionada = false;
 	private Main main;
 	private JButton jbuttonSalvar;
 	JPopupMenu menu;
@@ -114,7 +119,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 	
 	public EditorPanel(IModel model, int modelID, String pathModelFile, SchemeXml schemeXml, Main main) {
-		setLayout(new BorderLayout(0, 0));
+		setLayout(new GridLayout(1, 0));
 		this.main = main;
 		constraints = new HashMap<String, String>();
 		constraintLiterals = new ArrayList<Literal>();
@@ -130,6 +135,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 		resolutions = new ArrayList<Resolution>();
 
 		tree = new JTree();
+		treeRnf = new JTree();
+		treeAdaptation = new JTree();
 
 		tree.setModel(new FeatureModelTree(model.getFeatureModel().getRoot()));
 
@@ -140,13 +147,32 @@ public class EditorPanel extends JPanel implements ActionListener {
 		defaultContext = new Context("default", resolutions, null);
 		tree.setCellRenderer(new FeaturesTreeCellRenderer(defaultContext));
 
-		JScrollPane scrollPane = new JScrollPane(tree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+		JPanel panelTree = new JPanel(new BorderLayout());
+		panelTree.add(tree, BorderLayout.CENTER);
+		JLabel tituloTree = new JLabel("Feature Model");
+		panelTree.add(tituloTree, BorderLayout.NORTH);
+		JScrollPane scrollPane = new JScrollPane(panelTree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		add(scrollPane, BorderLayout.CENTER);
-
+		add(scrollPane);
+		
+		JPanel panelTreeAdaptation = new JPanel(new BorderLayout());
+		panelTreeAdaptation.add(treeAdaptation, BorderLayout.CENTER);
+		JLabel tituloTreeAdaptation = new JLabel("Adaptation Context Feature Model");
+		panelTreeAdaptation.add(tituloTreeAdaptation, BorderLayout.NORTH);
+		JScrollPane scrollPaneAdaptation = new JScrollPane(panelTreeAdaptation, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		add(scrollPaneAdaptation);
+		
+		JPanel panelTreeRnf = new JPanel(new BorderLayout());
+		panelTreeRnf.add(treeRnf, BorderLayout.CENTER);
+		JLabel tituloTreeRnf = new JLabel("Rnf Feature Model");
+		panelTreeRnf.add(tituloTreeRnf, BorderLayout.NORTH);
+		JScrollPane scrollPaneRnf = new JScrollPane(panelTreeRnf, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		
 		JPanel panelInfos = new JPanel();
-		add(panelInfos, BorderLayout.EAST);
-		panelInfos.setLayout(new BorderLayout(0, 0));
+		add(panelInfos);
+		panelInfos.setLayout(new BorderLayout(1, 1));
 
 		JPanel panelNewContext = new JPanel();
 		panelInfos.add(panelNewContext, BorderLayout.NORTH);
@@ -246,6 +272,31 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 		panelNewContext.add(btnNewContext);
 
+		JButton addTreeRnf = new JButton("Add RNF");
+		
+		addTreeRnf.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JButton botao = ((JButton)e.getSource());
+				if(!treeRnfAdicionada){
+					if(!getComponent(1).equals(scrollPaneRnf)){
+						botao.setText("Remove RNF");
+						treeRnfAdicionada = true;
+						add(scrollPaneRnf, 1);
+						updateUI();
+					}
+				}else{
+					if(getComponent(1).equals(scrollPaneRnf)){
+						botao.setText("Add RNF");
+						treeRnfAdicionada = false;
+						remove(1);
+						updateUI();
+					}
+				}
+			}
+		});
+		
 		JPanel panelMessage = new JPanel();
 		panelInfos.add(panelMessage, BorderLayout.SOUTH);
 		panelMessage.setLayout(new GridLayout(0, 1, 0, 0));
@@ -272,10 +323,13 @@ public class EditorPanel extends JPanel implements ActionListener {
 		JSeparator separator = new JSeparator();
 		panelConstraint.add(separator);
 
+		addTreeRnf.setHorizontalAlignment(SwingConstants.CENTER);
+		panelConstraint.add(addTreeRnf);
+
 		jbuttonSalvar = new JButton("Salvar no Repositório");
 		jbuttonSalvar.setHorizontalAlignment(SwingConstants.CENTER);
 		panelConstraint.add(jbuttonSalvar);
-
+		
 		JLabel lblConstraint = new JLabel("Constraint:");
 		lblConstraint.setHorizontalAlignment(SwingConstants.CENTER);
 		panelConstraint.add(lblConstraint);

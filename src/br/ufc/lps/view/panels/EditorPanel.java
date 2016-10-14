@@ -107,6 +107,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 	private Boolean treeRnfAdicionada = false;
 	private Main main;
 	private JButton jbuttonSalvar;
+	private ControllerFeatures controllerFeatures;
 	JPopupMenu menu;
 
 	/**
@@ -135,6 +136,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 		tree = new JTree();
 		treeRnf = new JTree();
 		treeAdaptation = new JTree();
+		controllerFeatures = new ControllerFeatures((model.getFeatureModel().getRoot()));
 
 		tree.setModel(new FeatureModelTree(model.getFeatureModel().getRoot()));
 
@@ -222,7 +224,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 						FeatureTreeNode root = (FeatureTreeNode)tree.getModel().getRoot();
 						
 						ControllerFeatures aa = new ControllerFeatures(root);
-						aa.drawTree(root);
+						aa.drawTree();
 						
 						System.out.println(aa.getArvoreDesenhada());
 						
@@ -797,7 +799,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
+	
+		
 		if (e.getActionCommand().equals("setActive")) {
 
 			System.out.println("SetActivee:" + selectedNode.getName());
@@ -850,33 +853,83 @@ public class EditorPanel extends JPanel implements ActionListener {
 			addToConstraint(literal);
 
 		} else if (e.getActionCommand().equals("addOptionalFeature")) {
-
-			String nome = JOptionPane.showInputDialog("digite o nome da feature");
-			selectedNode.add(new SolitaireFeature(true, UUID.randomUUID().toString(), nome, null));
+		
+			
+			String nome = JOptionPane.showInputDialog("Type the feature name:");
+	
+			if(selectedNode.isRoot()){
+				controllerFeatures.addFeatures(0,TypeFeature.OPTIONAL , nome);
+			}else{
+				
+				controllerFeatures.addFeatures(selectedNode.getParent().getIndex(selectedNode),TypeFeature.OPTIONAL , nome);
+					
+			}
+			
 			tree.repaint();
 			tree.updateUI();
+		
 
 		} else if (e.getActionCommand().equals("addMandatoryFeature")) {
 
-			String nome = JOptionPane.showInputDialog("digite o nome da feature");
-			selectedNode.add(new SolitaireFeature(false, UUID.randomUUID().toString(), nome, null));
+			String nome = JOptionPane.showInputDialog("Type the feature name:");
+
+			if(selectedNode.isRoot()){
+
+				controllerFeatures.addFeatures(0,TypeFeature.MANDATORY , nome);
+				
+			}else{
+				
+				controllerFeatures.addFeatures(selectedNode.getParent().getIndex(selectedNode),TypeFeature.MANDATORY , nome);
+					
+			}
+			
 			tree.repaint();
 			tree.updateUI();
+		
+
 
 		} else if (e.getActionCommand().equals("addXORGroup")) {
 
-			selectedNode.add(new FeatureGroup(UUID.randomUUID().toString(), null, 1, 1, null));
+	
+
+			if(selectedNode.isRoot()){
+
+				controllerFeatures.addFeatures(0,TypeFeature.GROUP_XOR , null);
+				
+			}else{
+				
+				controllerFeatures.addFeatures(selectedNode.getParent().getIndex(selectedNode),TypeFeature.GROUP_XOR , null);
+					
+			}
+			
 			tree.repaint();
 			tree.updateUI();
+		
+
 
 		} else if (e.getActionCommand().equals("addORGroup")) {
+		
 
-			selectedNode.add(new FeatureGroup(UUID.randomUUID().toString(), null, 1, -1, null));
+			if(selectedNode.isRoot()){
+
+				controllerFeatures.addFeatures(0,TypeFeature.GROUP_OR , null);
+				
+			}else{
+				
+				controllerFeatures.addFeatures(selectedNode.getParent().getIndex(selectedNode),TypeFeature.GROUP_OR , null);
+					
+			}
+			
 			tree.repaint();
 			tree.updateUI();
+		
 		} else {
+			
+			System.out.println(selectedNode.toString());
 
-			selectedNode.removeFromParent();
+			controllerFeatures.removeFeatures(selectedNode.getParent().getIndex(selectedNode));
+
+			tree.repaint();
 			tree.updateUI();
 
 		}

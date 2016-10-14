@@ -24,20 +24,32 @@ public class ControllerFeatures {
 		}
 	}
 	
+	public boolean removeFeatures(int position){
+		try {
+			FeatureTreeNode featureSelecionada = (FeatureTreeNode) this.tree.getChildAt(position);
+			featureSelecionada.remove(getTypeFeature(featureSelecionada, null, null));
+		
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
+	
 	public String getArvoreDesenhada() {
 		return arvoreDesenhada;
 	}
 	
-	public void drawTree(FeatureTreeNode feature){
-		drawTreeChildren(feature);
-		arvoreDesenhada = feature.toString() + "\n" + arvoreDesenhada;
+	public void drawTree(){
+		drawTreeChildren();
+		arvoreDesenhada = tree.toString() + "\n" + arvoreDesenhada;
 	}
 	
-	private void drawTreeChildren(FeatureTreeNode feature){
+	private void drawTreeChildren(){
+		FeatureTreeNode feature = tree;
 		
 		if(feature == null)
 			return;
-		
 		
 		if(feature.getChildCount() > 0){
 			for(int i=0; i < feature.getChildCount(); i++){
@@ -56,7 +68,7 @@ public class ControllerFeatures {
 				}else
 					arvoreDesenhada+=filha.toString()+"("+filha.getID()+")"+"\n";
 				
-				drawTreeChildren(filha);
+				drawTreeChildren();
 				
 			}
 		}

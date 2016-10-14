@@ -264,7 +264,14 @@ public class MenuFactory {
 		addMandatoryFeature.setActionCommand("addMandatoryFeature");
 		addXORGroup.setActionCommand("addXORGroup");
 		addORGroup.setActionCommand("addORGroup");
-
+		
+		addOptionalFeature.addActionListener(editorPanel);
+		addMandatoryFeature.addActionListener(editorPanel);
+		addXORGroup.addActionListener(editorPanel);
+		addORGroup.addActionListener(editorPanel);
+		
+		
+		
 		menu.add(addOptionalFeature);
 		menu.add(addMandatoryFeature);
 		menu.add(separator);
@@ -291,6 +298,12 @@ public class MenuFactory {
 		addMandatoryFeature.setActionCommand("addMandatoryFeature");
 		addXORGroup.setActionCommand("addXORGroup");
 		addORGroup.setActionCommand("addORGroup");
+		
+		addOptionalFeature.addActionListener(editorPanel);
+		addMandatoryFeature.addActionListener(editorPanel);
+		addXORGroup.addActionListener(editorPanel);
+		addORGroup.addActionListener(editorPanel);
+		
 
 		menu.add(addOptionalFeature);
 		menu.add(addMandatoryFeature);
@@ -318,6 +331,13 @@ public class MenuFactory {
 		addMandatoryFeature.setActionCommand("addMandatoryFeature");
 		addXORGroup.setActionCommand("addXORGroup");
 		addORGroup.setActionCommand("addORGroup");
+		
+		
+		addOptionalFeature.addActionListener(editorPanel);
+		addMandatoryFeature.addActionListener(editorPanel);
+		addXORGroup.addActionListener(editorPanel);
+		addORGroup.addActionListener(editorPanel);
+		
 
 		menu.add(addOptionalFeature);
 		menu.add(addMandatoryFeature);

@@ -213,7 +213,15 @@ public class ViewerPanel extends JPanel {
 				
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					boolean resultado = ControladorXml.salvarXMLRepositorio(file, schemeXml);
+					
+					String nome  = JOptionPane.showInputDialog("Digite o novo nome do modelo");
+					
+					if(nome.equals("")){
+						JOptionPane.showMessageDialog(null, "É necessário pelo menos uma letra para o nome");
+						return;
+					}
+					
+					boolean resultado = ControladorXml.salvarXMLRepositorio(nome, file, null);
 					if(resultado){
 						botaoSalvar.setEnabled(false);
 						JOptionPane.showMessageDialog(null, "Salvo com sucesso!");

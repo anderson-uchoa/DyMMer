@@ -475,7 +475,7 @@ public class Main extends JFrame {
 	
 	public void abrirD3( List<SchemeXml> schema){
 		JComponent a = BrowserController.getD3(schema);
-		createTab(a, "teste");
+		createTab(a, "Nleaf x DTMax (largura x profundidade)");
 	}
 	
 	public void abrirD3Tree( List<SchemeXml> schema){
@@ -485,7 +485,17 @@ public class Main extends JFrame {
 	
 	public void abrirD3Bubble( List<SchemeXml> schema){
 		JComponent a = BrowserController.getD3Bubble(schema);
-		createTab(a, "teste");
+		createTab(a, "Nleaf x DTMax (largura x profundidade)");
+	}
+	
+	public void abrirD3FoC( List<SchemeXml> schema){
+		JComponent a = BrowserController.getD3FoC(schema);
+		createTab(a, "FoC (Flexibilidade)");
+	}
+	
+	public void abrirD3FEX( List<SchemeXml> schema){
+		JComponent a = BrowserController.getD3FEX(schema);
+		createTab(a, "FEX (Analisabilidade)");
 	}
 
 	private void initXMLmodels() {

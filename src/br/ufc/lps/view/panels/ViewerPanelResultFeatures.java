@@ -71,15 +71,15 @@ public class ViewerPanelResultFeatures extends JPanel {
 		painelOpcoes.add(painelBotaoOpen, BorderLayout.NORTH);
 		painelBotaoOpen.setLayout(new GridLayout(7, 0, 0, 0));
 		
-		open = new JButton("Abrir");
+		open = new JButton("Open");
 		
 		painelBotaoOpen.add(open);
 		
-		editar = new JButton("Editar");
+		editar = new JButton("Edit");
 		
 		painelBotaoOpen.add(editar);
 		
-		deletar = new JButton("Deletar");
+		deletar = new JButton("Delete");
 		
 		painelBotaoOpen.add(deletar);
 
@@ -107,15 +107,23 @@ public class ViewerPanelResultFeatures extends JPanel {
 		
 		painelMensagens.add(button5);
 		
-		JButton button6 = new JButton("d3 Bubble Circle");
+		JButton button6 = new JButton("Nleaf x DTMax (largura x profundidade)");
 		
 		painelMensagens.add(button6);
 		
-		medidas = new JButton("Medidas");
+		JButton button7 = new JButton("FoC");
+		
+		painelMensagens.add(button7);
+		
+		JButton button8 = new JButton("FEX");
+		
+		painelMensagens.add(button8);
+		
+		medidas = new JButton("Measures");
 		
 		painelBotaoOpen.add(medidas);
 		
-		refresh = new JButton("Recarregar");
+		refresh = new JButton("Refresh");
 		
 		painelBotaoOpen.add(refresh);
 		
@@ -211,6 +219,22 @@ public class ViewerPanelResultFeatures extends JPanel {
 			}
 		});
 		
+		button7.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ViewerPanelResultFeatures.this.main.abrirD3FoC(listaItens);
+			}
+		});
+
+		button8.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ViewerPanelResultFeatures.this.main.abrirD3FEX(listaItens);
+			}
+		});
+		
 		open.addActionListener(new ActionListener() {
 			
 			@Override
@@ -288,9 +312,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 		if(listaItens!=null){
 			if(listaItens.size() > 0){
 				for(SchemeXml sc : listaItens){
-					File file = ControladorXml.createFileFromXml(sc.getXml());
-					IModel model = new SplotModel(file.getAbsolutePath());
-					mDefaultTableModel.addRow(new String[]{model.getModelName()});
+					mDefaultTableModel.addRow(new String[]{sc.getNameXml()});
 				}
 					setBotoes(true);
 			} else {

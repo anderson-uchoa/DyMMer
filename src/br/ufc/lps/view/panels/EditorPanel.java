@@ -49,8 +49,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-import com.teamdev.jxbrowser.chromium.bo;
-
 import br.ufc.lps.controller.features.ControllerFeatures;
 import br.ufc.lps.controller.features.TypeFeature;
 import br.ufc.lps.controller.xml.ControladorXml;
@@ -79,7 +77,6 @@ import br.ufc.lps.splar.plugins.reasoners.bdd.javabdd.FMReasoningWithBDD;
 import br.ufc.lps.view.Main;
 import br.ufc.lps.view.export.WriteXMLmodel;
 import br.ufc.lps.view.list.ConstraintsListModel;
-
 import br.ufc.lps.view.trees.FeatureModelTree;
 import br.ufc.lps.view.trees.FeaturesTreeCellRenderer;
 
@@ -337,6 +334,10 @@ public class EditorPanel extends JPanel implements ActionListener {
 		jbuttonSalvar.setHorizontalAlignment(SwingConstants.CENTER);
 		panelConstraint.add(jbuttonSalvar);
 		
+		JButton jbuttonSalvarNew = new JButton("Salvar no Repositório como novo modelo");
+		jbuttonSalvarNew.setHorizontalAlignment(SwingConstants.CENTER);
+		panelConstraint.add(jbuttonSalvarNew);
+		
 		JLabel lblConstraint = new JLabel("Constraint:");
 		lblConstraint.setHorizontalAlignment(SwingConstants.CENTER);
 		panelConstraint.add(lblConstraint);
@@ -346,7 +347,36 @@ public class EditorPanel extends JPanel implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				File file = new File(pathModelFile);
-				Boolean resultado = ControladorXml.salvarXMLRepositorio(file, schemeXml);
+				Boolean resultado = ControladorXml.salvarXMLRepositorio(null, file, schemeXml);
+				if (resultado) {
+					JOptionPane.showMessageDialog(null, "Salvo com sucesso!");
+					EditorPanel.this.main.recarregarListaFeatures();
+				}
+			}
+		});
+		
+		jbuttonSalvarNew.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				String nome  = JOptionPane.showInputDialog("Digite o novo nome do modelo", schemeXml.getNameXml());
+				
+				if(nome.equals("")){
+					JOptionPane.showMessageDialog(null, "É necessário pelo menos uma letra para o nome");
+					return;
+				}
+				
+				if(nome.equals(schemeXml.getNameXml())){
+					JOptionPane.showMessageDialog(null, "Utilize um nome diferente!");
+					return;
+				}
+				
+				
+				
+				schemeXml.setNameXml(nome);
+				File file = new File(pathModelFile);
+				Boolean resultado = ControladorXml.salvarXMLRepositorio(nome, file, null);
 				if (resultado) {
 					JOptionPane.showMessageDialog(null, "Salvo com sucesso!");
 					EditorPanel.this.main.recarregarListaFeatures();

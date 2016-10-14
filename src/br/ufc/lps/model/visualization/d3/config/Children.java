@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Children {
 	private String name;
-	private Integer size;
+	private Double size;
 	private List<Children> children;
 	
 	public String getName() {
@@ -13,10 +13,10 @@ public class Children {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Integer getSize() {
+	public Double getSize() {
 		return size;
 	}
-	public void setSize(Integer size) {
+	public void setSize(Double size) {
 		this.size = size;
 	}
 	public List<Children> getChildren() {

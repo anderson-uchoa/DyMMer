@@ -439,8 +439,8 @@ public class BrowserController{
     		   SchemeXml sch = scheme.get(i);
 			   addC.setName(sch.getNameXml());
 			   
-    		   int nlf = sch.getNumberOfLeafFeatures();
-    		   int dtm = sch.getDepthOfTreeMax();
+    		   double nlf = sch.getNumberOfLeafFeatures();
+    		   double dtm = sch.getDepthOfTreeMax();
     		   if(nlf > dtm){
     			   addC.setSize(nlf);
     			   listaNleaf.add(addC);
@@ -450,12 +450,12 @@ public class BrowserController{
     		   }
     	   }
     	   Children aaa = new Children();
-    	   aaa.setSize(45);
+    	   aaa.setSize(45d);
     	   aaa.setName("suhasua");
 		   listaDTMax.add(aaa);
 		   
 		   Children aaab = new Children();
-    	   aaab.setSize(10);
+    	   aaab.setSize(10d);
     	   aaab.setName("suheuh");
 		   listaDTMax.add(aaab);
     	   
@@ -494,7 +494,7 @@ public class BrowserController{
     	   
     	   Config config = new Config();
     	   Children c = new Children();
-    	   c.setName("Nleaf x DTMax (largura x profundidade)");
+    	   c.setName("");
     	   config.setRoot(c);
     	   
     	   List<Children> NleafXDTMax = new ArrayList<>();
@@ -516,8 +516,8 @@ public class BrowserController{
     		   SchemeXml sch = scheme.get(i);
 			   addC.setName(sch.getNameXml());
 			   
-    		   int nlf = sch.getNumberOfLeafFeatures();
-    		   int dtm = sch.getDepthOfTreeMax();
+    		   double nlf = sch.getNumberOfLeafFeatures();
+    		   double dtm = sch.getDepthOfTreeMax();
     		   if(nlf > dtm){
     			   addC.setSize(nlf);
     			   listaNleaf.add(addC);
@@ -527,12 +527,12 @@ public class BrowserController{
     		   }
     	   }
     	   Children aaa = new Children();
-    	   aaa.setSize(45);
+    	   aaa.setSize(45d);
     	   aaa.setName("suhasua");
 		   listaDTMax.add(aaa);
 		   
 		   Children aaab = new Children();
-    	   aaab.setSize(10);
+    	   aaab.setSize(10d);
     	   aaab.setName("suheuh");
 		   listaDTMax.add(aaab);
     	   
@@ -544,7 +544,7 @@ public class BrowserController{
     	   System.out.println(saida);
     	   
     	   
-    	    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/treeMapTitle.html");
+    	    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/pack-hierarchy.html");
     	   browser.addLoadListener(new LoadAdapter() {
                @Override
                public void onFinishLoadingFrame(FinishLoadingEvent event) {
@@ -565,7 +565,105 @@ public class BrowserController{
     	   
     	   return new BrowserView(browser);
        }
-        
+
+       public static JComponent getD3FoC(List<SchemeXml> scheme){
+    	   Browser browser = new Browser();
+    	   
+    	   
+    	   Config config = new Config();
+    	   Children c = new Children();
+    	   c.setName("FoC - Flexibilidade do Modelo");
+    	   config.setRoot(c);
+    	   
+    	   List<Children> foc = new ArrayList<>();
+    	  
+    	   for(int i=0; i < scheme.size(); i++){
+    		   Children addC = new Children();
+    		   SchemeXml sch = scheme.get(i);
+			   addC.setName(sch.getNameXml());
+			   addC.setSize(sch.getFlexibilityOfConfiguration());
+			   foc.add(addC);
+    	   }
+    	   
+    	   c.setChildren(foc);
+    	   
+    	   Gson g = new Gson();
+    	   String saida = g.toJson(config);
+    	   
+    	   System.out.println(saida);
+    	   
+    	   
+    	    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/d3Bubble.html");
+    	   browser.addLoadListener(new LoadAdapter() {
+               @Override
+               public void onFinishLoadingFrame(FinishLoadingEvent event) {
+                   if (event.isMainFrame()) {
+                       event.getBrowser().executeJavaScript("receber('"+saida+"')");
+                   }
+               }
+           });
+    	   browser.addConsoleListener(new ConsoleListener() {
+			
+			@Override
+			public void onMessage(ConsoleEvent arg0) {
+				// TODO Auto-generated method stub
+				System.out.println(arg0.getMessage());
+				
+			}
+		});
+    	   
+    	   return new BrowserView(browser);
+       }
+
+       public static JComponent getD3FEX(List<SchemeXml> scheme){
+    	   Browser browser = new Browser();
+    	   
+    	   
+    	   Config config = new Config();
+    	   Children c = new Children();
+    	   c.setName("FEX Analisabilidade");
+    	   config.setRoot(c);
+    	   
+    	   List<Children> foc = new ArrayList<>();
+    	  
+    	   for(int i=0; i < scheme.size(); i++){
+    		   Children addC = new Children();
+    		   SchemeXml sch = scheme.get(i);
+			   addC.setName(sch.getNameXml());
+			   addC.setSize(Double.parseDouble(sch.getFeatureExtendibility()+""));
+			   foc.add(addC);
+    	   }
+    	   
+    	   c.setChildren(foc);
+    	   
+    	   Gson g = new Gson();
+    	   String saida = g.toJson(config);
+    	   
+    	   System.out.println(saida);
+    	   
+    	   
+    	    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/d3Bubble.html");
+    	   browser.addLoadListener(new LoadAdapter() {
+               @Override
+               public void onFinishLoadingFrame(FinishLoadingEvent event) {
+                   if (event.isMainFrame()) {
+                       event.getBrowser().executeJavaScript("receber('"+saida+"')");
+                   }
+               }
+           });
+    	   browser.addConsoleListener(new ConsoleListener() {
+			
+			@Override
+			public void onMessage(ConsoleEvent arg0) {
+				// TODO Auto-generated method stub
+				System.out.println(arg0.getMessage());
+				
+			}
+		});
+    	   
+    	   return new BrowserView(browser);
+       }
+       
        public static JComponent getD3Tree(List<SchemeXml> scheme){
     	   Browser browser = new Browser();
     	  
@@ -593,8 +691,8 @@ public class BrowserController{
     		   SchemeXml sch = scheme.get(i);
 			   addC.setName(sch.getNameXml());
 			   
-    		   int nlf = sch.getNumberOfLeafFeatures();
-    		   int dtm = sch.getDepthOfTreeMax();
+			   double nlf = sch.getNumberOfLeafFeatures();
+			   double dtm = sch.getDepthOfTreeMax();
     		   if(nlf > dtm){
     			   addC.setSize(nlf);
     			   listaNleaf.add(addC);
@@ -604,12 +702,12 @@ public class BrowserController{
     		   }
     	   }
     	   Children aaa = new Children();
-    	   aaa.setSize(45);
+    	   aaa.setSize(45d);
     	   aaa.setName("suhasua");
 		   listaDTMax.add(aaa);
 		   
 		   Children aaab = new Children();
-    	   aaab.setSize(10);
+    	   aaab.setSize(10d);
     	   aaab.setName("suheuh");
 		   listaDTMax.add(aaab);
     	   

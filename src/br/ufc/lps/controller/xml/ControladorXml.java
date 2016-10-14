@@ -136,11 +136,14 @@ public class ControladorXml{
 		}
 	}
 	
-	public static boolean salvarXMLRepositorio(File file, SchemeXml schemaAnterior){
+	public static boolean salvarXMLRepositorio(String nome, File file, SchemeXml schemaAnterior){
 		
 		SchemeXml scheme = new SchemeXml();
 		String xml = ControladorXml.createXmlFromFile(file);
 		scheme.setXml(xml);
+		
+		if(nome!=null)
+			scheme.setNameXml(nome);
 		
 		if(schemaAnterior!=null)
 			scheme.set_id(schemaAnterior.get_id());
@@ -149,7 +152,6 @@ public class ControladorXml{
 		
 		model.setFeatureModel(model.getContexts().get(ContextModel.DEFAULT_CONTEXT));	
 		
-		scheme.setNameXml(model.getModelName());
 		scheme.setNumberOfFeatures(model.numberOfFeatures());
 		scheme.setNumberOfOptionalFeatures(model.numberOfOptionalFeatures());
 		scheme.setNumberOfMandatoryFeatures(model.numberOfMandatoryFeatures());

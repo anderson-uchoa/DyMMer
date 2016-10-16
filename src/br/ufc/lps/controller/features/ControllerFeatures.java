@@ -7,28 +7,20 @@ import br.ufc.lps.splar.core.fm.SolitaireFeature;
 
 public class ControllerFeatures {
 
-	private FeatureTreeNode tree;
 	private String arvoreDesenhada = "";
 
-	public ControllerFeatures(FeatureTreeNode tree) {
-		this.tree = tree;
-	}
-
-	public boolean addFeatures(int position, TypeFeature typeFeatures, String name) {
+	public boolean addFeatures(FeatureTreeNode feature, TypeFeature typeFeatures, String name) {
 		try {
-			FeatureTreeNode featureSelecionada = (FeatureTreeNode) this.tree.getChildAt(position);
-			featureSelecionada.add(getTypeFeature(featureSelecionada, typeFeatures, name));
+			feature.add(getTypeFeature(feature, typeFeatures, name));
 			return true;
 		} catch (Exception e) {
 			return false;
 		}
 	}
 	
-	public boolean removeFeatures(int position){
+	public boolean removeFeatures(FeatureTreeNode feature){
 		try {
-			FeatureTreeNode featureSelecionada = (FeatureTreeNode) this.tree.getChildAt(position);
-			featureSelecionada.remove(getTypeFeature(featureSelecionada, null, null));
-		
+			feature.removeFromParent();
 			return true;
 		} catch (Exception e) {
 			return false;
@@ -40,13 +32,13 @@ public class ControllerFeatures {
 		return arvoreDesenhada;
 	}
 	
-	public void drawTree(){
-		drawTreeChildren();
-		arvoreDesenhada = tree.toString() + "\n" + arvoreDesenhada;
+	public void drawTree(FeatureTreeNode root){
+		arvoreDesenhada = "";
+		drawTreeChildren(root);
+		arvoreDesenhada = "\n"+root.toString() + "(_r)\n" + arvoreDesenhada;
 	}
 	
-	private void drawTreeChildren(){
-		FeatureTreeNode feature = tree;
+	private void drawTreeChildren(FeatureTreeNode feature){
 		
 		if(feature == null)
 			return;
@@ -55,21 +47,20 @@ public class ControllerFeatures {
 			for(int i=0; i < feature.getChildCount(); i++){
 				FeatureTreeNode filha = (FeatureTreeNode)feature.getChildAt(i);
 				
-				for(int j=0; j < feature.getLevel()+1; j++){
+				for(int j=0; j < feature.getLevel()+1; j++)
 					arvoreDesenhada+="\t";
-				}	
+				
 				if(filha.getTypeFeature().equals(TypeFeature.GROUP_OR) ||
 						filha.getTypeFeature().equals(TypeFeature.GROUP_XOR)){
 					FeatureGroup fg = (FeatureGroup) filha;
 					if(fg.getMax() == -1)
-						arvoreDesenhada+=":g ("+filha.getID()+") [1, *]\n";
+						arvoreDesenhada+=":g ("+filha.getID()+") [1,*]\n";
 					else
-						arvoreDesenhada+=":g ("+filha.getID()+") [1, 1]\n";
+						arvoreDesenhada+=":g ("+filha.getID()+") [1,1]\n";
 				}else
 					arvoreDesenhada+=filha.toString()+"("+filha.getID()+")"+"\n";
 				
-				drawTreeChildren();
-				
+				drawTreeChildren(filha);
 			}
 		}
 	}

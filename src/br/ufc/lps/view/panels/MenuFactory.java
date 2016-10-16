@@ -151,6 +151,8 @@ public class MenuFactory {
 		addConstraintPositive.setActionCommand("addConstraintPositive");
 		addConstraintNegative.setActionCommand("addConstraintNegative");
 		addXORGroup.setActionCommand("addXORGroup");
+		addOptionalFeature.setActionCommand("addOptionalFeature");
+		addMandatoryFeature.setActionCommand("addMandatoryFeature");
 		addORGroup.setActionCommand("addORGroup");
 
 		remove.setActionCommand("remove");
@@ -211,6 +213,8 @@ public class MenuFactory {
 		takeOffContext.setActionCommand("takeOffContext");
 		addConstraintPositive.setActionCommand("addConstraintPositive");
 		addConstraintNegative.setActionCommand("addConstraintNegative");
+		addOptionalFeature.setActionCommand("addOptionalFeature");
+		addMandatoryFeature.setActionCommand("addMandatoryFeature");
 		addXORGroup.setActionCommand("addXORGroup");
 		addORGroup.setActionCommand("addORGroup");
 

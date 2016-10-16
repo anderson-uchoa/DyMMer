@@ -47,6 +47,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import br.ufc.lps.controller.features.ControllerFeatures;
@@ -136,7 +137,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 		tree = new JTree();
 		treeRnf = new JTree();
 		treeAdaptation = new JTree();
-		controllerFeatures = new ControllerFeatures((model.getFeatureModel().getRoot()));
+		controllerFeatures = new ControllerFeatures();
 
 		tree.setModel(new FeatureModelTree(model.getFeatureModel().getRoot()));
 
@@ -219,14 +220,26 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 						Element rootEle = doc.getDocumentElement();
 
-						FeatureModelTree a = new FeatureModelTree((FeatureTreeNode)tree.getModel().getRoot());
-						
 						FeatureTreeNode root = (FeatureTreeNode)tree.getModel().getRoot();
 						
-						ControllerFeatures aa = new ControllerFeatures(root);
-						aa.drawTree();
+						Node tree = null;
 						
-						System.out.println(aa.getArvoreDesenhada());
+						for(int i=0; i < rootEle.getChildNodes().getLength(); i++){
+							tree = rootEle.getChildNodes().item(i);
+							if(tree.getNodeName().equals("feature_tree"))
+								break;
+						}
+						
+						rootEle.removeChild(tree);
+						
+						controllerFeatures.drawTree(root);
+						controllerFeatures.getArvoreDesenhada();
+						
+						Node newTree = doc.createElement("feature_tree");
+						
+						newTree.appendChild(doc.createTextNode(controllerFeatures.getArvoreDesenhada()));
+						
+						rootEle.appendChild(newTree);
 						
 						rootEle.appendChild(WriteXMLmodel.getContext(doc, textFieldNewContext.getText(),
 								EditorPanel.this.resolutions, new ArrayList<String>(constraints.values())));
@@ -247,8 +260,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 						txtMessageText.setText("None for while...");
 						constraintNumber = 0;
 
-						tree.repaint();
-						tree.updateUI();
+						EditorPanel.this.tree.updateUI();
 						JOptionPane.showMessageDialog(EditorPanel.this,
 								"Your context has been saved. Now, open the file to see it.");
 
@@ -332,11 +344,11 @@ public class EditorPanel extends JPanel implements ActionListener {
 		addTreeRnf.setHorizontalAlignment(SwingConstants.CENTER);
 		panelConstraint.add(addTreeRnf);
 
-		jbuttonSalvar = new JButton("Salvar no Repositório");
+		jbuttonSalvar = new JButton("Save in repository.");
 		jbuttonSalvar.setHorizontalAlignment(SwingConstants.CENTER);
 		panelConstraint.add(jbuttonSalvar);
 		
-		JButton jbuttonSalvarNew = new JButton("Salvar no Repositório como novo modelo");
+		JButton jbuttonSalvarNew = new JButton("Save in repository ( New Model )");
 		jbuttonSalvarNew.setHorizontalAlignment(SwingConstants.CENTER);
 		panelConstraint.add(jbuttonSalvarNew);
 		
@@ -351,7 +363,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 				File file = new File(pathModelFile);
 				Boolean resultado = ControladorXml.salvarXMLRepositorio(null, file, schemeXml);
 				if (resultado) {
-					JOptionPane.showMessageDialog(null, "Salvo com sucesso!");
+					JOptionPane.showMessageDialog(null, "Save Successfull");
 					EditorPanel.this.main.recarregarListaFeatures();
 				}
 			}
@@ -362,15 +374,15 @@ public class EditorPanel extends JPanel implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				String nome  = JOptionPane.showInputDialog("Digite o novo nome do modelo", schemeXml.getNameXml());
+				String nome  = JOptionPane.showInputDialog("Type the name of new model:", schemeXml.getNameXml());
 				
 				if(nome.equals("")){
-					JOptionPane.showMessageDialog(null, "É necessário pelo menos uma letra para o nome");
+					JOptionPane.showMessageDialog(null, "Type a name valid!");
 					return;
 				}
 				
 				if(nome.equals(schemeXml.getNameXml())){
-					JOptionPane.showMessageDialog(null, "Utilize um nome diferente!");
+					JOptionPane.showMessageDialog(null, "Type a different name!");
 					return;
 				}
 				
@@ -380,7 +392,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 				File file = new File(pathModelFile);
 				Boolean resultado = ControladorXml.salvarXMLRepositorio(nome, file, null);
 				if (resultado) {
-					JOptionPane.showMessageDialog(null, "Salvo com sucesso!");
+					JOptionPane.showMessageDialog(null, "Save successful!");
 					EditorPanel.this.main.recarregarListaFeatures();
 				}
 			}
@@ -523,16 +535,9 @@ public class EditorPanel extends JPanel implements ActionListener {
 				// TODO Auto-generated method stub
 				super.mouseReleased(event);
 
-				System.out.println("Mouse event");
-				System.out.println(event.getButton());
-
 				if (event.getButton() == MouseEvent.BUTTON3) {
 
-					System.out.println("BUTTON 3");
-
 					if (event.getSource() == tree) {
-
-						System.out.println("Arvore");
 
 						TreePath pathForLocation = tree.getPathForLocation(event.getPoint().x, event.getPoint().y);
 						if (pathForLocation != null) {
@@ -544,12 +549,6 @@ public class EditorPanel extends JPanel implements ActionListener {
 									.verificarMenuDeSelecao(selectedNode.getTypeFeature());
 
 							menu.show(tree, event.getPoint().x, event.getPoint().y);
-
-							if (menu == null) {
-
-								System.out.println("null");
-							}
-							System.out.println(selectedNode.getTypeFeature());
 
 						} else {
 							System.out.println("NULL");
@@ -829,7 +828,6 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 			Resolution resolution = new Resolution(selectedNode.getID(), null, false);
 			resolutions.remove(resolution);
-			tree.repaint();
 			tree.updateUI();
 
 			removeFromContextConstraint(selectedNode);
@@ -856,80 +854,48 @@ public class EditorPanel extends JPanel implements ActionListener {
 		
 			
 			String nome = JOptionPane.showInputDialog("Type the feature name:");
-	
-			if(selectedNode.isRoot()){
-				controllerFeatures.addFeatures(0,TypeFeature.OPTIONAL , nome);
-			}else{
-				
-				controllerFeatures.addFeatures(selectedNode.getParent().getIndex(selectedNode),TypeFeature.OPTIONAL , nome);
-					
+			
+			if(nome==null || nome.equals("")){
+				JOptionPane.showMessageDialog(null, "Type a valid feature name.");
+				return;
 			}
 			
-			tree.repaint();
+			controllerFeatures.addFeatures(selectedNode, TypeFeature.OPTIONAL , nome);
+			
 			tree.updateUI();
 		
 
 		} else if (e.getActionCommand().equals("addMandatoryFeature")) {
 
 			String nome = JOptionPane.showInputDialog("Type the feature name:");
-
-			if(selectedNode.isRoot()){
-
-				controllerFeatures.addFeatures(0,TypeFeature.MANDATORY , nome);
-				
-			}else{
-				
-				controllerFeatures.addFeatures(selectedNode.getParent().getIndex(selectedNode),TypeFeature.MANDATORY , nome);
-					
-			}
 			
-			tree.repaint();
+			if(nome==null || nome.equals("")){
+				JOptionPane.showMessageDialog(null, "Type a valid feature name.");
+				return;
+			}
+
+			controllerFeatures.addFeatures(selectedNode, TypeFeature.MANDATORY , nome);
+			
 			tree.updateUI();
 		
 
 
 		} else if (e.getActionCommand().equals("addXORGroup")) {
 
-	
-
-			if(selectedNode.isRoot()){
-
-				controllerFeatures.addFeatures(0,TypeFeature.GROUP_XOR , null);
+			controllerFeatures.addFeatures(selectedNode, TypeFeature.GROUP_XOR , null);
 				
-			}else{
-				
-				controllerFeatures.addFeatures(selectedNode.getParent().getIndex(selectedNode),TypeFeature.GROUP_XOR , null);
-					
-			}
-			
-			tree.repaint();
 			tree.updateUI();
-		
-
 
 		} else if (e.getActionCommand().equals("addORGroup")) {
 		
+			controllerFeatures.addFeatures(selectedNode, TypeFeature.GROUP_OR , null);
 
-			if(selectedNode.isRoot()){
-
-				controllerFeatures.addFeatures(0,TypeFeature.GROUP_OR , null);
-				
-			}else{
-				
-				controllerFeatures.addFeatures(selectedNode.getParent().getIndex(selectedNode),TypeFeature.GROUP_OR , null);
-					
-			}
-			
-			tree.repaint();
 			tree.updateUI();
 		
 		} else {
 			
-			System.out.println(selectedNode.toString());
+			controllerFeatures.removeFeatures(selectedNode);
 
-			controllerFeatures.removeFeatures(selectedNode.getParent().getIndex(selectedNode));
-
-			tree.repaint();
 			tree.updateUI();
 
 		}

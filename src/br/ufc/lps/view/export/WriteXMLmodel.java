@@ -2,19 +2,10 @@ package br.ufc.lps.view.export;
 
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import br.ufc.lps.model.contextaware.Constraint;
 import br.ufc.lps.model.contextaware.Resolution;
 
 public class WriteXMLmodel {

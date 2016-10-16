@@ -21,7 +21,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import br.ufc.lps.model.Adaptacao;
+import br.ufc.lps.model.ContextoAdaptacao;
 import br.ufc.lps.model.ModelFactory;
+import br.ufc.lps.model.ValorAdaptacao;
 import br.ufc.lps.model.contextaware.Constraint;
 import br.ufc.lps.model.contextaware.Context;
 import br.ufc.lps.model.contextaware.Resolution;
@@ -62,6 +65,8 @@ public class ContextModel implements IContextModel {
      */
     
     private Map<String, Context> contexts;
+    private Map<String, Adaptacao> adaptacoes;
+    private Adaptacao arvoreAdaptacao;
     private Map<Context, FeatureModelStatistics> statisticsByContext;
     private Map<Context, ReasoningWithBDD> bddByContext;
 	private Context currentContext;
@@ -77,11 +82,24 @@ public class ContextModel implements IContextModel {
 		
 		this.pathModelFile = pathModelFile;
 		contexts = new HashMap<String, Context>();
+		adaptacoes = new HashMap<String, Adaptacao>();
+		arvoreAdaptacao = new Adaptacao();
 		statisticsByContext = new HashMap<Context, FeatureModelStatistics>();
 		bddByContext = new HashMap<Context, ReasoningWithBDD>();
 		
 		parseXMLToGetContexts();
+		parseXMLToGetArvoreAdaptacao();
+		parseXMLToGetAdaptacoes();
 		createFeatureModelByContext();
+	}
+	
+	
+	public Adaptacao getArvoreAdaptacao() {
+		return arvoreAdaptacao;
+	}
+
+	public void setArvoreAdaptacao(Adaptacao arvoreAdaptacao) {
+		this.arvoreAdaptacao = arvoreAdaptacao;
 	}
 	
 	public FeatureModel setFeatureModel(Context context){
@@ -188,6 +206,165 @@ public class ContextModel implements IContextModel {
 		
 		
 	}
+	
+	
+private void parseXMLToGetAdaptacoes(){
+		
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db;
+		try {
+			
+			db = dbf.newDocumentBuilder();
+			
+			//parse using builder to get DOM representation of the XML file
+			
+			Document doc = db.parse(pathModelFile);
+			Element rootEle = doc.getDocumentElement();
+			
+			//parse contexts
+			NodeList contexts = rootEle.getElementsByTagName("adaptacao");
+			String nomeAdaptacao = rootEle.getAttribute("nome");
+			for(int i=0; i < contexts.getLength(); i++){
+				Element elContext = (Element) contexts.item(i);
+				String nameContext = elContext.getAttribute("nome");
+				List<ContextoAdaptacao> contextos = new ArrayList<ContextoAdaptacao>();
+				
+				NodeList elsResolutions = elContext.getElementsByTagName("contexto");
+				for(int countRes = 0; countRes < elsResolutions.getLength(); countRes++){
+					Element elResolution = (Element) elsResolutions.item(countRes);
+					
+					String nome = elResolution.getAttribute("nome");
+					
+					ContextoAdaptacao contextoAdaptacao = new ContextoAdaptacao();
+					contextoAdaptacao.setNome(nome);
+					
+					List<ValorAdaptacao> listaAdaptacoes = new ArrayList<ValorAdaptacao>();
+					NodeList valor = elContext.getElementsByTagName("contexto");
+					for(int countValor = 0; countValor < valor.getLength(); countValor++){
+						Element elValor = (Element) valor.item(countRes);
+						
+						String nomeValor = elValor.getAttribute("nome");
+						
+						Boolean statusValor = false;
+						if (elValor.getAttribute("status").equals("true")) 
+							statusValor = true;
+						
+						ValorAdaptacao valorAdap = new ValorAdaptacao();
+						valorAdap.setNome(nomeValor);
+						valorAdap.setStatus(statusValor);
+						
+						listaAdaptacoes.add(valorAdap);
+					}		
+					
+					contextoAdaptacao.setValorAdaptacao(listaAdaptacoes);
+				}
+				
+				Adaptacao adaptacao = new Adaptacao();
+				
+				adaptacao.setNome(nomeAdaptacao);
+				adaptacao.setValorAdaptacao(contextos);
+				
+				this.adaptacoes.put(nomeAdaptacao, adaptacao);	
+			}	
+			
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	}
+private void parseXMLToGetArvoreAdaptacao(){
+	
+	DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	DocumentBuilder db;
+	try {
+		
+		db = dbf.newDocumentBuilder();
+		
+		//parse using builder to get DOM representation of the XML file
+		
+		Document doc = db.parse(pathModelFile);
+		Element rootEle = doc.getDocumentElement();
+		
+		Adaptacao adaptacao = new Adaptacao();
+		//parse contexts
+		NodeList contexts = rootEle.getElementsByTagName("arvore_adaptacao");
+		
+		for(int i=0; i < contexts.getLength(); i++){
+			
+			Element elContext = (Element) contexts.item(i);
+			
+			List<ContextoAdaptacao> contextos = new ArrayList<ContextoAdaptacao>();
+			
+			NodeList elsResolutions = elContext.getElementsByTagName("contexto");
+			
+			for(int countRes = 0; countRes < elsResolutions.getLength(); countRes++){
+			
+				Element elResolution = (Element) elsResolutions.item(countRes);
+				
+				String nome = elResolution.getAttribute("nome");
+				
+				ContextoAdaptacao contextoAdaptacao = new ContextoAdaptacao();
+				contextoAdaptacao.setNome(nome);
+				
+				List<ValorAdaptacao> listaAdaptacoes = new ArrayList<ValorAdaptacao>();
+				NodeList valor = elResolution.getElementsByTagName("valor");
+				
+				for(int countValor = 0; countValor < valor.getLength(); countValor++){
+					Element elValor = (Element) valor.item(countValor);
+					
+					String nomeValor = elValor.getAttribute("nome");
+					
+					Boolean statusValor = false;
+					if (elValor.getAttribute("status").equals("true")) 
+						statusValor = true;
+					
+					ValorAdaptacao valorAdap = new ValorAdaptacao();
+					valorAdap.setNome(nomeValor);
+					valorAdap.setStatus(statusValor);
+					
+					listaAdaptacoes.add(valorAdap);
+				}		
+				
+				contextoAdaptacao.setValorAdaptacao(listaAdaptacoes);
+				contextos.add(contextoAdaptacao);
+			}
+			
+			adaptacao.setNome("");
+			adaptacao.setValorAdaptacao(contextos);
+
+		}	
+
+		this.arvoreAdaptacao = adaptacao;
+		
+	} catch (ParserConfigurationException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (SAXException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}	
+}
+
+	
+	
+public Map<String, Adaptacao> getAdaptacoes() {
+	return adaptacoes;
+}
+
+public void setAdaptacoes(Map<String, Adaptacao> adaptacoes) {
+	this.adaptacoes = adaptacoes;
+}
+
+	
 	
 	//For each context, it creates a model for and set active and deactive features;
 	private void createFeatureModelByContext(){

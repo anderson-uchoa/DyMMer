@@ -1091,20 +1091,6 @@ public class EditorPanel extends JPanel implements ActionListener {
 		} else if (e.getActionCommand().equals("addMandatoryFeature")) {
 
 			String nome = JOptionPane.showInputDialog("Type the feature name:");
-<<<<<<< HEAD
-=======
-
-			if(selectedNode.isRoot()){
-
-			controllerFeatures.addFeatures(0,TypeFeature.MANDATORY , nome);
-			
-						
-			}else{
-				
-				controllerFeatures.addFeatures(selectedNode.getParent().getIndex(selectedNode),TypeFeature.MANDATORY , nome);
-					
-			}
->>>>>>> branch 'dev' of https://github.com/anderson-uchoa/DyMMer.git
 			
 			if(nome==null || nome.equals("")){
 				JOptionPane.showMessageDialog(null, "Type a valid feature name.");

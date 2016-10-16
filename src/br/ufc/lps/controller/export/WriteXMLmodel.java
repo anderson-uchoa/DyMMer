@@ -1,4 +1,4 @@
-package br.ufc.lps.view.export;
+package br.ufc.lps.controller.export;
 
 import java.util.List;
 
@@ -41,11 +41,6 @@ public class WriteXMLmodel {
 	    		elemConstraint.setTextContent(constraint);
 	    		node.appendChild(elemConstraint);
 	    	}
-	    		
-	    	
 	    	return node;
 	    }
-	 
-	
-	
 }

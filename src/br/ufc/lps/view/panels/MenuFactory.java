@@ -1,25 +1,22 @@
 package br.ufc.lps.view.panels;
 
+import java.awt.event.ActionListener;
+
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 
 import br.ufc.lps.controller.features.TypeFeature;
-import br.ufc.lps.splar.core.fm.FeatureGroup;
 import br.ufc.lps.splar.core.fm.FeatureTreeNode;
-import br.ufc.lps.splar.core.fm.RootNode;
-import br.ufc.lps.splar.core.fm.SolitaireFeature;
-
-import br.ufc.lps.view.trees.TypeTree;
 
 public class MenuFactory {
 
-	private static EditorPanel editorPanel;
+	private static ActionListener editorPanel;
 	private static FeatureTreeNode featureTreeNode;
 	private static MenuFactory instancia;
 	private static JPopupMenu jPopupMenu;
 
-	public static MenuFactory getIntance(EditorPanel editor, FeatureTreeNode feature) {
+	public static MenuFactory getIntance(ActionListener editor, FeatureTreeNode feature) {
 		featureTreeNode = feature;
 		editorPanel = editor;
 
@@ -29,7 +26,7 @@ public class MenuFactory {
 		return instancia;
 	}
 
-	public MenuFactory(EditorPanel editorPanel, FeatureTreeNode featureTreeNode) {
+	public MenuFactory(ActionListener editorPanel, FeatureTreeNode featureTreeNode) {
 
 		this.editorPanel = editorPanel;
 		this.featureTreeNode = featureTreeNode;

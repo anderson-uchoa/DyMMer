@@ -13,6 +13,11 @@
 <data name="reference"/>
 </meta>
 <constraints>
+constraint_1:~_r_13_15 or _r_36_37_40
+constraint_6:_r_13_25 or ~_r_36_37_38
+constraint_4:~_r_13_15_16 or ~_r_36_37_40_41_42_46_47
+constraint_5:~_r_13_25 or _r_36_37_38
+constraint_3:_r_13_15 or ~_r_36_37_40
 </constraints>
 <context name="operation-mode">
 <resolution feature="DCUMasterParameter" id="_r_1" status="true"/>
@@ -127,21 +132,15 @@
 <context name="n">
 <constraints/>
 </context>
-<context name="hb">
-<constraints/>
-</context>
-<feature_tree/>
+
 <context name="b">
-<constraints/>
-</context>
-<context name="n">
 <constraints/>
 </context>
 <feature_tree>
 :r DeviceControlUnit(_r)
 	:m DCUMasterParameter(_r_1)
 		:m MeasuringMode(_r_1_2)
-			:g (_r_1_2_3) [1, 1]
+			:g (_r_1_2_3) [1,1]
 				: Mode4(_r_1_2_3_4)
 				: Mode3(_r_1_2_3_5)
 				: Mode2(_r_1_2_3_6)
@@ -167,7 +166,7 @@
 			:o EnableGenRTBMasterClock(_r_13_25_50)
 			:o EnableSyncSupplyFequence(_r_13_25_51)
 	:m OperationMode(_r_26)
-		:g (_r_26_27) [1, 1]
+		:g (_r_26_27) [1,1]
 			: QualityAssurance(_r_26_27_28)
 			: Adjustment(_r_26_27_29)
 			: Experiment(_r_26_27_30)
@@ -177,22 +176,23 @@
 			: Idle(_r_26_27_34)
 	:m DeviceController(_r_35)
 	:m Type(_r_36)
-		:g (_r_36_37) [1, 1]
+		:g (_r_36_37) [1,1]
 			: Z(_r_36_37_38)
 			: SD(_r_36_37_39)
 			: DeviceControl(_r_36_37_40)
-				:g (_r_36_37_40_41) [1, 1]
+				:g (_r_36_37_40_41) [1,1]
 					: Ramped(_r_36_37_40_41_42)
-						:g (_r_36_37_40_41_42_46) [1, 1]
+						:g (_r_36_37_40_41_42_46) [1,1]
 							: RK(_r_36_37_40_41_42_46_47)
 							: RB(_r_36_37_40_41_42_46_48)
 							: R(_r_36_37_40_41_42_46_49)
 					: P(_r_36_37_40_41_43)
 					: T(_r_36_37_40_41_44)
 					: TS(_r_36_37_40_41_45)
-	:o sdfsdf(_r_37)
+	:o sfs(_r_37)
+	:m sfhsiofd(_r_38)
 </feature_tree>
-<context name="b">
+<context name="hue">
 <constraints/>
 </context>
 </feature_model>

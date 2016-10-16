@@ -1,7 +1,6 @@
 package br.ufc.lps.view.panels;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,9 +17,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import br.ufc.lps.controller.xml.ControladorXml;
-import br.ufc.lps.model.context.ContextModel;
-import br.ufc.lps.model.normal.IModel;
-import br.ufc.lps.model.normal.SplotModel;
 import br.ufc.lps.repositorio.SchemeXml;
 import br.ufc.lps.view.Main;
 
@@ -33,8 +29,9 @@ public class ViewerPanelResultFeatures extends JPanel {
 	private Main main;
 	private JTable tabela;
 	private JButton open;
-	private JButton editar;
-	private JButton deletar;
+	private JButton edit;
+	private JButton create;
+	private JButton delete;
 	private JButton listarMedidas;
 	private JButton refresh;
 	private JButton medidas;
@@ -75,13 +72,17 @@ public class ViewerPanelResultFeatures extends JPanel {
 		
 		painelBotaoOpen.add(open);
 		
-		editar = new JButton("Edit");
+		edit = new JButton("Edit");
 		
-		painelBotaoOpen.add(editar);
+		painelBotaoOpen.add(edit);
 		
-		deletar = new JButton("Delete");
+		create = new JButton("Create New Model");
 		
-		painelBotaoOpen.add(deletar);
+		painelBotaoOpen.add(create);
+		
+		delete = new JButton("Delete");
+		
+		painelBotaoOpen.add(delete);
 
 		listarMedidas = new JButton("Comparar Contextos de um modelo");
 		
@@ -134,7 +135,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 		
 		painelTabela.add(barraRolagem);
 		
-		deletar.addActionListener(new ActionListener() {
+		delete.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -144,7 +145,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 					if(resp == JOptionPane.YES_OPTION){
 						SchemeXml selecionado = listaItens.get(selecao);
 						if(controladorXml.delete(selecionado)){
-							System.out.println("deletado com sucesso!");
+							System.out.println("deleted successful!");
 							carregarItens();
 						}
 					}
@@ -250,6 +251,21 @@ public class ViewerPanelResultFeatures extends JPanel {
 			}
 		});
 		
+		create.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				String name = JOptionPane.showInputDialog("Type the name of feature root:");
+				
+				if(name== null || name.equals("")){
+					JOptionPane.showMessageDialog(null, "Type a name valid");
+					return;
+				}
+					
+				main.createModelFeature(name);
+			}
+		});
+		
 		refresh.addActionListener(new ActionListener() {
 			
 			@Override
@@ -277,7 +293,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 			}
 		});
 		
-		editar.addActionListener(new ActionListener() {
+		edit.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -302,8 +318,8 @@ public class ViewerPanelResultFeatures extends JPanel {
 	private void setBotoes(boolean status){
 		open.setEnabled(status);
 		listarMedidas.setEnabled(status);
-		editar.setEnabled(status);
-		deletar.setEnabled(status);
+		edit.setEnabled(status);
+		delete.setEnabled(status);
 	}
 	
 	public synchronized void carregarItens(){

@@ -1,4 +1,4 @@
-package br.ufc.lps.view.export;
+package br.ufc.lps.controller.export;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -2,7 +2,6 @@ package br.ufc.lps.view.panels;
 
 import javax.swing.JPopupMenu;
 
-import br.ufc.lps.controller.features.TypeFeature;
 import br.ufc.lps.splar.core.fm.FeatureTreeNode;
 
 public class MenuTreeAdaptationFactory {

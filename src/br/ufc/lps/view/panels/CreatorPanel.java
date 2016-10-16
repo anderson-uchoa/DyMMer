@@ -65,6 +65,7 @@ import br.ufc.lps.model.contextaware.Context;
 import br.ufc.lps.model.contextaware.Literal;
 import br.ufc.lps.model.contextaware.Resolution;
 import br.ufc.lps.model.normal.IModel;
+import br.ufc.lps.model.normal.SplotModel;
 import br.ufc.lps.repositorio.SchemeXml;
 import br.ufc.lps.splar.core.constraints.BooleanVariable;
 import br.ufc.lps.splar.core.constraints.CNFClause;
@@ -76,6 +77,7 @@ import br.ufc.lps.splar.core.fm.FeatureModel;
 import br.ufc.lps.splar.core.fm.FeatureModelException;
 import br.ufc.lps.splar.core.fm.FeatureTreeNode;
 import br.ufc.lps.splar.core.fm.GroupedFeature;
+import br.ufc.lps.splar.core.fm.RootNode;
 import br.ufc.lps.splar.core.heuristics.FTPreOrderSortedECTraversalHeuristic;
 import br.ufc.lps.splar.core.heuristics.VariableOrderingHeuristic;
 import br.ufc.lps.splar.core.heuristics.VariableOrderingHeuristicsManager;
@@ -90,7 +92,7 @@ import br.ufc.lps.view.trees.FeatureModelTree;
 import br.ufc.lps.view.trees.FeaturesTreeCellRenderer;
 import br.ufc.lps.view.trees.ValorAdaptacao;
 
-public class EditorPanel extends JPanel implements ActionListener {
+public class CreatorPanel extends JPanel implements ActionListener {
 
 	protected static final String BASE_NAME_CONSTRAINT = "contextConstraint";
 	private IModel model;
@@ -113,7 +115,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 	private List<Constraint> constraintsList;
 	private int constraintNumber;
 	private Integer modelID;
-	private String pathModelFile;
+	private String pathModelFile = "tests/test_fm_consistent.xml";
 	private Boolean treeRnfAdicionada = false;
 	private Main main;
 	private JButton jbuttonSalvar;
@@ -128,8 +130,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 	 * @param model
 	 */
 
-	
-	public EditorPanel(IModel model, int modelID, String pathModelFile, SchemeXml schemeXml, Main main) {
+	public CreatorPanel(int modelID, Main main, String nameRoot) {
+		
 		setLayout(new GridLayout(1, 0));
 		this.main = main;
 		constraints = new HashMap<String, String>();
@@ -143,9 +145,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 		constraintNumber = 0;
 
 		this.modelID = modelID;
-		this.pathModelFile = pathModelFile;
 
-		this.model = model;
+		this.model = new SplotModel(pathModelFile);
 		resolutions = new ArrayList<Resolution>();
 
 		tree = new   JTree();
@@ -153,7 +154,9 @@ public class EditorPanel extends JPanel implements ActionListener {
 		treeAdaptation = new JTree();
 		controllerFeatures = new ControllerFeatures();
 
-		tree.setModel(new FeatureModelTree(model.getFeatureModel().getRoot()));
+		FeatureTreeNode featureRoot = new RootNode("_r", nameRoot, null);
+	
+		tree.setModel(new FeatureModelTree(featureRoot));
 
 		tree.setEditable(true);
 		tree.setComponentPopupMenu(getComponentPopupMenu());
@@ -278,7 +281,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 					try {
 
 						DocumentBuilder db = dbf.newDocumentBuilder();
-						Document doc = db.parse(EditorPanel.this.pathModelFile);
+						Document doc = db.parse(CreatorPanel.this.pathModelFile);
 
 						Element rootEle = doc.getDocumentElement();
 
@@ -304,12 +307,12 @@ public class EditorPanel extends JPanel implements ActionListener {
 						rootEle.appendChild(newTree);
 						
 						rootEle.appendChild(WriteXMLmodel.getContext(doc, textFieldNewContext.getText(),
-								EditorPanel.this.resolutions, new ArrayList<String>(constraints.values())));
+								CreatorPanel.this.resolutions, new ArrayList<String>(constraints.values())));
 
 						Transformer transformer = TransformerFactory.newInstance().newTransformer();
 						transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 						DOMSource source = new DOMSource(doc);
-						StreamResult console = new StreamResult(new FileOutputStream(EditorPanel.this.pathModelFile));
+						StreamResult console = new StreamResult(new FileOutputStream(CreatorPanel.this.pathModelFile));
 						transformer.transform(source, console);
 
 						textFieldNewContext.setText("");
@@ -322,8 +325,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 						txtMessageText.setText("None for while...");
 						constraintNumber = 0;
 
-						EditorPanel.this.tree.updateUI();
-						JOptionPane.showMessageDialog(EditorPanel.this,
+						CreatorPanel.this.tree.updateUI();
+						JOptionPane.showMessageDialog(CreatorPanel.this,
 								"Your context has been saved. Now, open the file to see it.");
 
 					} catch (SAXException e1) {
@@ -410,12 +413,6 @@ public class EditorPanel extends JPanel implements ActionListener {
 		jbuttonSalvar.setHorizontalAlignment(SwingConstants.CENTER);
 		panelConstraint.add(jbuttonSalvar);
 		
-		JButton jbuttonSalvarNew = new JButton("Save in repository ( New Model )");
-		jbuttonSalvarNew.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		if(schemeXml!=null)
-			panelConstraint.add(jbuttonSalvarNew);
-		
 		JLabel lblConstraint = new JLabel("Constraint:");
 		lblConstraint.setHorizontalAlignment(SwingConstants.CENTER);
 		panelConstraint.add(lblConstraint);
@@ -425,43 +422,14 @@ public class EditorPanel extends JPanel implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				File file = new File(pathModelFile);
-				Boolean resultado = ControladorXml.salvarXMLRepositorio(null, file, schemeXml);
+				Boolean resultado = ControladorXml.salvarXMLRepositorio(null, file, null);
 				if (resultado) {
 					JOptionPane.showMessageDialog(null, "Save Successfull");
-					EditorPanel.this.main.recarregarListaFeatures();
+					CreatorPanel.this.main.recarregarListaFeatures();
 				}
 			}
 		});
 		
-		jbuttonSalvarNew.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				String nome  = JOptionPane.showInputDialog("Type the name of new model:", schemeXml.getNameXml());
-				
-				if(nome.equals("")){
-					JOptionPane.showMessageDialog(null, "Type a name valid!");
-					return;
-				}
-				
-				if(nome.equals(schemeXml.getNameXml())){
-					JOptionPane.showMessageDialog(null, "Type a different name!");
-					return;
-				}
-				
-				
-				
-				schemeXml.setNameXml(nome);
-				File file = new File(pathModelFile);
-				Boolean resultado = ControladorXml.salvarXMLRepositorio(nome, file, null);
-				if (resultado) {
-					JOptionPane.showMessageDialog(null, "Save successful!");
-					EditorPanel.this.main.recarregarListaFeatures();
-				}
-			}
-		});
-
 		txtAddTheFeatures = new JTextField();
 		txtAddTheFeatures.setText("Add the features...");
 		txtAddTheFeatures.setEditable(false);
@@ -638,7 +606,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 							selectedNode = (FeatureTreeNode) pathForLocation.getLastPathComponent();
 
-							menu = MenuFactory.getIntance(EditorPanel.this, selectedNode)
+							menu = MenuFactory.getIntance(CreatorPanel.this, selectedNode)
 									.verificarMenuDeSelecao(selectedNode.getTypeFeature());
 
 							menu.show(tree, event.getPoint().x, event.getPoint().y);
@@ -996,7 +964,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 	private void setTreeVisualization(final String contextName) {
 		
 		if(splotContextModel.getContexts().isEmpty()){
-			JOptionPane.showMessageDialog(EditorPanel.this, "It's not supported, because it does not have any context. Please, first edit it and add one context.");
+			JOptionPane.showMessageDialog(CreatorPanel.this, "It's not supported, because it does not have any context. Please, first edit it and add one context.");
 			tree.setModel(null);
 			return;
 		}	
@@ -1130,16 +1098,16 @@ private void adicionar(){
 			try {
 			
 				DocumentBuilder db = dbf.newDocumentBuilder();
-				Document doc = db.parse(EditorPanel.this.pathModelFile);
+				Document doc = db.parse(CreatorPanel.this.pathModelFile);
 			
 				Element rootEle = doc.getDocumentElement();	
 				
-				rootEle.appendChild(WriteXMLmodel.getContext(doc, textFieldNewContext.getText(), EditorPanel.this.resolutions, new ArrayList<String>(constraints.values())));
+				rootEle.appendChild(WriteXMLmodel.getContext(doc, textFieldNewContext.getText(), CreatorPanel.this.resolutions, new ArrayList<String>(constraints.values())));
 				
 				Transformer transformer = TransformerFactory.newInstance().newTransformer();
 	            transformer.setOutputProperty(OutputKeys.INDENT, "yes"); 
 	            DOMSource source = new DOMSource(doc);
-	            StreamResult console = new StreamResult(new FileOutputStream(EditorPanel.this.pathModelFile));
+	            StreamResult console = new StreamResult(new FileOutputStream(CreatorPanel.this.pathModelFile));
 	            transformer.transform(source, console);
 	            
 	            textFieldNewContext.setText("");
@@ -1155,7 +1123,7 @@ private void adicionar(){
 				
 				tree.repaint();
 				tree.updateUI();
-				JOptionPane.showMessageDialog(EditorPanel.this, "Your context has been saved. Now, open the file to see it.");
+				JOptionPane.showMessageDialog(CreatorPanel.this, "Your context has been saved. Now, open the file to see it.");
 				
 			} catch (SAXException e1) {
 				// TODO Auto-generated catch block

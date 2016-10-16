@@ -32,6 +32,12 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -51,10 +57,13 @@ import org.xml.sax.SAXException;
 
 import com.teamdev.jxbrowser.chromium.bo;
 
+
 import br.ufc.lps.controller.features.ControllerFeatures;
 import br.ufc.lps.controller.features.TypeFeature;
 import br.ufc.lps.controller.xml.ControladorXml;
+import br.ufc.lps.model.ContextoAdaptacao;
 import br.ufc.lps.model.ModelFactory;
+import br.ufc.lps.model.context.SplotContextModel;
 import br.ufc.lps.model.contextaware.Constraint;
 import br.ufc.lps.model.contextaware.Context;
 import br.ufc.lps.model.contextaware.Literal;
@@ -79,9 +88,13 @@ import br.ufc.lps.splar.plugins.reasoners.bdd.javabdd.FMReasoningWithBDD;
 import br.ufc.lps.view.Main;
 import br.ufc.lps.view.export.WriteXMLmodel;
 import br.ufc.lps.view.list.ConstraintsListModel;
-
+import br.ufc.lps.view.trees.Adaptacao;
+import br.ufc.lps.view.trees.CheckBoxNodeData;
+import br.ufc.lps.view.trees.CheckBoxNodeEditor;
+import br.ufc.lps.view.trees.CheckBoxNodeRenderer;
 import br.ufc.lps.view.trees.FeatureModelTree;
 import br.ufc.lps.view.trees.FeaturesTreeCellRenderer;
+import br.ufc.lps.view.trees.ValorAdaptacao;
 
 public class EditorPanel extends JPanel implements ActionListener {
 
@@ -111,6 +124,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 	private Main main;
 	private JButton jbuttonSalvar;
 	private ControllerFeatures controllerFeatures;
+	private SplotContextModel splotContextModel;
+	private DefaultTreeModel treeModel;
 	JPopupMenu menu;
 
 	/**
@@ -126,6 +141,9 @@ public class EditorPanel extends JPanel implements ActionListener {
 		constraints = new HashMap<String, String>();
 		constraintLiterals = new ArrayList<Literal>();
 		constraintsList = new ArrayList<Constraint>();
+		
+		splotContextModel = new SplotContextModel(pathModelFile);
+		
 		menu = new JPopupMenu();
 
 		constraintNumber = 0;
@@ -136,7 +154,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 		this.model = model;
 		resolutions = new ArrayList<Resolution>();
 
-		tree = new JTree();
+		tree = new   JTree();
 		treeRnf = new JTree();
 		treeAdaptation = new JTree();
 		controllerFeatures = new ControllerFeatures((model.getFeatureModel().getRoot()));
@@ -152,6 +170,54 @@ public class EditorPanel extends JPanel implements ActionListener {
 		treeRnf.setEditable(true);
 		treeRnf.setComponentPopupMenu(getComponentPopupMenu());
 		treeRnf.addMouseListener(getMouseListener());
+
+		
+		//ARVORE DA ADAPTAÇÃO
+				preenchendoArvore(splotContextModel.getArvoreAdaptacao());
+				final CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
+				treeAdaptation.setCellRenderer(renderer);
+				final CheckBoxNodeEditor editor = new CheckBoxNodeEditor(treeAdaptation);
+				treeAdaptation.setCellEditor(editor);
+				treeAdaptation.setEditable(true);
+		
+				treeModel.addTreeModelListener(new TreeModelListener() {
+
+					@Override
+					public void treeNodesChanged(final TreeModelEvent e) {
+						mudancaCheckBoxArvoreAdaptacao();
+					}
+
+					@Override
+					public void treeNodesInserted(TreeModelEvent e) {}
+
+					@Override
+					public void treeNodesRemoved(TreeModelEvent e) {}
+
+					@Override
+					public void treeStructureChanged(TreeModelEvent e){}
+				});
+				
+				treeAdaptation.addMouseListener(new MouseListener() {
+					
+					@Override
+					public void mouseReleased(MouseEvent e) {}
+					
+					@Override
+					public void mousePressed(MouseEvent e) {}
+					
+					@Override
+					public void mouseExited(MouseEvent e) {}
+					
+					@Override
+					public void mouseEntered(MouseEvent e) {}
+					
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						if(e.getButton() == MouseEvent.BUTTON3){
+							mouseClickArvoreAdaptacao(e);    
+						}
+					}
+				});
 
 		
 		defaultContext = new Context("default", resolutions, null);
@@ -440,7 +506,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 						// PropositionalFormula(constsString.getKey(),
 						// clause.toString2()));
 						otherModel.addConstraint(new PropositionalFormula(constsString.getKey(), clause.toString()));
-
+					System.out.println( clause.toString());
 					} catch (CNFClauseParseException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -480,6 +546,35 @@ public class EditorPanel extends JPanel implements ActionListener {
 		return model.getModelName();
 	}
 
+	private void mudancaCheckBoxArvoreAdaptacao(){
+		TreePath currentSelection = treeAdaptation.getSelectionPath();
+
+		if (currentSelection != null) {   				
+			DefaultMutableTreeNode tipoSelecionado = (DefaultMutableTreeNode) currentSelection.getLastPathComponent();
+			if(tipoSelecionado instanceof ValorAdaptacao){
+				Object ob = tipoSelecionado.getUserObject();
+				if(ob instanceof CheckBoxNodeData){
+					CheckBoxNodeData check = (CheckBoxNodeData) ob;
+					if(check.isChecked()){
+						DefaultMutableTreeNode pai = (DefaultMutableTreeNode) tipoSelecionado.getParent();
+						for(int i=0; i<pai.getChildCount(); i++){
+							if(!pai.getChildAt(i).equals(tipoSelecionado)){
+								CheckBoxNodeData c = (CheckBoxNodeData) ((DefaultMutableTreeNode)pai.getChildAt(i)).getUserObject();
+								c.setChecked(false);
+							}
+						}
+						treeAdaptation.updateUI();
+					}
+				}
+			}
+		}
+		
+		//String nome = verificandoArvore((DefaultMutableTreeNode)treeModel.getRoot());
+		
+	//	if(nome!=null)
+			//setTreeVisualization(nome);
+	}
+	
 	private MouseListener getMouseListener() {
 		return new MouseAdapter() {
 
@@ -589,11 +684,20 @@ public class EditorPanel extends JPanel implements ActionListener {
 			toAdd = literal.getFeature().getName();
 		else
 			toAdd = "~" + literal.getFeature().getName();
+			
 
 		if (constraintLiterals.isEmpty()) {
 			txtAddTheFeatures.setText("");
 			txtAddTheFeatures.setText(toAdd);
 		} else
+			/* if (toAdd.contains("~")  && txtAddTheFeatures.getText().contains("~") ){
+					
+				 txtAddTheFeatures.setText(txtAddTheFeatures.getText() + " excludes " + toAdd);
+				 
+			 }else {
+				 
+				 txtAddTheFeatures.setText(txtAddTheFeatures.getText() + " requires " + toAdd);
+			 } */
 			txtAddTheFeatures.setText(txtAddTheFeatures.getText() + " V " + toAdd);
 
 		constraintLiterals.add(literal);
@@ -767,6 +871,120 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 	}
 
+	private void expandAllNodes(JTree tree, int startingIndex, int rowCount){
+	    for(int i=startingIndex;i<rowCount;++i){
+	        tree.expandRow(i);
+	    }
+
+	    if(tree.getRowCount()!=rowCount){
+	        expandAllNodes(tree, rowCount, tree.getRowCount());
+	    }
+	}
+	
+	private void mouseClickArvoreAdaptacao(MouseEvent e){
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode)treeAdaptation.getLastSelectedPathComponent();
+		if(node.getLevel() == 0){
+			JPopupMenu menu = new JPopupMenu();
+			menu.add(new JLabel("Opções de Adaptação:"));
+			menu.addSeparator();
+			JMenuItem adicionar = new JMenuItem("Adicionar");
+			
+			menu.add(adicionar);
+			
+			adicionar.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					String adaptacao = JOptionPane.showInputDialog("Adicione o nome da adaptação");
+					if(adaptacao!=null && !adaptacao.trim().isEmpty()){
+						node.add(new Adaptacao(adaptacao));
+						treeAdaptation.updateUI();
+					}
+				}
+			});
+			
+			menu.show(treeAdaptation, e.getX(), e.getY());
+			
+		}else if(node.getLevel() == 1){
+			JPopupMenu menu = new JPopupMenu("Valor");
+			menu.add(new JLabel("Opções de Valor:"));
+			menu.addSeparator();
+			JMenuItem adicionar = new JMenuItem("Adicionar");
+			
+			menu.add(adicionar);
+			
+			adicionar.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					String valor = JOptionPane.showInputDialog("Adicione o nome do valor");
+					if(valor!=null && !valor.trim().isEmpty()){
+						CheckBoxNodeData check = new CheckBoxNodeData(valor, false);
+						node.add(new br.ufc.lps.view.trees.ValorAdaptacao(check));
+						treeAdaptation.updateUI();
+					}
+				}
+			});
+			
+			menu.add(new JLabel("Opções de Adaptação:"));
+			menu.addSeparator();
+			JMenuItem remover = new JMenuItem("Remover");
+			
+			menu.add(remover);
+			
+			remover.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					node.removeFromParent();
+					treeAdaptation.updateUI();
+				}
+			});
+			
+			menu.show(treeAdaptation, e.getX(), e.getY());
+			
+		}else{
+			JPopupMenu menu = new JPopupMenu("Adaptação");
+			menu.add(new JLabel("Opções de Valor:"));
+			menu.addSeparator();
+			JMenuItem adicionar = new JMenuItem("Remover");
+			
+			menu.add(adicionar);
+			
+			adicionar.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					node.removeFromParent();
+					treeAdaptation.updateUI();
+				}
+			});
+			
+			menu.show(treeAdaptation, e.getX(), e.getY());
+		}
+	
+
+}
+	
+	private void setTreeVisualization(final String contextName) {
+		
+		if(splotContextModel.getContexts().isEmpty()){
+			JOptionPane.showMessageDialog(EditorPanel.this, "It's not supported, because it does not have any context. Please, first edit it and add one context.");
+			tree.setModel(null);
+			return;
+		}	
+		
+		Context context = splotContextModel.getContexts().get(contextName);
+		FeatureModel featureModel = splotContextModel.setFeatureModel(context);
+		String modelName = featureModel.getName();
+		
+		
+		tree.setModel(featureModel);	
+		tree.setEditable(true);
+		tree.setCellRenderer(new FeaturesTreeCellRenderer(context));
+		expandAllNodes(tree, 0, tree.getRowCount());
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 	
@@ -845,8 +1063,9 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 			if(selectedNode.isRoot()){
 
-				controllerFeatures.addFeatures(0,TypeFeature.MANDATORY , nome);
-				
+			controllerFeatures.addFeatures(0,TypeFeature.MANDATORY , nome);
+			
+						
 			}else{
 				
 				controllerFeatures.addFeatures(selectedNode.getParent().getIndex(selectedNode),TypeFeature.MANDATORY , nome);
@@ -905,4 +1124,117 @@ public class EditorPanel extends JPanel implements ActionListener {
 		}
 	}
 
+private void adicionar(){
+		
+		if(textFieldNewContext.getText().equals("")){
+			txtMessageText.setText("Please, type the context name.");
+			lblNewContext.setForeground(Color.RED);
+			textFieldNewContext.requestFocus();
+		}else{
+			
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			
+			try {
+			
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				Document doc = db.parse(EditorPanel.this.pathModelFile);
+			
+				Element rootEle = doc.getDocumentElement();	
+				
+				rootEle.appendChild(WriteXMLmodel.getContext(doc, textFieldNewContext.getText(), EditorPanel.this.resolutions, new ArrayList<String>(constraints.values())));
+				
+				Transformer transformer = TransformerFactory.newInstance().newTransformer();
+	            transformer.setOutputProperty(OutputKeys.INDENT, "yes"); 
+	            DOMSource source = new DOMSource(doc);
+	            StreamResult console = new StreamResult(new FileOutputStream(EditorPanel.this.pathModelFile));
+	            transformer.transform(source, console);
+	            
+	            textFieldNewContext.setText("");
+				constraintLiterals.clear();
+				constraints.clear();
+				constraintsList.clear();
+				constraintsListModel.update();
+				txtAddTheFeatures.setText("");
+				resolutions.clear();
+				txtMessageText.setText("None for while...");
+				constraintNumber = 0;				
+				
+				
+				tree.repaint();
+				tree.updateUI();
+				JOptionPane.showMessageDialog(EditorPanel.this, "Your context has been saved. Now, open the file to see it.");
+				
+			} catch (SAXException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (ParserConfigurationException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (TransformerConfigurationException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (TransformerFactoryConfigurationError e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (TransformerException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		}
+		
+	}
+
+	private String verificandoArvore(DefaultMutableTreeNode root){
+		String nome = "";
+		boolean pelomenosum = false;
+		for(int i=0; i < root.getChildCount(); i++){
+			DefaultMutableTreeNode filho = (DefaultMutableTreeNode) root.getChildAt(i);
+			
+			for(int j=0; j < filho.getChildCount(); j++){
+				DefaultMutableTreeNode neto = (DefaultMutableTreeNode) filho.getChildAt(j);
+				CheckBoxNodeData dado = (CheckBoxNodeData) neto.getUserObject();
+				if(dado.isChecked()){
+					nome=nome+filho.toString();
+					nome=nome+dado.getText();
+					pelomenosum = true;
+					break;
+				}
+			}
+		}
+		
+		if(pelomenosum){
+			return nome.replaceAll(" ", "");
+		}
+		
+		return null;
+	}
+	
+	private void preenchendoArvore(br.ufc.lps.model.Adaptacao adaptacao){
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Adaptações de contexto");
+		
+		if(adaptacao!=null && adaptacao.getValorAdaptacao()!=null){
+			for(ContextoAdaptacao contextoAdaptacao : adaptacao.getValorAdaptacao()){
+				Adaptacao contexto = new Adaptacao(contextoAdaptacao.getNome());
+				
+				for(br.ufc.lps.model.ValorAdaptacao valorAdaptacao : contextoAdaptacao.getValorAdaptacao()){
+					CheckBoxNodeData data = new CheckBoxNodeData(valorAdaptacao.getNome(), false);
+					contexto.add(new br.ufc.lps.view.trees.ValorAdaptacao(data));
+					
+				}
+				
+				root.add(contexto);
+			}
+		}
+		treeModel = new DefaultTreeModel(root);
+		treeAdaptation = new JTree(treeModel);
+		treeAdaptation.setModel(treeModel);
+		treeAdaptation.updateUI();
+		expandAllNodes(treeAdaptation, 0, treeAdaptation.getRowCount());
+	}
+
+	
 }

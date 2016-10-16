@@ -55,12 +55,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-<<<<<<< HEAD
+
 import com.teamdev.jxbrowser.chromium.bo;
 
 
-=======
->>>>>>> branch 'dev' of https://github.com/anderson-uchoa/DyMMer.git
 import br.ufc.lps.controller.features.ControllerFeatures;
 import br.ufc.lps.controller.features.TypeFeature;
 import br.ufc.lps.controller.xml.ControladorXml;
@@ -91,13 +89,11 @@ import br.ufc.lps.splar.plugins.reasoners.bdd.javabdd.FMReasoningWithBDD;
 import br.ufc.lps.view.Main;
 import br.ufc.lps.view.export.WriteXMLmodel;
 import br.ufc.lps.view.list.ConstraintsListModel;
-<<<<<<< HEAD
+
 import br.ufc.lps.view.trees.Adaptacao;
 import br.ufc.lps.view.trees.CheckBoxNodeData;
 import br.ufc.lps.view.trees.CheckBoxNodeEditor;
 import br.ufc.lps.view.trees.CheckBoxNodeRenderer;
-=======
->>>>>>> branch 'dev' of https://github.com/anderson-uchoa/DyMMer.git
 import br.ufc.lps.view.trees.FeatureModelTree;
 import br.ufc.lps.view.trees.FeaturesTreeCellRenderer;
 import br.ufc.lps.view.trees.ValorAdaptacao;

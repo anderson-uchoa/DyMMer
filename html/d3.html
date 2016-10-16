@@ -48,7 +48,8 @@ function receber(config){
       .text(function(d) { return d.data.name + "\n" + format(d.value); });
 
   node.append("circle")
-      .attr("r", function(d) { return d.r; });
+      .attr("r", function(d) { return d.r; })
+      .style("fill", function(d, i) { return "red"; });
 
   node.filter(function(d) { return !d.children; }).append("text")
       .attr("dy", "0.3em")

@@ -128,6 +128,10 @@ public class ContextModel implements IContextModel {
 		return modelName;
 	}
 	
+	public void setModelName(String modelName){
+		this.modelName = modelName;
+	}
+	
 	public Map<String, Context> getContexts(){
 		return contexts;
 	}

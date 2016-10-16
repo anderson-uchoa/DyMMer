@@ -3,17 +3,19 @@
 <style>
 
 text {
-  font: 10px sans-serif;
+  font: 15px tahoma;
 }
 
 </style>
-<body>
+<center>
+	<body>
+</center>
 <script src="js/d3.v3.js"></script>
 <script>
 
 var diameter = 960,
     format = d3.format(",d"),
-    color = d3.scale.category20c();
+    color = d3.scale.category20b();
 
 var bubble = d3.layout.pack()
     .sort(null)
@@ -41,9 +43,11 @@ function receber(config){
   node.append("title")
       .text(function(d) { return d.className + ": " + format(d.value); });
 
+  //para mudar a cor de acordo com o titulo mudar o value para packageName
+
   node.append("circle")
       .attr("r", function(d) { return d.r; })
-      .style("fill", function(d) { return color(d.packageName); });
+      .style("fill", function(d, i) { return color(i); });
 
   node.append("text")
       .attr("dy", ".3em")

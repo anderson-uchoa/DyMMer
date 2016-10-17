@@ -20,6 +20,7 @@ import br.ufc.lps.splar.plugins.reasoners.bdd.javabdd.FMReasoningWithBDD;
 import br.ufc.lps.splar.plugins.reasoners.bdd.javabdd.ReasoningWithBDD;
 import br.ufc.lps.splar.plugins.reasoners.sat.sat4j.ReasoningWithSAT;
 
+
 public abstract class Model implements IModel{
 
 	private FeatureModel featureModel;

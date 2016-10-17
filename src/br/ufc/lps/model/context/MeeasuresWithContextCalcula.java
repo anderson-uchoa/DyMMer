@@ -23,7 +23,7 @@ import br.ufc.lps.model.ValorAdaptacao;
 import br.ufc.lps.model.contextaware.Constraint;
 import br.ufc.lps.model.contextaware.Context;
 import br.ufc.lps.model.contextaware.Resolution;
-import br.ufc.lps.model.normal.MeasuresWithoutContextCalculator;
+import br.ufc.lps.model.normal.MeasuresWithoutContextCalculat;
 import br.ufc.lps.splar.core.constraints.BooleanVariable;
 import br.ufc.lps.splar.core.constraints.PropositionalFormula;
 import br.ufc.lps.splar.core.fm.FeatureModel;
@@ -37,7 +37,7 @@ import br.ufc.lps.splar.plugins.reasoners.bdd.javabdd.FMReasoningWithBDD;
 import br.ufc.lps.splar.plugins.reasoners.bdd.javabdd.ReasoningWithBDD;
 import br.ufc.lps.splar.plugins.reasoners.sat.sat4j.ReasoningWithSAT;
 
-public class MeeasuresWithContextCalculator extends MeasuresWithoutContextCalculator implements IMeasuresWithContext {
+public class MeeasuresWithContextCalcula extends MeasuresWithoutContextCalculat implements IMeasuresWithContext {
 
 	public static final String DEFAULT_CONTEXT = "default";
 	private FeatureModel featureModel;
@@ -57,10 +57,10 @@ public class MeeasuresWithContextCalculator extends MeasuresWithoutContextCalcul
 	private Context currentContext;
 	private String modelName;
 
-	public MeeasuresWithContextCalculator() {
+	public MeeasuresWithContextCalcula() {
 	}
 
-	public MeeasuresWithContextCalculator(String pathModelFile, int modelID) {
+	public MeeasuresWithContextCalcula(String pathModelFile, int modelID) {
 
 		this.modelID = modelID;
 

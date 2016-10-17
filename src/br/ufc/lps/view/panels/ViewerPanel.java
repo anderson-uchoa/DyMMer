@@ -30,7 +30,7 @@ import javax.swing.border.EmptyBorder;
 
 import br.ufc.lps.controller.xml.ControladorXml;
 import br.ufc.lps.model.context.ContextModel;
-import br.ufc.lps.model.context.MeeasuresWithContextCalculator;
+import br.ufc.lps.model.context.MeeasuresWithContextCalcula;
 import br.ufc.lps.model.contextaware.Context;
 import br.ufc.lps.repositorio.SchemeXml;
 import br.ufc.lps.splar.core.constraints.BooleanVariable;

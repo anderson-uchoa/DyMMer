@@ -18,7 +18,7 @@ import org.apache.poi.ss.usermodel.Row;
 
 import br.ufc.lps.model.context.ContextModel;
 import br.ufc.lps.model.context.IContextModel;
-import br.ufc.lps.model.context.MeeasuresWithContextCalculator;
+import br.ufc.lps.model.context.MeeasuresWithContextCalcula;
 import br.ufc.lps.model.context.SplotContextModel;
 import br.ufc.lps.model.contextaware.Context;
 import br.ufc.lps.model.normal.IModel;

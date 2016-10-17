@@ -368,7 +368,7 @@ public class Main extends JFrame {
 		
 		final CreatorPanel viewer = new CreatorPanel(ModelID.SPLOT_MODEL.getId(), this, nameRoot);
 		
-		createTab(viewer, "Creating new Model");
+		createTab(viewer,  "Creating new Model");
 		
 	}
 	

@@ -45,8 +45,7 @@ import br.ufc.lps.splar.plugins.reasoners.bdd.javabdd.ReasoningWithBDD;
 import br.ufc.lps.splar.plugins.reasoners.sat.sat4j.ReasoningWithSAT;
 
 
-//Needs to refactor this class
-//Its has repeated code with class Model
+
 public class ContextModel implements IContextModel {
 
 	public static final String DEFAULT_CONTEXT = "default";

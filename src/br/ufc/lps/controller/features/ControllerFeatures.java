@@ -17,8 +17,8 @@ public class ControllerFeatures {
 			return false;
 		}
 	}
-	
-	public boolean removeFeatures(FeatureTreeNode feature){
+
+	public boolean removeFeatures(FeatureTreeNode feature) {
 		try {
 			feature.removeFromParent();
 			return true;
@@ -26,77 +26,74 @@ public class ControllerFeatures {
 			return false;
 		}
 	}
-	
-	
+
 	public String getArvoreDesenhada() {
 		return arvoreDesenhada;
 	}
-	
-	public void drawTree(FeatureTreeNode root){
+
+	public void drawTree(FeatureTreeNode root) {
 		arvoreDesenhada = "";
 		drawTreeChildren(root);
-		arvoreDesenhada = "\n"+root.toString() + "(_r)\n" + arvoreDesenhada;
+		arvoreDesenhada = "\n" + root.toString() + "(_r)\n" + arvoreDesenhada;
 	}
-	
-	private void drawTreeChildren(FeatureTreeNode feature){
-		
-		if(feature == null)
+
+	private void drawTreeChildren(FeatureTreeNode feature) {
+
+		if (feature == null)
 			return;
-		
-		if(feature.getChildCount() > 0){
-			for(int i=0; i < feature.getChildCount(); i++){
-				FeatureTreeNode filha = (FeatureTreeNode)feature.getChildAt(i);
-				
-				for(int j=0; j < feature.getLevel()+1; j++)
-					arvoreDesenhada+="\t";
-				
-				if(filha.getTypeFeature().equals(TypeFeature.GROUP_OR) ||
-						filha.getTypeFeature().equals(TypeFeature.GROUP_XOR)){
+
+		if (feature.getChildCount() > 0) {
+			for (int i = 0; i < feature.getChildCount(); i++) {
+				FeatureTreeNode filha = (FeatureTreeNode) feature.getChildAt(i);
+
+				for (int j = 0; j < feature.getLevel() + 1; j++)
+					arvoreDesenhada += "\t";
+
+				if (filha.getTypeFeature().equals(TypeFeature.GROUP_OR)
+						|| filha.getTypeFeature().equals(TypeFeature.GROUP_XOR)) {
 					FeatureGroup fg = (FeatureGroup) filha;
-					if(fg.getMax() == -1)
-						arvoreDesenhada+=":g ("+filha.getID()+") [1,*]\n";
+					if (fg.getMax() == -1)
+						arvoreDesenhada += ":g (" + filha.getID() + ") [1,*]\n";
 					else
-						arvoreDesenhada+=":g ("+filha.getID()+") [1,1]\n";
-				}else
-					arvoreDesenhada+=filha.toString()+"("+filha.getID()+")"+"\n";
-				
+						arvoreDesenhada += ":g (" + filha.getID() + ") [1,1]\n";
+				} else
+					arvoreDesenhada += filha.toString() + "(" + filha.getID() + ")" + "\n";
+
 				drawTreeChildren(filha);
 			}
 		}
 	}
-	
-	
-	private String getNextId(FeatureTreeNode pai){
+
+	private String getNextId(FeatureTreeNode pai) {
 		String id;
-		
-		if(pai == null)
+
+		if (pai == null)
 			return null;
-		
+
 		int quantidadeFilhos = pai.getChildCount();
-		
-		if(quantidadeFilhos > 0){
+
+		if (quantidadeFilhos > 0) {
 			int idMaior = 1;
-			for(int i=0; i < quantidadeFilhos; i++){
+			for (int i = 0; i < quantidadeFilhos; i++) {
 				FeatureTreeNode filho = (FeatureTreeNode) pai.getChildAt(i);
 				String idFilho = filho.getID();
-				String [] idParticionado = idFilho.split("_");
-				String ultimoItemId = idParticionado[idParticionado.length-1];
-				try{
+				String[] idParticionado = idFilho.split("_");
+				String ultimoItemId = idParticionado[idParticionado.length - 1];
+				try {
 					int ultimoValor = Integer.parseInt(ultimoItemId);
-					if(ultimoValor > idMaior)
+					if (ultimoValor > idMaior)
 						idMaior = ultimoValor;
-				}catch (Exception e) {
+				} catch (Exception e) {
 					System.err.println("MODELO MAL FORMADO");
 					return null;
 				}
 			}
-			id = pai.getID()+"_"+(idMaior+1);
-		}else{
-			id = pai.getID()+"_"+1;
-		}	
+			id = pai.getID() + "_" + (idMaior + 1);
+		} else {
+			id = pai.getID() + "_" + 1;
+		}
 		return id;
 	}
-
 
 	private FeatureTreeNode getTypeFeature(FeatureTreeNode featurePai, TypeFeature typeFeatures, String name) {
 

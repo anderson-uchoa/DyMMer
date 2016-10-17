@@ -14,7 +14,7 @@ import br.ufc.lps.repositorio.MedidasContexto;
 import br.ufc.lps.repositorio.SchemeXml;
 import br.ufc.lps.view.Main;
 
-public class ViewerPanelResulMeasures extends JPanel {
+public class ViewerPanelResultMeasures extends JPanel {
 	
 	private static String colunas[] = {"Name Context", "Number Of Features", "Number Of Optional Features", "Number Of Top Features", "Number Of Leaf Features",
 			"Depth Of Tree Max", "Depth Of Tree Median", "Cognitive Complexity Of A Feature Model", "Flexibility Of Configuration", "Single Cyclic Dependent Features",
@@ -28,7 +28,7 @@ public class ViewerPanelResulMeasures extends JPanel {
 	private Main main;
 	private JTable tabela;
 	
-	public ViewerPanelResulMeasures(final Main main, SchemeXml xml) {
+	public ViewerPanelResultMeasures(final Main main, SchemeXml xml) {
 		this.main = main;
 		
 		setBorder(new EmptyBorder(5, 5, 5, 5));

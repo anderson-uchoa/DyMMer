@@ -5,11 +5,13 @@ import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -45,7 +47,7 @@ import br.ufc.lps.repositorio.SchemeXml;
 import br.ufc.lps.view.panels.CreatorPanel;
 import br.ufc.lps.view.panels.EditorPanel;
 import br.ufc.lps.view.panels.ViewerPanel;
-import br.ufc.lps.view.panels.ViewerPanelResulMeasures;
+import br.ufc.lps.view.panels.ViewerPanelResultMeasures;
 import br.ufc.lps.view.panels.ViewerPanelResultFeatures;
 
 public class Main extends JFrame {
@@ -101,6 +103,8 @@ public class Main extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 640, 480);
 		setLocationRelativeTo(null);
+		setTitle("DyMMer");
+		setIconImage(new ImageIcon("images/icone.png").getImage());
 
 		tabbedPane = new JTabbedPane();
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
@@ -360,7 +364,7 @@ public class Main extends JFrame {
 		
 		currentViewer = viewer;
 		
-		createTab(viewer, viewer.getModelName());
+		createTab(viewer, schemeXml.getNameXml());
 		
 	}
 	
@@ -414,7 +418,7 @@ public class Main extends JFrame {
 		String path = schemeXml.getFile().getAbsolutePath();
 		final EditorPanel viewer = new EditorPanel(new SplotModel(path), ModelID.SPLOT_MODEL.getId(), path, schemeXml, this);
 		
-		createTab(viewer, viewer.getModelName());
+		createTab(viewer, schemeXml.getNameXml());
 	}
 	
 	public void recarregarListaFeatures(){
@@ -501,7 +505,7 @@ public class Main extends JFrame {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				JComponent a = new ViewerPanelResulMeasures(Main.this, schema);
+				JComponent a = new ViewerPanelResultMeasures(Main.this, schema);
 				createTab(a, "Medidas das Features");
 			}
 		}).start();

@@ -3,15 +3,14 @@
 <style>
 
 text {
-  font: 11px tahoma;
+  font: 8px tahoma;
 }
 
 body {
-            overflow: hidden;
-            margin: 0;
-            font-size: 12px;
-            font-family: "Helvetica Neue", Helvetica;
-        }
+    margin: 0;
+    font-size: 8px;
+    font-family: "Helvetica Neue", Helvetica;
+}
 
 
 .svg-container {
@@ -34,6 +33,7 @@ body {
 	<div id="body"></div>
 </center>
 <script src="js/d3.v3.js"></script>
+<script src="js/jquery-3.1.0.min.js"></script>
 <script>
 
 var diameter = 960,
@@ -68,7 +68,14 @@ function receber(config){
       .filter(function(d) { return !d.children; }))
     .enter().append("g")
       .attr("class", "node")
-      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+      .on("mouseover", function(d){
+			showToolTip(" "+d.className+"<br>"+d.value+" ",d.x+d3.mouse(this)[0]+50,d.y+d3.mouse(this)[1],true);
+	   })
+	   .on("mouseout", function()
+	   {
+			showToolTip(" ",0,0,false);
+	   });
 
   node.append("title")
       .text(function(d) { return d.className + ": " + format(d.value); });
@@ -99,5 +106,20 @@ function classes(root) {
 }
 
 d3.select(self.frameElement).style("height", chartHeight + "px");
+
+function showToolTip(pMessage,pX,pY,pShow)
+{
+  if (typeof(tooltipDivID)=="undefined")
+  {
+             tooltipDivID = $('<div id="messageToolTipDiv" style="position:absolute;display:block;z-index:10000;border:2px solid black;background-color:rgba(0,0,0,0.8);margin:auto;padding:3px 5px 3px 5px;color:white;font-size:12px;font-family:arial;border-radius: 5px;vertical-align: middle;text-align: center;min-width:50px;overflow:auto;"></div>');
+
+		$('#body').append(tooltipDivID);
+  }
+  if (!pShow) { tooltipDivID.hide(); return;}
+  //MT.tooltipDivID.empty().append(pMessage);
+  tooltipDivID.html(pMessage);
+  tooltipDivID.css({top:pY,left:pX});
+  tooltipDivID.show();
+}
 
 </script>

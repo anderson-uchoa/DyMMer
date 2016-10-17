@@ -794,7 +794,7 @@ public class BrowserController{
     	   Gson g = new Gson();
     	   String saida = g.toJson(config);
     	   
-    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/treeMapTitleNameResize.html");
+    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/collapsibleForceLayout.html");
     	   browser.addLoadListener(new LoadAdapter() {
                @Override
                public void onFinishLoadingFrame(FinishLoadingEvent event) {

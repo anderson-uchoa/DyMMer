@@ -23,7 +23,7 @@ import br.ufc.lps.view.Main;
 
 public class ViewerPanelResultFeatures extends JPanel {
 	
-	private static String colunas[] = {"Nome"};
+	private static String colunas[] = {"N°","Nome"};
 	private DefaultTableModel mDefaultTableModel;
 	private ControladorXml controladorXml;
 	private List<SchemeXml> listaItens;
@@ -253,7 +253,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 					@Override
 					public void run() {
 						int [] selecao = tabela.getSelectedRows();
-						if(selecao.length > 0 && selecao.length < 11){
+						if(selecao.length > 0 && selecao.length < 41){
 							for(int i=0; i < selecao.length; i++){
 								SchemeXml selecionado = listaItens.get(selecao[i]);
 								File file = ControladorXml.createFileFromXml(selecionado.getXml());
@@ -261,7 +261,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 								main.abrirArquivosDoRepositorio(selecionado);
 							}
 						}else
-							JOptionPane.showMessageDialog(null, "Selecione uma faixa adequada de modelos na tabela (até 10 por vez)");
+							JOptionPane.showMessageDialog(null, "Selecione uma faixa adequada de modelos na tabela (até 40 por vez)");
 					}
 				}).start();
 			
@@ -314,12 +314,12 @@ public class ViewerPanelResultFeatures extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-new Thread(new Runnable() {
+				new Thread(new Runnable() {
 					
 					@Override
 					public void run() {
 						int [] selecao = tabela.getSelectedRows();
-						if(selecao.length > 0 && selecao.length < 11){
+						if(selecao.length > 0 && selecao.length < 41){
 							for(int i=0; i < selecao.length; i++){
 								SchemeXml selecionado = listaItens.get(selecao[i]);
 								File file = ControladorXml.createFileFromXml(selecionado.getXml());
@@ -327,7 +327,7 @@ new Thread(new Runnable() {
 								main.editarArquivosDoRepositorio(selecionado);
 							}
 						}else
-							JOptionPane.showMessageDialog(null, "Selecione uma faixa adequada de modelos na tabela (até 10 por vez)");
+							JOptionPane.showMessageDialog(null, "Selecione uma faixa adequada de modelos na tabela (até 40 por vez)");
 					}
 				}).start();
 			}
@@ -347,18 +347,26 @@ new Thread(new Runnable() {
 		delete.setEnabled(status);
 	}
 	
+	private int getWidthByNumber(Integer count){
+		String numero = count.toString();
+		System.out.println(numero.length());
+		return numero.length()*15;
+	}
+	
 	public synchronized void carregarItens(){
 		listaItens = controladorXml.getXml();
 		mDefaultTableModel.setRowCount(0);
+		int count = 1;
 		if(listaItens!=null){
 			if(listaItens.size() > 0){
 				for(SchemeXml sc : listaItens){
-					mDefaultTableModel.addRow(new String[]{sc.getNameXml()});
+					mDefaultTableModel.addRow(new String[]{(count++)+"-", sc.getNameXml()});
 				}
 					setBotoes(true);
 			} else {
 				setBotoes(false);
 			}
+			tabela.getColumnModel().getColumn(0).setMaxWidth(getWidthByNumber(count));
 		}else{
 			labelMensagens.setText("Ocorreu algum problema na conexão");
 			JOptionPane.showMessageDialog(null, "Ocorreu algum problema na conexão");

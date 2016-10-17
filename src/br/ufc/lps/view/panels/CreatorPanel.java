@@ -360,6 +360,71 @@ public class CreatorPanel extends JPanel implements ActionListener {
 			}
 		});
 		
+	
+		panelNewContext.add(btnNewContext);
+
+		JButton addTreeRnf = new JButton("Add RNF");
+		
+		addTreeRnf.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JButton botao = ((JButton)e.getSource());
+				if(!treeRnfAdicionada){
+					if(!getComponent(1).equals(scrollPaneRnf)){
+						botao.setText("Remove RNF");
+						treeRnfAdicionada = true;
+						add(scrollPaneRnf, 1);
+						updateUI();
+					}
+				}else{
+					if(getComponent(1).equals(scrollPaneRnf)){
+						botao.setText("Add RNF");
+						treeRnfAdicionada = false;
+						remove(1);
+						updateUI();
+					}
+				}
+			}
+		});
+		
+		JPanel panelMessage = new JPanel();
+		panelInfos.add(panelMessage, BorderLayout.SOUTH);
+		panelMessage.setLayout(new GridLayout(0, 1, 0, 0));
+
+		JLabel lblMessageTitle = new JLabel("Message:");
+		lblMessageTitle.setHorizontalAlignment(SwingConstants.LEFT);
+		panelMessage.add(lblMessageTitle);
+
+		txtMessageText = new JTextArea();
+		txtMessageText.setText("None for while...");
+		txtMessageText.setLineWrap(true);
+		txtMessageText.setEditable(false);
+		txtMessageText.setBackground(SystemColor.menu);
+		panelMessage.add(txtMessageText);
+
+		JPanel panel = new JPanel();
+		panelInfos.add(panel, BorderLayout.CENTER);
+		panel.setLayout(new BorderLayout(0, 0));
+
+		JPanel panelConstraint = new JPanel();
+		panel.add(panelConstraint, BorderLayout.NORTH);
+		panelConstraint.setLayout(new GridLayout(0, 1, 0, 0));
+
+		JSeparator separator = new JSeparator();
+		panelConstraint.add(separator);
+
+		addTreeRnf.setHorizontalAlignment(SwingConstants.CENTER);
+		panelConstraint.add(addTreeRnf);
+
+		jbuttonSalvar = new JButton("Save in repository");
+		jbuttonSalvar.setHorizontalAlignment(SwingConstants.CENTER);
+		panelConstraint.add(jbuttonSalvar);
+		
+		jbuttonLocal = new JButton("Save in local");
+		jbuttonLocal.setHorizontalAlignment(SwingConstants.CENTER);
+		panelConstraint.add(jbuttonLocal);
+		
 		jbuttonLocal.addActionListener(new ActionListener() {
 
 			@Override
@@ -448,69 +513,6 @@ public class CreatorPanel extends JPanel implements ActionListener {
 			}
 		});
 
-		panelNewContext.add(btnNewContext);
-
-		JButton addTreeRnf = new JButton("Add RNF");
-		
-		addTreeRnf.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JButton botao = ((JButton)e.getSource());
-				if(!treeRnfAdicionada){
-					if(!getComponent(1).equals(scrollPaneRnf)){
-						botao.setText("Remove RNF");
-						treeRnfAdicionada = true;
-						add(scrollPaneRnf, 1);
-						updateUI();
-					}
-				}else{
-					if(getComponent(1).equals(scrollPaneRnf)){
-						botao.setText("Add RNF");
-						treeRnfAdicionada = false;
-						remove(1);
-						updateUI();
-					}
-				}
-			}
-		});
-		
-		JPanel panelMessage = new JPanel();
-		panelInfos.add(panelMessage, BorderLayout.SOUTH);
-		panelMessage.setLayout(new GridLayout(0, 1, 0, 0));
-
-		JLabel lblMessageTitle = new JLabel("Message:");
-		lblMessageTitle.setHorizontalAlignment(SwingConstants.LEFT);
-		panelMessage.add(lblMessageTitle);
-
-		txtMessageText = new JTextArea();
-		txtMessageText.setText("None for while...");
-		txtMessageText.setLineWrap(true);
-		txtMessageText.setEditable(false);
-		txtMessageText.setBackground(SystemColor.menu);
-		panelMessage.add(txtMessageText);
-
-		JPanel panel = new JPanel();
-		panelInfos.add(panel, BorderLayout.CENTER);
-		panel.setLayout(new BorderLayout(0, 0));
-
-		JPanel panelConstraint = new JPanel();
-		panel.add(panelConstraint, BorderLayout.NORTH);
-		panelConstraint.setLayout(new GridLayout(0, 1, 0, 0));
-
-		JSeparator separator = new JSeparator();
-		panelConstraint.add(separator);
-
-		addTreeRnf.setHorizontalAlignment(SwingConstants.CENTER);
-		panelConstraint.add(addTreeRnf);
-
-		jbuttonSalvar = new JButton("Save in repository");
-		jbuttonSalvar.setHorizontalAlignment(SwingConstants.CENTER);
-		panelConstraint.add(jbuttonSalvar);
-		
-		jbuttonLocal = new JButton("Save in local");
-		jbuttonLocal.setHorizontalAlignment(SwingConstants.CENTER);
-		panelConstraint.add(jbuttonLocal);
 		
 		JLabel lblConstraint = new JLabel("Constraint:");
 		lblConstraint.setHorizontalAlignment(SwingConstants.CENTER);

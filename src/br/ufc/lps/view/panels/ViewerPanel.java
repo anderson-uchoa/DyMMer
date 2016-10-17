@@ -328,7 +328,7 @@ public class ViewerPanel extends JPanel {
 			PropositionalFormula formula = it.next();
 			variables = formula.getVariables();
 			
-			System.out.println("-------------");
+			//System.out.println("-------------");
 			
 			java.util.List<String> a = new ArrayList();
 			
@@ -356,7 +356,7 @@ public class ViewerPanel extends JPanel {
 				*/
 			}
 			//fpc.bindRestrict(this.treeP, a);
-			System.out.println("--------------");
+			//System.out.println("--------------");
 		}
 		
 		//for (Iterator iterator = fpc.getLista().keySet().iterator(); iterator.hasNext();) {

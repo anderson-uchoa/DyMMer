@@ -67,6 +67,23 @@
             font-size: 11px;
             cursor: pointer
         }
+        
+        .svg-container {
+		    display: inline-block;
+		    position: relative;
+		    width: 100%;
+		    padding-bottom: 100%; /* aspect ratio */
+		    vertical-align: top;
+		    overflow: hidden;
+		}
+		.svg-content-responsive {
+		    display: inline-block;
+		    position: absolute;
+		    top: 10px;
+		    left: 10px;
+		    right: 10px;
+		    left: 10px;
+		}
     </style>
 </head>
 <body>
@@ -81,8 +98,8 @@
 
 <script type="text/javascript">
     var isIE = BrowserDetect.browser == 'Explorer';
-    var chartWidth = 550;
-    var chartHeight = 550;
+    var chartWidth = 680;
+    var chartHeight = 340;
     var xscale = d3.scale.linear().range([0, chartWidth]);
     var yscale = d3.scale.linear().range([0, chartHeight]);
     var color = d3.scale.category10();
@@ -101,10 +118,14 @@
         });
 
     var chart = d3.select("#body")
-        .append("svg:svg")
-        .attr("width", chartWidth)
-        .attr("height", chartHeight)
-        .append("svg:g");
+	   .append("div")
+	   .classed("svg-container", true) //container class to make it responsive
+	   .append("svg")
+	   //responsive SVG needs these 2 attributes and no width and height attr
+	   .attr("preserveAspectRatio", "xMinYMin meet")
+	   .attr("viewBox", "0 0 700 340")
+	   //class to make it responsive
+	   .classed("svg-content-responsive", true);
 
     //d3.json("../data/flare1.json", function(data) {
     function receber(config){

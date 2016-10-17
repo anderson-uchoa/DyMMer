@@ -2,8 +2,8 @@ package br.ufc.lps.model.normal;
 
 import br.ufc.lps.splar.core.fm.FeatureModel;
 
-public interface IModel {
-
+public interface IMeasuresWithoutContext {
+	
 	public FeatureModel getFeatureModel();
 
 	public String getModelName();
@@ -85,5 +85,6 @@ public interface IModel {
 	public double ratioSwitchFeatures();
 
 	public int crossTreeConstraintsVariables();
+	
 
 }

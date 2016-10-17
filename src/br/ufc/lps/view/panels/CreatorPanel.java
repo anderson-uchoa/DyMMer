@@ -53,10 +53,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-import br.ufc.lps.controller.export.WriteXMLmodel;
 import br.ufc.lps.controller.features.ControllerFeatures;
 import br.ufc.lps.controller.features.TypeFeature;
 import br.ufc.lps.controller.xml.ControladorXml;
+import br.ufc.lps.controller.xml.WriteXMLmodel;
 import br.ufc.lps.model.ContextoAdaptacao;
 import br.ufc.lps.model.ModelFactory;
 import br.ufc.lps.model.context.SplotContextModel;

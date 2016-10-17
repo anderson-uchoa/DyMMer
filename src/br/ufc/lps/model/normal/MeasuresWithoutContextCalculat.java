@@ -18,7 +18,7 @@ import br.ufc.lps.splar.plugins.reasoners.bdd.javabdd.FMReasoningWithBDD;
 import br.ufc.lps.splar.plugins.reasoners.bdd.javabdd.ReasoningWithBDD;
 import br.ufc.lps.splar.plugins.reasoners.sat.sat4j.ReasoningWithSAT;
 
-public class MeasuresWithoutContextCalculator implements IMeasuresWithoutContext {
+public class MeasuresWithoutContextCalculat implements IMeasuresWithoutContext {
 
 	private FeatureModel featureModel;
 	private ReasoningWithBDD bddReasoner;
@@ -26,10 +26,10 @@ public class MeasuresWithoutContextCalculator implements IMeasuresWithoutContext
 	private FeatureModelStatistics featureModelStatistics;
 	private int modelID;
 
-	public MeasuresWithoutContextCalculator() {
+	public MeasuresWithoutContextCalculat() {
 	}
 
-	public MeasuresWithoutContextCalculator(String pathModelFile, int modelID) {
+	public MeasuresWithoutContextCalculat(String pathModelFile, int modelID) {
 
 		this.modelID = modelID;
 

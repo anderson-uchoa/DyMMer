@@ -1,8 +1,8 @@
 package br.ufc.lps.model.context;
 
-import br.ufc.lps.model.normal.IModel;
+import java.util.ArrayList;
 
-public interface IContextModel extends IModel {
+public interface IMeasuresWithContext {
 
 	public int numberActivatedFeatures();
 
@@ -19,4 +19,15 @@ public interface IContextModel extends IModel {
 	public int contextAdaptationExtensibility();
 
 	public int contextAdaptationFlexibility();
+
+	public double activatedFeaturesByContextAdaptation();
+
+	public double desactivatedFeaturesByContextAdaptation();
+
+	public ArrayList<String> getAllDeactivatedFeatures();
+
+	public int contextFeatures();
+
+	public int contextFeaturesContraints();
+
 }

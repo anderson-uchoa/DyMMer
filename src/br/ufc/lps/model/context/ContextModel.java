@@ -795,6 +795,7 @@ public void setAdaptacoes(Map<String, Adaptacao> adaptacoes) {
 
 		int count = 0;
 		
+		
 		for(Map.Entry<String, Context> c : contexts.entrySet()){
 			count += c.getValue().getConstraints().size();
 		}

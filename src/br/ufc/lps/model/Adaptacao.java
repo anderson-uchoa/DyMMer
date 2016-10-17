@@ -6,6 +6,7 @@ package br.ufc.lps.model;
 import java.util.List;
 
 public class Adaptacao {
+	
 	private String nome;
 	private List<ContextoAdaptacao> valorAdaptacao;
 	

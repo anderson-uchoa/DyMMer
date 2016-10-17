@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -100,7 +101,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 		
 		painelMensagens.add(button3);
 
-		JButton button5 = new JButton("d3 Tree");
+		JButton button5 = new JButton("Nleaf x DTMax (largura x profundidade) Tree");
 		
 		painelMensagens.add(button5);
 		
@@ -115,6 +116,10 @@ public class ViewerPanelResultFeatures extends JPanel {
 		JButton button8 = new JButton("FEX");
 		
 		painelMensagens.add(button8);
+		
+		JButton button9 = new JButton("NF / NA / NO / NM (tamanho do modelo)");
+		
+		painelMensagens.add(button9);
 		
 		medidas = new JButton("Measures");
 		
@@ -224,18 +229,42 @@ public class ViewerPanelResultFeatures extends JPanel {
 			}
 		});
 		
+		button9.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int [] selecao = tabela.getSelectedRows();
+				if(selecao.length >= 2){
+					List<SchemeXml> list = new ArrayList<>();
+					for(int i=0; i < selecao.length; i++)
+						list.add(listaItens.get(i));
+					ViewerPanelResultFeatures.this.main.getD3TreeMapEvolucao(list);
+				}else
+					JOptionPane.showMessageDialog(null, "Selecione os modelos na tabela");
+			}
+		});
+		
 		open.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int selecao = tabela.getSelectedRow();
-				if(selecao > -1){
-					SchemeXml selecionado = listaItens.get(selecao);
-					File file = ControladorXml.createFileFromXml(selecionado.getXml());
-					selecionado.setFile(file);
-					main.abrirArquivosDoRepositorio(selecionado);
-				}else
-					mensagemSelecionarLinha();
+				new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						int [] selecao = tabela.getSelectedRows();
+						if(selecao.length > 0 && selecao.length < 11){
+							for(int i=0; i < selecao.length; i++){
+								SchemeXml selecionado = listaItens.get(selecao[i]);
+								File file = ControladorXml.createFileFromXml(selecionado.getXml());
+								selecionado.setFile(file);
+								main.abrirArquivosDoRepositorio(selecionado);
+							}
+						}else
+							JOptionPane.showMessageDialog(null, "Selecione uma faixa adequada de modelos na tabela (até 10 por vez)");
+					}
+				}).start();
+			
 			}
 		});
 		
@@ -285,14 +314,22 @@ public class ViewerPanelResultFeatures extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int selecao = tabela.getSelectedRow();
-				if(selecao > -1){
-					SchemeXml selecionado = listaItens.get(selecao);
-					File file = ControladorXml.createFileFromXml(selecionado.getXml());
-					selecionado.setFile(file);
-					main.editarArquivosDoRepositorio(selecionado);
-				}else
-					mensagemSelecionarLinha();
+new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						int [] selecao = tabela.getSelectedRows();
+						if(selecao.length > 0 && selecao.length < 11){
+							for(int i=0; i < selecao.length; i++){
+								SchemeXml selecionado = listaItens.get(selecao[i]);
+								File file = ControladorXml.createFileFromXml(selecionado.getXml());
+								selecionado.setFile(file);
+								main.editarArquivosDoRepositorio(selecionado);
+							}
+						}else
+							JOptionPane.showMessageDialog(null, "Selecione uma faixa adequada de modelos na tabela (até 10 por vez)");
+					}
+				}).start();
 			}
 		});
 		new Thread(new Runnable() {

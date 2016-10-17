@@ -143,11 +143,13 @@ public class ControladorXml{
 		String xml = ControladorXml.createXmlFromFile(file);
 		scheme.setXml(xml);
 		
+		if(schemaAnterior!=null){
+			scheme.set_id(schemaAnterior.get_id());
+			scheme.setNameXml(schemaAnterior.getNameXml());
+		}
+		
 		if(nome!=null)
 			scheme.setNameXml(nome);
-		
-		if(schemaAnterior!=null)
-			scheme.set_id(schemaAnterior.get_id());
 		
 		ContextModel model = new SplotContextModel(file.getAbsolutePath());
 		
@@ -168,6 +170,7 @@ public class ControladorXml{
 		scheme.setSingleCyclicDependentFeatures(model.singleCyclicDependentFeatures());
 		scheme.setMultipleCyclicDependentFeatures(model.multipleCyclicDependentFeatures());
 		scheme.setFeatureExtendibility(model.featureExtendibility());
+		scheme.setNumberOfAlternativeFeatures(model.numberOfAlternativeFeatures());
 		scheme.setCyclomaticComplexity(model.cyclomaticComplexity());
 		scheme.setVariableCrosstreeConstraints(model.crossTreeConstraintsVariables());
 		scheme.setCompoundComplexity(model.compoundComplexity());

@@ -424,8 +424,14 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+				String nome = null;
+				
+				if(schemeXml==null)
+					nome = JOptionPane.showInputDialog("Type the name of Model", model.getModelName());
+				
 				File file = new File(pathModelFile);
-				Boolean resultado = ControladorXml.salvarXMLRepositorio(null, file, schemeXml);
+				Boolean resultado = ControladorXml.salvarXMLRepositorio(nome, file, schemeXml);
 				if (resultado) {
 					JOptionPane.showMessageDialog(null, "Save Successfull");
 					EditorPanel.this.main.recarregarListaFeatures();
@@ -449,8 +455,6 @@ public class EditorPanel extends JPanel implements ActionListener {
 					JOptionPane.showMessageDialog(null, "Type a different name!");
 					return;
 				}
-				
-				
 				
 				schemeXml.setNameXml(nome);
 				File file = new File(pathModelFile);

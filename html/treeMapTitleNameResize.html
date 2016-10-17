@@ -221,13 +221,13 @@
                 return d.name;
             });
 
-        /*if (isIE) {
+        if (isIE) {
             childEnterTransition.selectAll(".foreignObject .labelbody .label")
                 .style("display", "none");
         } else {
             childEnterTransition.selectAll(".foreignObject")
                 .style("display", "none");
-        }*/
+        }
 
         // update transition
         var childUpdateTransition = childrenCells.transition().duration(transitionDuration);
@@ -322,15 +322,15 @@
         xscale.domain([d.x, d.x + d.dx]);
         yscale.domain([d.y, d.y + d.dy]);
 
-        /*if (node != level) {
+        if (node != level) {
             if (isIE) {
                 chart.selectAll(".cell.child .foreignObject .labelbody .label")
                     .style("display", "none");
             } else {
                 chart.selectAll(".cell.child .foreignObject")
-                    ;//.style("display", "none");
+                    .style("display", "none");
             }
-        }*/
+        }
 
         var zoomTransition = chart.selectAll("g.cell").transition().duration(transitionDuration)
             .attr("transform", function(d) {

@@ -215,8 +215,13 @@ public class ViewerPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					
-					String nome  = JOptionPane.showInputDialog("Digite o novo nome do modelo");
+					String nome = "";
 					
+					if(schemeXml!=null)
+						nome  = JOptionPane.showInputDialog("Digite o novo nome do modelo", schemeXml.getNameXml());
+					else
+						nome  = JOptionPane.showInputDialog("Digite o novo nome do modelo", model.getModelName());
+							
 					if(nome.equals("")){
 						JOptionPane.showMessageDialog(null, "É necessário pelo menos uma letra para o nome");
 						return;

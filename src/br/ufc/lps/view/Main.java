@@ -458,58 +458,123 @@ public class Main extends JFrame {
 	}
 	
 	public void numeroDeFeatures( List<SchemeXml>  lista){
-		JComponent a = BrowserController.getPie(lista);
-		createTab(a, "Número de Features");
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				JComponent a = BrowserController.getPie(lista);
+				createTab(a, "Número de Features");
+			}
+		}).start();
 	}
 
 	public void bubble( List<SchemeXml>  lista){
-		JComponent a = BrowserController.getBubble(lista);
-		createTab(a, "RoV x NVC (Variabilidade estática)");
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				JComponent a = BrowserController.getBubble(lista);
+				createTab(a, "RoV x NVC (Variabilidade estática)");
+			}
+		}).start();
 	}
 
 	public void ComparacaoContextos( SchemeXml  schema){
-		JComponent a = BrowserController.getBar(schema);
-		createTab(a, "Comparação Contextos Radar");
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				JComponent a = BrowserController.getBar(schema);
+				createTab(a, "Comparação Contextos Radar");
+			}
+		}).start();
 	}
 
 	public void comparacaoContextosLine( SchemeXml schema){
-		JComponent a = BrowserController.getLine(schema);
-		createTab(a, "Comparação Contextos Line");
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				JComponent a = BrowserController.getLine(schema);
+				createTab(a, "Comparação Contextos Line");
+			}
+		}).start();
 	}
 	
 	public void abrirMedidas( SchemeXml schema){
-		JComponent a = new ViewerPanelResulMeasures(this, schema);
-		createTab(a, "Medidas das Features");
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				JComponent a = new ViewerPanelResulMeasures(Main.this, schema);
+				createTab(a, "Medidas das Features");
+			}
+		}).start();
 	}
 	
 	public void abrirD3( List<SchemeXml> schema){
-		JComponent a = BrowserController.getD3(schema);
-		createTab(a, "Nleaf x DTMax (largura x profundidade)");
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				JComponent a = BrowserController.getD3(schema);
+				createTab(a, "Nleaf x DTMax (largura x profundidade)");
+			}
+		}).start();
 	}
 	
 	public void abrirD3Tree( List<SchemeXml> schema){
-		JComponent a = BrowserController.getD3Tree(schema);
-		createTab(a, "teste");
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				JComponent a = BrowserController.getD3Tree(schema);
+				createTab(a, "Nleaf x DTMax (largura x profundidade) Tree");
+			}
+		}).start();
 	}
 	
 	public void abrirD3Bubble( List<SchemeXml> schema){
-		JComponent a = BrowserController.getD3Bubble(schema);
-		createTab(a, "Nleaf x DTMax (largura x profundidade)");
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				JComponent a = BrowserController.getD3Bubble(schema);
+				createTab(a, "Nleaf x DTMax (largura x profundidade)");
+			}
+		}).start();
 	}
 	
 	public void abrirD3BubbleRoVxNVC( List<SchemeXml> schema){
-		JComponent a = BrowserController.getD3BubbleRoVxNVC(schema);
-		createTab(a, "RoV x NVC (Variabilidade estática)");
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				JComponent a = BrowserController.getD3BubbleRoVxNVC(schema);
+				createTab(a, "RoV x NVC (Variabilidade estática)");
+			}
+		}).start();
 	}
 	
 	public void abrirD3FoC( List<SchemeXml> schema){
-		JComponent a = BrowserController.getD3FoC(schema);
-		createTab(a, "FoC (Flexibilidade)");
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				JComponent a = BrowserController.getD3FoC(schema);
+				createTab(a, "FoC (Flexibilidade)");
+			}
+		}).start();
 	}
 	
 	public void abrirD3FEX( List<SchemeXml> schema){
-		JComponent a = BrowserController.getD3FEX(schema);
-		createTab(a, "FEX (Analisabilidade)");
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				JComponent a = BrowserController.getD3FEX(schema);
+				createTab(a, "FEX (Analisabilidade)");
+			}
+		}).start();
+	}
+	
+	public void getD3TreeMapEvolucao( List<SchemeXml> schema){
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				JComponent a = BrowserController.getD3TreeMapEvolucao(schema);
+				createTab(a, "NF / NA / NO / NM (tamanho do modelo)");
+			}
+		}).start();
 	}
 
 	private void initXMLmodels() {

@@ -770,6 +770,9 @@ public class BrowserController{
 			   
 			   double nlf = sch.getNumberOfLeafFeatures();
 			   double dtm = sch.getDepthOfTreeMax();
+			   
+			   System.out.println("Name: "+sch.getNameXml()+" nlf: "+nlf+" dtm: "+dtm);
+			   
     		   if(nlf > dtm){
     			   addC.setSize(nlf);
     			   listaNleaf.add(addC);
@@ -780,18 +783,18 @@ public class BrowserController{
     	   }
     	   Children aaa = new Children();
     	   aaa.setSize(45d);
-    	   aaa.setName("suhasua");
+    	   aaa.setName("teste 1");
 		   listaDTMax.add(aaa);
 		   
 		   Children aaab = new Children();
     	   aaab.setSize(10d);
-    	   aaab.setName("suheuh");
+    	   aaab.setName("teste 2");
 		   listaDTMax.add(aaab);
     	   
     	   Gson g = new Gson();
     	   String saida = g.toJson(config);
     	   
-    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/treeMapTitle.html");
+    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/treeMapTitleNameResize.html");
     	   browser.addLoadListener(new LoadAdapter() {
                @Override
                public void onFinishLoadingFrame(FinishLoadingEvent event) {
@@ -813,6 +816,139 @@ public class BrowserController{
     	   return new BrowserView(browser);
     	   
        }
+       
+       public static JComponent getD3TreeMapEvolucao(List<SchemeXml> scheme){
+    	   Browser browser = new Browser();
+    	   int removedNF = 0;
+    	   int removedNA = 0;
+    	   int removedNO = 0;
+    	   int removedNM = 0;
+    	   int adicionedNF = 0;
+    	   int adicionedNA = 0;
+    	   int adicionedNO = 0;
+    	   int adicionedNM = 0;
+    	   
+    	   for(int i=0; i < scheme.size(); i++){
+    		   if((i+1) < scheme.size()){
+    			   int result = scheme.get(i).getNumberOfFeatures() - scheme.get(i+1).getNumberOfFeatures();
+    			   
+    			   if(result < 0)
+    				   removedNF+=(result*-1);
+    			   else if(result > 0)
+    				   adicionedNF+=result;
+    			   
+    			   result = scheme.get(i).getNumberOfAlternativeFeatures()!=null ? scheme.get(i).getNumberOfAlternativeFeatures() : 1  - (scheme.get(i+1).getNumberOfAlternativeFeatures()!=null ? scheme.get(i+1).getNumberOfAlternativeFeatures() : 2);
+    			   
+    			   if(result < 0)
+    				   removedNA+=(result*-1);
+    			   else if(result > 0)
+    				   adicionedNA+=result;
+    			   
+    			   result = scheme.get(i).getNumberOfOptionalFeatures() - scheme.get(i+1).getNumberOfOptionalFeatures();
+    			   
+    			   if(result < 0)
+    				   removedNO+=(result*-1);
+    			   else if(result > 0)
+    				   adicionedNO+=result;
+    			   
+    			   result = scheme.get(i).getNumberOfMandatoryFeatures() - scheme.get(i+1).getNumberOfMandatoryFeatures();
+    			   
+    			   if(result < 0)
+    				   removedNM+=(result*-1);
+    			   else if(result > 0)
+    				   adicionedNM+=result;
+    		   }
+    	   }
+    	   
+    	   Config config = new Config();
+    	   Children c = new Children();
+    	   c.setName("NF / NA / NO / NM (tamanho do modelo)");
+    	   //NUMERO FEATURES - NUMERO ALTERNATIVA - NUMERO OPCIONAL - NUMERO MANDATORY 
+    	   config.setRoot(c);
+    	   
+    	   List<Children> groupsTree = new ArrayList<>();
+    	   Children removed = new Children();
+    	   removed.setName("Removed Features");
+    	   groupsTree.add(removed);
+    	   Children adicioned = new Children();
+    	   adicioned.setName("Adicioned Features");
+    	   groupsTree.add(adicioned);
+    	   c.setChildren(groupsTree);
+    	   
+    	   List<Children> listaRemoved = new ArrayList<>();
+    	   removed.setChildren(listaRemoved);
+    	   List<Children> listaAdicioned = new ArrayList<>();
+    	   adicioned.setChildren(listaAdicioned);
+
+    	   Children rnf = new Children();
+    	   rnf.setSize(Double.parseDouble(removedNF+""));
+    	   rnf.setName("NF = "+removedNF);
+		   listaRemoved.add(rnf);
+		   
+		   Children rna = new Children();
+    	   rna.setSize(Double.parseDouble(removedNA+""));
+    	   rna.setName("NA = "+removedNA);
+		   listaRemoved.add(rna);
+		   
+		   Children rno = new Children();
+    	   rno.setSize(Double.parseDouble(removedNO+""));
+    	   rno.setName("NO = "+removedNO);
+		   listaRemoved.add(rno);
+		   
+		   Children rnm = new Children();
+    	   rnm.setSize(Double.parseDouble(removedNM+""));
+    	   rnm.setName("NM = "+removedNM);
+		   listaRemoved.add(rnm);
+		   
+		   //
+		   
+		   Children anf = new Children();
+    	   anf.setSize(Double.parseDouble(adicionedNF+""));
+    	   anf.setName("NF = "+adicionedNF);
+		   listaAdicioned.add(anf);
+		   
+		   Children ana = new Children();
+    	   ana.setSize(Double.parseDouble(adicionedNA+""));
+    	   ana.setName("NA = "+adicionedNA);
+		   listaAdicioned.add(ana);
+		   
+		   Children ano = new Children();
+    	   ano.setSize(Double.parseDouble(adicionedNO+""));
+    	   ano.setName("NO = "+adicionedNO);
+		   listaAdicioned.add(ano);
+		   
+		   Children anm = new Children();
+    	   anm.setSize(Double.parseDouble(adicionedNM+""));
+    	   anm.setName("NM = "+adicionedNM);
+		   listaAdicioned.add(anm);
+    	   
+    	   Gson g = new Gson();
+    	   String saida = g.toJson(config);
+    	   
+    	   System.out.println(saida);
+    	   
+    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/treeMapTitle.html");
+    	   browser.addLoadListener(new LoadAdapter() {
+               @Override
+               public void onFinishLoadingFrame(FinishLoadingEvent event) {
+                   if (event.isMainFrame()) {
+                       event.getBrowser().executeJavaScript("receber('"+saida+"')");
+                   }
+               }
+           });
+    	   browser.addConsoleListener(new ConsoleListener() {
+			
+			@Override
+			public void onMessage(ConsoleEvent arg0) {
+				// TODO Auto-generated method stub
+				System.out.println(arg0.getMessage());
+				
+			}
+		});
+    	   
+    	   return new BrowserView(browser);
+       }
+      
        
        public static String getJSON(String arquivo){
     	   JsonElement jsonObject;

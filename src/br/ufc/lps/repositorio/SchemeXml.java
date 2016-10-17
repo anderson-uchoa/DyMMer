@@ -24,6 +24,8 @@ public class SchemeXml {
 	@Expose
 	private Integer numberOfLeafFeatures;
 	@Expose
+	private Integer numberOfAlternativeFeatures;
+	@Expose
 	private Integer depthOfTreeMax;
 	@Expose
 	private Double depthOfTreeMedian;
@@ -356,6 +358,14 @@ public class SchemeXml {
 
 	public void setMedidasContexto(List<MedidasContexto> medidasContexto) {
 		this.medidasContexto = medidasContexto;
+	}
+
+	public Integer getNumberOfAlternativeFeatures() {
+		return numberOfAlternativeFeatures;
+	}
+
+	public void setNumberOfAlternativeFeatures(Integer numberOfAlternativeFeatures) {
+		this.numberOfAlternativeFeatures = numberOfAlternativeFeatures;
 	}
 
 	@Override

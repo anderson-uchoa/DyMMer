@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -95,11 +96,10 @@ import br.ufc.lps.view.trees.ValorAdaptacao;
 public class CreatorPanel extends JPanel implements ActionListener {
 
 	protected static final String BASE_NAME_CONSTRAINT = "contextConstraint";
-	private IModel model;
 	private JTextField textFieldNewContext;
-	public JTree tree;
-	public JTree treeRnf;
-	public JTree treeAdaptation;
+	private JTree tree;
+	private JTree treeRnf;
+	private JTree treeAdaptation;
 	private FeatureTreeNode selectedNode;
 	private JTextArea txtMessageText;
 	private JButton btnNewContext;
@@ -115,14 +115,16 @@ public class CreatorPanel extends JPanel implements ActionListener {
 	private List<Constraint> constraintsList;
 	private int constraintNumber;
 	private Integer modelID;
-	private String pathModelFile = "tests/test_fm_consistent.xml";
+	private String pathModelFile = "modelBase/model_base.xml";
 	private Boolean treeRnfAdicionada = false;
 	private Main main;
 	private JButton jbuttonSalvar;
+	private JButton jbuttonLocal;
 	private ControllerFeatures controllerFeatures;
 	private SplotContextModel splotContextModel;
 	private DefaultTreeModel treeModel;
-	JPopupMenu menu;
+	private JPopupMenu menu;
+	private File fileTemp;
 
 	/**
 	 * Create the panel.
@@ -138,6 +140,12 @@ public class CreatorPanel extends JPanel implements ActionListener {
 		constraintLiterals = new ArrayList<Literal>();
 		constraintsList = new ArrayList<Constraint>();
 		
+		try {
+			fileTemp = File.createTempFile(UUID.randomUUID()+"", ".xml");
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
+		
 		splotContextModel = new SplotContextModel(pathModelFile);
 		
 		menu = new JPopupMenu();
@@ -146,7 +154,6 @@ public class CreatorPanel extends JPanel implements ActionListener {
 
 		this.modelID = modelID;
 
-		this.model = new SplotModel(pathModelFile);
 		resolutions = new ArrayList<Resolution>();
 
 		tree = new   JTree();
@@ -162,7 +169,7 @@ public class CreatorPanel extends JPanel implements ActionListener {
 		tree.setComponentPopupMenu(getComponentPopupMenu());
 		tree.addMouseListener(getMouseListener());
 
-		treeRnf.setModel(new FeatureModelTree(model.getFeatureModel().getRoot()));
+		treeRnf.setModel(new FeatureModelTree(featureRoot));
 
 		treeRnf.setEditable(true);
 		treeRnf.setComponentPopupMenu(getComponentPopupMenu());
@@ -312,7 +319,95 @@ public class CreatorPanel extends JPanel implements ActionListener {
 						Transformer transformer = TransformerFactory.newInstance().newTransformer();
 						transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 						DOMSource source = new DOMSource(doc);
-						StreamResult console = new StreamResult(new FileOutputStream(CreatorPanel.this.pathModelFile));
+						StreamResult console = new StreamResult(new FileOutputStream(CreatorPanel.this.fileTemp));
+						transformer.transform(source, console);
+
+						textFieldNewContext.setText("");
+						constraintLiterals.clear();
+						constraints.clear();
+						constraintsList.clear();
+						constraintsListModel.update();
+						txtAddTheFeatures.setText("");
+						resolutions.clear();
+						txtMessageText.setText("None for while...");
+						constraintNumber = 0;
+
+						CreatorPanel.this.tree.updateUI();
+						JOptionPane.showMessageDialog(CreatorPanel.this,
+								"Your context has been saved. Now, open the file to see it.");
+
+					} catch (SAXException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ParserConfigurationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (TransformerConfigurationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (TransformerFactoryConfigurationError e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (TransformerException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+				}
+			}
+		});
+		
+		jbuttonLocal.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				if (textFieldNewContext.getText().equals("")) {
+					txtMessageText.setText("Please, type the context name.");
+					lblNewContext.setForeground(Color.RED);
+					textFieldNewContext.requestFocus();
+				} else {
+
+					DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+					try {
+
+						DocumentBuilder db = dbf.newDocumentBuilder();
+						Document doc = db.parse(CreatorPanel.this.pathModelFile);
+
+						Element rootEle = doc.getDocumentElement();
+
+						FeatureTreeNode root = (FeatureTreeNode)tree.getModel().getRoot();
+						
+						Node tree = null;
+						
+						for(int i=0; i < rootEle.getChildNodes().getLength(); i++){
+							tree = rootEle.getChildNodes().item(i);
+							if(tree.getNodeName().equals("feature_tree"))
+								break;
+						}
+						
+						rootEle.removeChild(tree);
+						
+						controllerFeatures.drawTree(root);
+						controllerFeatures.getArvoreDesenhada();
+						
+						Node newTree = doc.createElement("feature_tree");
+						
+						newTree.appendChild(doc.createTextNode(controllerFeatures.getArvoreDesenhada()));
+						
+						rootEle.appendChild(newTree);
+						
+						rootEle.appendChild(WriteXMLmodel.getContext(doc, textFieldNewContext.getText(),
+								CreatorPanel.this.resolutions, new ArrayList<String>(constraints.values())));
+
+						Transformer transformer = TransformerFactory.newInstance().newTransformer();
+						transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+						DOMSource source = new DOMSource(doc);
+						StreamResult console = new StreamResult(new FileOutputStream(CreatorPanel.this.fileTemp));
 						transformer.transform(source, console);
 
 						textFieldNewContext.setText("");
@@ -409,9 +504,13 @@ public class CreatorPanel extends JPanel implements ActionListener {
 		addTreeRnf.setHorizontalAlignment(SwingConstants.CENTER);
 		panelConstraint.add(addTreeRnf);
 
-		jbuttonSalvar = new JButton("Save in repository.");
+		jbuttonSalvar = new JButton("Save in repository");
 		jbuttonSalvar.setHorizontalAlignment(SwingConstants.CENTER);
 		panelConstraint.add(jbuttonSalvar);
+		
+		jbuttonLocal = new JButton("Save in local");
+		jbuttonLocal.setHorizontalAlignment(SwingConstants.CENTER);
+		panelConstraint.add(jbuttonLocal);
 		
 		JLabel lblConstraint = new JLabel("Constraint:");
 		lblConstraint.setHorizontalAlignment(SwingConstants.CENTER);
@@ -549,11 +648,6 @@ public class CreatorPanel extends JPanel implements ActionListener {
 		this.main.expandAllNodes(tree, 0, tree.getRowCount());
 	}
 	
-	public String getModelName() {
-
-		return model.getModelName();
-	}
-
 	private void mudancaCheckBoxArvoreAdaptacao(){
 		TreePath currentSelection = treeAdaptation.getSelectionPath();
 

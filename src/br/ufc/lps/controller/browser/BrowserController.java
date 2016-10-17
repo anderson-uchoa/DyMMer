@@ -340,9 +340,9 @@ public class BrowserController{
 	    	   dataSetBubble.setLabel(scheme.get(i).getNameXml());
 	    	   List<DataBubble> data = new ArrayList<>();    	   
 	    	   DataBubble exemplo = new DataBubble();
-	    	   exemplo.setY(Double.parseDouble(scheme.get(i).getDepthOfTreeMax().toString()));
-	    	   exemplo.setX(Double.parseDouble(scheme.get(i).getNumberOfLeafFeatures().toString()));
-	    	   exemplo.setR(20.0);
+	    	   exemplo.setY(Double.parseDouble(scheme.get(i).getRatioOfVariability().toString()));
+	    	   exemplo.setX(Double.parseDouble(scheme.get(i).getNumberOfValidConfigurations().toString()));
+	    	   exemplo.setR(15.0);
 	    	   dataSetBubble.setBackgroundColor(getRamdomColor(1));
 	    	   data.add(exemplo);
 	    	   dataSetBubble.setData(data);
@@ -364,7 +364,7 @@ public class BrowserController{
     	   xaxes.setDisplay(true);
     	   ScaleLabelSet xlabelSet = new ScaleLabelSet();
     	   xlabelSet.setDisplay(true);
-    	   xlabelSet.setLabelString("Número de Features Folhas");
+    	   xlabelSet.setLabelString("NVC");
     	   xaxes.setScaleLabel(xlabelSet);
     	   List<AxesSet> listax = new ArrayList<>();
     	   listax.add(xaxes);
@@ -374,7 +374,7 @@ public class BrowserController{
     	   yaxes.setDisplay(true);
     	   ScaleLabelSet ylabelSet = new ScaleLabelSet();
     	   ylabelSet.setDisplay(true);
-    	   ylabelSet.setLabelString("Profundidade Máxima da Árvore");
+    	   ylabelSet.setLabelString("RoV");
     	   yaxes.setScaleLabel(ylabelSet);
     	   List<AxesSet> listay = new ArrayList<>();
     	   listay.add(yaxes);
@@ -385,7 +385,7 @@ public class BrowserController{
     	   //TITLE OF OPTIONS
     	   TitleSet titleSet = new TitleSet();
     	   titleSet.setDisplay(true);
-    	   titleSet.setText("Relação entre Profundidade Máxima da Árvore e Número de Features Folhas dos modelos");
+    	   titleSet.setText("RoV x NVC (Variabilidade estática)");
     	   titleSet.setFontSize(20);
     	   optionsSet.setTitle(titleSet);
     	
@@ -537,6 +537,83 @@ public class BrowserController{
 		   listaDTMax.add(aaab);
     	   
     	   
+    	   
+    	   Gson g = new Gson();
+    	   String saida = g.toJson(config);
+    	   
+    	   System.out.println(saida);
+    	   
+    	   
+    	    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/pack-hierarchy.html");
+    	   browser.addLoadListener(new LoadAdapter() {
+               @Override
+               public void onFinishLoadingFrame(FinishLoadingEvent event) {
+                   if (event.isMainFrame()) {
+                       event.getBrowser().executeJavaScript("receber('"+saida+"')");
+                   }
+               }
+           });
+    	   browser.addConsoleListener(new ConsoleListener() {
+			
+			@Override
+			public void onMessage(ConsoleEvent arg0) {
+				// TODO Auto-generated method stub
+				System.out.println(arg0.getMessage());
+				
+			}
+		});
+    	   
+    	   return new BrowserView(browser);
+       }
+       
+       public static JComponent getD3BubbleRoVxNVC(List<SchemeXml> scheme){
+    	   Browser browser = new Browser();
+    	   
+    	   Config config = new Config();
+    	   Children c = new Children();
+    	   c.setName("");
+    	   config.setRoot(c);
+    	   
+    	   List<Children> RovxNVC = new ArrayList<>();
+    	   Children nLeaf = new Children();
+    	   nLeaf.setName("RoV");
+    	   RovxNVC.add(nLeaf);
+    	   Children dTMax = new Children();
+    	   dTMax.setName("NVC");
+    	   RovxNVC.add(dTMax);
+    	   c.setChildren(RovxNVC);
+    	   
+    	   List<Children> listaRov = new ArrayList<>();
+    	   nLeaf.setChildren(listaRov);
+    	   List<Children> listaNVC = new ArrayList<>();
+    	   dTMax.setChildren(listaNVC);
+    	   
+    	   for(int i=0; i < scheme.size(); i++){
+    		   Children addC = new Children();
+    		   SchemeXml sch = scheme.get(i);
+			   addC.setName(sch.getNameXml());
+			   
+    		   double nlf = sch.getRatioOfVariability();
+    		   double dtm = sch.getNumberOfValidConfigurations();
+    		   if(nlf > dtm){
+    			   addC.setSize(nlf);
+    			   listaRov.add(addC);
+    		   }else{
+    			   addC.setSize(dtm);
+    			   listaNVC.add(addC);
+    		   }
+    	   }
+    	   
+    	   Children ccc = new Children();
+    	   ccc.setName("teste");
+    	   ccc.setSize(45d);
+    	   
+    	   Children cccc = new Children();
+    	   cccc.setName("teste 2");
+    	   cccc.setSize(45d);
+    	   
+    	   listaRov.add(ccc);
+    	   listaRov.add(cccc);
     	   
     	   Gson g = new Gson();
     	   String saida = g.toJson(config);

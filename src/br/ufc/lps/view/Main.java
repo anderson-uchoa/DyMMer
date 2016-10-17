@@ -464,7 +464,7 @@ public class Main extends JFrame {
 
 	public void bubble( List<SchemeXml>  lista){
 		JComponent a = BrowserController.getBubble(lista);
-		createTab(a, "Profundidade Máxima da Árvore e Número de Features Folhas dos modelos");
+		createTab(a, "RoV x NVC (Variabilidade estática)");
 	}
 
 	public void ComparacaoContextos( SchemeXml  schema){
@@ -495,6 +495,11 @@ public class Main extends JFrame {
 	public void abrirD3Bubble( List<SchemeXml> schema){
 		JComponent a = BrowserController.getD3Bubble(schema);
 		createTab(a, "Nleaf x DTMax (largura x profundidade)");
+	}
+	
+	public void abrirD3BubbleRoVxNVC( List<SchemeXml> schema){
+		JComponent a = BrowserController.getD3BubbleRoVxNVC(schema);
+		createTab(a, "RoV x NVC (Variabilidade estática)");
 	}
 	
 	public void abrirD3FoC( List<SchemeXml> schema){

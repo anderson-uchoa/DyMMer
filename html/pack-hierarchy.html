@@ -10,6 +10,19 @@ text {
   pointer-events: none;
 }
 
+body {
+        margin: 0;
+        font-size: 12px;
+        font-family: "Helvetica Neue", Helvetica;
+        
+    }
+    
+#gra{
+	    margin: 0 auto;
+    text-align: left;
+    width: 800px;
+}
+
 text.parent {
   fill: #3150B0;
   font-size: 15px;
@@ -38,7 +51,9 @@ circle.child {
 
     </style>
   </head>
-  <center><body></body></center>
+  <body>
+  	<div id="gra"></div>
+  </body>
     <script type="text/javascript" src="js/d3.v.js"></script>
     <script type="text/javascript" src="js/d3.layout.js"></script>
     <script type="text/javascript">
@@ -55,7 +70,7 @@ var pack = d3.layout.pack()
     .size([r, r])
     .value(function(d) { return d.size; })
 
-var vis = d3.select("body").insert("svg:svg", "h2")
+var vis = d3.select("#gra").insert("svg:svg", "h2")
     .attr("width", w)
     .attr("height", h)
   .append("svg:g")

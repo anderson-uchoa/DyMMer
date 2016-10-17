@@ -96,13 +96,9 @@ public class ViewerPanelResultFeatures extends JPanel {
 		
 		painelMensagens.add(button2);
 		
-		JButton button3 = new JButton("Profundidade Máxima da Árvore e Número de Features Folhas dos modelos");
+		JButton button3 = new JButton("RoV x NVC (Variabilidade estática)");
 		
 		painelMensagens.add(button3);
-		
-		JButton button4 = new JButton("d3");
-		
-		painelMensagens.add(button4);
 
 		JButton button5 = new JButton("d3 Tree");
 		
@@ -193,14 +189,6 @@ public class ViewerPanelResultFeatures extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				ViewerPanelResultFeatures.this.main.bubble(listaItens);
-			}
-		});
-		
-		button4.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				ViewerPanelResultFeatures.this.main.abrirD3(listaItens);
 			}
 		});
 		

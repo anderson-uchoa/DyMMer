@@ -3,29 +3,59 @@
 <style>
 
 text {
-  font: 15px tahoma;
+  font: 11px tahoma;
+}
+
+body {
+            overflow: hidden;
+            margin: 0;
+            font-size: 12px;
+            font-family: "Helvetica Neue", Helvetica;
+        }
+
+
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* aspect ratio */
+    vertical-align: top;
+    overflow: hidden;
+}
+.svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
 }
 
 </style>
 <center>
-	<body>
+	<div id="body"></div>
 </center>
 <script src="js/d3.v3.js"></script>
 <script>
 
 var diameter = 960,
+ 	chartWidth = 680,
+    chartHeight = 340,
     format = d3.format(",d"),
     color = d3.scale.category20b();
 
 var bubble = d3.layout.pack()
     .sort(null)
-    .size([diameter, diameter])
+    .size([chartWidth, chartHeight])
     .padding(1.5);
 
-var svg = d3.select("body").append("svg")
-    .attr("width", diameter)
-    .attr("height", diameter)
-    .attr("class", "bubble");
+var svg = d3.select("#body")
+	   .append("div")
+	   .classed("svg-container", true) //container class to make it responsive
+	   .append("svg")
+	   //responsive SVG needs these 2 attributes and no width and height attr
+	   .attr("preserveAspectRatio", "xMinYMin meet")
+	   .attr("viewBox", "0 0 700 340")
+	   //class to make it responsive
+	   .classed("svg-content-responsive", true);
 
 //d3.json("flare.json", function(error, root) {
  // if (error) throw error;
@@ -68,6 +98,6 @@ function classes(root) {
   return {children: classes};
 }
 
-d3.select(self.frameElement).style("height", diameter + "px");
+d3.select(self.frameElement).style("height", chartHeight + "px");
 
 </script>

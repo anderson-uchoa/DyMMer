@@ -8,6 +8,7 @@ text {
 
 body {
     margin: 0;
+    overflow: hidden;
     font-size: 8px;
     font-family: "Helvetica Neue", Helvetica;
 }
@@ -77,8 +78,8 @@ function receber(config){
 			showToolTip(" ",0,0,false);
 	   });
 
-  node.append("title")
-      .text(function(d) { return d.className + ": " + format(d.value); });
+  //node.append("title")
+    //  .text(function(d) { return d.className + ": " + d.value });
 
   //para mudar a cor de acordo com o titulo mudar o value para packageName
 

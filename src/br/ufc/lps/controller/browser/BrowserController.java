@@ -1,22 +1,17 @@
 package br.ufc.lps.controller.browser;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import javax.swing.JComponent;
 
-import org.apache.poi.poifs.property.Child;
-import org.json.JSONObject;
+import javax.swing.JComponent;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonIOException;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.teamdev.jxbrowser.chromium.Browser;
@@ -24,8 +19,6 @@ import com.teamdev.jxbrowser.chromium.events.ConsoleEvent;
 import com.teamdev.jxbrowser.chromium.events.ConsoleListener;
 import com.teamdev.jxbrowser.chromium.events.FinishLoadingEvent;
 import com.teamdev.jxbrowser.chromium.events.LoadAdapter;
-import com.teamdev.jxbrowser.chromium.events.RenderEvent;
-import com.teamdev.jxbrowser.chromium.events.RenderListener;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
 import br.ufc.lps.model.visualization.chartjs.config.AxesSet;
@@ -794,7 +787,7 @@ public class BrowserController{
     	   Gson g = new Gson();
     	   String saida = g.toJson(config);
     	   
-    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/collapsibleForceLayout.html");
+    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/treeMapTitleNameResize.html");
     	   browser.addLoadListener(new LoadAdapter() {
                @Override
                public void onFinishLoadingFrame(FinishLoadingEvent event) {

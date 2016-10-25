@@ -292,6 +292,15 @@ public class EditorPanel extends JPanel implements ActionListener {
 								break;
 						}
 						
+						for(int i=0; i < rootEle.getChildNodes().getLength(); i++){
+							Node tr = rootEle.getChildNodes().item(i);
+							if(tr.getNodeName().equals("constraints")){
+								rootEle.removeChild(tr);
+								break;
+							}
+								
+						}
+						
 						rootEle.removeChild(tree);
 						
 						controllerFeatures.drawTree(root);
@@ -303,8 +312,9 @@ public class EditorPanel extends JPanel implements ActionListener {
 						
 						rootEle.appendChild(newTree);
 						
-						rootEle.appendChild(WriteXMLmodel.getContext(doc, textFieldNewContext.getText(),
-								EditorPanel.this.resolutions, new ArrayList<String>(constraints.values())));
+						if(!constraints.isEmpty())
+							rootEle.appendChild(WriteXMLmodel.getContext(doc, textFieldNewContext.getText(),
+									EditorPanel.this.resolutions, new ArrayList<String>(constraints.values())));
 
 						Transformer transformer = TransformerFactory.newInstance().newTransformer();
 						transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -721,14 +731,14 @@ public class EditorPanel extends JPanel implements ActionListener {
 			txtAddTheFeatures.setText("");
 			txtAddTheFeatures.setText(toAdd);
 		} else
-			/* if (toAdd.contains("~")  && txtAddTheFeatures.getText().contains("~") ){
+			 if (toAdd.contains("~")  && txtAddTheFeatures.getText().contains("~") ){
 					
 				 txtAddTheFeatures.setText(txtAddTheFeatures.getText() + " excludes " + toAdd);
 				 
 			 }else {
 				 
 				 txtAddTheFeatures.setText(txtAddTheFeatures.getText() + " requires " + toAdd);
-			 } */
+			 }
 			txtAddTheFeatures.setText(txtAddTheFeatures.getText() + " V " + toAdd);
 
 		constraintLiterals.add(literal);
@@ -1121,67 +1131,76 @@ public class EditorPanel extends JPanel implements ActionListener {
 		}
 	}
 
-private void adicionar(){
-		
-		if(textFieldNewContext.getText().equals("")){
-			txtMessageText.setText("Please, type the context name.");
-			lblNewContext.setForeground(Color.RED);
-			textFieldNewContext.requestFocus();
-		}else{
+	private void criarModelo(){
+
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	
+		try {
+	
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			Document doc = db.parse(EditorPanel.this.pathModelFile);
+	
+			Element rootEle = doc.getDocumentElement();
+	
+			FeatureTreeNode root = (FeatureTreeNode)tree.getModel().getRoot();
 			
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			Node tree = null;
 			
-			try {
-			
-				DocumentBuilder db = dbf.newDocumentBuilder();
-				Document doc = db.parse(EditorPanel.this.pathModelFile);
-			
-				Element rootEle = doc.getDocumentElement();	
-				
-				rootEle.appendChild(WriteXMLmodel.getContext(doc, textFieldNewContext.getText(), EditorPanel.this.resolutions, new ArrayList<String>(constraints.values())));
-				
-				Transformer transformer = TransformerFactory.newInstance().newTransformer();
-	            transformer.setOutputProperty(OutputKeys.INDENT, "yes"); 
-	            DOMSource source = new DOMSource(doc);
-	            StreamResult console = new StreamResult(new FileOutputStream(EditorPanel.this.pathModelFile));
-	            transformer.transform(source, console);
-	            
-	            textFieldNewContext.setText("");
-				constraintLiterals.clear();
-				constraints.clear();
-				constraintsList.clear();
-				constraintsListModel.update();
-				txtAddTheFeatures.setText("");
-				resolutions.clear();
-				txtMessageText.setText("None for while...");
-				constraintNumber = 0;				
-				
-				
-				tree.repaint();
-				tree.updateUI();
-				JOptionPane.showMessageDialog(EditorPanel.this, "Your context has been saved. Now, open the file to see it.");
-				
-			} catch (SAXException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (ParserConfigurationException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (TransformerConfigurationException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (TransformerFactoryConfigurationError e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (TransformerException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			for(int i=0; i < rootEle.getChildNodes().getLength(); i++){
+				tree = rootEle.getChildNodes().item(i);
+				if(tree.getNodeName().equals("feature_tree"))
+					break;
 			}
 			
+			for(int i=0; i < rootEle.getChildNodes().getLength(); i++){
+				Node tr = rootEle.getChildNodes().item(i);
+				if(tr.getNodeName().equals("constraints")){
+					rootEle.removeChild(tr);
+					break;
+				}
+					
+			}
+			
+			rootEle.removeChild(tree);
+			
+			controllerFeatures.drawTree(root);
+			controllerFeatures.getArvoreDesenhada();
+			
+			Node newTree = doc.createElement("feature_tree");
+			
+			newTree.appendChild(doc.createTextNode(controllerFeatures.getArvoreDesenhada()));
+			
+			rootEle.appendChild(newTree);
+	
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			DOMSource source = new DOMSource(doc);
+			StreamResult console = new StreamResult(new FileOutputStream(EditorPanel.this.pathModelFile));
+			transformer.transform(source, console);
+	
+			JOptionPane.showMessageDialog(EditorPanel.this,
+					"Your model has been saved. Now, open the file to see it.");
+	
+		} catch (SAXException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (ParserConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (TransformerConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (TransformerFactoryConfigurationError e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (TransformerException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+
 		
 	}
 

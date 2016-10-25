@@ -376,7 +376,7 @@ public class Main extends JFrame {
 		
 	}
 	
-	private void createTab(JComponent panel, String nameTab){
+	private void createTab(Component panel, String nameTab){
 		SwingUtilities.invokeLater(new Runnable() {
 			
 			@Override
@@ -465,7 +465,7 @@ public class Main extends JFrame {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				JComponent a = BrowserController.getPie(lista);
+				Component a = BrowserController.getPie(lista);
 				createTab(a, "Número de Features");
 			}
 		}).start();
@@ -475,7 +475,7 @@ public class Main extends JFrame {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				JComponent a = BrowserController.getBubble(lista);
+				Component a = BrowserController.getBubble(lista);
 				createTab(a, "RoV x NVC (Variabilidade estática)");
 			}
 		}).start();
@@ -485,7 +485,7 @@ public class Main extends JFrame {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				JComponent a = BrowserController.getBar(schema);
+				Component a = BrowserController.getBar(schema);
 				createTab(a, "Comparação Contextos Radar");
 			}
 		}).start();
@@ -495,7 +495,7 @@ public class Main extends JFrame {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				JComponent a = BrowserController.getLine(schema);
+				Component a = BrowserController.getLine(schema);
 				createTab(a, "Comparação Contextos Line");
 			}
 		}).start();
@@ -505,7 +505,7 @@ public class Main extends JFrame {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				JComponent a = new ViewerPanelResultMeasures(Main.this, schema);
+				Component a = new ViewerPanelResultMeasures(Main.this, schema);
 				createTab(a, "Medidas das Features");
 			}
 		}).start();
@@ -515,7 +515,7 @@ public class Main extends JFrame {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				JComponent a = BrowserController.getD3(schema);
+				Component a = BrowserController.getD3(schema);
 				createTab(a, "Nleaf x DTMax (largura x profundidade)");
 			}
 		}).start();
@@ -525,7 +525,7 @@ public class Main extends JFrame {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				JComponent a = BrowserController.getD3Tree(schema);
+				Component a = BrowserController.getD3Tree(schema);
 				createTab(a, "Nleaf x DTMax (largura x profundidade) Tree");
 			}
 		}).start();
@@ -535,7 +535,7 @@ public class Main extends JFrame {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				JComponent a = BrowserController.getD3Bubble(schema);
+				Component a = BrowserController.getD3Bubble(schema);
 				createTab(a, "Nleaf x DTMax (largura x profundidade)");
 			}
 		}).start();
@@ -545,7 +545,7 @@ public class Main extends JFrame {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				JComponent a = BrowserController.getD3BubbleRoVxNVC(schema);
+				Component a = BrowserController.getD3BubbleRoVxNVC(schema);
 				createTab(a, "RoV x NVC (Variabilidade estática)");
 			}
 		}).start();
@@ -555,7 +555,7 @@ public class Main extends JFrame {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				JComponent a = BrowserController.getD3FoC(schema);
+				Component a = BrowserController.getD3FoC(schema);
 				createTab(a, "FoC (Flexibilidade)");
 			}
 		}).start();
@@ -565,7 +565,7 @@ public class Main extends JFrame {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				JComponent a = BrowserController.getD3FEX(schema);
+				Component a = BrowserController.getD3FEX(schema);
 				createTab(a, "FEX (Analisabilidade)");
 			}
 		}).start();
@@ -575,7 +575,7 @@ public class Main extends JFrame {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				JComponent a = BrowserController.getD3TreeMapEvolucao(schema);
+				Component a = BrowserController.getD3TreeMapEvolucao(schema);
 				createTab(a, "NF / NA / NO / NM (tamanho do modelo)");
 			}
 		}).start();

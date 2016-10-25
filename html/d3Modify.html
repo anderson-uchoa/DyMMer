@@ -1,6 +1,10 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<style>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <title>Treemap - Neat Zoom Effect</title>
+  <script type="text/javascript" src="js/d3.v3.js"></script>
+<style type="text/css">
 
 circle {
   fill: rgb(31, 119, 180);
@@ -15,14 +19,14 @@ text {
 }
 
 </style>
+</head>
+<body>
 <center>
   <svg width="960" height="960"></svg>
 </center>
-<script src="js/d3.v3.js"></script>
-<script>
+</body>
 
-
-
+<script type="text/javascript">
 var w = 1280,
     h = 800,
     r = 720,
@@ -44,7 +48,7 @@ var vis = d3.select("body").insert("svg:svg", "h2")
 //d3.json("flare.json", function(data) {
   function receber(config){
   var root = JSON.parse( config );
-  
+
   node = root = root.root;
 
   var nodes = pack.nodes(root);
@@ -92,6 +96,7 @@ function zoom(d, i) {
 
   node = d;
   d3.event.stopPropagation();
-}   
+}
 
 </script>
+</html>

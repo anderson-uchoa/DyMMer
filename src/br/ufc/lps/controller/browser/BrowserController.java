@@ -1,5 +1,6 @@
 package br.ufc.lps.controller.browser;
 
+import java.awt.Component;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -42,7 +43,8 @@ import br.ufc.lps.repositorio.SchemeXml;
 
 public class BrowserController{
        
-       public static JComponent getBar(SchemeXml scheme){
+       public static Component getBar(SchemeXml scheme){
+    	   
     	   Browser browser = new Browser();
     	   ConfigSet cnf = new ConfigSet();
     	   
@@ -65,7 +67,7 @@ public class BrowserController{
     	   for(int i=0; i < scheme.getMedidasContexto().size(); i++){
     		   int r = rand.nextInt(255);
     		   int g = rand.nextInt(255);
-    		   int b = rand.nextInt(255);
+    		   	   int b = rand.nextInt(255);
     		   String rgbBack = "rgba("+r+", "+g+", "+b+", 0.5)";
     		   String rgbHover = "rgba("+r+", "+g+", "+b+", 1)";
     		   coresBackground.add(rgbBack);
@@ -128,6 +130,7 @@ public class BrowserController{
     	   
     	   
     	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/generic.html");
+      	  
     	   browser.addLoadListener(new LoadAdapter() {
                @Override
                public void onFinishLoadingFrame(FinishLoadingEvent event) {
@@ -137,7 +140,16 @@ public class BrowserController{
                }
            });
     	   
+    	   browser.addConsoleListener(new ConsoleListener() {
+			
+			@Override
+			public void onMessage(ConsoleEvent arg0) {
+				System.out.println(arg0.getMessage());
+			}
+		});
+    	 
     	   return new BrowserView(browser);
+    	   
        }
      
        public static JComponent getLine(SchemeXml scheme){
@@ -239,6 +251,7 @@ public class BrowserController{
        }
        
        public static JComponent getPie(List<SchemeXml> scheme){
+    	   System.setProperty("teamdev.license.info", "true");
     	   Browser browser = new Browser();
     	   ConfigSet cnf = new ConfigSet();
     	   
@@ -636,7 +649,7 @@ public class BrowserController{
     	   return new BrowserView(browser);
        }
 
-       public static JComponent getD3FoC(List<SchemeXml> scheme){
+       public static Component getD3FoC(List<SchemeXml> scheme){
     	   Browser browser = new Browser();
     	   
     	   
@@ -663,7 +676,9 @@ public class BrowserController{
     	   System.out.println(saida);
     	   
     	   
-    	    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/d3Bubble.html");
+    	   
+    	   browser.loadHTML("File://"+System.getProperty("user.dir")+"/html/d3Bubble.html");
+
     	   browser.addLoadListener(new LoadAdapter() {
                @Override
                public void onFinishLoadingFrame(FinishLoadingEvent event) {
@@ -681,8 +696,8 @@ public class BrowserController{
 				
 			}
 		});
-    	   
-    	   return new BrowserView(browser);
+  
+    	return new BrowserView(browser);
        }
 
        public static JComponent getD3FEX(List<SchemeXml> scheme){
@@ -712,7 +727,8 @@ public class BrowserController{
     	   System.out.println(saida);
     	   
     	   
-    	    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/d3Bubble.html");
+    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/d3Bubble.html");
+    	   
     	   browser.addLoadListener(new LoadAdapter() {
                @Override
                public void onFinishLoadingFrame(FinishLoadingEvent event) {

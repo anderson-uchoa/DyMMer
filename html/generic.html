@@ -1,27 +1,30 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-	<style>
-		body{
-			 overflow: hidden;
-		}
-	</style>
-    <head>
-        <meta charset="utf-8" />
-        <title>Chart.js demo</title>
-        <script src="js/jquery-3.1.0.min.js"></script>
-        <script src="js/Chart.min.js"></script>
-    </head>
-    <body>
-      <div style="width:100%;">
-        <canvas id="buyers"></canvas>
-      </div>
-    </body>
-    <script>
-        var ctx = document.getElementById('buyers').getContext('2d');
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<title>Chart.js</title>
 
-        function preencherGrafico(config){
-          var arr_from_json = JSON.parse( config );
-          window.myLine = new Chart(ctx, arr_from_json);
-        }
-    </script>
+<script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
+<script type="text/javascript" src="js/Chart.min.js"></script>
+
+<style type="text/css">
+	body{
+		 overflow: hidden;
+	}
+</style>
+</head>
+<body>
+<div style="width:100%;">
+	<canvas id="buyers"></canvas>
+</div>
+</body>
+<script type="text/javascript">
+	var ctx = document.getElementById('buyers').getContext('2d');
+
+	function preencherGrafico(config){
+		var arr_from_json = JSON.parse( config );
+		window.myLine = new Chart(ctx, arr_from_json);
+	}
+	
+</script>
 </html>

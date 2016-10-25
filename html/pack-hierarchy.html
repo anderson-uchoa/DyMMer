@@ -3,6 +3,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <link type="text/css" rel="stylesheet" href="css/style.css"/>
+      <script type="text/javascript" src="js/d3.v.js"></script>
+      <script type="text/javascript" src="js/d3.layout.js"></script>
     <style type="text/css">
 
 text {
@@ -14,9 +16,9 @@ body {
     margin: 0;
     font-size: 12px;
     font-family: "Helvetica Neue", Helvetica;
-    
+
 }
-    
+
 #gra{
 	margin: auto;
 	display: block;
@@ -52,8 +54,6 @@ circle.child {
   <body>
   	<div id="gra"></div>
   </body>
-    <script type="text/javascript" src="js/d3.v.js"></script>
-    <script type="text/javascript" src="js/d3.layout.js"></script>
     <script type="text/javascript">
 
 var w = 1280,
@@ -100,7 +100,7 @@ var vis = d3.select("#gra").insert("svg:svg", "h2")
       .attr("text-anchor", "middle")
       .style("opacity", function(d) { return d.r > 20 ? 1 : 0; })
       .text(function(d) { return d.name.substring(0, d.r / 3) });
-      
+
   d3.select(window).on("click", function() { zoom(root); });
 //});
 }

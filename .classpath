@@ -28,6 +28,6 @@
 	<classpathentry kind="lib" path="libs/jxbrowser-linux64-6.7.jar"/>
 	<classpathentry kind="lib" path="libs/jxbrowser-mac-6.7.jar"/>
 	<classpathentry kind="lib" path="libs/jxbrowser-win-6.7.jar"/>
-	<classpathentry kind="lib" path="libs/license.jar"/>
+	<classpathentry kind="lib" path="libs/licence.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

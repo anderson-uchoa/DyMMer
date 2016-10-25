@@ -1,69 +1,76 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<style>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<title>Bubble</title>    
+	<script type="text/javascript" src="http://www.billdwhite.com/wordpress/wp-content/js/browserdetect/browserdetect.js"></script>
+    <script type="text/javascript" src="http://www.billdwhite.com/wordpress/wp-content/js/d3/d3.js"></script>
+<script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
 
-text {
-  font: 8px tahoma;
-}
+<style type="text/css">
+  text {
+    font: 8px tahoma;
+  }
 
-body {
-    margin: 0;
-    overflow: hidden;
-    font-size: 8px;
-    font-family: "Helvetica Neue", Helvetica;
-}
-
-
-.svg-container {
-    display: inline-block;
-    position: relative;
-    width: 100%;
-    padding-bottom: 100%; /* aspect ratio */
-    vertical-align: top;
-    overflow: hidden;
-}
-.svg-content-responsive {
-    display: inline-block;
-    position: absolute;
-    top: 10px;
-    left: 0;
-}
-
+  body {
+      margin: 0;
+      overflow: hidden;
+      font-size: 8px;
+      font-family: "Helvetica Neue", Helvetica;
+  }
+  .svg-container {
+      display: inline-block;
+      position: relative;
+      width: 100%;
+      padding-bottom: 100%; /* aspect ratio */
+      vertical-align: top;
+      overflow: hidden;
+  }
+  .svg-content-responsive {
+      display: inline-block;
+      position: absolute;
+      top: 10px;
+      left: 0;
+  }
 </style>
+</head>
+
+<body>
 <center>
 	<div id="body"></div>
 </center>
-<script src="js/d3.v3.js"></script>
-<script src="js/jquery-3.1.0.min.js"></script>
-<script>
-
-var diameter = 960,
- 	chartWidth = 680,
-    chartHeight = 340,
-    format = d3.format(",d"),
-    color = d3.scale.category20b();
-
-var bubble = d3.layout.pack()
-    .sort(null)
-    .size([chartWidth, chartHeight])
-    .padding(1.5);
-
-var svg = d3.select("#body")
-	   .append("div")
-	   .classed("svg-container", true) //container class to make it responsive
-	   .append("svg")
-	   //responsive SVG needs these 2 attributes and no width and height attr
-	   .attr("preserveAspectRatio", "xMinYMin meet")
-	   .attr("viewBox", "0 0 700 340")
-	   //class to make it responsive
-	   .classed("svg-content-responsive", true);
+</body>
+<script type="text/javascript">
 
 //d3.json("flare.json", function(error, root) {
  // if (error) throw error;
 
 function receber(config){
+
+  var diameter = 960,
+   	chartWidth = 680,
+      chartHeight = 340,
+      format = d3.format(",d"),
+      color = d3.scale.category20b();
+
+  var bubble = d3.layout.pack()
+      .sort(null)
+      .size([chartWidth, chartHeight])
+      .padding(1.5);
+
+  var svg = d3.select("#body")
+  	   .append("div")
+  	   .classed("svg-container", true) //container class to make it responsive
+  	   .append("svg")
+  	   //responsive SVG needs these 2 attributes and no width and height attr
+  	   .attr("preserveAspectRatio", "xMinYMin meet")
+  	   .attr("viewBox", "0 0 700 340")
+  	   //class to make it responsive
+  	   .classed("svg-content-responsive", true);
+
 	var root = JSON.parse(config);
 	root = root.root;
+
   var node = svg.selectAll(".node")
       .data(bubble.nodes(classes(root))
       .filter(function(d) { return !d.children; }))
@@ -122,5 +129,5 @@ function showToolTip(pMessage,pX,pY,pShow)
   tooltipDivID.css({top:pY,left:pX});
   tooltipDivID.show();
 }
-
 </script>
+</html>

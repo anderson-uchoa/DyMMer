@@ -677,7 +677,7 @@ public class BrowserController{
     	   
     	   
     	   
-    	   browser.loadHTML("File://"+System.getProperty("user.dir")+"/html/d3Bubble.html");
+    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/d3Bubble.html");
 
     	   browser.addLoadListener(new LoadAdapter() {
                @Override
@@ -826,6 +826,90 @@ public class BrowserController{
     	   
        }
        
+       public static JComponent getD3TreeVariabilidadeAdaptativa(SchemeXml scheme){
+    	   Browser browser = new Browser();
+    	  
+    	   Config config = new Config();
+    	   Children c = new Children();
+    	   c.setName("Variabilidade Adaptativa - "+scheme.getNameXml());
+    	   config.setRoot(c);
+    	   
+    	   List<Children> contextos = new ArrayList<>();
+    	   c.setChildren(contextos);
+    	   
+    	   for(int i=0; i < scheme.getMedidasContexto().size(); i++){
+    		   
+    		   Children addC = new Children();
+    		   MedidasContexto sch = scheme.getMedidasContexto().get(i);
+    		   
+    		   if(sch.getNameContext().equals("default"))
+    			   continue;
+    		   
+    		   List<Children> variabilidade = new ArrayList<>();
+    		   
+    		   addC.setChildren(variabilidade);
+    		   addC.setName(sch.getNameContext());
+    		   
+    		   Children addC2 = new Children();
+    		   addC2.setName("NcF = "+sch.getNonContextFeatures());
+    		   addC2.setSize(Double.parseDouble(sch.getNonContextFeatures()+""));
+			   
+    		   Children addC3 = new Children();
+    		   addC3.setName("NaF = "+sch.getNumberOfActivatedFeatures());
+    		   addC3.setSize(Double.parseDouble(sch.getNumberOfActivatedFeatures()+""));
+    		   
+    		   Children addC4 = new Children();
+    		   addC4.setName("NdF = "+sch.getNumberOfDeactivatedFeatures());
+    		   addC4.setSize(Double.parseDouble(sch.getNumberOfDeactivatedFeatures()+""));
+
+    		   Children addC5 = new Children();
+    		   addC5.setName("NcC = "+sch.getNumberOfContextConstraints());
+    		   addC5.setSize(Double.parseDouble(sch.getNumberOfContextConstraints()+""));
+		
+    		   Children addC6 = new Children();
+    		   addC6.setName("DFCA = "+sch.getDesactivatedFeaturesByContextAdaptation());
+    		   addC6.setSize(Double.parseDouble(sch.getDesactivatedFeaturesByContextAdaptation()+""));
+    		   
+    		   Children addC7 = new Children();
+    		   addC7.setName("AFCA = "+sch.getActivatedFeaturesByContextAdaptation());
+    		   addC7.setSize(Double.parseDouble(sch.getActivatedFeaturesByContextAdaptation()+""));
+    		   
+    		   variabilidade.add(addC2);
+    		   variabilidade.add(addC3);
+    		   variabilidade.add(addC4);
+    		   variabilidade.add(addC5);
+    		   variabilidade.add(addC6);
+    		   variabilidade.add(addC7);
+    		   
+    		   contextos.add(addC);
+    	   }
+    	  
+    	   Gson g = new Gson();
+    	   String saida = g.toJson(config);
+    	   
+    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/treeMapTitle.html");
+    	   browser.addLoadListener(new LoadAdapter() {
+               @Override
+               public void onFinishLoadingFrame(FinishLoadingEvent event) {
+                   if (event.isMainFrame()) {
+                       event.getBrowser().executeJavaScript("receber('"+saida+"')");
+                   }
+               }
+           });
+    	   
+    	   browser.addConsoleListener(new ConsoleListener() {
+			
+			@Override
+			public void onMessage(ConsoleEvent arg0) {
+				System.out.println(arg0.getMessage());
+				
+			}
+		});
+    	   return new BrowserView(browser);
+    	   
+       }
+       
+       
        public static JComponent getD3TreeMapEvolucao(List<SchemeXml> scheme){
     	   Browser browser = new Browser();
     	   int removedNF = 0;
@@ -871,7 +955,7 @@ public class BrowserController{
     	   
     	   Config config = new Config();
     	   Children c = new Children();
-    	   c.setName("NF / NA / NO / NM (tamanho do modelo)");
+    	   c.setName("Evolução da Complexidade Estrutural - Toko");
     	   //NUMERO FEATURES - NUMERO ALTERNATIVA - NUMERO OPCIONAL - NUMERO MANDATORY 
     	   config.setRoot(c);
     	   

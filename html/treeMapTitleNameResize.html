@@ -67,7 +67,7 @@
             font-size: 11px;
             cursor: pointer
         }
-        
+
         .svg-container {
 		    display: inline-block;
 		    position: relative;
@@ -129,7 +129,7 @@
 
     //d3.json("../data/flare1.json", function(data) {
     function receber(config){
-    	var data = JSON.parse(config);  	
+    	var data = JSON.parse(config);
         node = root = data.root;
         var nodes = treemap.nodes(root);
 
@@ -191,7 +191,7 @@
         // create children cells
         var childrenCells = chart.selectAll("g.cell.child")
             .data(children, function(d) {
-                return "c-" + d.name;
+                return Math.random()+"c-" + d.name;
             });
         // enter transition
         var childEnterTransition = childrenCells.enter()

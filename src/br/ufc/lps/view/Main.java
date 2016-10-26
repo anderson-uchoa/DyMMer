@@ -501,6 +501,16 @@ public class Main extends JFrame {
 		}).start();
 	}
 	
+	public void variabilidadeAdaptativa( SchemeXml schema){
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Component a = BrowserController.getD3TreeVariabilidadeAdaptativa(schema);
+				createTab(a, "Variabilidade Adaptativa");
+			}
+		}).start();
+	}
+	
 	public void abrirMedidas( SchemeXml schema){
 		new Thread(new Runnable() {
 			@Override

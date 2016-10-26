@@ -2,10 +2,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-<title>Bubble</title>    
-	<script type="text/javascript" src="http://www.billdwhite.com/wordpress/wp-content/js/browserdetect/browserdetect.js"></script>
-    <script type="text/javascript" src="http://www.billdwhite.com/wordpress/wp-content/js/d3/d3.js"></script>
-<script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
+<title>Bubble</title>
+    <script type="text/javascript" src="js/d3.v3.js"></script>
+    <script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
 
 <style type="text/css">
   text {
@@ -42,31 +41,34 @@
 </body>
 <script type="text/javascript">
 
+var diameter = 960,
+ 	chartWidth = 680,
+    chartHeight = 340,
+    format = d3.format(",d"),
+
+    color = d3.scale.linear().domain([0,50]).range([0,1])
+      .interpolate(d3.interpolateHcl)
+      .range([d3.rgb("#D0D3D4"), d3.rgb('#CB4335')]);
+
+var bubble = d3.layout.pack()
+    .size([chartWidth, chartHeight]);
+
+var svg = d3.select("#body")
+	   .append("div")
+	   .classed("svg-container", true) //container class to make it responsive
+	   .append("svg")
+	   //responsive SVG needs these 2 attributes and no width and height attr
+	   .attr("preserveAspectRatio", "xMinYMin meet")
+	   .attr("viewBox", "0 0 700 340")
+	   //class to make it responsive
+	   .classed("svg-content-responsive", true);
+
 //d3.json("flare.json", function(error, root) {
  // if (error) throw error;
 
 function receber(config){
 
-  var diameter = 960,
-   	chartWidth = 680,
-      chartHeight = 340,
-      format = d3.format(",d"),
-      color = d3.scale.category20b();
 
-  var bubble = d3.layout.pack()
-      .sort(null)
-      .size([chartWidth, chartHeight])
-      .padding(1.5);
-
-  var svg = d3.select("#body")
-  	   .append("div")
-  	   .classed("svg-container", true) //container class to make it responsive
-  	   .append("svg")
-  	   //responsive SVG needs these 2 attributes and no width and height attr
-  	   .attr("preserveAspectRatio", "xMinYMin meet")
-  	   .attr("viewBox", "0 0 700 340")
-  	   //class to make it responsive
-  	   .classed("svg-content-responsive", true);
 
 	var root = JSON.parse(config);
 	root = root.root;
@@ -92,7 +94,7 @@ function receber(config){
 
   node.append("circle")
       .attr("r", function(d) { return d.r; })
-      .style("fill", function(d, i) { return color(i); });
+      .style("fill", function(d, i) { return color(d.r); });
 
   node.append("text")
       .attr("dy", ".3em")

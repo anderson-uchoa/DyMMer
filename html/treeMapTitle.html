@@ -5,7 +5,9 @@
     <title>Treemap - Neat Zoom Effect</title>
     <script type="text/javascript" src="http://www.billdwhite.com/wordpress/wp-content/js/browserdetect/browserdetect.js"></script>
     <script type="text/javascript" src="http://www.billdwhite.com/wordpress/wp-content/js/d3/d3.js"></script>
-	<style type="text/css">
+    <script type="text/javascript" src="js/cycle.js"></script>
+
+  <style type="text/css">
         body {
         	overflow: hidden;
             margin: 0;
@@ -67,7 +69,7 @@
             font-size: 11px;
             cursor: pointer
         }
-        
+
         .svg-container {
 		    display: inline-block;
 		    position: relative;
@@ -129,7 +131,7 @@
 
     //d3.json("../data/flare1.json", function(data) {
     function receber(config){
-    	var data = JSON.parse(config);  	
+    	var data = JSON.parse(config);
         node = root = data.root;
         var nodes = treemap.nodes(root);
 
@@ -164,7 +166,8 @@
             .append("div")
             .attr("class", "label");
         // update transition
-        var parentUpdateTransition = parentCells.transition().duration(transitionDuration);
+        var parentUpdateTransition = parentCells
+        .transition().duration(transitionDuration);
         parentUpdateTransition.select(".cell")
             .attr("transform", function(d) {
                 return "translate(" + d.dx + "," + d.y + ")";
@@ -191,7 +194,7 @@
         // create children cells
         var childrenCells = chart.selectAll("g.cell.child")
             .data(children, function(d) {
-                return "c-" + d.name;
+                return Math.random()+"c-" + d.name;
             });
         // enter transition
         var childEnterTransition = childrenCells.enter()
@@ -322,17 +325,8 @@
         xscale.domain([d.x, d.x + d.dx]);
         yscale.domain([d.y, d.y + d.dy]);
 
-        /*if (node != level) {
-            if (isIE) {
-                chart.selectAll(".cell.child .foreignObject .labelbody .label")
-                    .style("display", "none");
-            } else {
-                chart.selectAll(".cell.child .foreignObject")
-                    ;//.style("display", "none");
-            }
-        }*/
-
-        var zoomTransition = chart.selectAll("g.cell").transition().duration(transitionDuration)
+        var zoomTransition = chart.selectAll("g.cell")
+            .transition().duration(transitionDuration)
             .attr("transform", function(d) {
                 return "translate(" + xscale(d.x) + "," + yscale(d.y) + ")";
             })
@@ -374,7 +368,7 @@
             })
             .select(".labelbody .label")
             .text(function(d) {
-                return d.name;
+              return d.name;
             });
 
         // update the width/height of the rects

@@ -121,6 +121,10 @@ public class ViewerPanelResultFeatures extends JPanel {
 		
 		painelMensagens.add(button9);
 		
+		JButton button10 = new JButton("Variabilidade Adaptativa");
+		
+		painelMensagens.add(button10);
+		
 		medidas = new JButton("Measures");
 		
 		painelBotaoOpen.add(medidas);
@@ -241,6 +245,19 @@ public class ViewerPanelResultFeatures extends JPanel {
 					ViewerPanelResultFeatures.this.main.getD3TreeMapEvolucao(list);
 				}else
 					JOptionPane.showMessageDialog(null, "Selecione os modelos na tabela");
+			}
+		});
+		
+		button10.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int selecao = tabela.getSelectedRow();
+				if(selecao > -1){
+					SchemeXml selecionado = listaItens.get(selecao);
+					ViewerPanelResultFeatures.this.main.variabilidadeAdaptativa(selecionado);
+				}else
+					mensagemSelecionarLinha();
 			}
 		});
 		

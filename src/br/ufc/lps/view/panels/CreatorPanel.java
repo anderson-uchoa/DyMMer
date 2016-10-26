@@ -153,7 +153,6 @@ public class CreatorPanel extends JPanel implements ActionListener {
 		constraintNumber = 0;
 
 		this.modelID = modelID;
-
 		resolutions = new ArrayList<Resolution>();
 
 		tree = new   JTree();
@@ -246,7 +245,7 @@ public class CreatorPanel extends JPanel implements ActionListener {
 		
 		JPanel panelTreeRnf = new JPanel(new BorderLayout());
 		panelTreeRnf.add(treeRnf, BorderLayout.CENTER);
-		JLabel tituloTreeRnf = new JLabel("Rnf Feature Model");
+		JLabel tituloTreeRnf = new JLabel("Quality Feature Model");
 		panelTreeRnf.add(tituloTreeRnf, BorderLayout.NORTH);
 		JScrollPane scrollPaneRnf = new JScrollPane(panelTreeRnf, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);

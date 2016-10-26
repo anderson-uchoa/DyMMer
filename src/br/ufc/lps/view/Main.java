@@ -433,7 +433,7 @@ public class Main extends JFrame {
 			@Override
 			public void run() {
 				mnMeasures_1.setEnabled(true);
-				String tabName = "Repositório de Modelos";
+				String tabName = "Models Repository";
 				long time = System.currentTimeMillis();
 				
 				ViewerPanelResultFeatures a = new ViewerPanelResultFeatures(Main.this);

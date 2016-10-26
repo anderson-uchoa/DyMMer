@@ -295,15 +295,19 @@ public class MenuFactory {
 		JMenuItem addXORGroup = new JMenuItem("Add a XOR Group");
 		JMenuItem addORGroup = new JMenuItem("Add a OR Group");
 
+		JMenuItem remove = new JMenuItem("Remove");
+		
 		addOptionalFeature.setActionCommand("addOptionalFeature");
 		addMandatoryFeature.setActionCommand("addMandatoryFeature");
 		addXORGroup.setActionCommand("addXORGroup");
 		addORGroup.setActionCommand("addORGroup");
+		remove.setActionCommand("remove");
 		
 		addOptionalFeature.addActionListener(editorPanel);
 		addMandatoryFeature.addActionListener(editorPanel);
 		addXORGroup.addActionListener(editorPanel);
 		addORGroup.addActionListener(editorPanel);
+		remove.addActionListener(editorPanel);
 		
 
 		menu.add(addOptionalFeature);
@@ -312,6 +316,7 @@ public class MenuFactory {
 
 		menu.add(addXORGroup);
 		menu.add(addORGroup);
+		menu.add(remove);
 
 		return menu;
 
@@ -327,12 +332,14 @@ public class MenuFactory {
 		JMenuItem addMandatoryFeature = new JMenuItem("Add a Mandatory Feature");
 		JMenuItem addXORGroup = new JMenuItem("Add a XOR Group");
 		JMenuItem addORGroup = new JMenuItem("Add a OR Group");
+		
+		JMenuItem remove = new JMenuItem("Remove");
 
 		addOptionalFeature.setActionCommand("addOptionalFeature");
 		addMandatoryFeature.setActionCommand("addMandatoryFeature");
 		addXORGroup.setActionCommand("addXORGroup");
 		addORGroup.setActionCommand("addORGroup");
-		
+		remove.setActionCommand("remove");
 		
 		addOptionalFeature.addActionListener(editorPanel);
 		addMandatoryFeature.addActionListener(editorPanel);
@@ -346,7 +353,9 @@ public class MenuFactory {
 
 		menu.add(addXORGroup);
 		menu.add(addORGroup);
-
+		menu.add(remove);
+		
+		
 		return menu;
 
 	}

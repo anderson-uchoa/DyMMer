@@ -122,7 +122,7 @@ public class ViewerPanel extends JPanel {
 		panelBotoesLayoutTree = new JPanel();
 		panelBotoesTree.setLayout(new GridLayout(1, 0));
 		
-		JButton butaoMudarLayoutM = new JButton("Mudar tipo de arvore");
+		JButton butaoMudarLayoutM = new JButton("Change type of tree");
 		butaoMudarLayoutM.addActionListener(new ActionListener() {
 			
 			@Override
@@ -138,7 +138,7 @@ public class ViewerPanel extends JPanel {
 			}
 		});
 		
-		JLabel textoMudancaLayout = new JLabel("Modificar Layout: ");
+		JLabel textoMudancaLayout = new JLabel("Change Layout: ");
 		
 		JButton butaoMudarLayout1 = new JButton("Left Right");
 		butaoMudarLayout1.addActionListener(new ActionListener() {
@@ -206,7 +206,7 @@ public class ViewerPanel extends JPanel {
 		panelInfoContexts.add(comboBoxContexts);
 		
 		if(schemeXml==null){
-			JButton botaoSalvar = new JButton("Salvar");
+			JButton botaoSalvar = new JButton("Save");
 			
 			panelInfoContexts.add(botaoSalvar);
 			
@@ -218,19 +218,19 @@ public class ViewerPanel extends JPanel {
 					String nome = "";
 					
 					if(schemeXml!=null)
-						nome  = JOptionPane.showInputDialog("Digite o novo nome do modelo", schemeXml.getNameXml());
+						nome  = JOptionPane.showInputDialog("Type the new model name", schemeXml.getNameXml());
 					else
-						nome  = JOptionPane.showInputDialog("Digite o novo nome do modelo", model.getModelName());
+						nome  = JOptionPane.showInputDialog("Type the new model name", model.getModelName());
 							
 					if(nome.equals("")){
-						JOptionPane.showMessageDialog(null, "É necessário pelo menos uma letra para o nome");
+						JOptionPane.showMessageDialog(null, "You need at least one letter to the name");
 						return;
 					}
 					
 					boolean resultado = ControladorXml.salvarXMLRepositorio(nome, file, null);
 					if(resultado){
 						botaoSalvar.setEnabled(false);
-						JOptionPane.showMessageDialog(null, "Salvo com sucesso!");
+						JOptionPane.showMessageDialog(null, "Saved successfully!");
 						ViewerPanel.this.main.recarregarListaFeatures();
 					}
 				}

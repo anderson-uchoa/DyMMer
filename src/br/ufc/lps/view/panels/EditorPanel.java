@@ -236,7 +236,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 		
 		JPanel panelTreeRnf = new JPanel(new BorderLayout());
 		panelTreeRnf.add(treeRnf, BorderLayout.CENTER);
-		JLabel tituloTreeRnf = new JLabel("Rnf Feature Model");
+		JLabel tituloTreeRnf = new JLabel("Quality Feature Model");
 		panelTreeRnf.add(tituloTreeRnf, BorderLayout.NORTH);
 		JScrollPane scrollPaneRnf = new JScrollPane(panelTreeRnf, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -249,19 +249,19 @@ public class EditorPanel extends JPanel implements ActionListener {
 		panelInfos.add(panelNewContext, BorderLayout.NORTH);
 		panelNewContext.setLayout(new GridLayout(0, 2, 0, 0));
 
-		lblNewContext = new JLabel("New context");
-		panelNewContext.add(lblNewContext);
+		//lblNewContext = new JLabel("New context");
+		//panelNewContext.add(lblNewContext);
 
-		textFieldNewContext = new JTextField();
-		textFieldNewContext.setToolTipText("New context's name");
-		panelNewContext.add(textFieldNewContext);
-		textFieldNewContext.setColumns(10);
+		//textFieldNewContext = new JTextField();
+		//textFieldNewContext.setToolTipText("New context's name");
+		//panelNewContext.add(textFieldNewContext);
+		//textFieldNewContext.setColumns(10);
 
 		JLabel lblBlankSpace = new JLabel("");
-		panelNewContext.add(lblBlankSpace);
+		//panelNewContext.add(lblBlankSpace);
 
-		btnNewContext = new JButton("Add");
-
+		//btnNewContext = new JButton("Add");
+/*
 		btnNewContext.addActionListener(new ActionListener() {
 
 			@Override
@@ -351,7 +351,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 		});
 
 		panelNewContext.add(btnNewContext);
-
+*/
 		JButton addTreeRnf = new JButton("Add RNF");
 		
 		addTreeRnf.addActionListener(new ActionListener() {
@@ -916,9 +916,9 @@ public class EditorPanel extends JPanel implements ActionListener {
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)treeAdaptation.getLastSelectedPathComponent();
 		if(node.getLevel() == 0){
 			JPopupMenu menu = new JPopupMenu();
-			menu.add(new JLabel("Opções de Adaptação:"));
+			menu.add(new JLabel("Adaptation Options:"));
 			menu.addSeparator();
-			JMenuItem adicionar = new JMenuItem("Adicionar");
+			JMenuItem adicionar = new JMenuItem("Add");
 			
 			menu.add(adicionar);
 			
@@ -926,7 +926,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					String adaptacao = JOptionPane.showInputDialog("Adicione o nome da adaptação");
+					String adaptacao = JOptionPane.showInputDialog("Add the name of adaptation");
 					if(adaptacao!=null && !adaptacao.trim().isEmpty()){
 						node.add(new Adaptacao(adaptacao));
 						treeAdaptation.updateUI();
@@ -937,10 +937,10 @@ public class EditorPanel extends JPanel implements ActionListener {
 			menu.show(treeAdaptation, e.getX(), e.getY());
 			
 		}else if(node.getLevel() == 1){
-			JPopupMenu menu = new JPopupMenu("Valor");
-			menu.add(new JLabel("Opções de Valor:"));
+			JPopupMenu menu = new JPopupMenu("Value");
+			menu.add(new JLabel("Value Options:"));
 			menu.addSeparator();
-			JMenuItem adicionar = new JMenuItem("Adicionar");
+			JMenuItem adicionar = new JMenuItem("Add");
 			
 			menu.add(adicionar);
 			
@@ -948,7 +948,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					String valor = JOptionPane.showInputDialog("Adicione o nome do valor");
+					String valor = JOptionPane.showInputDialog("Add the name of value");
 					if(valor!=null && !valor.trim().isEmpty()){
 						CheckBoxNodeData check = new CheckBoxNodeData(valor, false);
 						node.add(new br.ufc.lps.view.trees.ValorAdaptacao(check));
@@ -957,9 +957,9 @@ public class EditorPanel extends JPanel implements ActionListener {
 				}
 			});
 			
-			menu.add(new JLabel("Opções de Adaptação:"));
+			menu.add(new JLabel("Adaptation Options:"));
 			menu.addSeparator();
-			JMenuItem remover = new JMenuItem("Remover");
+			JMenuItem remover = new JMenuItem("Remove");
 			
 			menu.add(remover);
 			
@@ -975,10 +975,10 @@ public class EditorPanel extends JPanel implements ActionListener {
 			menu.show(treeAdaptation, e.getX(), e.getY());
 			
 		}else{
-			JPopupMenu menu = new JPopupMenu("Adaptação");
-			menu.add(new JLabel("Opções de Valor:"));
+			JPopupMenu menu = new JPopupMenu("Adaptation");
+			menu.add(new JLabel("Value Options:"));
 			menu.addSeparator();
-			JMenuItem adicionar = new JMenuItem("Remover");
+			JMenuItem adicionar = new JMenuItem("Remove");
 			
 			menu.add(adicionar);
 			
@@ -1211,7 +1211,7 @@ private void adicionar(){
 	}
 	
 	private void preenchendoArvore(br.ufc.lps.model.Adaptacao adaptacao){
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Adaptações de contexto");
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Context adaptations");
 		
 		if(adaptacao!=null && adaptacao.getValorAdaptacao()!=null){
 			for(ContextoAdaptacao contextoAdaptacao : adaptacao.getValorAdaptacao()){

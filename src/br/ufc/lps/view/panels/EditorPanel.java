@@ -120,6 +120,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 	private ControllerFeatures controllerFeatures;
 	private SplotContextModel splotContextModel;
 	private DefaultTreeModel treeModel;
+    private Map<String, br.ufc.lps.model.Adaptacao> adaptacoes;
+    
 	JPopupMenu menu;
 
 	/**
@@ -166,6 +168,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 		treeRnf.addMouseListener(getMouseListener());
 
 		
+		adaptacoes = splotContextModel.getAdaptacoes();
 		//ARVORE DA ADAPTAÇÃO
 		preenchendoArvore(splotContextModel.getArvoreAdaptacao());
 		final CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
@@ -249,19 +252,19 @@ public class EditorPanel extends JPanel implements ActionListener {
 		panelInfos.add(panelNewContext, BorderLayout.NORTH);
 		panelNewContext.setLayout(new GridLayout(0, 2, 0, 0));
 
-		//lblNewContext = new JLabel("New context");
-		//panelNewContext.add(lblNewContext);
+		lblNewContext = new JLabel("New context");
+		panelNewContext.add(lblNewContext);
 
-		//textFieldNewContext = new JTextField();
-		//textFieldNewContext.setToolTipText("New context's name");
-		//panelNewContext.add(textFieldNewContext);
-		//textFieldNewContext.setColumns(10);
+		textFieldNewContext = new JTextField();
+		textFieldNewContext.setToolTipText("New context's name");
+		panelNewContext.add(textFieldNewContext);
+		textFieldNewContext.setColumns(10);
 
 		JLabel lblBlankSpace = new JLabel("");
-		//panelNewContext.add(lblBlankSpace);
+		panelNewContext.add(lblBlankSpace);
 
-		//btnNewContext = new JButton("Add");
-/*
+		btnNewContext = new JButton("Add");
+
 		btnNewContext.addActionListener(new ActionListener() {
 
 			@Override
@@ -276,7 +279,16 @@ public class EditorPanel extends JPanel implements ActionListener {
 					DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
 					try {
+						
+						DefaultMutableTreeNode rootArvoreAdaptacao = (DefaultMutableTreeNode)treeAdaptation.getModel().getRoot();
 
+						String nomeContexto = verificandoArvore(rootArvoreAdaptacao);
+						
+						if(nomeContexto==null){
+							JOptionPane.showMessageDialog(null, "Check someone item in Tree Adaptation");
+							return;
+						}
+						
 						DocumentBuilder db = dbf.newDocumentBuilder();
 						Document doc = db.parse(EditorPanel.this.pathModelFile);
 
@@ -289,22 +301,14 @@ public class EditorPanel extends JPanel implements ActionListener {
 						for(int i=0; i < rootEle.getChildNodes().getLength(); i++){
 							tree = rootEle.getChildNodes().item(i);
 							if(tree.getNodeName().equals("feature_tree"))
-								break;
+								rootEle.removeChild(tree);
+							if(tree.getNodeName().equals("constraints"))
+								rootEle.removeChild(tree);
+							if(tree.getNodeName().equals("arvore_adaptacao"))
+								rootEle.removeChild(tree);
 						}
-						
-						for(int i=0; i < rootEle.getChildNodes().getLength(); i++){
-							Node tr = rootEle.getChildNodes().item(i);
-							if(tr.getNodeName().equals("constraints")){
-								rootEle.removeChild(tr);
-								break;
-							}
-								
-						}
-						
-						rootEle.removeChild(tree);
 						
 						controllerFeatures.drawTree(root);
-						controllerFeatures.getArvoreDesenhada();
 						
 						Node newTree = doc.createElement("feature_tree");
 						
@@ -312,8 +316,11 @@ public class EditorPanel extends JPanel implements ActionListener {
 						
 						rootEle.appendChild(newTree);
 						
-						if(!constraints.isEmpty())
-							rootEle.appendChild(WriteXMLmodel.getContext(doc, textFieldNewContext.getText(),
+						rootEle.appendChild(WriteXMLmodel.getArvoreAdaptacao(doc, rootArvoreAdaptacao));
+						
+						rootEle.appendChild(WriteXMLmodel.getAdaptacao(doc, rootArvoreAdaptacao, nomeContexto));
+						
+						rootEle.appendChild(WriteXMLmodel.getContext(doc, nomeContexto,
 									EditorPanel.this.resolutions, new ArrayList<String>(constraints.values())));
 
 						Transformer transformer = TransformerFactory.newInstance().newTransformer();
@@ -361,7 +368,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 		});
 
 		panelNewContext.add(btnNewContext);
-*/
+
 		JButton addTreeRnf = new JButton("Add RNF");
 		
 		addTreeRnf.addActionListener(new ActionListener() {

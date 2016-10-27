@@ -27,8 +27,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
 import br.ufc.lps.controller.xml.ControladorXml;
+import br.ufc.lps.model.ContextoAdaptacao;
 import br.ufc.lps.model.context.ContextModel;
 import br.ufc.lps.model.context.MeeasuresWithContextCalcula;
 import br.ufc.lps.model.contextaware.Context;
@@ -38,9 +44,14 @@ import br.ufc.lps.splar.core.constraints.PropositionalFormula;
 import br.ufc.lps.splar.core.fm.FeatureModel;
 import br.ufc.lps.splar.core.fm.FeatureTreeNode;
 import br.ufc.lps.view.Main;
+import br.ufc.lps.view.trees.Adaptacao;
+import br.ufc.lps.view.trees.CheckBoxNodeData;
+import br.ufc.lps.view.trees.CheckBoxNodeEditor;
+import br.ufc.lps.view.trees.CheckBoxNodeRenderer;
 import br.ufc.lps.view.trees.FeaturesTreeCellRenderer;
 import br.ufc.lps.view.trees.FeaturesTreePerfuseControl;
 import br.ufc.lps.view.trees.FeaturesTreeViewPerfuse;
+import br.ufc.lps.view.trees.ValorAdaptacao;
 import prefuse.Constants;
 import prefuse.Visualization;
 import prefuse.controls.ControlAdapter;
@@ -63,12 +74,14 @@ public class ViewerPanel extends JPanel {
 	private Tree treeP;
 	private JScrollPane scrollPane;
 	private JPanel panelBotoesLayoutTree;
+	public JTree treeAdaptation;
 	private JPanel panelTreePerfuse;
    	private Table table;
     private FeaturesTreeViewPerfuse tview;
     private JPanel panelSelecionada;
     private JPanel panelTree;
     private boolean primeira = true;
+    private DefaultTreeModel treeModel;
 	
 	private void inicializarTreePerfuse(){
 		this.treeP = new Tree();
@@ -103,6 +116,34 @@ public class ViewerPanel extends JPanel {
 		JPanel panelTrees = new JPanel();
 		panelTrees.setLayout(new BorderLayout(0, 0));
 		add(panelTrees, BorderLayout.CENTER);
+		
+		//TREE ADAPTAÇÃO
+		treeAdaptation = new JTree();
+		
+		//ARVORE DA ADAPTAÇÃO
+		preenchendoArvore(model.getArvoreAdaptacao());
+		final CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
+		treeAdaptation.setCellRenderer(renderer);
+		final CheckBoxNodeEditor editor = new CheckBoxNodeEditor(treeAdaptation);
+		treeAdaptation.setCellEditor(editor);
+		treeAdaptation.setEditable(true);
+		
+		treeModel.addTreeModelListener(new TreeModelListener() {
+
+			@Override
+			public void treeNodesChanged(final TreeModelEvent e) {
+				mudancaCheckBoxArvoreAdaptacao();
+			}
+
+			@Override
+			public void treeNodesInserted(TreeModelEvent e) {}
+
+			@Override
+			public void treeNodesRemoved(TreeModelEvent e) {}
+
+			@Override
+			public void treeStructureChanged(TreeModelEvent e){}
+		});
 		
 		tree = new JTree();
 		
@@ -191,7 +232,17 @@ public class ViewerPanel extends JPanel {
 		panelInfos.add(panelInfoContexts, BorderLayout.NORTH);
 		
 		JLabel lblNewLabel = new JLabel("Contexts");
-		panelInfoContexts.add(lblNewLabel);
+		//panelInfoContexts.add(lblNewLabel);
+		
+		JPanel painelTreeAdaptation = new JPanel(new BorderLayout());
+		painelTreeAdaptation.add(treeAdaptation, BorderLayout.CENTER);
+		JLabel tituloTree = new JLabel("Tree Adaptation");
+		painelTreeAdaptation.add(tituloTree, BorderLayout.NORTH);
+		JScrollPane scrollPane = new JScrollPane(painelTreeAdaptation, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		
+		
+		panelInfoContexts.add(scrollPane);
 		
 		JPanel panelInfoConstraints = new JPanel();
 		panelInfos.add(panelInfoConstraints, BorderLayout.SOUTH);
@@ -203,9 +254,9 @@ public class ViewerPanel extends JPanel {
 		for(String contextNames : model.getContexts().keySet()){
 			comboBoxContexts.addItem(contextNames);
 		}
-		panelInfoContexts.add(comboBoxContexts);
+		//panelInfoContexts.add(comboBoxContexts);
 		
-		if(schemeXml==null){
+		if(false){
 			JButton botaoSalvar = new JButton("Save");
 			
 			panelInfoContexts.add(botaoSalvar);
@@ -286,6 +337,60 @@ public class ViewerPanel extends JPanel {
 		}
 		
 		constraintsPanel.setText(constraints);
+	}
+	
+	private void mudancaCheckBoxArvoreAdaptacao(){
+		TreePath currentSelection = treeAdaptation.getSelectionPath();
+
+		if (currentSelection != null) {   				
+			DefaultMutableTreeNode tipoSelecionado = (DefaultMutableTreeNode) currentSelection.getLastPathComponent();
+			if(tipoSelecionado instanceof ValorAdaptacao){
+				Object ob = tipoSelecionado.getUserObject();
+				if(ob instanceof CheckBoxNodeData){
+					CheckBoxNodeData check = (CheckBoxNodeData) ob;
+					if(check.isChecked()){
+						DefaultMutableTreeNode pai = (DefaultMutableTreeNode) tipoSelecionado.getParent();
+						for(int i=0; i<pai.getChildCount(); i++){
+							if(!pai.getChildAt(i).equals(tipoSelecionado)){
+								CheckBoxNodeData c = (CheckBoxNodeData) ((DefaultMutableTreeNode)pai.getChildAt(i)).getUserObject();
+								c.setChecked(false);
+							}
+						}
+						treeAdaptation.updateUI();
+					}
+				}
+			}
+		}
+		
+		String nome = verificandoArvore((DefaultMutableTreeNode)treeModel.getRoot());
+		
+		if(nome!=null)
+			setTreeVisualization(nome);
+	}
+	
+	private String verificandoArvore(DefaultMutableTreeNode root){
+		String nome = "";
+		boolean pelomenosum = false;
+		for(int i=0; i < root.getChildCount(); i++){
+			DefaultMutableTreeNode filho = (DefaultMutableTreeNode) root.getChildAt(i);
+			
+			for(int j=0; j < filho.getChildCount(); j++){
+				DefaultMutableTreeNode neto = (DefaultMutableTreeNode) filho.getChildAt(j);
+				CheckBoxNodeData dado = (CheckBoxNodeData) neto.getUserObject();
+				if(dado.isChecked()){
+					nome=nome+filho.toString();
+					nome=nome+dado.getText();
+					pelomenosum = true;
+					break;
+				}
+			}
+		}
+		
+		if(pelomenosum){
+			return nome.replaceAll(" ", "");
+		}
+		
+		return null;
 	}
 	
 	public JLabel getLblResultReasoning() {
@@ -435,5 +540,38 @@ public class ViewerPanel extends JPanel {
         return panel;
     }
 	  
+	private void preenchendoArvore(br.ufc.lps.model.Adaptacao adaptacao){
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Context adaptations");
+		
+		if(adaptacao!=null && adaptacao.getValorAdaptacao()!=null){
+			for(ContextoAdaptacao contextoAdaptacao : adaptacao.getValorAdaptacao()){
+				Adaptacao contexto = new Adaptacao(contextoAdaptacao.getNome());
+				
+				for(br.ufc.lps.model.ValorAdaptacao valorAdaptacao : contextoAdaptacao.getValorAdaptacao()){
+					CheckBoxNodeData data = new CheckBoxNodeData(valorAdaptacao.getNome(), false);
+					contexto.add(new br.ufc.lps.view.trees.ValorAdaptacao(data));
+					
+				}
+				
+				root.add(contexto);
+			}
+		}
+		treeModel = new DefaultTreeModel(root);
+		treeAdaptation = new JTree(treeModel);
+		treeAdaptation.setModel(treeModel);
+		treeAdaptation.updateUI();
+		expandAllNodes(treeAdaptation, 0, treeAdaptation.getRowCount());
+	}
+	
+	private void expandAllNodes(JTree tree, int startingIndex, int rowCount){
+	    for(int i=startingIndex;i<rowCount;++i){
+	        tree.expandRow(i);
+	    }
+
+	    if(tree.getRowCount()!=rowCount){
+	        expandAllNodes(tree, rowCount, tree.getRowCount());
+	    }
+	}
+	
 
 }

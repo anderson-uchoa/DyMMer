@@ -46,10 +46,6 @@ public class WriteXMLmodel {
 		return node;
 	}
 
-	public static void changeArvoreXml(Document doc, String xml) {
-		doc.getElementById("feature_tree").setNodeValue(xml);
-	}
-
 	public static Node getAdaptacao(Document doc, DefaultMutableTreeNode root, String nome) {
 		Element adaptacao = doc.createElement("adaptacao");
 		adaptacao.setAttribute("nome", nome);
@@ -72,7 +68,7 @@ public class WriteXMLmodel {
 		return context;
 	}
 
-	public static Node getAdaptacaoContextoValor(Document doc, String name, boolean status) {
+	private static Node getAdaptacaoContextoValor(Document doc, String name, boolean status) {
 		Element node = doc.createElement("valor");
 		node.setAttribute("nome", name);
 		node.setAttribute("status", status ? "true" : "false");

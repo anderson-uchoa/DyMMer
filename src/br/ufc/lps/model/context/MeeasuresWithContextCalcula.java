@@ -16,10 +16,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import br.ufc.lps.model.Adaptacao;
-import br.ufc.lps.model.ContextoAdaptacao;
 import br.ufc.lps.model.ModelFactory;
-import br.ufc.lps.model.ValorAdaptacao;
+import br.ufc.lps.model.adaptation.Adaptacao;
+import br.ufc.lps.model.adaptation.ContextoAdaptacao;
+import br.ufc.lps.model.adaptation.ValorAdaptacao;
 import br.ufc.lps.model.contextaware.Constraint;
 import br.ufc.lps.model.contextaware.Context;
 import br.ufc.lps.model.contextaware.Resolution;

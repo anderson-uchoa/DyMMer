@@ -34,7 +34,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import br.ufc.lps.controller.xml.ControladorXml;
-import br.ufc.lps.model.ContextoAdaptacao;
+import br.ufc.lps.model.adaptation.ContextoAdaptacao;
 import br.ufc.lps.model.context.ContextModel;
 import br.ufc.lps.model.context.MeeasuresWithContextCalcula;
 import br.ufc.lps.model.contextaware.Context;
@@ -44,14 +44,14 @@ import br.ufc.lps.splar.core.constraints.PropositionalFormula;
 import br.ufc.lps.splar.core.fm.FeatureModel;
 import br.ufc.lps.splar.core.fm.FeatureTreeNode;
 import br.ufc.lps.view.Main;
-import br.ufc.lps.view.trees.Adaptacao;
-import br.ufc.lps.view.trees.CheckBoxNodeData;
-import br.ufc.lps.view.trees.CheckBoxNodeEditor;
-import br.ufc.lps.view.trees.CheckBoxNodeRenderer;
 import br.ufc.lps.view.trees.FeaturesTreeCellRenderer;
 import br.ufc.lps.view.trees.FeaturesTreePerfuseControl;
 import br.ufc.lps.view.trees.FeaturesTreeViewPerfuse;
-import br.ufc.lps.view.trees.ValorAdaptacao;
+import br.ufc.lps.view.trees.adaptation.Adaptacao;
+import br.ufc.lps.view.trees.adaptation.CheckBoxNodeData;
+import br.ufc.lps.view.trees.adaptation.CheckBoxNodeEditor;
+import br.ufc.lps.view.trees.adaptation.CheckBoxNodeRenderer;
+import br.ufc.lps.view.trees.adaptation.ValorAdaptacao;
 import prefuse.Constants;
 import prefuse.Visualization;
 import prefuse.controls.ControlAdapter;
@@ -540,16 +540,16 @@ public class ViewerPanel extends JPanel {
         return panel;
     }
 	  
-	private void preenchendoArvore(br.ufc.lps.model.Adaptacao adaptacao){
+	private void preenchendoArvore(br.ufc.lps.model.adaptation.Adaptacao adaptacao){
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Context adaptations");
 		
 		if(adaptacao!=null && adaptacao.getValorAdaptacao()!=null){
 			for(ContextoAdaptacao contextoAdaptacao : adaptacao.getValorAdaptacao()){
 				Adaptacao contexto = new Adaptacao(contextoAdaptacao.getNome());
 				
-				for(br.ufc.lps.model.ValorAdaptacao valorAdaptacao : contextoAdaptacao.getValorAdaptacao()){
+				for(br.ufc.lps.model.adaptation.ValorAdaptacao valorAdaptacao : contextoAdaptacao.getValorAdaptacao()){
 					CheckBoxNodeData data = new CheckBoxNodeData(valorAdaptacao.getNome(), false);
-					contexto.add(new br.ufc.lps.view.trees.ValorAdaptacao(data));
+					contexto.add(new br.ufc.lps.view.trees.adaptation.ValorAdaptacao(data));
 					
 				}
 				

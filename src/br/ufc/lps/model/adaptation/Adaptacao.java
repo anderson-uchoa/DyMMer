@@ -1,8 +1,4 @@
-package br.ufc.lps.model;
-
-
-
-
+package br.ufc.lps.model.adaptation;
 import java.util.List;
 
 public class Adaptacao {

@@ -20,6 +20,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import br.ufc.lps.view.trees.adaptation.Adaptacao;
+import br.ufc.lps.view.trees.adaptation.CheckBoxNodeData;
+import br.ufc.lps.view.trees.adaptation.CheckBoxNodeEditor;
+import br.ufc.lps.view.trees.adaptation.CheckBoxNodeRenderer;
+import br.ufc.lps.view.trees.adaptation.ValorAdaptacao;
+
 
 public class Teste extends JPanel{
 	

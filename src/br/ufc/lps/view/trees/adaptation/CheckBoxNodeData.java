@@ -1,4 +1,4 @@
-package br.ufc.lps.view.trees;
+package br.ufc.lps.view.trees.adaptation;
 
 public class CheckBoxNodeData {
 

@@ -1,4 +1,4 @@
-package br.ufc.lps.view.trees;
+package br.ufc.lps.view.trees.adaptation;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -11,16 +11,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
-/**
- * A {@link TreeCellRenderer} for check box tree nodes.
- * <p>
- * Thanks to John Zukowski for the <a
- * href="http://www.java2s.com/Code/Java/Swing-JFC/CheckBoxNodeTreeSample.htm"
- * >sample code</a> upon which this is based.
- * </p>
- * 
- * @author Curtis Rueden
- */
 public class CheckBoxNodeRenderer implements TreeCellRenderer {
 
 	private final CheckBoxNodePanel panel = new CheckBoxNodePanel();

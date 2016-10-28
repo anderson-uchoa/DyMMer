@@ -9,7 +9,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import br.ufc.lps.model.contextaware.Resolution;
-import br.ufc.lps.view.trees.CheckBoxNodeData;
+import br.ufc.lps.model.rnf.ContextoRnf;
+import br.ufc.lps.model.rnf.ValorContextoRnf;
+import br.ufc.lps.view.trees.adaptation.CheckBoxNodeData;
 
 public class WriteXMLmodel {
 
@@ -85,5 +87,68 @@ public class WriteXMLmodel {
 
 		return adaptacao;
 	}
+	
+	// ARVORE RNFs
+	public static Node getArvoreRnf(Document doc, DefaultMutableTreeNode root) {
 
+		Element arvore = doc.createElement("arvore_rnf");
+
+		for (int i = 0; i < root.getChildCount(); i++)
+			arvore.appendChild(getCaracteristicaRnf(doc, (DefaultMutableTreeNode) root.getChildAt(i)));
+
+		return arvore;
+	}
+	
+	private static Node getCaracteristicaRnf(Document doc, DefaultMutableTreeNode carac) {
+
+		Element caracteristica = doc.createElement("caracteristica");
+		caracteristica.setAttribute("nome", carac.toString());
+		
+		for (int i = 0; i < carac.getChildCount(); i++)
+			caracteristica.appendChild(getSubcaracteristicaRnf(doc, (DefaultMutableTreeNode) carac.getChildAt(i)));
+
+		return caracteristica;
+	}
+	
+	private static Node getSubcaracteristicaRnf(Document doc, DefaultMutableTreeNode sub) {
+
+		Element subcaracteristica = doc.createElement("subcaracteristica");
+		subcaracteristica.setAttribute("nome", sub.toString());
+		
+		for (int i = 0; i < sub.getChildCount(); i++)
+			subcaracteristica.appendChild(getPropriedadeNFuncionalRnf(doc, (DefaultMutableTreeNode) sub.getChildAt(i)));
+
+		return subcaracteristica;
+	}
+	
+	private static Node getPropriedadeNFuncionalRnf(Document doc, DefaultMutableTreeNode pnf) {
+
+		Element propriedadenf = doc.createElement("propriedadenfuncional");
+		propriedadenf.setAttribute("nome", pnf.toString());
+
+		return propriedadenf;
+	}
+	
+	//CONTEXTO RNFS
+	
+	public static Node getContextoRnf(Document doc, ContextoRnf contexto) {
+		
+		Element contextornf = doc.createElement("contextornf");
+		contextornf.setAttribute("nome", contexto.getNome());
+		
+		for (ValorContextoRnf valorContextoRnf : contexto.getValorContextoRnf())
+			contextornf.appendChild(getValorContextoRnf(doc, valorContextoRnf));
+
+		return contextornf;
+	}
+	
+	private static Node getValorContextoRnf(Document doc, ValorContextoRnf valorContextoRnf) {
+
+		Element propriedadenf = doc.createElement("valorrnf");
+		propriedadenf.setAttribute("idfeature", valorContextoRnf.getIdFeature());
+		propriedadenf.setAttribute("idrnf", valorContextoRnf.getIdRnf());
+		propriedadenf.setAttribute("impacto", valorContextoRnf.getImpacto()+"");
+
+		return propriedadenf;
+	}
 }

@@ -21,13 +21,19 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import br.ufc.lps.model.Adaptacao;
-import br.ufc.lps.model.ContextoAdaptacao;
+import com.teamdev.jxbrowser.chromium.ca;
+
 import br.ufc.lps.model.ModelFactory;
-import br.ufc.lps.model.ValorAdaptacao;
+import br.ufc.lps.model.adaptation.Adaptacao;
+import br.ufc.lps.model.adaptation.ContextoAdaptacao;
+import br.ufc.lps.model.adaptation.ValorAdaptacao;
 import br.ufc.lps.model.contextaware.Constraint;
 import br.ufc.lps.model.contextaware.Context;
 import br.ufc.lps.model.contextaware.Resolution;
+import br.ufc.lps.model.rnf.Caracteristica;
+import br.ufc.lps.model.rnf.PropriedadeNFuncional;
+import br.ufc.lps.model.rnf.Rnf;
+import br.ufc.lps.model.rnf.Subcaracteristica;
 import br.ufc.lps.splar.core.constraints.BooleanVariable;
 import br.ufc.lps.splar.core.constraints.BooleanVariableInterface;
 import br.ufc.lps.splar.core.constraints.CNFFormula;
@@ -66,6 +72,7 @@ public class ContextModel implements IContextModel {
     private Map<String, Context> contexts;
     private Map<String, Adaptacao> adaptacoes;
     private Adaptacao arvoreAdaptacao;
+    private Rnf arvoreRnf;
     private Map<Context, FeatureModelStatistics> statisticsByContext;
     private Map<Context, ReasoningWithBDD> bddByContext;
 	private Context currentContext;
@@ -89,12 +96,17 @@ public class ContextModel implements IContextModel {
 		parseXMLToGetContexts();
 		parseXMLToGetArvoreAdaptacao();
 		parseXMLToGetAdaptacoes();
+		parseXMLToGetArvoreRnf();
 		createFeatureModelByContext();
 	}
 	
 	
 	public Adaptacao getArvoreAdaptacao() {
 		return arvoreAdaptacao;
+	}
+	
+	public Rnf getArvoreRnf() {
+		return arvoreRnf;
 	}
 
 	public void setArvoreAdaptacao(Adaptacao arvoreAdaptacao) {
@@ -207,15 +219,15 @@ public class ContextModel implements IContextModel {
 	}
 	
 	
-private void parseXMLToGetAdaptacoes(){
-		
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder db;
-		try {
+	private void parseXMLToGetAdaptacoes(){
 			
-			db = dbf.newDocumentBuilder();
-			
-			//parse using builder to get DOM representation of the XML file
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db;
+			try {
+				
+				db = dbf.newDocumentBuilder();
+				
+				//parse using builder to get DOM representation of the XML file
 			
 			Document doc = db.parse(pathModelFile);
 			Element rootEle = doc.getDocumentElement();
@@ -274,10 +286,10 @@ private void parseXMLToGetAdaptacoes(){
 			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
-	}
-private void parseXMLToGetArvoreAdaptacao(){
+				e.printStackTrace();
+			}	
+		}
+	private void parseXMLToGetArvoreAdaptacao(){
 	
 	DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 	DocumentBuilder db;
@@ -353,17 +365,168 @@ private void parseXMLToGetArvoreAdaptacao(){
 	}	
 }
 
+	private void parseXMLToGetConstraintsRnf(){
+		
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db;
+		try {
+			
+			db = dbf.newDocumentBuilder();
+			
+			Document doc = db.parse(pathModelFile);
+			Element rootEle = doc.getDocumentElement();
+			
+			//parse contexts
+			NodeList contexts = rootEle.getElementsByTagName("adaptacao");
+			String nomeAdaptacao = rootEle.getAttribute("nome");
+			for(int i=0; i < contexts.getLength(); i++){
+				Element elContext = (Element) contexts.item(i);
+				String nameContext = elContext.getAttribute("nome");
+				List<ContextoAdaptacao> contextos = new ArrayList<ContextoAdaptacao>();
+				
+				NodeList elsResolutions = elContext.getElementsByTagName("contexto");
+				for(int countRes = 0; countRes < elsResolutions.getLength(); countRes++){
+					Element elResolution = (Element) elsResolutions.item(countRes);
+					
+					String nome = elResolution.getAttribute("nome");
+					
+					ContextoAdaptacao contextoAdaptacao = new ContextoAdaptacao();
+					contextoAdaptacao.setNome(nome);
+					
+					List<ValorAdaptacao> listaAdaptacoes = new ArrayList<ValorAdaptacao>();
+					NodeList valor = elContext.getElementsByTagName("contexto");
+					for(int countValor = 0; countValor < valor.getLength(); countValor++){
+						Element elValor = (Element) valor.item(countRes);
+						
+						String nomeValor = elValor.getAttribute("nome");
+						
+						Boolean statusValor = false;
+						if (elValor.getAttribute("status").equals("true")) 
+							statusValor = true;
+						
+						ValorAdaptacao valorAdap = new ValorAdaptacao();
+						valorAdap.setNome(nomeValor);
+						valorAdap.setStatus(statusValor);
+						
+						listaAdaptacoes.add(valorAdap);
+					}		
+					
+					contextoAdaptacao.setValorAdaptacao(listaAdaptacoes);
+				}
+				
+				Adaptacao adaptacao = new Adaptacao();
+				
+				adaptacao.setNome(nomeAdaptacao);
+				adaptacao.setValorAdaptacao(contextos);
+				
+				this.adaptacoes.put(nomeAdaptacao, adaptacao);	
+			}	
+			
+	} catch (ParserConfigurationException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (SAXException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	}
 	
 	
-public Map<String, Adaptacao> getAdaptacoes() {
-	return adaptacoes;
-}
+	private void parseXMLToGetArvoreRnf(){
 
-public void setAdaptacoes(Map<String, Adaptacao> adaptacoes) {
-	this.adaptacoes = adaptacoes;
-}
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db;
+		
+		try {
+			
+			db = dbf.newDocumentBuilder();
+			
+			Document doc = db.parse(pathModelFile);
+			Element rootEle = doc.getDocumentElement();
+			
+			Rnf rnf = new Rnf();
 
+			NodeList root = rootEle.getElementsByTagName("arvore_rnf");
+			
+			for(int i=0; i < root.getLength(); i++){
+				
+				Element arvore = (Element) root.item(i);
+				
+				List<Caracteristica> caracteristicas = new ArrayList<Caracteristica>();
+				
+				NodeList nodeCaracteristicas = arvore.getElementsByTagName("caracteristica");
+				
+				for(int countCaracteristica = 0; countCaracteristica < nodeCaracteristicas.getLength(); countCaracteristica++){
+				
+					Element elCaracteristica = (Element) nodeCaracteristicas.item(countCaracteristica);
+					
+					String nome = elCaracteristica.getAttribute("nome");
+					
+					Caracteristica caracteristica = new Caracteristica();
+					caracteristica.setNome(nome);
+					
+					caracteristicas.add(caracteristica);
+					
+					List<Subcaracteristica> subcaracteristicas = new ArrayList<Subcaracteristica>();
+					NodeList nodeSubcaracteristica = elCaracteristica.getElementsByTagName("subcaracteristica");
+					
+					for(int countSubcaracteristica = 0; countSubcaracteristica < nodeSubcaracteristica.getLength(); countSubcaracteristica++){
+						Element elSubcaracteristica = (Element) nodeSubcaracteristica.item(countSubcaracteristica);
+						
+						String nomeSub = elSubcaracteristica.getAttribute("nome");
+						
+						Subcaracteristica subcaracteristica = new Subcaracteristica();
+						
+						subcaracteristica.setNome(nomeSub);
+						
+						subcaracteristicas.add(subcaracteristica);
+						
+						List<PropriedadeNFuncional> propriedadeNFuncionais = new ArrayList<PropriedadeNFuncional>();
+						NodeList prop = elCaracteristica.getElementsByTagName("subcaracteristica");
+						
+						for(int countProp = 0; countProp < nodeSubcaracteristica.getLength(); countProp++){
+							Element elProp = (Element) prop.item(countProp);
+							
+							String nomeProp = elProp.getAttribute("nome");
+							
+							PropriedadeNFuncional propriedadeNFuncional = new PropriedadeNFuncional();
+							
+							propriedadeNFuncional.setPropriedade(nomeProp);
+							
+							propriedadeNFuncionais.add(propriedadeNFuncional);
+						}
+						subcaracteristica.setPropriedadeNFuncionais(propriedadeNFuncionais);
+					}	
+					caracteristica.setSubcaracteristicas(subcaracteristicas);
+				}
+				rnf.setCaracteristicas(caracteristicas);
+			}	
+		
+			this.arvoreRnf = rnf;
+			
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	}
 	
+	
+	public Map<String, Adaptacao> getAdaptacoes() {
+		return adaptacoes;
+	}
+	
+	public void setAdaptacoes(Map<String, Adaptacao> adaptacoes) {
+		this.adaptacoes = adaptacoes;
+	}
 	
 	//For each context, it creates a model for and set active and deactive features;
 	private void createFeatureModelByContext(){

@@ -5,15 +5,12 @@ import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,7 +31,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
-
 import br.ufc.lps.controller.browser.BrowserController;
 import br.ufc.lps.controller.export.ExportOfficeExcel;
 import br.ufc.lps.model.context.SplotContextModel;
@@ -47,8 +43,8 @@ import br.ufc.lps.repositorio.SchemeXml;
 import br.ufc.lps.view.panels.CreatorPanel;
 import br.ufc.lps.view.panels.EditorPanel;
 import br.ufc.lps.view.panels.ViewerPanel;
-import br.ufc.lps.view.panels.ViewerPanelResultMeasures;
 import br.ufc.lps.view.panels.ViewerPanelResultFeatures;
+import br.ufc.lps.view.panels.ViewerPanelResultMeasures;
 
 public class Main extends JFrame {
 
@@ -92,10 +88,6 @@ public class Main extends JFrame {
 		});
 	}
 
-	 
-	/**
-	 * Create the frame.
-	 */
 	public Main() {
 		
 		initXMLmodels();
@@ -315,7 +307,7 @@ public class Main extends JFrame {
 		mntmEditSplotModel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				JFileChooser fileChooser = new JFileChooser();
+				/*JFileChooser fileChooser = new JFileChooser();
 				fileChooser.setFileFilter(new FileFilter() {
 					
 					@Override
@@ -343,13 +335,13 @@ public class Main extends JFrame {
 				
 				int returnValue = fileChooser.showOpenDialog(null);
 				if(returnValue == JFileChooser.APPROVE_OPTION){
-					
-					String path = fileChooser.getSelectedFile().getAbsolutePath();
+					*/
+					String path = "/home/loopback/Heidelberg Ion-Beam Therapy Center.xml";//fileChooser.getSelectedFile().getAbsolutePath();
 					IModel model = new SplotModel(path);
 					final EditorPanel editor = new EditorPanel(model, ModelID.SPLOT_MODEL.getId(), path, null, Main.this);
 					
 					createTab(editor, editor.getModelName());
-				}
+				//}
 			}
 		});
 		

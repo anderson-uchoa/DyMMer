@@ -1,6 +1,4 @@
-package br.ufc.lps.model;
-
-
+package br.ufc.lps.model.adaptation;
 import java.util.List;
 
 public class ContextoAdaptacao {
@@ -19,6 +17,4 @@ public class ContextoAdaptacao {
 	public void setValorAdaptacao(List<ValorAdaptacao> valorAdaptacao) {
 		this.valorAdaptacao = valorAdaptacao;
 	}
-	
-	
 }

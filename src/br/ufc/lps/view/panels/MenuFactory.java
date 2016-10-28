@@ -139,7 +139,22 @@ public class MenuFactory {
 		JMenuItem addMandatoryFeature = new JMenuItem("Add a Mandatory Feature");
 		JMenuItem addXORGroup = new JMenuItem("Add a XOR Group");
 		JMenuItem addORGroup = new JMenuItem("Add a OR Group");
+		
 
+		JMenuItem addConstraintRnfPositive2 = new JMenuItem("Add to Constraint RNF as ++");
+		JMenuItem addConstraintRnfPositive1 = new JMenuItem("Add to Constraint RNF as +");
+		JMenuItem addConstraintRnfNegative1 = new JMenuItem("Add to Constraint RNF as -");
+		JMenuItem addConstraintRnfNegative2 = new JMenuItem("Add to Constraint RNF as --");
+
+		addConstraintRnfNegative1.setActionCommand("AddtoConstraintRNF-");
+		addConstraintRnfNegative1.addActionListener(editorPanel);
+		addConstraintRnfNegative2.setActionCommand("AddtoConstraintRNF--");
+		addConstraintRnfNegative2.addActionListener(editorPanel);
+		addConstraintRnfPositive1.setActionCommand("AddtoConstraintRNF+");
+		addConstraintRnfPositive1.addActionListener(editorPanel);
+		addConstraintRnfPositive2.setActionCommand("AddtoConstraintRNF++");
+		addConstraintRnfPositive2.addActionListener(editorPanel);
+		
 		JMenuItem remove = new JMenuItem("Remove");
 
 		setActive.setActionCommand("setActive");
@@ -182,6 +197,13 @@ public class MenuFactory {
 
 		menu.add(addConstraintNegative);
 		menu.add(addConstraintPositive);
+		
+		menu.add(separator);
+		
+		menu.add(addConstraintRnfPositive2);
+		menu.add(addConstraintRnfPositive1);
+		menu.add(addConstraintRnfNegative1);
+		menu.add(addConstraintRnfNegative2);
 
 		return menu;
 
@@ -202,7 +224,21 @@ public class MenuFactory {
 		JMenuItem addMandatoryFeature = new JMenuItem("Add a Mandatory Feature");
 		JMenuItem addXORGroup = new JMenuItem("Add a XOR Group");
 		JMenuItem addORGroup = new JMenuItem("Add a OR Group");
+		
+		JMenuItem addConstraintRnfPositive2 = new JMenuItem("Add to Constraint RNF as ++");
+		JMenuItem addConstraintRnfPositive1 = new JMenuItem("Add to Constraint RNF as +");
+		JMenuItem addConstraintRnfNegative1 = new JMenuItem("Add to Constraint RNF as -");
+		JMenuItem addConstraintRnfNegative2 = new JMenuItem("Add to Constraint RNF as --");
 
+		addConstraintRnfNegative1.setActionCommand("AddtoConstraintRNF-");
+		addConstraintRnfNegative1.addActionListener(editorPanel);
+		addConstraintRnfNegative2.setActionCommand("AddtoConstraintRNF--");
+		addConstraintRnfNegative2.addActionListener(editorPanel);
+		addConstraintRnfPositive1.setActionCommand("AddtoConstraintRNF+");
+		addConstraintRnfPositive1.addActionListener(editorPanel);
+		addConstraintRnfPositive2.setActionCommand("AddtoConstraintRNF++");
+		addConstraintRnfPositive2.addActionListener(editorPanel);
+		
 		JMenuItem remove = new JMenuItem("Remove");
 
 		setActive.setActionCommand("setActive");
@@ -245,6 +281,13 @@ public class MenuFactory {
 
 		menu.add(addConstraintNegative);
 		menu.add(addConstraintPositive);
+		
+		menu.add(separator);
+		
+		menu.add(addConstraintRnfPositive2);
+		menu.add(addConstraintRnfPositive1);
+		menu.add(addConstraintRnfNegative1);
+		menu.add(addConstraintRnfNegative2);
 
 		return menu;
 
@@ -294,7 +337,21 @@ public class MenuFactory {
 		JMenuItem addMandatoryFeature = new JMenuItem("Add a Mandatory Feature");
 		JMenuItem addXORGroup = new JMenuItem("Add a XOR Group");
 		JMenuItem addORGroup = new JMenuItem("Add a OR Group");
+		
+		JMenuItem addConstraintRnfPositive2 = new JMenuItem("Add to Constraint RNF as ++");
+		JMenuItem addConstraintRnfPositive1 = new JMenuItem("Add to Constraint RNF as +");
+		JMenuItem addConstraintRnfNegative1 = new JMenuItem("Add to Constraint RNF as -");
+		JMenuItem addConstraintRnfNegative2 = new JMenuItem("Add to Constraint RNF as --");
 
+		addConstraintRnfNegative1.setActionCommand("AddtoConstraintRNF-");
+		addConstraintRnfNegative1.addActionListener(editorPanel);
+		addConstraintRnfNegative2.setActionCommand("AddtoConstraintRNF--");
+		addConstraintRnfNegative2.addActionListener(editorPanel);
+		addConstraintRnfPositive1.setActionCommand("AddtoConstraintRNF+");
+		addConstraintRnfPositive1.addActionListener(editorPanel);
+		addConstraintRnfPositive2.setActionCommand("AddtoConstraintRNF++");
+		addConstraintRnfPositive2.addActionListener(editorPanel);
+		
 		JMenuItem remove = new JMenuItem("Remove");
 		
 		addOptionalFeature.setActionCommand("addOptionalFeature");
@@ -317,6 +374,13 @@ public class MenuFactory {
 		menu.add(addXORGroup);
 		menu.add(addORGroup);
 		menu.add(remove);
+		
+		menu.add(separator);
+		
+		menu.add(addConstraintRnfPositive2);
+		menu.add(addConstraintRnfPositive1);
+		menu.add(addConstraintRnfNegative1);
+		menu.add(addConstraintRnfNegative2);
 
 		return menu;
 
@@ -333,8 +397,22 @@ public class MenuFactory {
 		JMenuItem addXORGroup = new JMenuItem("Add a XOR Group");
 		JMenuItem addORGroup = new JMenuItem("Add a OR Group");
 		
-		JMenuItem remove = new JMenuItem("Remove");
+		JMenuItem addConstraintRnfPositive2 = new JMenuItem("Add to Constraint RNF as ++");
+		JMenuItem addConstraintRnfPositive1 = new JMenuItem("Add to Constraint RNF as +");
+		JMenuItem addConstraintRnfNegative1 = new JMenuItem("Add to Constraint RNF as -");
+		JMenuItem addConstraintRnfNegative2 = new JMenuItem("Add to Constraint RNF as --");
 
+		JMenuItem remove = new JMenuItem("Remove");
+		
+		addConstraintRnfNegative1.setActionCommand("AddtoConstraintRNF-");
+		addConstraintRnfNegative1.addActionListener(editorPanel);
+		addConstraintRnfNegative2.setActionCommand("AddtoConstraintRNF--");
+		addConstraintRnfNegative2.addActionListener(editorPanel);
+		addConstraintRnfPositive1.setActionCommand("AddtoConstraintRNF+");
+		addConstraintRnfPositive1.addActionListener(editorPanel);
+		addConstraintRnfPositive2.setActionCommand("AddtoConstraintRNF++");
+		addConstraintRnfPositive2.addActionListener(editorPanel);
+		
 		addOptionalFeature.setActionCommand("addOptionalFeature");
 		addMandatoryFeature.setActionCommand("addMandatoryFeature");
 		addXORGroup.setActionCommand("addXORGroup");
@@ -355,6 +433,13 @@ public class MenuFactory {
 		menu.add(addORGroup);
 		menu.add(remove);
 		
+		menu.add(separator);
+		
+		menu.add(addConstraintRnfPositive2);
+		menu.add(addConstraintRnfPositive1);
+		menu.add(addConstraintRnfNegative1);
+		menu.add(addConstraintRnfNegative2);
+		
 		
 		return menu;
 
@@ -364,10 +449,10 @@ public class MenuFactory {
 
 		JPopupMenu menu = new JPopupMenu();
 
-		JSeparator separator = new JSeparator();
-
 		JMenuItem setActive = new JMenuItem("Set as active node");
 		JMenuItem setDeactive = new JMenuItem("Set as deactive node");
+		
+		JSeparator separator = new JSeparator();
 
 		JMenuItem takeOffContext = new JMenuItem("Take it off from context");
 		JMenuItem addConstraintPositive = new JMenuItem("Add to Constraint as Positive");
@@ -381,6 +466,20 @@ public class MenuFactory {
 		addConstraintPositive.setActionCommand("addConstraintPositive");
 		addConstraintNegative.setActionCommand("addConstraintNegative");
 
+		JMenuItem addConstraintRnfPositive2 = new JMenuItem("Add to Constraint RNF as ++");
+		JMenuItem addConstraintRnfPositive1 = new JMenuItem("Add to Constraint RNF as +");
+		JMenuItem addConstraintRnfNegative1 = new JMenuItem("Add to Constraint RNF as -");
+		JMenuItem addConstraintRnfNegative2 = new JMenuItem("Add to Constraint RNF as --");
+		
+		addConstraintRnfNegative1.setActionCommand("AddtoConstraintRNF-");
+		addConstraintRnfNegative1.addActionListener(editorPanel);
+		addConstraintRnfNegative2.setActionCommand("AddtoConstraintRNF--");
+		addConstraintRnfNegative2.addActionListener(editorPanel);
+		addConstraintRnfPositive1.setActionCommand("AddtoConstraintRNF+");
+		addConstraintRnfPositive1.addActionListener(editorPanel);
+		addConstraintRnfPositive2.setActionCommand("AddtoConstraintRNF++");
+		addConstraintRnfPositive2.addActionListener(editorPanel);
+		
 		remove.setActionCommand("remove");
 
 		setActive.addActionListener(editorPanel);
@@ -399,10 +498,15 @@ public class MenuFactory {
 
 		menu.add(remove);
 
-		menu.add(separator);
-
 		menu.add(addConstraintNegative);
 		menu.add(addConstraintPositive);
+		
+		menu.add(separator);
+		
+		menu.add(addConstraintRnfPositive2);
+		menu.add(addConstraintRnfPositive1);
+		menu.add(addConstraintRnfNegative1);
+		menu.add(addConstraintRnfNegative2);
 
 		return menu;
 	}

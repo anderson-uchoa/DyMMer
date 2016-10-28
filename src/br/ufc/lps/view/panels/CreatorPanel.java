@@ -58,8 +58,8 @@ import br.ufc.lps.controller.features.ControllerFeatures;
 import br.ufc.lps.controller.features.TypeFeature;
 import br.ufc.lps.controller.xml.ControladorXml;
 import br.ufc.lps.controller.xml.WriteXMLmodel;
-import br.ufc.lps.model.ContextoAdaptacao;
 import br.ufc.lps.model.ModelFactory;
+import br.ufc.lps.model.adaptation.ContextoAdaptacao;
 import br.ufc.lps.model.context.SplotContextModel;
 import br.ufc.lps.model.contextaware.Constraint;
 import br.ufc.lps.model.contextaware.Context;
@@ -85,13 +85,13 @@ import br.ufc.lps.splar.core.heuristics.VariableOrderingHeuristicsManager;
 import br.ufc.lps.splar.plugins.reasoners.bdd.javabdd.FMReasoningWithBDD;
 import br.ufc.lps.view.Main;
 import br.ufc.lps.view.list.ConstraintsListModel;
-import br.ufc.lps.view.trees.Adaptacao;
-import br.ufc.lps.view.trees.CheckBoxNodeData;
-import br.ufc.lps.view.trees.CheckBoxNodeEditor;
-import br.ufc.lps.view.trees.CheckBoxNodeRenderer;
 import br.ufc.lps.view.trees.FeatureModelTree;
 import br.ufc.lps.view.trees.FeaturesTreeCellRenderer;
-import br.ufc.lps.view.trees.ValorAdaptacao;
+import br.ufc.lps.view.trees.adaptation.Adaptacao;
+import br.ufc.lps.view.trees.adaptation.CheckBoxNodeData;
+import br.ufc.lps.view.trees.adaptation.CheckBoxNodeEditor;
+import br.ufc.lps.view.trees.adaptation.CheckBoxNodeRenderer;
+import br.ufc.lps.view.trees.adaptation.ValorAdaptacao;
 
 public class CreatorPanel extends JPanel implements ActionListener {
 
@@ -1010,7 +1010,7 @@ public class CreatorPanel extends JPanel implements ActionListener {
 					String valor = JOptionPane.showInputDialog("Adicione o nome do valor");
 					if(valor!=null && !valor.trim().isEmpty()){
 						CheckBoxNodeData check = new CheckBoxNodeData(valor, false);
-						node.add(new br.ufc.lps.view.trees.ValorAdaptacao(check));
+						node.add(new br.ufc.lps.view.trees.adaptation.ValorAdaptacao(check));
 						treeAdaptation.updateUI();
 					}
 				}
@@ -1269,16 +1269,16 @@ private void adicionar(){
 		return null;
 	}
 	
-	private void preenchendoArvore(br.ufc.lps.model.Adaptacao adaptacao){
+	private void preenchendoArvore(br.ufc.lps.model.adaptation.Adaptacao adaptacao){
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Adaptações de contexto");
 		
 		if(adaptacao!=null && adaptacao.getValorAdaptacao()!=null){
 			for(ContextoAdaptacao contextoAdaptacao : adaptacao.getValorAdaptacao()){
 				Adaptacao contexto = new Adaptacao(contextoAdaptacao.getNome());
 				
-				for(br.ufc.lps.model.ValorAdaptacao valorAdaptacao : contextoAdaptacao.getValorAdaptacao()){
+				for(br.ufc.lps.model.adaptation.ValorAdaptacao valorAdaptacao : contextoAdaptacao.getValorAdaptacao()){
 					CheckBoxNodeData data = new CheckBoxNodeData(valorAdaptacao.getNome(), false);
-					contexto.add(new br.ufc.lps.view.trees.ValorAdaptacao(data));
+					contexto.add(new br.ufc.lps.view.trees.adaptation.ValorAdaptacao(data));
 					
 				}
 				

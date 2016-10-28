@@ -16,7 +16,6 @@ public class ConstraintsListModel extends AbstractListModel<String>{
 
 	@Override
 	public String getElementAt(int position) {
-		// TODO Auto-generated method stub
 		return constraints.get(position).getClause();
 	}
 

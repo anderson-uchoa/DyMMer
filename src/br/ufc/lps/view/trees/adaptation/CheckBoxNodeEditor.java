@@ -1,4 +1,4 @@
-package br.ufc.lps.view.trees;
+package br.ufc.lps.view.trees.adaptation;
 
 import java.awt.Component;
 import java.awt.event.ItemEvent;
@@ -12,16 +12,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreePath;
 
-/**
- * A {@link TreeCellEditor} for check box tree nodes.
- * <p>
- * Thanks to John Zukowski for the <a
- * href="http://www.java2s.com/Code/Java/Swing-JFC/CheckBoxNodeTreeSample.htm"
- * >sample code</a> upon which this is based.
- * </p>
- * 
- * @author Curtis Rueden
- */
 public class CheckBoxNodeEditor extends AbstractCellEditor implements TreeCellEditor {
 
 	private final CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();

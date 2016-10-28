@@ -4,6 +4,11 @@ public class ValorContextoRnf {
 	private String idFeature;
 	private String idRnf;
 	private Integer impacto;
+	private boolean terminate;
+	
+	public ValorContextoRnf() {
+		this.terminate = false;
+	}
 	
 	public String getIdFeature() {
 		return idFeature;
@@ -23,10 +28,20 @@ public class ValorContextoRnf {
 	public void setImpacto(Integer impacto) {
 		this.impacto = impacto;
 	}
+	public boolean isTerminate() {
+		return terminate;
+	}
+	public void setTerminate(boolean terminate) {
+		this.terminate = terminate;
+	}
 	
 	@Override
 	public String toString() {
-		return idFeature +" "+NameImpacto.getNameimpacto(this.impacto)+" "+idRnf;
+		
+		if(idRnf==null)
+			return idFeature +" "+NameImpacto.getNameByImpacto(this.impacto);
+		
+		return idFeature +" "+NameImpacto.getNameByImpacto(this.impacto) + " " + idRnf;
 	}
 	
 	

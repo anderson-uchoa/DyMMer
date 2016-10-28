@@ -67,6 +67,7 @@ import br.ufc.lps.model.contextaware.Resolution;
 import br.ufc.lps.model.normal.IModel;
 import br.ufc.lps.model.rnf.Caracteristica;
 import br.ufc.lps.model.rnf.ContextoRnf;
+import br.ufc.lps.model.rnf.NameImpacto;
 import br.ufc.lps.model.rnf.PropriedadeNFuncional;
 import br.ufc.lps.model.rnf.Rnf;
 import br.ufc.lps.model.rnf.Subcaracteristica;
@@ -96,7 +97,6 @@ import br.ufc.lps.view.trees.adaptation.CheckBoxNodeData;
 import br.ufc.lps.view.trees.adaptation.CheckBoxNodeEditor;
 import br.ufc.lps.view.trees.adaptation.CheckBoxNodeRenderer;
 import br.ufc.lps.view.trees.adaptation.ValorAdaptacao;
-import prefuse.action.layout.Layout;
 
 public class EditorPanel extends JPanel implements ActionListener {
 
@@ -122,7 +122,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 	public ConstraintsRnfListModel constraintsRnfListModel;
 	private int selectedConstraintIndex;
 	private List<Constraint> constraintsList;
-	private List<ValorContextoRnf> constraintsRnfList;
+	private ValorContextoRnf constraintsRnf;
+	private List<ValorContextoRnf> constraintsListRnf;
 	private int constraintNumber;
 	private Integer modelID;
 	private String pathModelFile;
@@ -142,7 +143,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 		constraints = new HashMap<String, String>();
 		constraintLiterals = new ArrayList<Literal>();
 		constraintsList = new ArrayList<Constraint>();
-		constraintsRnfList = new ArrayList<ValorContextoRnf>();
+		constraintsListRnf = new ArrayList<>();
 		
 		splotContextModel = new SplotContextModel(pathModelFile);
 		
@@ -343,14 +344,19 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 						rootEle.appendChild(WriteXMLmodel.getArvoreRnf(doc, (DefaultMutableTreeNode)treeRnf.getModel().getRoot()));
 						
-						rootEle.appendChild(WriteXMLmodel.getArvoreRnf(doc, (DefaultMutableTreeNode)treeRnf.getModel().getRoot()));
+						rootEle.appendChild(WriteXMLmodel.getArvoreAdaptacao(doc, rootArvoreAdaptacao));
 												
-						rootEle.appendChild(WriteXMLmodel.getContextoRnf(doc, null));
-						
 						rootEle.appendChild(WriteXMLmodel.getAdaptacao(doc, rootArvoreAdaptacao, nomeContexto));
 						
 						rootEle.appendChild(WriteXMLmodel.getContext(doc, nomeContexto,
 									EditorPanel.this.resolutions, new ArrayList<String>(constraints.values())));
+						
+						ContextoRnf contextoRnf = new ContextoRnf();
+						
+						contextoRnf.setNome(nomeContexto);
+						contextoRnf.setValorContextoRnf(constraintsListRnf);
+						
+						rootEle.appendChild(WriteXMLmodel.getContextoRnf(doc, contextoRnf));
 
 						Transformer transformer = TransformerFactory.newInstance().newTransformer();
 						transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -627,7 +633,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 		JScrollPane scrollPane_1 = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
-		constraintsRnfListModel = new ConstraintsRnfListModel(constraintsRnfList);
+		constraintsRnfListModel = new ConstraintsRnfListModel(constraintsListRnf);
 		listConstraintsRnf = new JList<String>(constraintsRnfListModel);
 		listConstraintsRnf.setComponentPopupMenu(getComponentPopupMenuConstraintsList());
 		listConstraintsRnf.addMouseListener(getMouseListener());
@@ -668,6 +674,34 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 		JButton btnRemoveConstraintRnf = new JButton("Remove Constraint");
 		panel_2.add(btnRemoveConstraintRnf);
+		
+		btnRemoveConstraintRnf.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				constraintsRnf = null;
+				txtAddConstraintRnf.setText("");
+			}
+		});
+		
+		JButton btnAddConstraintRnf = new JButton("Add Constraint");
+		panel_2.add(btnAddConstraintRnf);
+
+		btnAddConstraintRnf.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+				if(constraintsRnf!=null && constraintsRnf.isTerminate()){
+					constraintsListRnf.add(constraintsRnf);
+					constraintsRnfListModel.update();
+					constraintsRnf = null;
+					txtAddConstraintRnf.setText("");
+				}
+
+			}
+		});
+
 		
 		this.main.expandAllNodes(tree, 0, tree.getRowCount());
 	}
@@ -1183,16 +1217,38 @@ public class EditorPanel extends JPanel implements ActionListener {
 			JPopupMenu menu = new JPopupMenu("Adaptation");
 			menu.add(new JLabel("Opções de PNF:"));
 			menu.addSeparator();
-			JMenuItem adicionar = new JMenuItem("Remove");
 			
-			menu.add(adicionar);
+			JMenuItem remover = new JMenuItem("Remove");
 			
-			adicionar.addActionListener(new ActionListener() {
+			menu.add(remover);
+			
+			remover.addActionListener(new ActionListener() {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					node.removeFromParent();
 					treeRnf.updateUI();
+				}
+			});
+			
+			menu.add(new JLabel("Opções de Contrainsts RNF:"));
+			menu.addSeparator();
+			
+			JMenuItem addToConstraint = new JMenuItem("Add to Constraint Model Features");
+			
+			menu.add(addToConstraint);
+			
+			addToConstraint.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+	
+					if(constraintsRnf != null && constraintsRnf.getIdFeature()!=null){
+						constraintsRnf.setIdRnf(node.toString());
+						constraintsRnf.setTerminate(true);
+						txtAddConstraintRnf.setText(constraintsRnf.toString());
+					}
+					
 				}
 			});
 			
@@ -1317,12 +1373,48 @@ public class EditorPanel extends JPanel implements ActionListener {
 		
 		} else if(e.getActionCommand().equals("AddtoConstraintRNF-")){
 			
+			constraintsRnf = new ValorContextoRnf();
+			
+			constraintsRnf.setIdFeature(selectedNode.getID());
+			constraintsRnf.setImpacto(NameImpacto.getImpactoByName("-"));
+			
+			System.out.println(constraintsRnf.toString());
+			
+			txtAddConstraintRnf.setText(constraintsRnf.toString());
+			
 		} else if(e.getActionCommand().equals("AddtoConstraintRNF--")){
 			
+			constraintsRnf = new ValorContextoRnf();
+			
+			constraintsRnf.setIdFeature(selectedNode.getID());
+			constraintsRnf.setImpacto(NameImpacto.getImpactoByName("--"));
+			
+			System.out.println(constraintsRnf.toString());
+			
+			txtAddConstraintRnf.setText(constraintsRnf.toString());
+			
 		} else if(e.getActionCommand().equals("AddtoConstraintRNF+")){
+
+			constraintsRnf = new ValorContextoRnf();
+			
+			constraintsRnf.setIdFeature(selectedNode.getID());
+			constraintsRnf.setImpacto(NameImpacto.getImpactoByName("+"));
+			
+			System.out.println(constraintsRnf.toString());
+			
+			txtAddConstraintRnf.setText(constraintsRnf.toString());
 			
 		} else if(e.getActionCommand().equals("AddtoConstraintRNF++")){
 
+			constraintsRnf = new ValorContextoRnf();
+			
+			constraintsRnf.setIdFeature(selectedNode.getID());
+			constraintsRnf.setImpacto(NameImpacto.getImpactoByName("++"));
+			
+			System.out.println(constraintsRnf.toString());
+			
+			txtAddConstraintRnf.setText(constraintsRnf.toString());
+			
 		} else{
 			
 			controllerFeatures.removeFeatures(selectedNode);
@@ -1481,6 +1573,5 @@ public class EditorPanel extends JPanel implements ActionListener {
 		treeRnf.updateUI();
 		expandAllNodes(treeRnf, 0, treeRnf.getRowCount());
 	}
-
 	
 }

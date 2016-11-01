@@ -2,9 +2,27 @@ package br.ufc.lps.model.rnf;
 
 public class ValorContextoRnf {
 	private String idFeature;
+	private String nomeFeature;
 	private String idRnf;
+	private String nomeRnf;
 	private Integer impacto;
 	private boolean terminate;
+	
+	public String getNomeFeature() {
+		return nomeFeature;
+	}
+	
+	public void setNomeFeature(String nomeFeature) {
+		this.nomeFeature = nomeFeature;
+	}
+	
+	public void setNomeRnf(String nomeRnf) {
+		this.nomeRnf = nomeRnf;
+	}
+	
+	public String getNomeRnf() {
+		return nomeRnf;
+	}
 	
 	public ValorContextoRnf() {
 		this.terminate = false;
@@ -39,9 +57,9 @@ public class ValorContextoRnf {
 	public String toString() {
 		
 		if(idRnf==null)
-			return idFeature +" "+NameImpacto.getNameByImpacto(this.impacto);
+			return nomeFeature +" "+NameImpacto.getNameByImpacto(this.impacto);
 		
-		return idFeature +" "+NameImpacto.getNameByImpacto(this.impacto) + " " + idRnf;
+		return nomeFeature +" "+NameImpacto.getNameByImpacto(this.impacto) + " " + idRnf;
 	}
 	
 	

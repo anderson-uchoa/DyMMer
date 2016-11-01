@@ -123,7 +123,7 @@ public class WriteXMLmodel {
 	
 	private static Node getPropriedadeNFuncionalRnf(Document doc, DefaultMutableTreeNode pnf) {
 
-		Element propriedadenf = doc.createElement("propriedadenfuncional");
+		Element propriedadenf = doc.createElement("propriedade_n_funcional");
 		propriedadenf.setAttribute("nome", pnf.toString());
 
 		return propriedadenf;
@@ -133,7 +133,7 @@ public class WriteXMLmodel {
 	
 	public static Node getContextoRnf(Document doc, ContextoRnf contexto) {
 		
-		Element contextornf = doc.createElement("contextornf");
+		Element contextornf = doc.createElement("contexto_rnf");
 		contextornf.setAttribute("nome", contexto.getNome());
 		
 		for (ValorContextoRnf valorContextoRnf : contexto.getValorContextoRnf())
@@ -144,10 +144,11 @@ public class WriteXMLmodel {
 	
 	private static Node getValorContextoRnf(Document doc, ValorContextoRnf valorContextoRnf) {
 
-		Element propriedadenf = doc.createElement("valorrnf");
-		propriedadenf.setAttribute("idfeature", valorContextoRnf.getIdFeature());
-		propriedadenf.setAttribute("idrnf", valorContextoRnf.getIdRnf());
+		Element propriedadenf = doc.createElement("valor_rnf");
+		propriedadenf.setAttribute("id_feature", valorContextoRnf.getIdFeature());
+		propriedadenf.setAttribute("id_rnf", valorContextoRnf.getIdRnf());
 		propriedadenf.setAttribute("impacto", valorContextoRnf.getImpacto()+"");
+		propriedadenf.setAttribute("nome_feature",  valorContextoRnf.getNomeFeature());
 
 		return propriedadenf;
 	}

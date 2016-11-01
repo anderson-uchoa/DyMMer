@@ -24,6 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -38,6 +39,13 @@ import br.ufc.lps.model.adaptation.ContextoAdaptacao;
 import br.ufc.lps.model.context.ContextModel;
 import br.ufc.lps.model.context.MeeasuresWithContextCalcula;
 import br.ufc.lps.model.contextaware.Context;
+import br.ufc.lps.model.rnf.Caracteristica;
+import br.ufc.lps.model.rnf.ContextoRnf;
+import br.ufc.lps.model.rnf.NameImpacto;
+import br.ufc.lps.model.rnf.PropriedadeNFuncional;
+import br.ufc.lps.model.rnf.Rnf;
+import br.ufc.lps.model.rnf.Subcaracteristica;
+import br.ufc.lps.model.rnf.ValorContextoRnf;
 import br.ufc.lps.repositorio.SchemeXml;
 import br.ufc.lps.splar.core.constraints.BooleanVariable;
 import br.ufc.lps.splar.core.constraints.PropositionalFormula;
@@ -70,16 +78,19 @@ public class ViewerPanel extends JPanel {
 	private ContextModel model;
 	private String modelName;
 	private TextArea constraintsPanel;
+	private TextArea constraintsPanelRnf;
 	private Main main;
 	private Tree treeP;
 	private JScrollPane scrollPane;
 	private JPanel panelBotoesLayoutTree;
-	public JTree treeAdaptation;
+	private JTree treeAdaptation;
+	private JTree treeRnf;
 	private JPanel panelTreePerfuse;
    	private Table table;
     private FeaturesTreeViewPerfuse tview;
     private JPanel panelSelecionada;
     private JPanel panelTree;
+    private ContextoRnf contextoRnf;
     private boolean primeira = true;
     private DefaultTreeModel treeModel;
 	
@@ -117,10 +128,14 @@ public class ViewerPanel extends JPanel {
 		panelTrees.setLayout(new BorderLayout(0, 0));
 		add(panelTrees, BorderLayout.CENTER);
 		
-		//TREE ADAPTAÇÃO
-		treeAdaptation = new JTree();
+		//ARVORE RNF
+		treeRnf = new JTree();
+		treeRnf.setEditable(true);
+		preenchendoArvoreRnf(model.getArvoreRnf());
+		contextoRnf = model.getContextoRnf();
 		
 		//ARVORE DA ADAPTAÇÃO
+		treeAdaptation = new JTree();
 		preenchendoArvore(model.getArvoreAdaptacao());
 		final CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
 		treeAdaptation.setCellRenderer(renderer);
@@ -144,13 +159,27 @@ public class ViewerPanel extends JPanel {
 			@Override
 			public void treeStructureChanged(TreeModelEvent e){}
 		});
-		
+	
 		tree = new JTree();
+		
+		JPanel painelTreeFeatures = new JPanel(new BorderLayout());
+		painelTreeFeatures.add(new JLabel("Feature Model"), BorderLayout.NORTH);
+		painelTreeFeatures.add(tree, BorderLayout.CENTER);
+		
+		JPanel painelTreeFeaturesRnf = new JPanel(new BorderLayout());
+		painelTreeFeaturesRnf.add(new JLabel("Quality Feature Model"), BorderLayout.NORTH);
+		painelTreeFeaturesRnf.add(treeRnf, BorderLayout.CENTER);
+		
+		JPanel painelTreeFeaturesAdap = new JPanel(new BorderLayout());
+		painelTreeFeaturesAdap.add(new JLabel("Adaptaion Context Feature"), BorderLayout.NORTH);
+		painelTreeFeaturesAdap.add(treeAdaptation, BorderLayout.CENTER);
 		
 		//Painel para a arvore;
 		panelTree = new JPanel();
-		panelTree.setLayout(new GridLayout(1,0));
-		panelTree.add(tree);
+		panelTree.setLayout(new GridLayout(1,0, 2, 2));
+		panelTree.add(painelTreeFeatures);
+		panelTree.add(painelTreeFeaturesRnf);
+		panelTree.add(painelTreeFeaturesAdap);
 
 		scrollPane = new JScrollPane(panelTree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panelTrees.add(scrollPane, BorderLayout.CENTER);
@@ -234,21 +263,35 @@ public class ViewerPanel extends JPanel {
 		JLabel lblNewLabel = new JLabel("Contexts");
 		//panelInfoContexts.add(lblNewLabel);
 		
-		JPanel painelTreeAdaptation = new JPanel(new BorderLayout());
-		painelTreeAdaptation.add(treeAdaptation, BorderLayout.CENTER);
-		JLabel tituloTree = new JLabel("Tree Adaptation");
-		painelTreeAdaptation.add(tituloTree, BorderLayout.NORTH);
-		JScrollPane scrollPane = new JScrollPane(painelTreeAdaptation, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+//		JPanel painelTreeAdaptation = new JPanel(new BorderLayout());
+//		painelTreeAdaptation.add(treeAdaptation);
+//		JLabel tituloTree = new JLabel("Tree Adaptation");
+//		painelTreeAdaptation.add(tituloTree, BorderLayout.NORTH);
+//		
+//		JScrollPane scrollPane = new JScrollPane(painelTreeAdaptation, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+//				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+//		
+		//panelInfoContexts.add(scrollPane);
 		
+		JPanel panelInfoConstraints = new JPanel(new GridLayout(0, 1));
 		
-		panelInfoContexts.add(scrollPane);
-		
-		JPanel panelInfoConstraints = new JPanel();
 		panelInfos.add(panelInfoConstraints, BorderLayout.SOUTH);
+		
+		JPanel panelConstraintsPanel = new JPanel(new BorderLayout());
 		constraintsPanel = new TextArea();
 		constraintsPanel.setEditable(false);
-		panelInfoConstraints.add(constraintsPanel);
+		panelConstraintsPanel.add(new JLabel("Constraints: "), BorderLayout.NORTH);
+		panelConstraintsPanel.add(constraintsPanel, BorderLayout.CENTER);
+		panelInfoConstraints.add(panelConstraintsPanel);
+		
+		JPanel panelConstraintsPanelRnf = new JPanel(new BorderLayout());
+		constraintsPanelRnf = new TextArea();
+		constraintsPanelRnf.setEditable(false);
+		panelConstraintsPanelRnf.add(new JLabel("Constraints RNF: "), BorderLayout.NORTH);
+		panelConstraintsPanelRnf.add(constraintsPanelRnf, BorderLayout.CENTER);
+		panelInfoConstraints.add(panelConstraintsPanelRnf);
+		
+		preenchendoContextosRnf();
 		
 		comboBoxContexts = new JComboBox();
 		for(String contextNames : model.getContexts().keySet()){
@@ -256,7 +299,7 @@ public class ViewerPanel extends JPanel {
 		}
 		//panelInfoContexts.add(comboBoxContexts);
 		
-		if(false){
+		if(schemeXml==null){
 			JButton botaoSalvar = new JButton("Save");
 			
 			panelInfoContexts.add(botaoSalvar);
@@ -410,9 +453,11 @@ public class ViewerPanel extends JPanel {
 		if(model.getContexts().isEmpty()){
 			JOptionPane.showMessageDialog(ViewerPanel.this, "It's not supported, because it does not have any context. Please, first edit it and add one context.");
 			tree.setModel(null);
-			
 			return;
 		}	
+		
+		if(!model.getContexts().containsKey(contextName))
+			return;
 		
 		Context context = model.getContexts().get(contextName);
 		FeatureModel featureModel = model.setFeatureModel(context);
@@ -563,6 +608,34 @@ public class ViewerPanel extends JPanel {
 		expandAllNodes(treeAdaptation, 0, treeAdaptation.getRowCount());
 	}
 	
+	private void preenchendoArvoreRnf(Rnf rnf){
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Rnf");
+		
+		if(rnf!=null && rnf.getCaracteristicas()!=null){
+			
+			for(Caracteristica caracteristica : rnf.getCaracteristicas()){
+				DefaultMutableTreeNode carac = new DefaultMutableTreeNode(caracteristica.getNome());
+				
+				for(Subcaracteristica subcaracteristica : caracteristica.getSubcaracteristicas()){
+					DefaultMutableTreeNode sub = new DefaultMutableTreeNode(subcaracteristica.getNome());
+					carac.add(sub);
+					
+					for(PropriedadeNFuncional propriedadeNFuncional : subcaracteristica.getPropriedadeNFuncionais()){
+						DefaultMutableTreeNode pnf = new DefaultMutableTreeNode(propriedadeNFuncional.getPropriedade());
+						sub.add(pnf);
+					}
+				}
+				
+				root.add(carac);
+			}
+			
+		}
+		treeModel = new DefaultTreeModel(root);
+		treeRnf = new JTree(treeModel);
+		treeRnf.setModel(treeModel);
+		treeRnf.updateUI();
+		expandAllNodes(treeRnf, 0, treeRnf.getRowCount());
+	}
 	private void expandAllNodes(JTree tree, int startingIndex, int rowCount){
 	    for(int i=startingIndex;i<rowCount;++i){
 	        tree.expandRow(i);
@@ -573,5 +646,10 @@ public class ViewerPanel extends JPanel {
 	    }
 	}
 	
+	private void preenchendoContextosRnf(){
+		for(ValorContextoRnf con : contextoRnf.getValorContextoRnf())
+			constraintsPanelRnf.setText(con.getNomeFeature() + " " + NameImpacto.getNameByImpacto(con.getImpacto()) + " " + con.getIdRnf() + "\n" +constraintsPanelRnf.getText());
+		
+	}
 
 }

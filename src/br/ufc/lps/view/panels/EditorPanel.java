@@ -32,7 +32,7 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
+import javax.swing.event.TreeModelListener;import javax.swing.text.AbstractWriter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -103,23 +103,20 @@ public class EditorPanel extends JPanel implements ActionListener {
 	protected static final String BASE_NAME_CONSTRAINT = "contextConstraint";
 	private IModel model;
 	private JTextField textFieldNewContext;
-	public JTree tree;
-	public JTree treeRnf;
-	public JTree treeAdaptation;
+	private JTree tree, treeRnf, treeAdaptation;
 	private FeatureTreeNode selectedNode;
 	private JTextArea txtMessageText;
 	private JButton btnNewContext;
 	private JLabel lblNewContext;
 	private Context defaultContext;
-	public List<Resolution> resolutions;
+	private List<Resolution> resolutions;
 	private JTextField txtAddTheFeatures;
 	private JTextField txtAddConstraintRnf;
 	private Map<String, String> constraints;
 	private List<Literal> constraintLiterals;
-	private JList list;
-	private JList listConstraintsRnf;
-	public ConstraintsListModel constraintsListModel;
-	public ConstraintsRnfListModel constraintsRnfListModel;
+	private JList list, listConstraintsRnf;
+	private ConstraintsListModel constraintsListModel;
+	private ConstraintsRnfListModel constraintsRnfListModel;
 	private int selectedConstraintIndex;
 	private List<Constraint> constraintsList;
 	private ValorContextoRnf constraintsRnf;
@@ -157,22 +154,24 @@ public class EditorPanel extends JPanel implements ActionListener {
 		this.model = model;
 		resolutions = new ArrayList<Resolution>();
 
-		tree = new   JTree();
-		treeRnf = new JTree();
-		treeAdaptation = new JTree();
 		controllerFeatures = new ControllerFeatures();
 
+		//ARVORE FEATURE
+		tree = new JTree();
 		tree.setModel(new FeatureModelTree(model.getFeatureModel().getRoot()));
-
 		tree.setEditable(true);
 		tree.setComponentPopupMenu(getComponentPopupMenu());
 		tree.addMouseListener(getMouseListener());
-
+	
+		//ARVORE RNF
+		treeRnf = new JTree();
 		treeRnf.setEditable(true);
 		preenchendoArvoreRnf(splotContextModel.getArvoreRnf());
 		
 		adaptacoes = splotContextModel.getAdaptacoes();
+
 		//ARVORE DA ADAPTAÇÃO
+		treeAdaptation = new JTree();
 		preenchendoArvore(splotContextModel.getArvoreAdaptacao());
 		final CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
 		treeAdaptation.setCellRenderer(renderer);
@@ -274,31 +273,24 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 		JPanel panelNewContext = new JPanel();
 		panelInfos.add(panelNewContext, BorderLayout.NORTH);
-		panelNewContext.setLayout(new GridLayout(0, 2, 0, 0));
+		panelNewContext.setLayout(new GridLayout(0, 1, 0, 0));
 
-		lblNewContext = new JLabel("New context");
-		panelNewContext.add(lblNewContext);
+		//lblNewContext = new JLabel("New context");
+		//panelNewContext.add(lblNewContext);
 
-		textFieldNewContext = new JTextField();
-		textFieldNewContext.setToolTipText("New context's name");
-		panelNewContext.add(textFieldNewContext);
-		textFieldNewContext.setColumns(10);
+		//textFieldNewContext = new JTextField();
+		//textFieldNewContext.setToolTipText("New context's name");
+		//panelNewContext.add(textFieldNewContext);
+		//textFieldNewContext.setColumns(10);
 
-		JLabel lblBlankSpace = new JLabel("");
-		panelNewContext.add(lblBlankSpace);
+		btnNewContext = new JButton("Adicionar");
 
-		btnNewContext = new JButton("Add");
+		btnNewContext.setHorizontalAlignment(SwingConstants.CENTER);
 
 		btnNewContext.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				if (textFieldNewContext.getText().equals("")) {
-					txtMessageText.setText("Please, type the context name.");
-					lblNewContext.setForeground(Color.RED);
-					textFieldNewContext.requestFocus();
-				} else {
 
 					DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
@@ -331,6 +323,10 @@ public class EditorPanel extends JPanel implements ActionListener {
 							if(tree.getNodeName().equals("arvore_adaptacao"))
 								rootEle.removeChild(tree);
 							if(tree.getNodeName().equals("arvore_rnf"))
+								rootEle.removeChild(tree);
+							if(tree.getNodeName().equals("adaptacao"))
+								rootEle.removeChild(tree);
+							if(tree.getNodeName().equals("contexto_rnf"))
 								rootEle.removeChild(tree);
 						}
 						
@@ -397,14 +393,16 @@ public class EditorPanel extends JPanel implements ActionListener {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-
-				}
 			}
 		});
 
 		panelNewContext.add(btnNewContext);
 
-		JButton addTreeRnf = new JButton("Add RNF");
+		JButton addTreeRnf = new JButton("Remove RNF");
+		
+		treeRnfAdicionada = true;
+		add(scrollPaneRnf, 1);
+		updateUI();
 		
 		addTreeRnf.addActionListener(new ActionListener() {
 			
@@ -635,13 +633,13 @@ public class EditorPanel extends JPanel implements ActionListener {
 		
 		constraintsRnfListModel = new ConstraintsRnfListModel(constraintsListRnf);
 		listConstraintsRnf = new JList<String>(constraintsRnfListModel);
-		listConstraintsRnf.setComponentPopupMenu(getComponentPopupMenuConstraintsList());
+		listConstraintsRnf.setComponentPopupMenu(getComponentPopupMenuConstraintsListRnf());
 		listConstraintsRnf.addMouseListener(getMouseListener());
 
 		JScrollPane scrollPane_4 = new JScrollPane(listConstraintsRnf, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
-		JPanel painelJlists = new JPanel(new GridLayout(1, 0));
+		JPanel painelJlists = new JPanel(new GridLayout(0, 1));
 		
 		JPanel painelTxtConstraints = new JPanel(new BorderLayout());
 			painelTxtConstraints.add(new JLabel("Constraints"), BorderLayout.NORTH);
@@ -702,7 +700,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 			}
 		});
 
-		
+		preenchendoContextosRnf(splotContextModel.getContextoRnf());
 		this.main.expandAllNodes(tree, 0, tree.getRowCount());
 	}
 	
@@ -801,6 +799,28 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 				constraints.remove(BASE_NAME_CONSTRAINT + String.valueOf(idConstraint));
 				System.out.println("Removed: " + String.valueOf(idConstraint));
+			}
+		});
+
+		menu.add(removeConstraint);
+
+		return menu;
+	}
+	
+	private JPopupMenu getComponentPopupMenuConstraintsListRnf() {
+
+		JPopupMenu menu = new JPopupMenu();
+		JMenuItem removeConstraint = new JMenuItem("Remove Constraint Rnf");
+
+		removeConstraint.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+				String idConstraint = constraintsListRnf.get(selectedConstraintIndex).toString();
+				constraintsListRnf.remove(selectedConstraintIndex);
+				constraintsRnfListModel.update();
+				System.out.println("Rnf Constraint Removed: " + idConstraint);
 			}
 		});
 
@@ -1376,9 +1396,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 			constraintsRnf = new ValorContextoRnf();
 			
 			constraintsRnf.setIdFeature(selectedNode.getID());
+			constraintsRnf.setNomeFeature(selectedNode.getName());
 			constraintsRnf.setImpacto(NameImpacto.getImpactoByName("-"));
-			
-			System.out.println(constraintsRnf.toString());
 			
 			txtAddConstraintRnf.setText(constraintsRnf.toString());
 			
@@ -1387,9 +1406,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 			constraintsRnf = new ValorContextoRnf();
 			
 			constraintsRnf.setIdFeature(selectedNode.getID());
+			constraintsRnf.setNomeFeature(selectedNode.getName());
 			constraintsRnf.setImpacto(NameImpacto.getImpactoByName("--"));
-			
-			System.out.println(constraintsRnf.toString());
 			
 			txtAddConstraintRnf.setText(constraintsRnf.toString());
 			
@@ -1398,9 +1416,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 			constraintsRnf = new ValorContextoRnf();
 			
 			constraintsRnf.setIdFeature(selectedNode.getID());
+			constraintsRnf.setNomeFeature(selectedNode.getName());
 			constraintsRnf.setImpacto(NameImpacto.getImpactoByName("+"));
-			
-			System.out.println(constraintsRnf.toString());
 			
 			txtAddConstraintRnf.setText(constraintsRnf.toString());
 			
@@ -1409,9 +1426,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 			constraintsRnf = new ValorContextoRnf();
 			
 			constraintsRnf.setIdFeature(selectedNode.getID());
+			constraintsRnf.setNomeFeature(selectedNode.getName());
 			constraintsRnf.setImpacto(NameImpacto.getImpactoByName("++"));
-			
-			System.out.println(constraintsRnf.toString());
 			
 			txtAddConstraintRnf.setText(constraintsRnf.toString());
 			
@@ -1572,6 +1588,13 @@ public class EditorPanel extends JPanel implements ActionListener {
 		treeRnf.setModel(treeModel);
 		treeRnf.updateUI();
 		expandAllNodes(treeRnf, 0, treeRnf.getRowCount());
+	}
+	
+	private void preenchendoContextosRnf(ContextoRnf contextoRnf){		
+		if(contextoRnf!=null){
+			constraintsListRnf.addAll(contextoRnf.getValorContextoRnf());
+			constraintsRnfListModel.update();
+		}
 	}
 	
 }

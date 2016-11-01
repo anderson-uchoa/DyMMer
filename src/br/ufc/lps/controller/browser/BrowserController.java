@@ -93,6 +93,7 @@ public class BrowserController{
 	    	   listaData.add(Double.parseDouble(medida.getActivatedFeaturesByContextAdaptation().toString()));
 	    	   listaData.add(Double.parseDouble(medida.getDesactivatedFeaturesByContextAdaptation().toString()));
 	    	   listaData.add(Double.parseDouble(medida.getNonContextFeatures().toString()));
+	    	   
     		   dataSet.setData(listaData);
     		   List<String> coresBackground2 = new ArrayList<>();
         	   List<String> coresHoverBackground2 = new ArrayList<>();
@@ -251,7 +252,6 @@ public class BrowserController{
        }
        
        public static JComponent getPie(List<SchemeXml> scheme){
-    	   System.setProperty("teamdev.license.info", "true");
     	   Browser browser = new Browser();
     	   ConfigSet cnf = new ConfigSet();
     	   

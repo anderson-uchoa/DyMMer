@@ -1,4 +1,4 @@
-package br.ufc.lps.model.context;
+	package br.ufc.lps.model.context;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,9 +31,11 @@ import br.ufc.lps.model.contextaware.Constraint;
 import br.ufc.lps.model.contextaware.Context;
 import br.ufc.lps.model.contextaware.Resolution;
 import br.ufc.lps.model.rnf.Caracteristica;
+import br.ufc.lps.model.rnf.ContextoRnf;
 import br.ufc.lps.model.rnf.PropriedadeNFuncional;
 import br.ufc.lps.model.rnf.Rnf;
 import br.ufc.lps.model.rnf.Subcaracteristica;
+import br.ufc.lps.model.rnf.ValorContextoRnf;
 import br.ufc.lps.splar.core.constraints.BooleanVariable;
 import br.ufc.lps.splar.core.constraints.BooleanVariableInterface;
 import br.ufc.lps.splar.core.constraints.CNFFormula;
@@ -59,20 +61,13 @@ public class ContextModel implements IContextModel {
 	private ReasoningWithBDD bddReasoner;
 	private ReasoningWithSAT satReasoner;
 	private FeatureModelStatistics featureModelStatistics;
-	
 	private String pathModelFile;
-	
-	
 	private int modelID;
-	
-    /*
-     * Context-Aware
-     */
-    
     private Map<String, Context> contexts;
     private Map<String, Adaptacao> adaptacoes;
     private Adaptacao arvoreAdaptacao;
     private Rnf arvoreRnf;
+    private ContextoRnf contextoRnf;
     private Map<Context, FeatureModelStatistics> statisticsByContext;
     private Map<Context, ReasoningWithBDD> bddByContext;
 	private Context currentContext;
@@ -97,9 +92,13 @@ public class ContextModel implements IContextModel {
 		parseXMLToGetArvoreAdaptacao();
 		parseXMLToGetAdaptacoes();
 		parseXMLToGetArvoreRnf();
+		parseXMLToGetConstraintsRnf();
 		createFeatureModelByContext();
 	}
 	
+	public ContextoRnf getContextoRnf() {
+		return contextoRnf;
+	}
 	
 	public Adaptacao getArvoreAdaptacao() {
 		return arvoreAdaptacao;
@@ -126,8 +125,6 @@ public class ContextModel implements IContextModel {
 			statisticsByContext.put(context, stats);
 			bddByContext.put(context, reasoner);
 		}
-		
-			
 			
 		featureModelStatistics = statisticsByContext.get(context);
 		bddReasoner = bddByContext.get(context);
@@ -190,7 +187,6 @@ public class ContextModel implements IContextModel {
 					Element elConstraint = (Element) elsConstraints.item(countCons);
 					String stringConstraint = elConstraint.getTextContent();
 					
-					
 					Constraint newConstraint = new Constraint(countCons, stringConstraint);
 					constraintsContext.add(newConstraint);
 				}
@@ -217,7 +213,6 @@ public class ContextModel implements IContextModel {
 		
 		
 	}
-	
 	
 	private void parseXMLToGetAdaptacoes(){
 			
@@ -376,50 +371,43 @@ public class ContextModel implements IContextModel {
 			Document doc = db.parse(pathModelFile);
 			Element rootEle = doc.getDocumentElement();
 			
-			//parse contexts
-			NodeList contexts = rootEle.getElementsByTagName("adaptacao");
-			String nomeAdaptacao = rootEle.getAttribute("nome");
+			NodeList contexts = rootEle.getElementsByTagName("contexto_rnf");
+			String nomeContextoRnf = rootEle.getAttribute("nome");
+			
 			for(int i=0; i < contexts.getLength(); i++){
 				Element elContext = (Element) contexts.item(i);
-				String nameContext = elContext.getAttribute("nome");
-				List<ContextoAdaptacao> contextos = new ArrayList<ContextoAdaptacao>();
 				
-				NodeList elsResolutions = elContext.getElementsByTagName("contexto");
+				String nameContext = elContext.getAttribute("nome");
+				List<ValorContextoRnf> contextos = new ArrayList<ValorContextoRnf>();
+				
+				NodeList elsResolutions = elContext.getElementsByTagName("valor_rnf");
+				
 				for(int countRes = 0; countRes < elsResolutions.getLength(); countRes++){
 					Element elResolution = (Element) elsResolutions.item(countRes);
 					
 					String nome = elResolution.getAttribute("nome");
+					String idFeature = elResolution.getAttribute("id_feature");
+					String idRnf = elResolution.getAttribute("id_rnf");
+					String impacto = elResolution.getAttribute("impacto");
+					String nomeFeature = elResolution.getAttribute("nome_feature");
 					
-					ContextoAdaptacao contextoAdaptacao = new ContextoAdaptacao();
-					contextoAdaptacao.setNome(nome);
+					ValorContextoRnf valor = new ValorContextoRnf();
 					
-					List<ValorAdaptacao> listaAdaptacoes = new ArrayList<ValorAdaptacao>();
-					NodeList valor = elContext.getElementsByTagName("contexto");
-					for(int countValor = 0; countValor < valor.getLength(); countValor++){
-						Element elValor = (Element) valor.item(countRes);
-						
-						String nomeValor = elValor.getAttribute("nome");
-						
-						Boolean statusValor = false;
-						if (elValor.getAttribute("status").equals("true")) 
-							statusValor = true;
-						
-						ValorAdaptacao valorAdap = new ValorAdaptacao();
-						valorAdap.setNome(nomeValor);
-						valorAdap.setStatus(statusValor);
-						
-						listaAdaptacoes.add(valorAdap);
-					}		
+					valor.setIdFeature(idFeature);
+					valor.setIdRnf(idRnf);
+					valor.setNomeFeature(nomeFeature);
+					valor.setImpacto(Integer.parseInt(impacto));
 					
-					contextoAdaptacao.setValorAdaptacao(listaAdaptacoes);
+					contextos.add(valor);
 				}
 				
-				Adaptacao adaptacao = new Adaptacao();
+				ContextoRnf contextoRnf = new ContextoRnf();
 				
-				adaptacao.setNome(nomeAdaptacao);
-				adaptacao.setValorAdaptacao(contextos);
+				contextoRnf.setNome(nomeContextoRnf);
+				contextoRnf.setValorContextoRnf(contextos);
 				
-				this.adaptacoes.put(nomeAdaptacao, adaptacao);	
+				this.contextoRnf = contextoRnf;	
+				break;
 			}	
 			
 	} catch (ParserConfigurationException e) {
@@ -428,7 +416,7 @@ public class ContextModel implements IContextModel {
 	} catch (SAXException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
-	} catch (IOException e) {
+	} catch (Exception e) {
 		// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
@@ -485,7 +473,7 @@ public class ContextModel implements IContextModel {
 						subcaracteristicas.add(subcaracteristica);
 						
 						List<PropriedadeNFuncional> propriedadeNFuncionais = new ArrayList<PropriedadeNFuncional>();
-						NodeList prop = elCaracteristica.getElementsByTagName("subcaracteristica");
+						NodeList prop = elCaracteristica.getElementsByTagName("propriedade_n_funcional");
 						
 						for(int countProp = 0; countProp < nodeSubcaracteristica.getLength(); countProp++){
 							Element elProp = (Element) prop.item(countProp);

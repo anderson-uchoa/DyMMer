@@ -1318,14 +1318,14 @@ public class EditorPanel extends JPanel implements ActionListener {
 			constraintsListRnf.clear();
 		}
 		
-		Context context = splotContextModel.getContexts().get(contextName);
-		FeatureModel featureModel = splotContextModel.setFeatureModel(context);
-		String modelName = featureModel.getName();
+		//Context context = splotContextModel.getContexts().get(contextName);
+		//FeatureModel featureModel = splotContextModel.setFeatureModel(context);
+		//String modelName = featureModel.getName();
 		
-		tree.setModel(featureModel);	
-		tree.setEditable(true);
-		tree.setCellRenderer(new FeaturesTreeCellRenderer(context));
-		expandAllNodes(tree, 0, tree.getRowCount());
+		//tree.setModel(featureModel);	
+		//tree.setEditable(true);
+		//tree.setCellRenderer(new FeaturesTreeCellRenderer(context));
+		//expandAllNodes(tree, 0, tree.getRowCount());
 	}
 	
 	@Override

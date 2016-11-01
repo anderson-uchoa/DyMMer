@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -90,7 +91,7 @@ public class ViewerPanel extends JPanel {
     private FeaturesTreeViewPerfuse tview;
     private JPanel panelSelecionada;
     private JPanel panelTree;
-    private ContextoRnf contextoRnf;
+    private Map<String, ContextoRnf> contextoRnf;
     private boolean primeira = true;
     private DefaultTreeModel treeModel;
 	
@@ -291,8 +292,6 @@ public class ViewerPanel extends JPanel {
 		panelConstraintsPanelRnf.add(constraintsPanelRnf, BorderLayout.CENTER);
 		panelInfoConstraints.add(panelConstraintsPanelRnf);
 		
-		preenchendoContextosRnf();
-		
 		comboBoxContexts = new JComboBox();
 		for(String contextNames : model.getContexts().keySet()){
 			comboBoxContexts.addItem(contextNames);
@@ -456,8 +455,10 @@ public class ViewerPanel extends JPanel {
 			return;
 		}	
 		
-		if(!model.getContexts().containsKey(contextName))
+		if(!model.getContexts().containsKey(contextName)){
+			constraintsPanelRnf.setText("");
 			return;
+		}
 		
 		Context context = model.getContexts().get(contextName);
 		FeatureModel featureModel = model.setFeatureModel(context);
@@ -471,48 +472,54 @@ public class ViewerPanel extends JPanel {
 		FeaturesTreePerfuseControl fpc = new FeaturesTreePerfuseControl();
 		fpc.getTree(context, treeP, null ,model.getFeatureModel().getRoot());
 		
-		Collection<BooleanVariable> variables = new ArrayList<BooleanVariable>();
-		Collection<PropositionalFormula> formulas = featureModel.getConstraints();
-		
-		for(Iterator<PropositionalFormula> it = formulas.iterator(); it.hasNext() ; ) {
-			PropositionalFormula formula = it.next();
-			variables = formula.getVariables();
-			
-			//System.out.println("-------------");
-			
-			java.util.List<String> a = new ArrayList();
-			
-			for(Iterator<BooleanVariable> it2 = variables.iterator(); it2.hasNext() ; ) {
-				BooleanVariable variable = it2.next();
-				
-				a.add(variable.getID());
-		
-				
-		
-				/*	
-				if(featureModel.getNodeByID(variable.getName()).getValue() != 0){
-					if(!FeatureTreeNode.isActiveHierarchy(featureModel.getNodeByID(variable.getName()))){
-						continue;
-					}
-					
-					if(variable.getState() == false){
-						constraints+="~";
-					}
-
-					constraints += featureModel.getNodeByID(variable.getName()).getName();
-					if(it2.hasNext())
-						constraints += " or ";
-				}
-				*/
-			}
-			//fpc.bindRestrict(this.treeP, a);
-			//System.out.println("--------------");
+		if(contextoRnf.containsKey(contextName))
+			preenchendoContextosRnf(contextoRnf.get(contextName));
+		else{
+			constraintsPanelRnf.setText("");
 		}
 		
-		//for (Iterator iterator = fpc.getLista().keySet().iterator(); iterator.hasNext();) {
-			//String type = (String) iterator.next();
-			//System.out.println("adicionado: "+type);
-	//	}
+//		Collection<BooleanVariable> variables = new ArrayList<BooleanVariable>();
+//		Collection<PropositionalFormula> formulas = featureModel.getConstraints();
+//		
+//		for(Iterator<PropositionalFormula> it = formulas.iterator(); it.hasNext() ; ) {
+//			PropositionalFormula formula = it.next();
+//			variables = formula.getVariables();
+//			
+//			//System.out.println("-------------");
+//			
+//			java.util.List<String> a = new ArrayList();
+//			
+//			for(Iterator<BooleanVariable> it2 = variables.iterator(); it2.hasNext() ; ) {
+//				BooleanVariable variable = it2.next();
+//				
+//				a.add(variable.getID());
+//		
+//				
+//		
+//				/*	
+//				if(featureModel.getNodeByID(variable.getName()).getValue() != 0){
+//					if(!FeatureTreeNode.isActiveHierarchy(featureModel.getNodeByID(variable.getName()))){
+//						continue;
+//					}
+//					
+//					if(variable.getState() == false){
+//						constraints+="~";
+//					}
+//
+//					constraints += featureModel.getNodeByID(variable.getName()).getName();
+//					if(it2.hasNext())
+//						constraints += " or ";
+//				}
+//				*/
+//			}
+//			//fpc.bindRestrict(this.treeP, a);
+//			//System.out.println("--------------");
+//		}
+//		
+//		//for (Iterator iterator = fpc.getLista().keySet().iterator(); iterator.hasNext();) {
+//			//String type = (String) iterator.next();
+//			//System.out.println("adicionado: "+type);
+//	//	}
 		
 	
 		panelTreePerfuse = panelTreePerfuse(treeP, "name", "image");
@@ -529,7 +536,6 @@ public class ViewerPanel extends JPanel {
 			panelSelecionada = panelTreePerfuse;
 		}
 		primeira = false;
-		//scrollPane.repaint();
 	}
 	
 	public JPanel panelTreePerfuse(Tree t, String label, String image) {
@@ -646,7 +652,8 @@ public class ViewerPanel extends JPanel {
 	    }
 	}
 	
-	private void preenchendoContextosRnf(){
+	private void preenchendoContextosRnf(ContextoRnf contextoRnf){
+		constraintsPanelRnf.setText("");
 		for(ValorContextoRnf con : contextoRnf.getValorContextoRnf())
 			constraintsPanelRnf.setText(con.getNomeFeature() + " " + NameImpacto.getNameByImpacto(con.getImpacto()) + " " + con.getIdRnf() + "\n" +constraintsPanelRnf.getText());
 		

@@ -3,25 +3,21 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.TreeMap;
 
 import javax.naming.OperationNotSupportedException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import com.teamdev.jxbrowser.chromium.ca;
 
 import br.ufc.lps.model.ModelFactory;
 import br.ufc.lps.model.adaptation.Adaptacao;
@@ -37,14 +33,11 @@ import br.ufc.lps.model.rnf.Rnf;
 import br.ufc.lps.model.rnf.Subcaracteristica;
 import br.ufc.lps.model.rnf.ValorContextoRnf;
 import br.ufc.lps.splar.core.constraints.BooleanVariable;
-import br.ufc.lps.splar.core.constraints.BooleanVariableInterface;
-import br.ufc.lps.splar.core.constraints.CNFFormula;
 import br.ufc.lps.splar.core.constraints.PropositionalFormula;
 import br.ufc.lps.splar.core.fm.FeatureModel;
 import br.ufc.lps.splar.core.fm.FeatureModelException;
 import br.ufc.lps.splar.core.fm.FeatureModelStatistics;
 import br.ufc.lps.splar.core.fm.FeatureTreeNode;
-import br.ufc.lps.splar.core.fm.XMLFeatureModel;
 import br.ufc.lps.splar.core.heuristics.FTPreOrderSortedECTraversalHeuristic;
 import br.ufc.lps.splar.core.heuristics.VariableOrderingHeuristic;
 import br.ufc.lps.splar.core.heuristics.VariableOrderingHeuristicsManager;
@@ -67,7 +60,7 @@ public class ContextModel implements IContextModel {
     private Map<String, Adaptacao> adaptacoes;
     private Adaptacao arvoreAdaptacao;
     private Rnf arvoreRnf;
-    private ContextoRnf contextoRnf;
+    private Map<String, ContextoRnf> contextoRnf;
     private Map<Context, FeatureModelStatistics> statisticsByContext;
     private Map<Context, ReasoningWithBDD> bddByContext;
 	private Context currentContext;
@@ -96,7 +89,7 @@ public class ContextModel implements IContextModel {
 		createFeatureModelByContext();
 	}
 	
-	public ContextoRnf getContextoRnf() {
+	public Map<String, ContextoRnf> getContextoRnf() {
 		return contextoRnf;
 	}
 	
@@ -364,6 +357,8 @@ public class ContextModel implements IContextModel {
 		
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db;
+		TreeMap<String, ContextoRnf> listaContextosRnfs = new TreeMap<>();
+		
 		try {
 			
 			db = dbf.newDocumentBuilder();
@@ -372,12 +367,12 @@ public class ContextModel implements IContextModel {
 			Element rootEle = doc.getDocumentElement();
 			
 			NodeList contexts = rootEle.getElementsByTagName("contexto_rnf");
-			String nomeContextoRnf = rootEle.getAttribute("nome");
 			
 			for(int i=0; i < contexts.getLength(); i++){
 				Element elContext = (Element) contexts.item(i);
 				
-				String nameContext = elContext.getAttribute("nome");
+				String nomeContextoRnf = elContext.getAttribute("nome");
+						
 				List<ValorContextoRnf> contextos = new ArrayList<ValorContextoRnf>();
 				
 				NodeList elsResolutions = elContext.getElementsByTagName("valor_rnf");
@@ -385,7 +380,6 @@ public class ContextModel implements IContextModel {
 				for(int countRes = 0; countRes < elsResolutions.getLength(); countRes++){
 					Element elResolution = (Element) elsResolutions.item(countRes);
 					
-					String nome = elResolution.getAttribute("nome");
 					String idFeature = elResolution.getAttribute("id_feature");
 					String idRnf = elResolution.getAttribute("id_rnf");
 					String impacto = elResolution.getAttribute("impacto");
@@ -406,9 +400,11 @@ public class ContextModel implements IContextModel {
 				contextoRnf.setNome(nomeContextoRnf);
 				contextoRnf.setValorContextoRnf(contextos);
 				
-				this.contextoRnf = contextoRnf;	
-				break;
+				listaContextosRnfs.put(nomeContextoRnf, contextoRnf);
+				//this.contextoRnf = contextoRnf;
 			}	
+			
+			this.contextoRnf = listaContextosRnfs;
 			
 	} catch (ParserConfigurationException e) {
 		// TODO Auto-generated catch block

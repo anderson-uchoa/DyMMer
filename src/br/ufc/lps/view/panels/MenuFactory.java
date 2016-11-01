@@ -15,6 +15,11 @@ public class MenuFactory {
 	private static FeatureTreeNode featureTreeNode;
 	private static MenuFactory instancia;
 	private static JPopupMenu jPopupMenu;
+	
+	private final String NOT_COMPLETELY_SATISFIES= "not completely satisfies \"--\"";
+	private final String COMPLETELY_SATISFIES= "completely satisfies \"++\"";
+	private final String POSITIVE_INFLUENCE= "positive influence  \"+\"";
+	private final String NEGATIVE_INFLUENCE= "negative influence \"−\"";
 
 	public static MenuFactory getIntance(ActionListener editor, FeatureTreeNode feature) {
 		featureTreeNode = feature;
@@ -141,10 +146,10 @@ public class MenuFactory {
 		JMenuItem addORGroup = new JMenuItem("Add a OR Group");
 		
 
-		JMenuItem addConstraintRnfPositive2 = new JMenuItem("Add to Constraint RNF as ++");
-		JMenuItem addConstraintRnfPositive1 = new JMenuItem("Add to Constraint RNF as +");
-		JMenuItem addConstraintRnfNegative1 = new JMenuItem("Add to Constraint RNF as -");
-		JMenuItem addConstraintRnfNegative2 = new JMenuItem("Add to Constraint RNF as --");
+		JMenuItem addConstraintRnfPositive2 = new JMenuItem(COMPLETELY_SATISFIES);
+		JMenuItem addConstraintRnfPositive1 = new JMenuItem(POSITIVE_INFLUENCE);
+		JMenuItem addConstraintRnfNegative1 = new JMenuItem(NEGATIVE_INFLUENCE);
+		JMenuItem addConstraintRnfNegative2 = new JMenuItem(NOT_COMPLETELY_SATISFIES);
 
 		addConstraintRnfNegative1.setActionCommand("AddtoConstraintRNF-");
 		addConstraintRnfNegative1.addActionListener(editorPanel);
@@ -225,10 +230,10 @@ public class MenuFactory {
 		JMenuItem addXORGroup = new JMenuItem("Add a XOR Group");
 		JMenuItem addORGroup = new JMenuItem("Add a OR Group");
 		
-		JMenuItem addConstraintRnfPositive2 = new JMenuItem("Add to Constraint RNF as ++");
-		JMenuItem addConstraintRnfPositive1 = new JMenuItem("Add to Constraint RNF as +");
-		JMenuItem addConstraintRnfNegative1 = new JMenuItem("Add to Constraint RNF as -");
-		JMenuItem addConstraintRnfNegative2 = new JMenuItem("Add to Constraint RNF as --");
+		JMenuItem addConstraintRnfPositive2 = new JMenuItem(COMPLETELY_SATISFIES);
+		JMenuItem addConstraintRnfPositive1 = new JMenuItem(POSITIVE_INFLUENCE);
+		JMenuItem addConstraintRnfNegative1 = new JMenuItem(NEGATIVE_INFLUENCE);
+		JMenuItem addConstraintRnfNegative2 = new JMenuItem(NOT_COMPLETELY_SATISFIES);
 
 		addConstraintRnfNegative1.setActionCommand("AddtoConstraintRNF-");
 		addConstraintRnfNegative1.addActionListener(editorPanel);
@@ -338,10 +343,10 @@ public class MenuFactory {
 		JMenuItem addXORGroup = new JMenuItem("Add a XOR Group");
 		JMenuItem addORGroup = new JMenuItem("Add a OR Group");
 		
-		JMenuItem addConstraintRnfPositive2 = new JMenuItem("Add to Constraint RNF as ++");
-		JMenuItem addConstraintRnfPositive1 = new JMenuItem("Add to Constraint RNF as +");
-		JMenuItem addConstraintRnfNegative1 = new JMenuItem("Add to Constraint RNF as -");
-		JMenuItem addConstraintRnfNegative2 = new JMenuItem("Add to Constraint RNF as --");
+		JMenuItem addConstraintRnfPositive2 = new JMenuItem(COMPLETELY_SATISFIES);
+		JMenuItem addConstraintRnfPositive1 = new JMenuItem(POSITIVE_INFLUENCE);
+		JMenuItem addConstraintRnfNegative1 = new JMenuItem(NEGATIVE_INFLUENCE);
+		JMenuItem addConstraintRnfNegative2 = new JMenuItem(NOT_COMPLETELY_SATISFIES);
 
 		addConstraintRnfNegative1.setActionCommand("AddtoConstraintRNF-");
 		addConstraintRnfNegative1.addActionListener(editorPanel);
@@ -397,10 +402,10 @@ public class MenuFactory {
 		JMenuItem addXORGroup = new JMenuItem("Add a XOR Group");
 		JMenuItem addORGroup = new JMenuItem("Add a OR Group");
 		
-		JMenuItem addConstraintRnfPositive2 = new JMenuItem("Add to Constraint RNF as ++");
-		JMenuItem addConstraintRnfPositive1 = new JMenuItem("Add to Constraint RNF as +");
-		JMenuItem addConstraintRnfNegative1 = new JMenuItem("Add to Constraint RNF as -");
-		JMenuItem addConstraintRnfNegative2 = new JMenuItem("Add to Constraint RNF as --");
+		JMenuItem addConstraintRnfPositive2 = new JMenuItem(COMPLETELY_SATISFIES);
+		JMenuItem addConstraintRnfPositive1 = new JMenuItem(POSITIVE_INFLUENCE);
+		JMenuItem addConstraintRnfNegative1 = new JMenuItem(NEGATIVE_INFLUENCE);
+		JMenuItem addConstraintRnfNegative2 = new JMenuItem(NOT_COMPLETELY_SATISFIES);
 
 		JMenuItem remove = new JMenuItem("Remove");
 		
@@ -466,10 +471,10 @@ public class MenuFactory {
 		addConstraintPositive.setActionCommand("addConstraintPositive");
 		addConstraintNegative.setActionCommand("addConstraintNegative");
 
-		JMenuItem addConstraintRnfPositive2 = new JMenuItem("Add to Constraint RNF as ++");
-		JMenuItem addConstraintRnfPositive1 = new JMenuItem("Add to Constraint RNF as +");
-		JMenuItem addConstraintRnfNegative1 = new JMenuItem("Add to Constraint RNF as -");
-		JMenuItem addConstraintRnfNegative2 = new JMenuItem("Add to Constraint RNF as --");
+		JMenuItem addConstraintRnfPositive2 = new JMenuItem(COMPLETELY_SATISFIES);
+		JMenuItem addConstraintRnfPositive1 = new JMenuItem(POSITIVE_INFLUENCE);
+		JMenuItem addConstraintRnfNegative1 = new JMenuItem(NEGATIVE_INFLUENCE);
+		JMenuItem addConstraintRnfNegative2 = new JMenuItem(NOT_COMPLETELY_SATISFIES);
 		
 		addConstraintRnfNegative1.setActionCommand("AddtoConstraintRNF-");
 		addConstraintRnfNegative1.addActionListener(editorPanel);

@@ -1,7 +1,7 @@
 package br.ufc.lps.view.panels;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
@@ -32,7 +32,7 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;import javax.swing.text.AbstractWriter;
+import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -102,37 +102,48 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 	protected static final String BASE_NAME_CONSTRAINT = "contextConstraint";
 	private IModel model;
-	private JTextField textFieldNewContext;
+	
+	private JTextField textFieldNewContext, txtAddTheFeatures, txtAddConstraintRnf;
+	
 	private JTree tree, treeRnf, treeAdaptation;
+	
 	private FeatureTreeNode selectedNode;
+	
 	private JTextArea txtMessageText;
-	private JButton btnNewContext;
-	private JLabel lblNewContext;
-	private Context defaultContext;
-	private List<Resolution> resolutions;
-	private JTextField txtAddTheFeatures;
-	private JTextField txtAddConstraintRnf;
-	private Map<String, String> constraints;
-	private List<Literal> constraintLiterals;
+	
 	private JList list, listConstraintsRnf;
+	
+	private List<Resolution> resolutions;
+	private List<Constraint> constraintsList;
+	private List<ValorContextoRnf> constraintsListRnf;
+	
+	private JButton btnNewContext;
+	private JButton jbuttonSalvar;
+	
+	private JLabel lblNewContext;
+
+	private Map<String, String> constraints;
+	private Map<String, ContextoRnf> contextoRnf;
+    private Map<String, br.ufc.lps.model.adaptation.Adaptacao> adaptacoes;
+    
+    private int selectedConstraintIndex, constraintNumber;
+    private Integer modelID;
+	
+	private Context defaultContext;
+	private List<Literal> constraintLiterals;
 	private ConstraintsListModel constraintsListModel;
 	private ConstraintsRnfListModel constraintsRnfListModel;
-	private int selectedConstraintIndex;
-	private List<Constraint> constraintsList;
+	
 	private ValorContextoRnf constraintsRnf;
-	private List<ValorContextoRnf> constraintsListRnf;
-	private int constraintNumber;
-	private Integer modelID;
+	
 	private String pathModelFile;
 	private Boolean treeRnfAdicionada = false;
 	private Main main;
-	private JButton jbuttonSalvar;
 	private ControllerFeatures controllerFeatures;
 	private SplotContextModel splotContextModel;
 	private DefaultTreeModel treeModel;
-    private Map<String, br.ufc.lps.model.adaptation.Adaptacao> adaptacoes;
 	private JPopupMenu menu;
-	private ContextoRnf contextoRnf;
+	
 	
 	public EditorPanel(IModel model, int modelID, String pathModelFile, SchemeXml schemeXml, Main main) {
 		setLayout(new GridLayout(1, 0));
@@ -178,94 +189,33 @@ public class EditorPanel extends JPanel implements ActionListener {
 		final CheckBoxNodeEditor editor = new CheckBoxNodeEditor(treeAdaptation);
 		treeAdaptation.setCellEditor(editor);
 		treeAdaptation.setEditable(true);
-
-		treeModel.addTreeModelListener(new TreeModelListener() {
-
-			@Override
-			public void treeNodesChanged(final TreeModelEvent e) {
-				mudancaCheckBoxArvoreAdaptacao();
-			}
-
-			@Override
-			public void treeNodesInserted(TreeModelEvent e) {}
-
-			@Override
-			public void treeNodesRemoved(TreeModelEvent e) {}
-
-			@Override
-			public void treeStructureChanged(TreeModelEvent e){}
-		});
-		
-		treeAdaptation.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(e.getButton() == MouseEvent.BUTTON3){
-					mouseClickArvoreAdaptacao(e);    
-				}
-			}
-		});
-		
-		treeRnf.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(e.getButton() == MouseEvent.BUTTON3){
-					mouseClickArvoreRnf(e);    
-				}
-			}
-		});
-
 		
 		defaultContext = new Context("default", resolutions, null);
 		tree.setCellRenderer(new FeaturesTreeCellRenderer(defaultContext));
 		
-		JPanel panelTree = new JPanel(new BorderLayout());
-		panelTree.add(tree, BorderLayout.CENTER);
-		JLabel tituloTree = new JLabel("Feature Model");
-		panelTree.add(tituloTree, BorderLayout.NORTH);
-		JScrollPane scrollPane = new JScrollPane(panelTree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		add(scrollPane);
-		
-		JPanel panelTreeAdaptation = new JPanel(new BorderLayout());
-		panelTreeAdaptation.add(treeAdaptation, BorderLayout.CENTER);
-		JLabel tituloTreeAdaptation = new JLabel("Adaptation Context Feature Model");
-		panelTreeAdaptation.add(tituloTreeAdaptation, BorderLayout.NORTH);
-		JScrollPane scrollPaneAdaptation = new JScrollPane(panelTreeAdaptation, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		add(scrollPaneAdaptation);
-		
-		JPanel panelTreeRnf = new JPanel(new BorderLayout());
-		panelTreeRnf.add(treeRnf, BorderLayout.CENTER);
-		JLabel tituloTreeRnf = new JLabel("Quality Feature Model");
-		panelTreeRnf.add(tituloTreeRnf, BorderLayout.NORTH);
-		JScrollPane scrollPaneRnf = new JScrollPane(panelTreeRnf, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		//CONFIGURANDO AS ARVORES NO LAYOUT
+			JPanel panelTree = new JPanel(new BorderLayout());
+			panelTree.add(tree, BorderLayout.CENTER);
+			JLabel tituloTree = new JLabel("Feature Model");
+			panelTree.add(tituloTree, BorderLayout.NORTH);
+			JScrollPane scrollPane = new JScrollPane(panelTree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			add(scrollPane);
+			
+			JPanel panelTreeAdaptation = new JPanel(new BorderLayout());
+			panelTreeAdaptation.add(treeAdaptation, BorderLayout.CENTER);
+			JLabel tituloTreeAdaptation = new JLabel("Adaptation Context Feature Model");
+			panelTreeAdaptation.add(tituloTreeAdaptation, BorderLayout.NORTH);
+			JScrollPane scrollPaneAdaptation = new JScrollPane(panelTreeAdaptation, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			add(scrollPaneAdaptation);
+			
+			JPanel panelTreeRnf = new JPanel(new BorderLayout());
+			panelTreeRnf.add(treeRnf, BorderLayout.CENTER);
+			JLabel tituloTreeRnf = new JLabel("Quality Feature Model");
+			panelTreeRnf.add(tituloTreeRnf, BorderLayout.NORTH);
+			JScrollPane scrollPaneRnf = new JScrollPane(panelTreeRnf, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
 		JPanel panelInfos = new JPanel();
 		add(panelInfos);
@@ -283,150 +233,20 @@ public class EditorPanel extends JPanel implements ActionListener {
 		//panelNewContext.add(textFieldNewContext);
 		//textFieldNewContext.setColumns(10);
 
-		btnNewContext = new JButton("Adicionar");
+		btnNewContext = new JButton("Save");
 
 		btnNewContext.setHorizontalAlignment(SwingConstants.CENTER);
 
-		btnNewContext.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-					DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-
-					try {
-						
-						DefaultMutableTreeNode rootArvoreAdaptacao = (DefaultMutableTreeNode)treeAdaptation.getModel().getRoot();
-
-						String nomeContexto = verificandoArvore(rootArvoreAdaptacao);
-						
-						if(nomeContexto==null){
-							JOptionPane.showMessageDialog(null, "Check someone item in Tree Adaptation");
-							return;
-						}
-						
-						DocumentBuilder db = dbf.newDocumentBuilder();
-						Document doc = db.parse(EditorPanel.this.pathModelFile);
-
-						Element rootEle = doc.getDocumentElement();
-
-						FeatureTreeNode root = (FeatureTreeNode)tree.getModel().getRoot();
-						
-						Node tree = null;
-						
-						for(int i=0; i < rootEle.getChildNodes().getLength(); i++){
-							tree = rootEle.getChildNodes().item(i);
-							if(tree.getNodeName().equals("feature_tree"))
-								rootEle.removeChild(tree);
-							if(tree.getNodeName().equals("constraints"))
-								rootEle.removeChild(tree);
-							if(tree.getNodeName().equals("arvore_adaptacao"))
-								rootEle.removeChild(tree);
-							if(tree.getNodeName().equals("arvore_rnf"))
-								rootEle.removeChild(tree);
-							if(tree.getNodeName().equals("adaptacao"))
-								rootEle.removeChild(tree);
-							if(tree.getNodeName().equals("contexto_rnf"))
-								rootEle.removeChild(tree);
-						}
-						
-						controllerFeatures.drawTree(root);
-						
-						Node newTree = doc.createElement("feature_tree");
-						
-						newTree.appendChild(doc.createTextNode(controllerFeatures.getArvoreDesenhada()));
-						
-						rootEle.appendChild(newTree);
-
-						rootEle.appendChild(WriteXMLmodel.getArvoreRnf(doc, (DefaultMutableTreeNode)treeRnf.getModel().getRoot()));
-						
-						rootEle.appendChild(WriteXMLmodel.getArvoreAdaptacao(doc, rootArvoreAdaptacao));
-												
-						rootEle.appendChild(WriteXMLmodel.getAdaptacao(doc, rootArvoreAdaptacao, nomeContexto));
-						
-						rootEle.appendChild(WriteXMLmodel.getContext(doc, nomeContexto,
-									EditorPanel.this.resolutions, new ArrayList<String>(constraints.values())));
-						
-						ContextoRnf contextoRnf = new ContextoRnf();
-						
-						contextoRnf.setNome(nomeContexto);
-						contextoRnf.setValorContextoRnf(constraintsListRnf);
-						
-						rootEle.appendChild(WriteXMLmodel.getContextoRnf(doc, contextoRnf));
-
-						Transformer transformer = TransformerFactory.newInstance().newTransformer();
-						transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-						DOMSource source = new DOMSource(doc);
-						StreamResult console = new StreamResult(new FileOutputStream(EditorPanel.this.pathModelFile));
-						transformer.transform(source, console);
-
-						textFieldNewContext.setText("");
-						constraintLiterals.clear();
-						constraints.clear();
-						constraintsList.clear();
-						constraintsListModel.update();
-						txtAddTheFeatures.setText("");
-						resolutions.clear();
-						txtMessageText.setText("None for while...");
-						constraintNumber = 0;
-
-						EditorPanel.this.tree.updateUI();
-						JOptionPane.showMessageDialog(EditorPanel.this,
-								"Your context has been saved. Now, open the file to see it.");
-
-					} catch (SAXException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ParserConfigurationException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (TransformerConfigurationException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (TransformerFactoryConfigurationError e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (TransformerException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-			}
-		});
-
 		panelNewContext.add(btnNewContext);
 
-		JButton addTreeRnf = new JButton("Remove RNF");
+		JButton addTreeRnf = new JButton("Remove NFP");
+		addTreeRnf.setHorizontalAlignment(SwingConstants.CENTER);
+		panelNewContext.add(addTreeRnf);
 		
 		treeRnfAdicionada = true;
 		add(scrollPaneRnf, 1);
 		updateUI();
-		
-		addTreeRnf.addActionListener(new ActionListener() {
 			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JButton botao = ((JButton)e.getSource());
-				if(!treeRnfAdicionada){
-					if(!getComponent(1).equals(scrollPaneRnf)){
-						botao.setText("Remove RNF");
-						treeRnfAdicionada = true;
-						add(scrollPaneRnf, 1);
-						updateUI();
-					}
-				}else{
-					if(getComponent(1).equals(scrollPaneRnf)){
-						botao.setText("Add RNF");
-						treeRnfAdicionada = false;
-						remove(1);
-						updateUI();
-					}
-				}
-			}
-		});
-		
 		JPanel panelMessage = new JPanel();
 		panelInfos.add(panelMessage, BorderLayout.SOUTH);
 		panelMessage.setLayout(new GridLayout(0, 1, 0, 0));
@@ -453,23 +273,97 @@ public class EditorPanel extends JPanel implements ActionListener {
 		JSeparator separator = new JSeparator();
 		panelConstraint.add(separator);
 
-		addTreeRnf.setHorizontalAlignment(SwingConstants.CENTER);
-		panelConstraint.add(addTreeRnf);
+		//BOTAO PARA SALVAR NO REPOSITORIO
+			jbuttonSalvar = new JButton("Save in repository");
+			jbuttonSalvar.setHorizontalAlignment(SwingConstants.CENTER);
+			panelNewContext.add(jbuttonSalvar);
+		
+		//BOTAO PARA SALVAR SE MODELO FOR NOVO
+			JButton jbuttonSalvarNew = new JButton("Save in repository ( New Model )");
+			jbuttonSalvarNew.setHorizontalAlignment(SwingConstants.CENTER);
+			
+			if(schemeXml!=null)
+				panelNewContext.add(jbuttonSalvarNew);
+		
+		
+		//CONSTRAINT DECLARAÇÔES
+			
+			txtAddTheFeatures = new JTextField("Add the features...");
+			txtAddTheFeatures.setEditable(false);
+			txtAddTheFeatures.setColumns(10);
+			
+			JScrollPane scrollPaneAddTheFeature = new JScrollPane(txtAddTheFeatures, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			
+			JButton btnAddConstraint = new JButton("Add Constraint");
+			
+			JButton btnRemoveConstraint = new JButton("Remove Constraint");
+			
+			JPanel painelButtonAddRemoveConstraints = new JPanel(new GridLayout(1, 0));
+			painelButtonAddRemoveConstraints.add(btnAddConstraint);
+			painelButtonAddRemoveConstraints.add(btnRemoveConstraint);
+			
+			JPanel painelConstraintButtons = new JPanel(new BorderLayout());
+			painelConstraintButtons.add(scrollPaneAddTheFeature, BorderLayout.NORTH);
+			painelConstraintButtons.add(painelButtonAddRemoveConstraints, BorderLayout.SOUTH);
+			
+			
+			constraintsListModel = new ConstraintsListModel(constraintsList);
+			list = new JList<String>(constraintsListModel);
+			list.setComponentPopupMenu(getComponentPopupMenuConstraintsList());
+			list.addMouseListener(getMouseListener());
+			
+			JScrollPane scrollPaneListModel = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		
+		//CONSTRAINTS RNFS DECLARAÇÔES
 
-		jbuttonSalvar = new JButton("Save in repository.");
-		jbuttonSalvar.setHorizontalAlignment(SwingConstants.CENTER);
-		panelConstraint.add(jbuttonSalvar);
+			txtAddConstraintRnf = new JTextField("Add Constraint Rnf...");
+			txtAddConstraintRnf.setEditable(false);
+			txtAddConstraintRnf.setColumns(10);
+			
+			JScrollPane scrollPaneAddConstraintRnf = new JScrollPane(txtAddConstraintRnf, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			
+			JButton btnAddConstraintRnf = new JButton("Add Constraint");
 		
-		JButton jbuttonSalvarNew = new JButton("Save in repository ( New Model )");
-		jbuttonSalvarNew.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		if(schemeXml!=null)
-			panelConstraint.add(jbuttonSalvarNew);
-		
-		JLabel lblConstraint = new JLabel("Constraint:");
-		lblConstraint.setHorizontalAlignment(SwingConstants.CENTER);
-		panelConstraint.add(lblConstraint);
+			JButton btnRemoveConstraintRnf = new JButton("Remove Constraint");
+			
+			JPanel painelButtonAddRemoveConstraintsRnf = new JPanel(new GridLayout(1, 0));
+			painelButtonAddRemoveConstraintsRnf.add(btnAddConstraintRnf);
+			painelButtonAddRemoveConstraintsRnf.add(btnRemoveConstraintRnf);
+			
+			JPanel painelConstraintRnfButtons = new JPanel(new BorderLayout());
+			painelConstraintRnfButtons.add(scrollPaneAddConstraintRnf, BorderLayout.NORTH);
+			painelConstraintRnfButtons.add(painelButtonAddRemoveConstraintsRnf, BorderLayout.SOUTH);
+			
+			constraintsRnfListModel = new ConstraintsRnfListModel(constraintsListRnf);
+			listConstraintsRnf = new JList<String>(constraintsRnfListModel);
+			listConstraintsRnf.setComponentPopupMenu(getComponentPopupMenuConstraintsListRnf());
+			listConstraintsRnf.addMouseListener(getMouseListener());
+			
+			JScrollPane scrollPaneListModelRnf = new JScrollPane(listConstraintsRnf, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			
+			JPanel painelTxtConstraints = new JPanel(new BorderLayout());
+			painelTxtConstraints.add(new JLabel("Constraints"), BorderLayout.NORTH);
+			painelConstraintButtons.add(scrollPaneListModel);
+			painelTxtConstraints.add(painelConstraintButtons, BorderLayout.CENTER);
+			
+			JPanel painelTxtConstraintsRnf = new JPanel(new BorderLayout());
+			painelTxtConstraintsRnf.add(new JLabel("Constraints NFP"), BorderLayout.NORTH);
+			painelConstraintRnfButtons.add(scrollPaneListModelRnf);
+			painelTxtConstraintsRnf.add(painelConstraintRnfButtons, BorderLayout.CENTER);
 
+			JPanel painelAllConstraints = new JPanel(new GridLayout(0, 1));
+			painelAllConstraints.add(painelTxtConstraints);
+			painelAllConstraints.add(painelTxtConstraintsRnf);
+			
+			panel.add(painelAllConstraints);
+			
+			
+		//ACTIONS LISTENERS
+		
 		jbuttonSalvar.addActionListener(new ActionListener() {
 
 			@Override
@@ -496,7 +390,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 				
 				String nome  = JOptionPane.showInputDialog("Type the name of new model:", schemeXml.getNameXml());
 				
-				if(nome.equals("")){
+				if(nome.trim().equals("")){
 					JOptionPane.showMessageDialog(null, "Type a name valid!");
 					return;
 				}
@@ -515,35 +409,31 @@ public class EditorPanel extends JPanel implements ActionListener {
 				}
 			}
 		});
-
-		txtAddTheFeatures = new JTextField();
-		txtAddTheFeatures.setText("Add the features...");
-		txtAddTheFeatures.setEditable(false);
-		txtAddTheFeatures.setColumns(10);
-
-		JScrollPane scrollPane_2 = new JScrollPane(txtAddTheFeatures, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		panelConstraint.add(scrollPane_2);
-
-		JPanel panel_1 = new JPanel();
-		panelConstraint.add(panel_1);
-
-		JButton btnRemoveConstraint = new JButton("Remove Constraint");
-		panel_1.add(btnRemoveConstraint);
 		
-		btnRemoveConstraint.addActionListener(new ActionListener() {
+		btnAddConstraintRnf.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 
-				txtAddTheFeatures.setText("");
-				constraintLiterals.clear();
+				if(constraintsRnf!=null && constraintsRnf.isTerminate()){
+					constraintsListRnf.add(constraintsRnf);
+					constraintsRnfListModel.update();
+					constraintsRnf = null;
+					txtAddConstraintRnf.setText("");
+				}
+
 			}
 		});
 
-		JButton btnAddConstraint = new JButton("Add Constraint");
-		panel_1.add(btnAddConstraint);
+		btnRemoveConstraintRnf.addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				constraintsRnf = null;
+				txtAddConstraintRnf.setText("");
+			}
+		});
+		
 		btnAddConstraint.addActionListener(new ActionListener() {
 
 			@Override
@@ -622,85 +512,218 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 			}
 		});
-
-		constraintsListModel = new ConstraintsListModel(constraintsList);
-		list = new JList<String>(constraintsListModel);
-		list.setComponentPopupMenu(getComponentPopupMenuConstraintsList());
-		list.addMouseListener(getMouseListener());
-
-		JScrollPane scrollPane_1 = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
-		constraintsRnfListModel = new ConstraintsRnfListModel(constraintsListRnf);
-		listConstraintsRnf = new JList<String>(constraintsRnfListModel);
-		listConstraintsRnf.setComponentPopupMenu(getComponentPopupMenuConstraintsListRnf());
-		listConstraintsRnf.addMouseListener(getMouseListener());
-
-		JScrollPane scrollPane_4 = new JScrollPane(listConstraintsRnf, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		
-		JPanel painelJlists = new JPanel(new GridLayout(0, 1));
-		
-		JPanel painelTxtConstraints = new JPanel(new BorderLayout());
-			painelTxtConstraints.add(new JLabel("Constraints"), BorderLayout.NORTH);
-			painelTxtConstraints.add(scrollPane_1, BorderLayout.CENTER);
-		JPanel painelTxtConstraintsRnf = new JPanel(new BorderLayout());
-			painelTxtConstraintsRnf.add(new JLabel("Constraints Rnf"), BorderLayout.NORTH);
-			painelTxtConstraintsRnf.add(scrollPane_4, BorderLayout.CENTER);
-		
-			painelJlists.add(painelTxtConstraints);
-		painelJlists.add(painelTxtConstraintsRnf);	
-		
-		panel.add(painelJlists, BorderLayout.CENTER);
-		
-		// PAINEL CONSTRAINT RNF
-		JLabel lblConstraintRnf = new JLabel("Constraints Rnf:");
-		lblConstraintRnf.setHorizontalAlignment(SwingConstants.CENTER);
-		panelConstraint.add(lblConstraintRnf);
-		
-		txtAddConstraintRnf = new JTextField();
-		txtAddConstraintRnf.setText("Add Constraint Rnf...");
-		txtAddConstraintRnf.setEditable(false);
-		txtAddConstraintRnf.setColumns(10);
-
-		JScrollPane scrollPane_3 = new JScrollPane(txtAddConstraintRnf, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		panelConstraint.add(scrollPane_3);
-
-		JPanel panel_2 = new JPanel();
-		panelConstraint.add(panel_2);
-
-		JButton btnRemoveConstraintRnf = new JButton("Remove Constraint");
-		panel_2.add(btnRemoveConstraintRnf);
-		
-		btnRemoveConstraintRnf.addActionListener(new ActionListener() {
+		btnRemoveConstraint.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				constraintsRnf = null;
-				txtAddConstraintRnf.setText("");
+
+				txtAddTheFeatures.setText("");
+				constraintLiterals.clear();
 			}
 		});
 		
-		JButton btnAddConstraintRnf = new JButton("Add Constraint");
-		panel_2.add(btnAddConstraintRnf);
-
-		btnAddConstraintRnf.addActionListener(new ActionListener() {
-
+		addTreeRnf.addActionListener(new ActionListener() {
+			
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-
-				if(constraintsRnf!=null && constraintsRnf.isTerminate()){
-					constraintsListRnf.add(constraintsRnf);
-					constraintsRnfListModel.update();
-					constraintsRnf = null;
-					txtAddConstraintRnf.setText("");
+			public void actionPerformed(ActionEvent e) {
+				JButton botao = ((JButton)e.getSource());
+				if(!treeRnfAdicionada){
+					if(!getComponent(1).equals(scrollPaneRnf)){
+						botao.setText("Remove RNF");
+						treeRnfAdicionada = true;
+						add(scrollPaneRnf, 1);
+						updateUI();
+					}
+				}else{
+					if(getComponent(1).equals(scrollPaneRnf)){
+						botao.setText("Add RNF");
+						treeRnfAdicionada = false;
+						remove(1);
+						updateUI();
+					}
 				}
-
 			}
 		});
 
-		preenchendoContextosRnf(splotContextModel.getContextoRnf());
+		btnNewContext.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+					DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+					try {
+						
+						DefaultMutableTreeNode rootArvoreAdaptacao = (DefaultMutableTreeNode)treeAdaptation.getModel().getRoot();
+
+						String nomeContexto = verificandoArvore(rootArvoreAdaptacao);
+						
+						if(nomeContexto==null){
+							JOptionPane.showMessageDialog(null, "Check someone item in Tree Adaptation");
+							return;
+						}
+						
+						DocumentBuilder db = dbf.newDocumentBuilder();
+						Document doc = db.parse(EditorPanel.this.pathModelFile);
+
+						Element rootEle = doc.getDocumentElement();
+
+						FeatureTreeNode root = (FeatureTreeNode)tree.getModel().getRoot();
+						
+						Node tree = null;
+						
+						for(int i=0; i < rootEle.getChildNodes().getLength(); i++){
+							tree = rootEle.getChildNodes().item(i);
+							if(tree.getNodeName().equals("feature_tree"))
+								rootEle.removeChild(tree);
+							if(tree.getNodeName().equals("constraints"))
+								rootEle.removeChild(tree);
+							if(tree.getNodeName().equals("arvore_adaptacao"))
+								rootEle.removeChild(tree);
+							if(tree.getNodeName().equals("arvore_rnf"))
+								rootEle.removeChild(tree);
+							if(tree.getNodeName().equals("adaptacao"))
+								rootEle.removeChild(tree);
+							if(tree.getNodeName().equals("contexto_rnf")){
+								for(int j=0; j < tree.getAttributes().getLength(); j++){
+									if(tree.getAttributes().getNamedItem("nome")!=null && 
+											tree.getAttributes().getNamedItem("nome").getNodeValue().equals(nomeContexto)){
+										rootEle.removeChild(tree);
+									}
+								}
+							}
+						}
+						
+						controllerFeatures.drawTree(root);
+						
+						Node newTree = doc.createElement("feature_tree");
+						
+						newTree.appendChild(doc.createTextNode(controllerFeatures.getArvoreDesenhada()));
+						
+						rootEle.appendChild(newTree);
+
+						rootEle.appendChild(WriteXMLmodel.getArvoreRnf(doc, (DefaultMutableTreeNode)treeRnf.getModel().getRoot()));
+						
+						rootEle.appendChild(WriteXMLmodel.getArvoreAdaptacao(doc, rootArvoreAdaptacao));
+												
+						rootEle.appendChild(WriteXMLmodel.getAdaptacao(doc, rootArvoreAdaptacao, nomeContexto));
+						
+						rootEle.appendChild(WriteXMLmodel.getContext(doc, nomeContexto,
+									EditorPanel.this.resolutions, new ArrayList<String>(constraints.values())));
+						
+						ContextoRnf contextoRnf = new ContextoRnf();
+						
+						contextoRnf.setNome(nomeContexto);
+						contextoRnf.setValorContextoRnf(constraintsListRnf);
+						
+						rootEle.appendChild(WriteXMLmodel.getContextoRnf(doc, contextoRnf));
+
+						Transformer transformer = TransformerFactory.newInstance().newTransformer();
+						transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+						DOMSource source = new DOMSource(doc);
+						StreamResult console = new StreamResult(new FileOutputStream(EditorPanel.this.pathModelFile));
+						transformer.transform(source, console);
+
+						//textFieldNewContext.setText("");
+						constraintLiterals.clear();
+						constraints.clear();
+						constraintsList.clear();
+						constraintsListModel.update();
+						txtAddTheFeatures.setText("");
+						resolutions.clear();
+						txtMessageText.setText("None for while...");
+						constraintNumber = 0;
+
+						EditorPanel.this.tree.updateUI();
+						JOptionPane.showMessageDialog(EditorPanel.this,
+								"Your context has been saved. Now, open the file to see it.");
+
+					} catch (SAXException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ParserConfigurationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (TransformerConfigurationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (TransformerFactoryConfigurationError e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (TransformerException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+			}
+		});
+
+		treeModel.addTreeModelListener(new TreeModelListener() {
+
+			@Override
+			public void treeNodesChanged(final TreeModelEvent e) {
+				mudancaCheckBoxArvoreAdaptacao();
+			}
+
+			@Override
+			public void treeNodesInserted(TreeModelEvent e) {}
+
+			@Override
+			public void treeNodesRemoved(TreeModelEvent e) {}
+
+			@Override
+			public void treeStructureChanged(TreeModelEvent e){}
+		});
+		
+		treeAdaptation.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getButton() == MouseEvent.BUTTON3){
+					mouseClickArvoreAdaptacao(e);    
+				}
+			}
+		});
+		
+		treeRnf.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getButton() == MouseEvent.BUTTON3){
+					mouseClickArvoreRnf(e);    
+				}
+			}
+		});
+
+		
+		contextoRnf = splotContextModel.getContextoRnf();
 		this.main.expandAllNodes(tree, 0, tree.getRowCount());
 	}
 	
@@ -732,10 +755,10 @@ public class EditorPanel extends JPanel implements ActionListener {
 			}
 		}
 		
-		//String nome = verificandoArvore((DefaultMutableTreeNode)treeModel.getRoot());
+		String nome = verificandoArvore((DefaultMutableTreeNode)treeModel.getRoot());
 		
-	//	if(nome!=null)
-			//setTreeVisualization(nome);
+		if(nome!=null)
+			setTreeVisualization(nome);
 	}
 	
 	private MouseListener getMouseListener() {
@@ -1140,7 +1163,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 		
 		if(node.getLevel() == 0){
 			JPopupMenu menu = new JPopupMenu();
-			menu.add(new JLabel("Opções de características:"));
+			menu.add(new JLabel("Options for characteristics of quality:"));
 			menu.addSeparator();
 			JMenuItem adicionar = new JMenuItem("Add");
 			
@@ -1150,7 +1173,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					String adaptacao = JOptionPane.showInputDialog("Adicione o nome da característica");
+					String adaptacao = JOptionPane.showInputDialog("Type the characteristics name:");
 					if(adaptacao!=null && !adaptacao.trim().isEmpty()){
 						node.add(new DefaultMutableTreeNode(adaptacao));
 						treeRnf.updateUI();
@@ -1162,7 +1185,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 			
 		}else if(node.getLevel() == 1){
 			JPopupMenu menu = new JPopupMenu("Value");
-			menu.add(new JLabel("Opções de subcaracterísticas:"));
+			menu.add(new JLabel("Options for subcharacteristics of quality:"));
 			menu.addSeparator();
 			JMenuItem adicionar = new JMenuItem("Add");
 			
@@ -1172,7 +1195,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					String valor = JOptionPane.showInputDialog("Adicione o nome da subcaracterísticas");
+					String valor = JOptionPane.showInputDialog("Type the subcharacteristics name:");
 					if(valor!=null && !valor.trim().isEmpty()){
 						node.add(new DefaultMutableTreeNode(valor));
 						treeRnf.updateUI();
@@ -1180,7 +1203,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 				}
 			});
 			
-			menu.add(new JLabel("Opções de características:"));
+			menu.add(new JLabel("Options for characteristics of quality:"));
 			menu.addSeparator();
 			JMenuItem remover = new JMenuItem("Remove");
 			
@@ -1199,7 +1222,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 			
 		}else if(node.getLevel() == 2){
 			JPopupMenu menu = new JPopupMenu("Value");
-			menu.add(new JLabel("Opções de PNF:"));
+			menu.add(new JLabel("NFP options:"));
 			menu.addSeparator();
 			JMenuItem adicionar = new JMenuItem("Add");
 			
@@ -1217,7 +1240,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 				}
 			});
 			
-			menu.add(new JLabel("Opções de subcaracterísticas:"));
+			menu.add(new JLabel("Options for subcharacteristics of quality:"));
 			menu.addSeparator();
 			JMenuItem remover = new JMenuItem("Remove");
 			
@@ -1235,7 +1258,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 			menu.show(treeRnf, e.getX(), e.getY());
 		}else if(node.getLevel() == 3){
 			JPopupMenu menu = new JPopupMenu("Adaptation");
-			menu.add(new JLabel("Opções de PNF:"));
+			menu.add(new JLabel("NFP options:"));
 			menu.addSeparator();
 			
 			JMenuItem remover = new JMenuItem("Remove");
@@ -1251,10 +1274,10 @@ public class EditorPanel extends JPanel implements ActionListener {
 				}
 			});
 			
-			menu.add(new JLabel("Opções de Contrainsts RNF:"));
+			menu.add(new JLabel("Options of RNF Contrainsts:"));
 			menu.addSeparator();
 			
-			JMenuItem addToConstraint = new JMenuItem("Add to Constraint Model Features");
+			JMenuItem addToConstraint = new JMenuItem("Add to Constraint Feature Models");
 			
 			menu.add(addToConstraint);
 			
@@ -1284,10 +1307,20 @@ public class EditorPanel extends JPanel implements ActionListener {
 			return;
 		}	
 		
+		if(!splotContextModel.getContexts().containsKey(contextName)){
+			constraintsListRnf.clear();
+			return;
+		}
+		
+		if(contextoRnf.containsKey(contextName))
+			preenchendoContextosRnf(contextoRnf.get(contextName));
+		else{
+			constraintsListRnf.clear();
+		}
+		
 		Context context = splotContextModel.getContexts().get(contextName);
 		FeatureModel featureModel = splotContextModel.setFeatureModel(context);
 		String modelName = featureModel.getName();
-		
 		
 		tree.setModel(featureModel);	
 		tree.setEditable(true);
@@ -1562,7 +1595,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 	}
 	
 	private void preenchendoArvoreRnf(Rnf rnf){
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Rnf");
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");
 		
 		if(rnf!=null && rnf.getCaracteristicas()!=null){
 			
@@ -1591,6 +1624,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 	}
 	
 	private void preenchendoContextosRnf(ContextoRnf contextoRnf){		
+		constraintsListRnf.clear();
 		if(contextoRnf!=null){
 			constraintsListRnf.addAll(contextoRnf.getValorContextoRnf());
 			constraintsRnfListModel.update();

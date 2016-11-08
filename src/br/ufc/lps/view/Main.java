@@ -503,6 +503,16 @@ public class Main extends JFrame {
 		}).start();
 	}
 	
+	public void getRadarVariabilidadeAdaptativa( List<SchemeXml> schema){
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Component a = BrowserController.getRadarVariabilidadeAdaptativa(schema);
+				createTab(a, "Complexidade Estrutural");
+			}
+		}).start();
+	}
+	
 	public void abrirMedidas( SchemeXml schema){
 		new Thread(new Runnable() {
 			@Override
@@ -579,6 +589,16 @@ public class Main extends JFrame {
 			public void run() {
 				Component a = BrowserController.getD3TreeMapEvolucao(schema);
 				createTab(a, "NF / NA / NO / NM (tamanho do modelo)");
+			}
+		}).start();
+	}
+	
+	public void getAnd(){
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Component a = BrowserController.getAnd();
+				createTab(a, "Arvore And");
 			}
 		}).start();
 	}

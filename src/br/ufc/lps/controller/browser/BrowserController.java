@@ -16,10 +16,17 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.a;
 import com.teamdev.jxbrowser.chromium.events.ConsoleEvent;
 import com.teamdev.jxbrowser.chromium.events.ConsoleListener;
+import com.teamdev.jxbrowser.chromium.events.FailLoadingEvent;
 import com.teamdev.jxbrowser.chromium.events.FinishLoadingEvent;
+import com.teamdev.jxbrowser.chromium.events.FrameLoadEvent;
 import com.teamdev.jxbrowser.chromium.events.LoadAdapter;
+import com.teamdev.jxbrowser.chromium.events.LoadEvent;
+import com.teamdev.jxbrowser.chromium.events.LoadListener;
+import com.teamdev.jxbrowser.chromium.events.ProvisionalLoadingEvent;
+import com.teamdev.jxbrowser.chromium.events.StartLoadingEvent;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
 import br.ufc.lps.model.visualization.chartjs.config.AxesSet;
@@ -153,6 +160,218 @@ public class BrowserController{
     	   
        }
      
+       
+       public static Component getRadarVariabilidadeAdaptativa(List<SchemeXml> scheme){
+    	   
+    	   Browser browser = new Browser();
+    	   ConfigSet cnf = new ConfigSet();
+    	   
+    	   cnf.setType("radar");
+    	   
+    	   BuyerData buyerData = new BuyerData();
+    	   
+    	   List<String> labels = Arrays.asList(
+    			   "Number of optional features removed",
+    			   "Number of alternative features removed",
+    			   "Number of mandatory features removed",
+    			   "Number of features removed",
+    			   
+    			   "Number of optional features adicioned",
+    			   "Number of alternative features adicioned",
+    			   "Number of mandatory features adicioned",
+    			   "Number of features");
+    	   
+    	   buyerData.setLabels(labels);
+    	   
+    	   List<DataSet> datasets = new ArrayList<>();
+    	   
+    	   List<String> coresBackground = new ArrayList<>();
+    	   List<String> coresHoverBackground = new ArrayList<>();
+    	   
+    	   Random rand = new Random();
+    	   for(int i=0; i < scheme.size(); i++){
+    		   int r = rand.nextInt(255);
+    		   int g = rand.nextInt(255);
+    		   	   int b = rand.nextInt(255);
+    		   String rgbBack = "rgba("+r+", "+g+", "+b+", 0.4)";
+    		   String rgbHover = "rgba("+r+", "+g+", "+b+", 1)";
+    		   coresBackground.add(rgbBack);
+    		   coresHoverBackground.add(rgbHover);
+    	   }
+    	   
+    	   List<Double> listaData = null;
+    	   DataSetBar dataSet = null;
+    	   
+    	   int removedNF = 0;
+    	   int removedNA = 0;
+    	   int removedNO = 0;
+    	   int removedNM = 0;
+    	   
+    	   int adicionedNF = 0;
+    	   int adicionedNA = 0;
+    	   int adicionedNO = 0;
+    	   int adicionedNM = 0;
+    	   
+    	   for(int i=1; i < scheme.size(); i++){
+    		   
+    		   if((i+1) < scheme.size()){
+    			   int result = scheme.get(i+1).getNumberOfFeatures() - scheme.get(i).getNumberOfFeatures();
+    			   
+    			   System.out.println(result);
+    			   
+    			   if(result < 0)
+    				   removedNF+=(result*-1);
+    			   else if(result > 0)
+    				   adicionedNF+=result;
+    			   
+    			   result = scheme.get(i+1).getNumberOfAlternativeFeatures()!=null ? scheme.get(i+1).getNumberOfAlternativeFeatures() : 1  - (scheme.get(i).getNumberOfAlternativeFeatures()!=null ? scheme.get(i).getNumberOfAlternativeFeatures() : 2);
+    			   
+    			   System.out.println(result);
+    			   
+    			   if(result < 0)
+    				   removedNA+=(result*-1);
+    			   else if(result > 0)
+    				   adicionedNA+=result;
+    			   
+    			   result = scheme.get(i+1).getNumberOfOptionalFeatures() - scheme.get(i).getNumberOfOptionalFeatures();
+
+    			   System.out.println(result);
+
+    			   if(result < 0)
+    				   removedNO+=(result*-1);
+    			   else if(result > 0)
+    				   adicionedNO+=result;
+    			   
+    			   result = scheme.get(i+1).getNumberOfMandatoryFeatures() - scheme.get(i).getNumberOfMandatoryFeatures();
+    			   
+    			   System.out.println(result);
+    			   
+    			   if(result < 0)
+    				   removedNM+=(result*-1);
+    			   else if(result > 0)
+    				   adicionedNM+=result;
+    		   }
+    		   
+    		   dataSet = new DataSetBar();
+	    	   dataSet.setBorderWidth(2);
+	    	   	
+	    	   listaData = new ArrayList<>();
+    		   dataSet.setLabel(scheme.get(i).getNameXml());
+    		   
+	    	   listaData.add(Double.parseDouble(removedNO+""));
+	    	   listaData.add(Double.parseDouble(removedNA+""));
+	    	   listaData.add(Double.parseDouble(removedNM+""));
+	    	   listaData.add(Double.parseDouble(removedNF+""));
+	    	   
+	    	   listaData.add(Double.parseDouble(adicionedNO+""));
+	    	   listaData.add(Double.parseDouble(adicionedNA+""));
+	    	   listaData.add(Double.parseDouble(adicionedNM+""));
+	    	   listaData.add(Double.parseDouble(adicionedNF+""));
+	    	   
+	    	   dataSet.setData(listaData);
+	    	   
+	    	   List<String> coresBackground2 = new ArrayList<>();
+        	   List<String> coresHoverBackground2 = new ArrayList<>();
+        	   
+    		   for(int j=0; j < 8; j++){
+	    		   coresBackground2.add(coresBackground.get(i));
+	    		   coresHoverBackground2.add(coresHoverBackground.get(i));
+    		   }
+    		   
+    		   dataSet.setBackgroundColor(coresBackground2);
+    		   dataSet.setHoverBackgroundColor(coresHoverBackground2);
+	    	
+	    	   
+	    	   removedNF = 0;
+	    	   removedNA = 0;
+	    	   removedNO = 0;
+	    	   removedNM = 0;
+	    	   
+	    	   adicionedNF = 0;
+	    	   adicionedNA = 0;
+	    	   adicionedNO = 0;
+	    	   adicionedNM = 0;
+	    	   
+	    	   datasets.add(dataSet);
+    	   }
+    	   
+    	  /* for(int j=0; j < scheme.getMedidasContexto().size(); j++){
+    		   
+    		   MedidasContexto medida = scheme.getMedidasContexto().get(j);
+    		   
+    		   dataSet = new DataSetBar();
+	    	   dataSet.setBorderWidth(3);
+	    	   	
+	    	   listaData = new ArrayList<>();
+    		   dataSet.setLabel(medida.getNameContext());
+    		   
+	    	   listaData.add(Double.parseDouble(medida.getNumberOfActivatedFeatures().toString()));
+	    	   listaData.add(Double.parseDouble(medida.getNumberOfDeactivatedFeatures().toString()));
+	    	   listaData.add(Double.parseDouble(medida.getNumberOfContextConstraints().toString()));
+	    	   listaData.add(Double.parseDouble(medida.getActivatedFeaturesByContextAdaptation().toString()));
+	    	   listaData.add(Double.parseDouble(medida.getDesactivatedFeaturesByContextAdaptation().toString()));
+	    	   listaData.add(Double.parseDouble(medida.getNonContextFeatures().toString()));
+	    	   
+    		   dataSet.setData(listaData);
+    		   List<String> coresBackground2 = new ArrayList<>();
+        	   List<String> coresHoverBackground2 = new ArrayList<>();
+    		   for(int i=0; i < 6; i++){
+	    		   coresBackground2.add(coresBackground.get(j));
+	    		   coresHoverBackground2.add(coresHoverBackground.get(j));
+    		   }
+    		   dataSet.setBackgroundColor(coresBackground2);
+    		   dataSet.setHoverBackgroundColor(coresHoverBackground2);
+	    	   datasets.add(dataSet);
+	    	  
+    	   }*/
+    	   
+    	   OptionsSet optionsSet = new OptionsSet();
+    	   TitleSet titleSet = new TitleSet();
+    	   titleSet.setDisplay(true);
+    	   titleSet.setText("Complexidade Estrutural: "+scheme.get(0).getNameXml());
+    	   titleSet.setFontSize(20);
+    	   optionsSet.setTitle(titleSet);
+    	   
+    	   //LEGEND OF OPTIONS
+    	   LegendSet legend = new LegendSet();
+    	   legend.setPosition("bottom");
+    	   optionsSet.setLegend(legend);
+
+    	   
+    	   cnf.setOptions(optionsSet);
+    	   
+    	   buyerData.setDatasets(datasets);
+    	   cnf.setData(buyerData);
+    	   
+    	   Gson g = new Gson();
+    	   String saida = g.toJson(cnf);
+    	   System.out.println(saida);
+    	   
+    	   
+    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/generic.html");
+      	  
+    	   browser.addLoadListener(new LoadAdapter() {
+               @Override
+               public void onFinishLoadingFrame(FinishLoadingEvent event) {
+                   if (event.isMainFrame()) {
+                       event.getBrowser().executeJavaScript("preencherGrafico('"+saida+"')");
+                   }
+               }
+           });
+    	   
+    	   browser.addConsoleListener(new ConsoleListener() {
+			
+			@Override
+			public void onMessage(ConsoleEvent arg0) {
+				System.out.println(arg0.getMessage());
+			}
+		});
+    	 
+    	   return new BrowserView(browser);
+    	   
+       }
+     
+       
        public static JComponent getLine(SchemeXml scheme){
     	   Browser browser = new Browser();
     	   ConfigSet cnf = new ConfigSet();
@@ -912,6 +1131,7 @@ public class BrowserController{
        
        public static JComponent getD3TreeMapEvolucao(List<SchemeXml> scheme){
     	   Browser browser = new Browser();
+    	   
     	   int removedNF = 0;
     	   int removedNA = 0;
     	   int removedNO = 0;
@@ -922,6 +1142,7 @@ public class BrowserController{
     	   int adicionedNM = 0;
     	   
     	   for(int i=0; i < scheme.size(); i++){
+
     		   if((i+1) < scheme.size()){
     			   int result = scheme.get(i).getNumberOfFeatures() - scheme.get(i+1).getNumberOfFeatures();
     			   
@@ -1041,6 +1262,33 @@ public class BrowserController{
     	   
     	   return new BrowserView(browser);
        }
+       
+
+       public static JComponent getAnd(){
+    	   Browser browser = new Browser();
+    	   
+    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/and.html");
+    	   browser.addLoadListener(new LoadAdapter() {
+               @Override
+               public void onFinishLoadingFrame(FinishLoadingEvent event) {
+                   if (event.isMainFrame()) {
+                       event.getBrowser().executeJavaScript("preencherGrafico('"+getJSON("json/and.json")+"')");
+                   }
+               }
+           });
+    	   
+    	   
+    	   browser.addConsoleListener(new ConsoleListener() {
+			
+			@Override
+			public void onMessage(ConsoleEvent arg0) {
+				System.out.println(arg0.toString());
+			}	
+		});
+    	   
+    	   return new BrowserView(browser);
+       }
+       
       
        
        public static String getJSON(String arquivo){

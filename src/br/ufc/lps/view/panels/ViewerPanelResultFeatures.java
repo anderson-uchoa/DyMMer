@@ -125,6 +125,14 @@ public class ViewerPanelResultFeatures extends JPanel {
 		
 		painelMensagens.add(button10);
 		
+		JButton button11 = new JButton("Complexidade Estrutural");
+		
+		painelMensagens.add(button11);
+		
+		JButton button12 = new JButton("And");
+		
+		painelMensagens.add(button12);
+		
 		medidas = new JButton("Measures");
 		
 		painelBotaoOpen.add(medidas);
@@ -241,7 +249,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 				if(selecao.length >= 2){
 					List<SchemeXml> list = new ArrayList<>();
 					for(int i=0; i < selecao.length; i++)
-						list.add(listaItens.get(i));
+						list.add(listaItens.get(selecao[i]));
 					ViewerPanelResultFeatures.this.main.getD3TreeMapEvolucao(list);
 				}else
 					JOptionPane.showMessageDialog(null, "Selecione os modelos na tabela");
@@ -260,6 +268,32 @@ public class ViewerPanelResultFeatures extends JPanel {
 					mensagemSelecionarLinha();
 			}
 		});
+		
+		button11.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int [] selecao = tabela.getSelectedRows();
+			
+				if(selecao.length >= 2){
+					List<SchemeXml> list = new ArrayList<>();
+					for(int i=0; i < selecao.length; i++)
+						list.add(listaItens.get(selecao[i]));
+					ViewerPanelResultFeatures.this.main.getRadarVariabilidadeAdaptativa(list);
+				}else
+					JOptionPane.showMessageDialog(null, "Selecione os modelos na tabela");
+				
+				
+			}
+		});
+		
+		button12.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				main.getAnd();
+			}
+		});	
 		
 		open.addActionListener(new ActionListener() {
 			

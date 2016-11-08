@@ -1,0 +1,288 @@
+{
+  "name": "Mapeamemento",
+  "children": [
+    {
+      "name": "Adequação funcional",
+      "children": [
+        {
+          "name": "Completude Funcional",
+          "children": [
+            {
+              "name": "Completude"
+            }
+          ]
+        },
+        {
+          "name": "Corretude Funcional",
+          "children": [
+            {
+              "name": "Precisão"
+            }
+          ]
+        },
+        {
+          "name": "Adequação Funcional",
+          "children": [
+            {
+              "name": "Satisfação do Cliente"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Eficiência de Desempenho",
+      "children": [
+        {
+          "name": "Comportamento de Tempo",
+          "children": [
+            {
+              "name": "Tempo de Resposta da Expedição"
+            },
+            {
+              "name": "Tempo Mínimo de Espera"
+            },
+            {
+              "name": "Tempo de Resposta"
+            },
+            {
+              "name": "Tempo de Execução"
+            },
+            {
+              "name": "Latência"
+            },
+            {
+              "name": "Tempo de Reconhencimento"
+            },
+            {
+              "name": "Velocidade"
+            },
+            {
+              "name": "Taxa de Transferência"
+            }
+          ]
+        },
+        {
+          "name": "Utilização de Recurso",
+          "children": [
+            {
+              "name": "Consumo de Memória"
+            },
+            {
+              "name": "Consumo de CPU"
+            },
+            {
+              "name": "Consumo de Energia"
+            },
+            {
+              "name": "CPU Disponíveis"
+            },
+            {
+              "name": "Eficiência Energética"
+            },
+            {
+              "name": "Economia de Energia"
+            },
+            {
+              "name": "Espaço - Memória Principal"
+            },
+            {
+              "name": "Espaço - Memória Secundária"
+            }
+          ]
+        },
+        {
+          "name": "Capacidade",
+          "children": [
+            {
+              "name": "Capacidade de Canal/Latência"
+            },
+            {
+              "name": "Tamanho do Arquivo"
+            },
+            {
+              "name": "Tamanho da Mensagem"
+            },
+            {
+              "name": "Peso"
+            },
+            {
+              "name": "Largura de Banda"
+            }
+          ]
+        }
+      ],
+      "dependsOn": []
+    },
+    {
+      "name": "Compatibilidade",
+      "children": [
+        {
+          "name": "Interoperabilidade"
+        },
+        {
+          "name": "Coexistência"
+        }
+      ],
+      "dependsOn": []
+    },
+    {
+      "name": "Usabilidade",
+      "children": [
+        {
+          "name": "Adequação de Identificabilidade",
+          "children": []
+        },
+        {
+          "name": "Aprendibilidade",
+          "children": []
+        },
+        {
+          "name": "Operabilidade",
+          "children": [
+            {
+              "name": "Uso Conveniente do Sistema"
+            },
+            {
+              "name": "Esforço"
+            },
+            {
+              "name": "Facilidade de Uso"
+            }
+          ]
+        },
+        {
+          "name": "Proteção de Erro do Usuário"
+        },
+        {
+          "name": "Estética da Interface do Usuário",
+          "children": [
+            {
+              "name": "Interface de Usuário Amigável"
+            },
+            {
+              "name": "Conforto"
+            }
+          ]
+        },
+        {
+          "name": "Acessibilidade",
+          "children": [
+            {
+              "name": "Usabilidade para Deficientes"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Confiabilidade",
+      "children": [
+        {
+          "name": "Maturidade"
+        },
+        {
+          "name": "Disponibilidade",
+          "children": [
+            {
+              "name": "Tempo de Serviço"
+            },
+            {
+              "name": "Disponibilidade"
+            }
+          ]
+        },
+        {
+          "name": "Tolerância a Falhas",
+          "children": [
+            {
+              "name": "Gravidade de Falhas do Produto"
+            },
+            {
+              "name": "Tolerância a Falhas"
+            }
+          ]
+        },
+        {
+          "name": "Recuperabilidade"
+        }
+      ]
+    },
+    {
+      "name": "Segurança",
+      "children": [
+        {
+          "name": "Não-Repúdio"
+        },
+        {
+          "name": "Responsabilização"
+        },
+        {
+          "name": "Autenticidade",
+          "children": [
+            {
+              "name": "Segurança de Acesso a Dados"
+            }
+          ]
+        },
+        {
+          "name": "Confidencialidade",
+          "children": [
+            {
+              "name": "Confidencialidade"
+            },
+            {
+              "name": "Privacidade"
+            }
+          ]
+        },
+        {
+          "name": "Integridade",
+          "children": [
+            {
+              "name": "Integridade"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Manutenibilidade",
+      "children": [
+        {
+          "name": "Modularidade"
+        },
+        {
+          "name": "Reusabilidade"
+        },
+        {
+          "name": "Analisabilidade"
+        },
+        {
+          "name": "Modificabilidade"
+        },
+        {
+          "name": "Estabilidade"
+        }
+      ]
+    },
+    {
+      "name": "Portabilidade",
+      "children": [
+        {
+          "name": "Adaptabilidade"
+        },
+        {
+          "name": "Instabilidade"
+        },
+        {
+          "name": "Substituibilidade"
+        }
+      ]
+    }
+  ],
+  "comments": "",
+  "dependsOn": [],
+  "technos": [],
+  "host": {}
+}

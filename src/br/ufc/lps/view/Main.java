@@ -336,7 +336,7 @@ public class Main extends JFrame {
 				int returnValue = fileChooser.showOpenDialog(null);
 				if(returnValue == JFileChooser.APPROVE_OPTION){
 					*/
-					String path = "/home/loopback/Heidelberg Ion-Beam Therapy Center.xml";//fileChooser.getSelectedFile().getAbsolutePath();
+					String path = "md.xml";//fileChooser.getSelectedFile().getAbsolutePath();
 					IModel model = new SplotModel(path);
 					final EditorPanel editor = new EditorPanel(model, ModelID.SPLOT_MODEL.getId(), path, null, Main.this);
 					

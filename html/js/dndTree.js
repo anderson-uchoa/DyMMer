@@ -176,7 +176,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
         .classed("svg-container", true)
         .append("svg")
         .attr("preserveAspectRatio", "xMinYMin meet")
-        .attr("viewBox", "0 0 700 340")
+        .attr("viewBox", "0 0 700 400")
         //.attr("width", viewerWidth)
         //.attr("height", viewerHeight)
         .attr("class", "overlay")

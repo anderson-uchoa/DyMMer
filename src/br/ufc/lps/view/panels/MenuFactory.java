@@ -66,6 +66,35 @@ public class MenuFactory {
 		return null;
 
 	}
+	
+	public JPopupMenu verificarMenuDeSelecaoCreatorNewModel(TypeFeature typeFeature) {
+
+		switch (typeFeature) {
+
+		case ROOT:
+			return showMenuRootFeature();
+
+		case GROUP_XOR:
+			return showMenuGroupCreateNewModel();
+
+		case GROUP_OR:
+			return showMenuGroupCreateNewModel();
+
+		case MANDATORY:
+			return showMenuRootFeature();
+
+		case OPTIONAL:
+			return showMenuRootFeature();
+
+		case GROUPED_FEATURE:
+			return showMenuRootFeature();
+
+		default:
+
+		}
+		return null;
+
+	}
 
 	public JPopupMenu showGenericMenu() {
 
@@ -214,6 +243,49 @@ public class MenuFactory {
 
 	}
 
+	public JPopupMenu showMenuOptionalFeatureCreateNewModel() {
+
+		JPopupMenu menu = new JPopupMenu();
+
+		JSeparator separator = new JSeparator();
+
+		JMenuItem addOptionalFeature = new JMenuItem("Add a Optional Feature");
+		JMenuItem addMandatoryFeature = new JMenuItem("Add a Mandatory Feature");
+		JMenuItem addXORGroup = new JMenuItem("Add a XOR Group");
+		JMenuItem addORGroup = new JMenuItem("Add a OR Group");
+		
+		JMenuItem remove = new JMenuItem("Remove");
+
+		addXORGroup.setActionCommand("addXORGroup");
+		addOptionalFeature.setActionCommand("addOptionalFeature");
+		addMandatoryFeature.setActionCommand("addMandatoryFeature");
+		addORGroup.setActionCommand("addORGroup");
+
+		remove.setActionCommand("remove");
+
+		addOptionalFeature.addActionListener(editorPanel);
+		addMandatoryFeature.addActionListener(editorPanel);
+		addXORGroup.addActionListener(editorPanel);
+		addORGroup.addActionListener(editorPanel);
+
+		remove.addActionListener(editorPanel);
+
+
+		menu.add(separator);
+		menu.add(addOptionalFeature);
+		menu.add(addMandatoryFeature);
+		menu.add(addXORGroup);
+		menu.add(addORGroup);
+		menu.add(remove);
+
+		menu.add(separator);
+
+		menu.add(separator);
+
+		return menu;
+
+	}
+	
 	public JPopupMenu showMenuMandatoryFeature() {
 		JPopupMenu menu = new JPopupMenu();
 
@@ -297,6 +369,43 @@ public class MenuFactory {
 		return menu;
 
 	}
+	
+	public JPopupMenu showMenuMandatoryFeatureCreateNewModel() {
+		JPopupMenu menu = new JPopupMenu();
+
+		JSeparator separator = new JSeparator();
+
+		JMenuItem addOptionalFeature = new JMenuItem("Add a Optional Feature");
+		JMenuItem addMandatoryFeature = new JMenuItem("Add a Mandatory Feature");
+		JMenuItem addXORGroup = new JMenuItem("Add a XOR Group");
+		JMenuItem addORGroup = new JMenuItem("Add a OR Group");
+		
+		JMenuItem remove = new JMenuItem("Remove");
+
+		addOptionalFeature.setActionCommand("addOptionalFeature");
+		addMandatoryFeature.setActionCommand("addMandatoryFeature");
+		addXORGroup.setActionCommand("addXORGroup");
+		addORGroup.setActionCommand("addORGroup");
+
+		remove.setActionCommand("remove");
+
+		addOptionalFeature.addActionListener(editorPanel);
+		addMandatoryFeature.addActionListener(editorPanel);
+		addXORGroup.addActionListener(editorPanel);
+		addORGroup.addActionListener(editorPanel);
+
+		remove.addActionListener(editorPanel);
+
+		menu.add(separator);
+		menu.add(addOptionalFeature);
+		menu.add(addMandatoryFeature);
+		menu.add(addXORGroup);
+		menu.add(addORGroup);
+		menu.add(remove);
+
+		return menu;
+
+	}
 
 	public JPopupMenu showMenuRootFeature() {
 
@@ -319,8 +428,6 @@ public class MenuFactory {
 		addXORGroup.addActionListener(editorPanel);
 		addORGroup.addActionListener(editorPanel);
 		
-		
-		
 		menu.add(addOptionalFeature);
 		menu.add(addMandatoryFeature);
 		menu.add(separator);
@@ -331,17 +438,15 @@ public class MenuFactory {
 		return menu;
 
 	}
-
+	
 	public JPopupMenu showMenuXORGroup() {
+
 
 		JPopupMenu menu = new JPopupMenu();
 
 		JSeparator separator = new JSeparator();
 
-		JMenuItem addOptionalFeature = new JMenuItem("Add a Optional Feature");
-		JMenuItem addMandatoryFeature = new JMenuItem("Add a Mandatory Feature");
-		JMenuItem addXORGroup = new JMenuItem("Add a XOR Group");
-		JMenuItem addORGroup = new JMenuItem("Add a OR Group");
+		JMenuItem addSolitaire = new JMenuItem("Add a Solitaire Feature");
 		
 		JMenuItem addConstraintRnfPositive2 = new JMenuItem(COMPLETELY_SATISFIES);
 		JMenuItem addConstraintRnfPositive1 = new JMenuItem(POSITIVE_INFLUENCE);
@@ -359,25 +464,15 @@ public class MenuFactory {
 		
 		JMenuItem remove = new JMenuItem("Remove");
 		
-		addOptionalFeature.setActionCommand("addOptionalFeature");
-		addMandatoryFeature.setActionCommand("addMandatoryFeature");
-		addXORGroup.setActionCommand("addXORGroup");
-		addORGroup.setActionCommand("addORGroup");
+		addSolitaire.setActionCommand("addSolitaire");
 		remove.setActionCommand("remove");
 		
-		addOptionalFeature.addActionListener(editorPanel);
-		addMandatoryFeature.addActionListener(editorPanel);
-		addXORGroup.addActionListener(editorPanel);
-		addORGroup.addActionListener(editorPanel);
+		addSolitaire.addActionListener(editorPanel);
 		remove.addActionListener(editorPanel);
-		
 
-		menu.add(addOptionalFeature);
-		menu.add(addMandatoryFeature);
+		menu.add(addSolitaire);
 		menu.add(separator);
 
-		menu.add(addXORGroup);
-		menu.add(addORGroup);
 		menu.add(remove);
 		
 		menu.add(separator);
@@ -390,6 +485,30 @@ public class MenuFactory {
 		return menu;
 
 	}
+	
+	public JPopupMenu showMenuGroupCreateNewModel() {
+
+		JPopupMenu menu = new JPopupMenu();
+
+		JSeparator separator = new JSeparator();
+
+		JMenuItem addSolitaire = new JMenuItem("Add a Solitaire Feature");
+	
+		JMenuItem remove = new JMenuItem("Remove");
+		
+		addSolitaire.setActionCommand("addSolitaire");
+		remove.setActionCommand("remove");
+		
+		addSolitaire.addActionListener(editorPanel);
+		remove.addActionListener(editorPanel);
+
+		menu.add(addSolitaire);
+		menu.add(separator);
+		menu.add(remove);
+
+		return menu;
+
+	}
 
 	public JPopupMenu showMenuORGroup() {
 
@@ -397,10 +516,7 @@ public class MenuFactory {
 
 		JSeparator separator = new JSeparator();
 
-		JMenuItem addOptionalFeature = new JMenuItem("Add a Optional Feature");
-		JMenuItem addMandatoryFeature = new JMenuItem("Add a Mandatory Feature");
-		JMenuItem addXORGroup = new JMenuItem("Add a XOR Group");
-		JMenuItem addORGroup = new JMenuItem("Add a OR Group");
+		JMenuItem addSolitaire = new JMenuItem("Add a OR Solitaire Feature");
 		
 		JMenuItem addConstraintRnfPositive2 = new JMenuItem(COMPLETELY_SATISFIES);
 		JMenuItem addConstraintRnfPositive1 = new JMenuItem(POSITIVE_INFLUENCE);
@@ -418,24 +534,14 @@ public class MenuFactory {
 		addConstraintRnfPositive2.setActionCommand("AddtoConstraintRNF++");
 		addConstraintRnfPositive2.addActionListener(editorPanel);
 		
-		addOptionalFeature.setActionCommand("addOptionalFeature");
-		addMandatoryFeature.setActionCommand("addMandatoryFeature");
-		addXORGroup.setActionCommand("addXORGroup");
-		addORGroup.setActionCommand("addORGroup");
+		addSolitaire.setActionCommand("addSolitaire");
 		remove.setActionCommand("remove");
 		
-		addOptionalFeature.addActionListener(editorPanel);
-		addMandatoryFeature.addActionListener(editorPanel);
-		addXORGroup.addActionListener(editorPanel);
-		addORGroup.addActionListener(editorPanel);
+		addSolitaire.addActionListener(editorPanel);
 		
 
-		menu.add(addOptionalFeature);
-		menu.add(addMandatoryFeature);
+		menu.add(addSolitaire);
 		menu.add(separator);
-
-		menu.add(addXORGroup);
-		menu.add(addORGroup);
 		menu.add(remove);
 		
 		menu.add(separator);
@@ -454,28 +560,24 @@ public class MenuFactory {
 
 		JPopupMenu menu = new JPopupMenu();
 
+		JSeparator separator = new JSeparator();
+
 		JMenuItem setActive = new JMenuItem("Set as active node");
 		JMenuItem setDeactive = new JMenuItem("Set as deactive node");
-		
-		JSeparator separator = new JSeparator();
 
 		JMenuItem takeOffContext = new JMenuItem("Take it off from context");
 		JMenuItem addConstraintPositive = new JMenuItem("Add to Constraint as Positive");
 		JMenuItem addConstraintNegative = new JMenuItem("Add to Constraint as Negative");
-
-		JMenuItem remove = new JMenuItem("Remove");
-
-		setActive.setActionCommand("setActive");
-		setDeactive.setActionCommand("setDeactive");
-		takeOffContext.setActionCommand("takeOffContext");
-		addConstraintPositive.setActionCommand("addConstraintPositive");
-		addConstraintNegative.setActionCommand("addConstraintNegative");
-
+		JMenuItem addOptionalFeature = new JMenuItem("Add a Optional Feature");
+		JMenuItem addMandatoryFeature = new JMenuItem("Add a Mandatory Feature");
+		JMenuItem addXORGroup = new JMenuItem("Add a XOR Group");
+		JMenuItem addORGroup = new JMenuItem("Add a OR Group");
+		
 		JMenuItem addConstraintRnfPositive2 = new JMenuItem(COMPLETELY_SATISFIES);
 		JMenuItem addConstraintRnfPositive1 = new JMenuItem(POSITIVE_INFLUENCE);
 		JMenuItem addConstraintRnfNegative1 = new JMenuItem(NEGATIVE_INFLUENCE);
 		JMenuItem addConstraintRnfNegative2 = new JMenuItem(NOT_COMPLETELY_SATISFIES);
-		
+
 		addConstraintRnfNegative1.setActionCommand("AddtoConstraintRNF-");
 		addConstraintRnfNegative1.addActionListener(editorPanel);
 		addConstraintRnfNegative2.setActionCommand("AddtoConstraintRNF--");
@@ -485,6 +587,18 @@ public class MenuFactory {
 		addConstraintRnfPositive2.setActionCommand("AddtoConstraintRNF++");
 		addConstraintRnfPositive2.addActionListener(editorPanel);
 		
+		JMenuItem remove = new JMenuItem("Remove");
+
+		setActive.setActionCommand("setActive");
+		setDeactive.setActionCommand("setDeactive");
+		takeOffContext.setActionCommand("takeOffContext");
+		addConstraintPositive.setActionCommand("addConstraintPositive");
+		addConstraintNegative.setActionCommand("addConstraintNegative");
+		addOptionalFeature.setActionCommand("addOptionalFeature");
+		addMandatoryFeature.setActionCommand("addMandatoryFeature");
+		addXORGroup.setActionCommand("addXORGroup");
+		addORGroup.setActionCommand("addORGroup");
+
 		remove.setActionCommand("remove");
 
 		setActive.addActionListener(editorPanel);
@@ -493,6 +607,11 @@ public class MenuFactory {
 		addConstraintPositive.addActionListener(editorPanel);
 		addConstraintNegative.addActionListener(editorPanel);
 
+		addOptionalFeature.addActionListener(editorPanel);
+		addMandatoryFeature.addActionListener(editorPanel);
+		addXORGroup.addActionListener(editorPanel);
+		addORGroup.addActionListener(editorPanel);
+
 		remove.addActionListener(editorPanel);
 
 		menu.add(setActive);
@@ -500,8 +619,13 @@ public class MenuFactory {
 		menu.add(takeOffContext);
 
 		menu.add(separator);
-
+		menu.add(addOptionalFeature);
+		menu.add(addMandatoryFeature);
+		menu.add(addXORGroup);
+		menu.add(addORGroup);
 		menu.add(remove);
+
+		menu.add(separator);
 
 		menu.add(addConstraintNegative);
 		menu.add(addConstraintPositive);

@@ -1,7 +1,6 @@
 package br.ufc.lps.view.panels;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
@@ -1463,6 +1462,20 @@ public class EditorPanel extends JPanel implements ActionListener {
 			constraintsRnf.setImpacto(NameImpacto.getImpactoByName("++"));
 			
 			txtAddConstraintRnf.setText(constraintsRnf.toString());
+			
+		} else if(e.getActionCommand().equals("addSolitaire")){
+
+			
+			String nome = JOptionPane.showInputDialog("Type the feature name:");
+			
+			if(nome==null || nome.equals("")){
+				JOptionPane.showMessageDialog(null, "Type a valid feature name.");
+				return;
+			}
+			
+			controllerFeatures.addFeatures(selectedNode, TypeFeature.GROUPED_FEATURE , nome);
+			
+			tree.updateUI();
 			
 		} else{
 			

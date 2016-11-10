@@ -2,6 +2,7 @@ package br.ufc.lps.controller.features;
 
 import br.ufc.lps.splar.core.fm.FeatureGroup;
 import br.ufc.lps.splar.core.fm.FeatureTreeNode;
+import br.ufc.lps.splar.core.fm.GroupedFeature;
 import br.ufc.lps.splar.core.fm.RootNode;
 import br.ufc.lps.splar.core.fm.SolitaireFeature;
 
@@ -108,6 +109,8 @@ public class ControllerFeatures {
 			return new SolitaireFeature(true, id, name, null);
 		case MANDATORY:
 			return new SolitaireFeature(false, id, name, null);
+		case GROUPED_FEATURE:
+			return new GroupedFeature(id, name, null);
 		default:
 			return new RootNode(id, name, null);
 		}

@@ -35,6 +35,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+
 import br.ufc.lps.controller.xml.ControladorXml;
 import br.ufc.lps.model.adaptation.ContextoAdaptacao;
 import br.ufc.lps.model.context.ContextModel;
@@ -463,6 +464,8 @@ public class ViewerPanel extends JPanel {
 		Context context = model.getContexts().get(contextName);
 		FeatureModel featureModel = model.setFeatureModel(context);
 		modelName = featureModel.getName();
+		adicionarConstraintsDoContexto(context);
+		
 		tree.setModel(featureModel);
 		tree.setCellRenderer(new FeaturesTreeCellRenderer(context));
 		main.expandAllNodes(tree, 0, tree.getRowCount());
@@ -537,6 +540,40 @@ public class ViewerPanel extends JPanel {
 		}
 		primeira = false;
 	}
+	
+private void adicionarConstraintsDoContexto(Context contexto){
+		
+		constraintsPanel.setText("");
+		
+		updateConstraintsPainel(contexto);
+		
+		String nome = "";
+		try{
+			for(br.ufc.lps.model.contextaware.Constraint a : contexto.getConstraints()){
+				System.out.println(a.getClause().trim());
+				
+				String [] formulas = a.getClause().trim().split("or");
+				
+				
+				for(int i=0; i < formulas.length; i++){
+
+					if(formulas[i].trim().startsWith("~")){
+						nome += "~"+contexto.getFeatureModel().getNodeByID(formulas[i].replace("~", "").trim()).getName(); 
+					}else{
+						nome += contexto.getFeatureModel().getNodeByID(formulas[i].trim()).getName(); 
+					}
+					
+					if(i+2 == formulas.length)
+						nome += " or ";
+				}
+							nome +="\n";
+			}
+			constraintsPanel.setText(constraintsPanel.getText()+nome);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
 	
 	public JPanel panelTreePerfuse(Tree t, String label, String image) {
         Color BACKGROUND = Color.WHITE;

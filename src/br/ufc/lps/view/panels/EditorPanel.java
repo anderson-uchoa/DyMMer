@@ -12,7 +12,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -884,20 +886,89 @@ public class EditorPanel extends JPanel implements ActionListener {
 			txtAddTheFeatures.setText("");
 			txtAddTheFeatures.setText(toAdd);
 		} else
-			 if (toAdd.contains("~")  && txtAddTheFeatures.getText().contains("~") ){
+			/* if (toAdd.contains("~")  && txtAddTheFeatures.getText().contains("~") ){
 					
 				 txtAddTheFeatures.setText(txtAddTheFeatures.getText() + " excludes " + toAdd);
 				 
 			 }else {
 				 
 				 txtAddTheFeatures.setText(txtAddTheFeatures.getText() + " requires " + toAdd);
-			 }
+			 } */
 			txtAddTheFeatures.setText(txtAddTheFeatures.getText() + " V " + toAdd);
 
 		constraintLiterals.add(literal);
 
 	}
 
+	public void updateConstraintsPainel(Context context){
+		FeatureModel featureModel = context.getFeatureModel();
+		String constraints = "";	
+		Collection<BooleanVariable> variables = new ArrayList<BooleanVariable>();
+		Collection<PropositionalFormula> formulas = featureModel.getConstraints();
+		
+		for(Iterator<PropositionalFormula> it = formulas.iterator(); it.hasNext() ; ) {
+			PropositionalFormula formula = it.next();
+			variables = formula.getVariables();
+			
+			for(Iterator<BooleanVariable> it2 = variables.iterator(); it2.hasNext() ; ) {
+				BooleanVariable variable = it2.next();
+				
+				if(featureModel.getNodeByID(variable.getName()).getValue() != 0){
+					if(!FeatureTreeNode.isActiveHierarchy(featureModel.getNodeByID(variable.getName()))){
+						continue;
+					}
+					
+					if(variable.getState() == false){
+						constraints+="~";
+					}
+
+					constraints += featureModel.getNodeByID(variable.getName()).getName();
+					if(it2.hasNext())
+						constraints += " or ";
+				}
+			}
+			constraints;
+			constraintsListModel.
+		}
+		
+		constraintsPanel.setText(constraints);
+	}
+	
+	
+	private void adicionarConstraintsDoContexto(Context contexto){
+		
+		list.setText("");
+		
+		updateConstraintsPainel(contexto);
+		
+		String nome = "";
+		try{
+			for(Constraint a : contexto.getConstraints()){
+				System.out.println(a.getClause().trim());
+				
+				String [] formulas = a.getClause().trim().split("or");
+				
+				
+				for(int i=0; i < formulas.length; i++){
+
+					if(formulas[i].trim().startsWith("~")){
+						nome += "~"+contexto.getFeatureModel().getNodeByID(formulas[i].replace("~", "").trim()).getName(); 
+					}else{
+						nome += contexto.getFeatureModel().getNodeByID(formulas[i].trim()).getName(); 
+					}
+					
+					if(i+2 == formulas.length)
+						nome += " or ";
+				}
+							nome +="\n";
+			}
+			constraintsPanel.setText(constraintsPanel.getText()+nome);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	
 	public boolean isFeatureGroup(FeatureTreeNode node) {
 		if (node instanceof FeatureGroup) {
 			txtMessageText.setText("Feature Group can not be selected. Please, select its parent feature: \""

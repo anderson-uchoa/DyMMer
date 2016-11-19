@@ -275,10 +275,11 @@ public class CreatorPanel extends JPanel implements ActionListener {
 			newTree.appendChild(doc.createTextNode(controllerFeatures.getArvoreDesenhada()));
 			
 			rootEle.appendChild(newTree);
-
+			
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			DOMSource source = new DOMSource(doc);
+			
 			StreamResult console = new StreamResult(new FileOutputStream(file));
 			transformer.transform(source, console);
 

@@ -45,8 +45,8 @@ import br.ufc.lps.model.visualization.chartjs.config.types.bubble.DataSetBubble;
 import br.ufc.lps.model.visualization.chartjs.config.types.line.DataSetLine;
 import br.ufc.lps.model.visualization.d3.config.Children;
 import br.ufc.lps.model.visualization.d3.config.Config;
-import br.ufc.lps.repositorio.MedidasContexto;
-import br.ufc.lps.repositorio.SchemeXml;
+import br.ufc.lps.repository.MeasuresContexts;
+import br.ufc.lps.repository.SchemeXml;
 
 public class BrowserController{
        
@@ -71,7 +71,7 @@ public class BrowserController{
     	   List<String> coresHoverBackground = new ArrayList<>();
     	   
     	   Random rand = new Random();
-    	   for(int i=0; i < scheme.getMedidasContexto().size(); i++){
+    	   for(int i=0; i < scheme.getMeasuresContexts().size(); i++){
     		   int r = rand.nextInt(255);
     		   int g = rand.nextInt(255);
     		   	   int b = rand.nextInt(255);
@@ -84,9 +84,9 @@ public class BrowserController{
     	   List<Double> listaData = null;
     	   DataSetBar dataSet = null;
     	   
-    	   for(int j=0; j < scheme.getMedidasContexto().size(); j++){
+    	   for(int j=0; j < scheme.getMeasuresContexts().size(); j++){
     		   
-    		   MedidasContexto medida = scheme.getMedidasContexto().get(j);
+    		   MeasuresContexts medida = scheme.getMeasuresContexts().get(j);
     		   
     		   dataSet = new DataSetBar	();
 	    	   dataSet.setBorderWidth(3);
@@ -295,9 +295,9 @@ public class BrowserController{
 	    	   datasets.add(dataSet);
     	   }
     	   
-    	  /* for(int j=0; j < scheme.getMedidasContexto().size(); j++){
+    	  /* for(int j=0; j < scheme.getMeasuresContexts().size(); j++){
     		   
-    		   MedidasContexto medida = scheme.getMedidasContexto().get(j);
+    		   MeasuresContexts medida = scheme.getMeasuresContexts().get(j);
     		   
     		   dataSet = new DataSetBar();
 	    	   dataSet.setBorderWidth(3);
@@ -393,7 +393,7 @@ public class BrowserController{
     	   List<String> coresHoverBackground = new ArrayList<>();
     	   
     	   Random rand = new Random();
-    	   for(int i=0; i < scheme.getMedidasContexto().size(); i++){
+    	   for(int i=0; i < scheme.getMeasuresContexts().size(); i++){
     		   int r = rand.nextInt(255);
     		   int g = rand.nextInt(255);
     		   int b = rand.nextInt(255);
@@ -406,9 +406,9 @@ public class BrowserController{
     	   List<Double> listaData = null;
     	   DataSetLine dataSet = null;
     	   
-    	   for(int j=0; j < scheme.getMedidasContexto().size(); j++){
+    	   for(int j=0; j < scheme.getMeasuresContexts().size(); j++){
     		   
-    		   MedidasContexto medida = scheme.getMedidasContexto().get(j);
+    		   MeasuresContexts medida = scheme.getMeasuresContexts().get(j);
     		   
     		   dataSet = new DataSetLine();
 	    	   dataSet.setBorderWidth(3);
@@ -1056,10 +1056,10 @@ public class BrowserController{
     	   List<Children> contextos = new ArrayList<>();
     	   c.setChildren(contextos);
     	   
-    	   for(int i=0; i < scheme.getMedidasContexto().size(); i++){
+    	   for(int i=0; i < scheme.getMeasuresContexts().size(); i++){
     		   
     		   Children addC = new Children();
-    		   MedidasContexto sch = scheme.getMedidasContexto().get(i);
+    		   MeasuresContexts sch = scheme.getMeasuresContexts().get(i);
     		   
     		   if(sch.getNameContext().equals("default"))
     			   continue;

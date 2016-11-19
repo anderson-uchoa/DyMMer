@@ -39,7 +39,7 @@ import br.ufc.lps.model.normal.SplotModel;
 import br.ufc.lps.model.xml.ModelID;
 import br.ufc.lps.model.xml.XMLFamiliarModel;
 import br.ufc.lps.model.xml.XMLSplotModel;
-import br.ufc.lps.repositorio.SchemeXml;
+import br.ufc.lps.repository.SchemeXml;
 import br.ufc.lps.view.panels.CreatorPanel;
 import br.ufc.lps.view.panels.EditorPanel;
 import br.ufc.lps.view.panels.ViewerPanel;

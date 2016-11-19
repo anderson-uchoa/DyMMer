@@ -1,4 +1,4 @@
-package br.ufc.lps.repositorio;
+package br.ufc.lps.repository;
 
 import java.io.IOException;
 
@@ -17,7 +17,6 @@ public class ClientHttp {
 	public String get(Request request){
 		try {
 			Response response = http.newCall(request).execute();
-			//System.out.println(response.code());
 			return response.body().string();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -28,7 +27,6 @@ public class ClientHttp {
 	public boolean save(Request request){
 		try {
 			Response response = http.newCall(request).execute();
-			//System.out.println(response.code());
 			return response.code()==200;
 		} catch (IOException e) {
 			e.printStackTrace();

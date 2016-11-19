@@ -20,10 +20,10 @@ import br.ufc.lps.model.context.ContextModel;
 import br.ufc.lps.model.context.MeeasuresWithContextCalcula;
 import br.ufc.lps.model.context.SplotContextModel;
 import br.ufc.lps.model.contextaware.Context;
-import br.ufc.lps.repositorio.MedidasContexto;
-import br.ufc.lps.repositorio.RepositorioXml;
-import br.ufc.lps.repositorio.SchemeXml;
-import br.ufc.lps.repositorio.constantes.Conexao;
+import br.ufc.lps.repository.MeasuresContexts;
+import br.ufc.lps.repository.RepositoryXml;
+import br.ufc.lps.repository.SchemeXml;
+import br.ufc.lps.repository.constants.Connection;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -31,12 +31,12 @@ import okhttp3.RequestBody;
 
 public class ControladorXml{
 	
-	private RepositorioXml repositorioXml;
+	private RepositoryXml repositorioXml;
 	private Gson gson;
 	private static ControladorXml controladorXml;
 	
 	public ControladorXml() {
-		this.repositorioXml = new RepositorioXml(new OkHttpClient());
+		this.repositorioXml = new RepositoryXml(new OkHttpClient());
 		this.gson = new Gson();
 	}
 	
@@ -50,7 +50,7 @@ public class ControladorXml{
 	public List<SchemeXml> getXml(){
 		
 		Request request = new Request.Builder()
-			      .url(Conexao.url)
+			      .url(Connection.URL)
 			      .build();
 		
 		String resultado = repositorioXml.getStringBody(request);
@@ -70,7 +70,7 @@ public class ControladorXml{
 			.build();
 	
 		Request request = new Request.Builder()
-		    .url(Conexao.url)
+		    .url(Connection.URL)
 		    .post(requestBody)
 		    .build();
 		
@@ -84,7 +84,7 @@ public class ControladorXml{
 			.build();
 	
 		Request request = new Request.Builder()
-		    .url(Conexao.url)
+		    .url(Connection.URL)
 		    .delete(requestBody)
 		    .build();
 		
@@ -156,6 +156,7 @@ public class ControladorXml{
 		model.setFeatureModel(model.getContexts().get(ContextModel.DEFAULT_CONTEXT));	
 		
 		scheme.setNumberOfFeatures(model.numberOfFeatures());
+		System.out.println("numero de f:  "+model.numberOfFeatures());
 		scheme.setNumberOfOptionalFeatures(model.numberOfOptionalFeatures());
 		scheme.setNumberOfMandatoryFeatures(model.numberOfMandatoryFeatures());
 		scheme.setNumberOfTopFeatures(model.numberOfTopFeatures());
@@ -190,13 +191,13 @@ public class ControladorXml{
 		scheme.setNonFunctionalCommonality(model.nonFunctionCommonality());
 		scheme.setNumberOfContexts(model.numberOfContexts());
 		
-		List<MedidasContexto> listaDeMedidasPorContexto = new ArrayList<MedidasContexto>();
+		List<MeasuresContexts> listaDeMedidasPorContexto = new ArrayList<MeasuresContexts>();
 		
 		for(Entry<String, Context> contexts : model.getContexts().entrySet()){
 			
 			model.setFeatureModel(contexts.getValue());
 			
-			MedidasContexto medida = new MedidasContexto();
+			MeasuresContexts medida = new MeasuresContexts();
 			medida.setNameContext(contexts.getKey());
 			medida.setNumberOfFeatures(model.numberOfFeatures());
 			medida.setNumberOfOptionalFeatures(model.numberOfOptionalFeatures());
@@ -237,7 +238,7 @@ public class ControladorXml{
 			listaDeMedidasPorContexto.add(medida);
 		}
 		
-		scheme.setMedidasContexto(listaDeMedidasPorContexto);
+		scheme.setMeasuresContexts(listaDeMedidasPorContexto);
 		
 		return ControladorXml.getInstance().save(scheme);
 	}	

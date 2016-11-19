@@ -18,7 +18,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import br.ufc.lps.controller.xml.ControladorXml;
-import br.ufc.lps.repositorio.SchemeXml;
+import br.ufc.lps.repository.SchemeXml;
 import br.ufc.lps.view.Main;
 
 public class ViewerPanelResultFeatures extends JPanel {

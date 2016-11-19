@@ -1,15 +1,15 @@
-package br.ufc.lps.repositorio;
+package br.ufc.lps.repository;
 
 import java.io.IOException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class RepositorioXml {
+public class RepositoryXml {
 	
 private OkHttpClient http;
 	
-	public RepositorioXml(OkHttpClient okHttpClient) {
+	public RepositoryXml(OkHttpClient okHttpClient) {
 		this.http = okHttpClient;
 	}
 	

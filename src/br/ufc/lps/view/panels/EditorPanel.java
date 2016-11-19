@@ -73,7 +73,7 @@ import br.ufc.lps.model.rnf.PropriedadeNFuncional;
 import br.ufc.lps.model.rnf.Rnf;
 import br.ufc.lps.model.rnf.Subcaracteristica;
 import br.ufc.lps.model.rnf.ValorContextoRnf;
-import br.ufc.lps.repositorio.SchemeXml;
+import br.ufc.lps.repository.SchemeXml;
 import br.ufc.lps.splar.core.constraints.BooleanVariable;
 import br.ufc.lps.splar.core.constraints.CNFClause;
 import br.ufc.lps.splar.core.constraints.PropositionalFormula;
@@ -132,6 +132,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 	
 	private Context defaultContext;
 	private List<Literal> constraintLiterals;
+	
 	private ConstraintsListModel constraintsListModel;
 	private ConstraintsRnfListModel constraintsRnfListModel;
 	
@@ -894,13 +895,13 @@ public class EditorPanel extends JPanel implements ActionListener {
 				 
 				 txtAddTheFeatures.setText(txtAddTheFeatures.getText() + " requires " + toAdd);
 			 } */
-			txtAddTheFeatures.setText(txtAddTheFeatures.getText() + " V " + toAdd);
+			txtAddTheFeatures.setText(txtAddTheFeatures.getText());
 
 		constraintLiterals.add(literal);
 
 	}
 
-	public void updateConstraintsPainel(Context context){
+	/*public void updateConstraintsPainel(Context context){
 		FeatureModel featureModel = context.getFeatureModel();
 		String constraints = "";	
 		Collection<BooleanVariable> variables = new ArrayList<BooleanVariable>();
@@ -932,43 +933,42 @@ public class EditorPanel extends JPanel implements ActionListener {
 		}
 		
 		constraintsPanel.setText(constraints);
-	}
-	
+	}*/
 	
 	private void adicionarConstraintsDoContexto(Context contexto){
-		
-		list.setText("");
-		
-		updateConstraintsPainel(contexto);
+		System.out.println("entrou");
+		//updateConstraintsPainel(contexto);
 		
 		String nome = "";
 		try{
 			for(Constraint a : contexto.getConstraints()){
 				System.out.println(a.getClause().trim());
-				
-				String [] formulas = a.getClause().trim().split("or");
-				
-				
-				for(int i=0; i < formulas.length; i++){
 
-					if(formulas[i].trim().startsWith("~")){
-						nome += "~"+contexto.getFeatureModel().getNodeByID(formulas[i].replace("~", "").trim()).getName(); 
-					}else{
-						nome += contexto.getFeatureModel().getNodeByID(formulas[i].trim()).getName(); 
+				constraintsList.add(a);
+				
+				/*String [] formulas = a.getClause().trim().split("or");
+				
+				
+					for(int i=0; i < formulas.length; i++){
+	
+						if(formulas[i].trim().startsWith("~")){
+							nome += "~"+contexto.getFeatureModel().getNodeByID(formulas[i].replace("~", "").trim()).getName(); 
+						}else{
+							nome += contexto.getFeatureModel().getNodeByID(formulas[i].trim()).getName(); 
+						}
+						
+						if(i+2 == formulas.length)
+							nome += " or ";
 					}
-					
-					if(i+2 == formulas.length)
-						nome += " or ";
-				}
-							nome +="\n";
+								nome +="\n";
+				*/
 			}
-			constraintsPanel.setText(constraintsPanel.getText()+nome);
+			constraintsListModel.update();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
 
-	
 	public boolean isFeatureGroup(FeatureTreeNode node) {
 		if (node instanceof FeatureGroup) {
 			txtMessageText.setText("Feature Group can not be selected. Please, select its parent feature: \""
@@ -1382,9 +1382,11 @@ public class EditorPanel extends JPanel implements ActionListener {
 			return;
 		}
 		
-		if(contextoRnf.containsKey(contextName))
+		if(contextoRnf.containsKey(contextName)){
+			Context context = splotContextModel.getContexts().get(contextName);
 			preenchendoContextosRnf(contextoRnf.get(contextName));
-		else{
+			adicionarConstraintsDoContexto(context);
+		}else{
 			constraintsListRnf.clear();
 		}
 		

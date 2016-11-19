@@ -48,7 +48,7 @@ import br.ufc.lps.model.rnf.PropriedadeNFuncional;
 import br.ufc.lps.model.rnf.Rnf;
 import br.ufc.lps.model.rnf.Subcaracteristica;
 import br.ufc.lps.model.rnf.ValorContextoRnf;
-import br.ufc.lps.repositorio.SchemeXml;
+import br.ufc.lps.repository.SchemeXml;
 import br.ufc.lps.splar.core.constraints.BooleanVariable;
 import br.ufc.lps.splar.core.constraints.PropositionalFormula;
 import br.ufc.lps.splar.core.fm.FeatureModel;

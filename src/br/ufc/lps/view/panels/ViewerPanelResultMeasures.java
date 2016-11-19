@@ -10,8 +10,8 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import br.ufc.lps.repositorio.MedidasContexto;
-import br.ufc.lps.repositorio.SchemeXml;
+import br.ufc.lps.repository.MeasuresContexts;
+import br.ufc.lps.repository.SchemeXml;
 import br.ufc.lps.view.Main;
 
 public class ViewerPanelResultMeasures extends JPanel {
@@ -52,9 +52,9 @@ public class ViewerPanelResultMeasures extends JPanel {
 	}
 	
 	public void carregarItens(SchemeXml xml){
-		if(xml.getMedidasContexto()!=null){
-			if(xml.getMedidasContexto().size() > 0){
-				for(MedidasContexto sc : xml.getMedidasContexto()){
+		if(xml.getMeasuresContexts()!=null){
+			if(xml.getMeasuresContexts().size() > 0){
+				for(MeasuresContexts sc : xml.getMeasuresContexts()){
 					mDefaultTableModel.addRow(new String[]{sc.getNameContext(),
 							sc.getNumberOfFeatures().toString(),
 							sc.getNumberOfOptionalFeatures().toString(),

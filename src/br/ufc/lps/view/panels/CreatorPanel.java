@@ -20,6 +20,7 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;

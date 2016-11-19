@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -31,6 +32,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+
 import br.ufc.lps.controller.browser.BrowserController;
 import br.ufc.lps.controller.export.ExportOfficeExcel;
 import br.ufc.lps.model.context.SplotContextModel;
@@ -51,6 +53,7 @@ public class Main extends JFrame {
 	private JTabbedPane tabbedPane;
 	private ViewerPanel currentViewer;
 	private JMenu mnMeasures_1;
+	private JMenu mnVisualizations;
 	private ViewerPanelResultFeatures viewMain;
 	
 	public static void main(String[] args) {
@@ -97,7 +100,7 @@ public class Main extends JFrame {
 		setLocationRelativeTo(null);
 		setTitle("DyMMer");
 		setIconImage(new ImageIcon("images/icone.png").getImage());
-
+		
 		tabbedPane = new JTabbedPane();
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
 		
@@ -127,6 +130,7 @@ public class Main extends JFrame {
 
 		mnMeasures_1 = new JMenu("Measures");
 		final JMenu mnFile = new JMenu("File");
+		mnVisualizations = new JMenu("Visualizations");
 		
 		menuBar.add(mnFile);
 
@@ -300,6 +304,9 @@ public class Main extends JFrame {
 
 		JMenu mnEditor = new JMenu("Editor");
 		menuBar.add(mnEditor);
+		
+		menuBar.add(mnVisualizations);
+		constructVisualizationsMenu(mnVisualizations);
 		
 		JMenuItem mntmEditSplotModel = new JMenuItem("Open SPLOT's xml");
 		mnEditor.add(mntmEditSplotModel);
@@ -636,6 +643,182 @@ public class Main extends JFrame {
 	        }
 	    }
 	}   
+	
+	private void constructVisualizationsMenu(JMenu visualization){
+		
+		JMenuItem CompararContextosDeUmModelo = new JMenuItem("Comparar Contextos de um modelo");
+		
+		CompararContextosDeUmModelo.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SchemeXml s = viewMain.getOneItemList();
+				System.out.println(s);
+				if(s!=null){
+					Main.this.ComparacaoContextos(s);
+				}
+			}
+		});
+		
+		visualization.add(CompararContextosDeUmModelo);
+		
+		JMenuItem CompararFeaturesEntreModelos = new JMenuItem("Comparar Features entre modelos");
+		
+		CompararFeaturesEntreModelos.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				List<SchemeXml> s = viewMain.getAllItensList();
+				Main.this.numeroDeFeatures(s);
+			}
+		});
+		
+		visualization.add(CompararFeaturesEntreModelos);
+		
+		JMenuItem EvolucaoDeContextos = new JMenuItem("Evolução entre contextos");
+		
+		EvolucaoDeContextos.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SchemeXml s = viewMain.getOneItemList();
+				System.out.println(s);
+				if(s!=null){
+					Main.this.comparacaoContextosLine(s);
+				}
+			}
+		});
+		
+		visualization.add(EvolucaoDeContextos);
+		
+		JMenuItem RoVxNVC = new JMenuItem("RoV x NVC (Variabilidade estática)");
+		
+		RoVxNVC.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				List<SchemeXml> s = viewMain.getAllItensList();
+				Main.this.bubble(s);
+			}
+		});
+		
+		visualization.add(RoVxNVC);
+
+		JMenuItem NLeafxDTMaxTree = new JMenuItem("Nleaf x DTMax (largura x profundidade) Tree");
+		
+		NLeafxDTMaxTree.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				List<SchemeXml> s = viewMain.getAllItensList();
+				Main.this.abrirD3Tree(s);
+			}
+		});
+		
+		visualization.add(NLeafxDTMaxTree);
+		
+		JMenuItem NLeafxDTMax = new JMenuItem("Nleaf x DTMax (largura x profundidade)");
+		
+		NLeafxDTMax.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				List<SchemeXml> s = viewMain.getAllItensList();
+				Main.this.abrirD3Bubble(s);
+			}
+		});
+		
+		visualization.add(NLeafxDTMax);
+		
+		JMenuItem FoC = new JMenuItem("FoC");
+		
+		FoC.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				List<SchemeXml> s = viewMain.getAllItensList();
+				Main.this.abrirD3FoC(s);
+			}
+		});
+		
+		visualization.add(FoC);
+		
+		JMenuItem FEX = new JMenuItem("FEX");
+		
+		FEX.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				List<SchemeXml> s = viewMain.getAllItensList();
+				Main.this.abrirD3FEX(s);
+			}
+		});
+		
+		visualization.add(FEX);
+		
+		JMenuItem TamanhoDoModelo = new JMenuItem("NF / NA / NO / NM (tamanho do modelo)");
+		
+		TamanhoDoModelo.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				List<SchemeXml> s = viewMain.getAllSelectedItensList();
+				System.out.println(s);
+				if(s!=null){
+					Main.this.getD3TreeMapEvolucao(s);
+				}
+				
+			}
+		});
+		
+		visualization.add(TamanhoDoModelo);
+		
+		JMenuItem VariabilidadeAdaptativa = new JMenuItem("Variabilidade Adaptativa");
+		
+		VariabilidadeAdaptativa.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SchemeXml s = viewMain.getOneItemList();
+				System.out.println(s);
+				if(s!=null){
+					Main.this.variabilidadeAdaptativa(s);
+				}
+				
+			}
+		});
+		
+		visualization.add(VariabilidadeAdaptativa);
+		
+		JMenuItem ComplexidadeEstrutural = new JMenuItem("Complexidade Estrutural");
+		
+		ComplexidadeEstrutural.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				List<SchemeXml> s = viewMain.getAllSelectedItensList();
+				System.out.println(s);
+				if(s!=null){
+					Main.this.getRadarVariabilidadeAdaptativa(s);
+				}
+			}
+		});
+		
+		visualization.add(ComplexidadeEstrutural);
+		
+		JMenuItem And = new JMenuItem("And");
+		
+		And.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Main.this.getAnd();
+			}
+		});
+		
+		visualization.add(And);
+	
+	}
 
 
 	private void constructMeasuresMenuItem(final JMenu mnMeasures) {
@@ -1005,6 +1188,8 @@ public class Main extends JFrame {
 			}
 		});
 	}
+	
+	
 	
 
 }

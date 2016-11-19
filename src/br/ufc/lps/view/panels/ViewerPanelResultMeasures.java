@@ -94,7 +94,7 @@ public class ViewerPanelResultMeasures extends JPanel {
 				}
 			}
 		}else{
-			JOptionPane.showMessageDialog(null, "Ocorreu algum problema na conexão");
+			JOptionPane.showMessageDialog(null, "Ocorreu um problema");
 		}
 				
 	}

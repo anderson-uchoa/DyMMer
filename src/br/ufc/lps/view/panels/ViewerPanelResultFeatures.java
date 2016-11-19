@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -33,12 +34,14 @@ public class ViewerPanelResultFeatures extends JPanel {
 	private JButton edit;
 	private JButton create;
 	private JButton delete;
-	private JButton listarMedidas;
 	private JButton refresh;
 	private JButton medidas;
 	private JLabel labelMensagens;
+	private JLabel loader;
 	
 	public ViewerPanelResultFeatures(final Main main) {
+		
+		loader = new JLabel(new ImageIcon("images/ajax-loader.gif"), JLabel.CENTER);
 		
 		controladorXml = new ControladorXml();
 		this.main = main;
@@ -84,54 +87,6 @@ public class ViewerPanelResultFeatures extends JPanel {
 		delete = new JButton("Delete");
 		
 		painelBotaoOpen.add(delete);
-
-		listarMedidas = new JButton("Comparar Contextos de um modelo");
-		
-		painelMensagens.add(listarMedidas);
-		
-		JButton button = new JButton("Comparar Features entre modelos");
-		
-		painelMensagens.add(button);
-		
-		JButton button2 = new JButton("Evolução entre contextos");
-		
-		painelMensagens.add(button2);
-		
-		JButton button3 = new JButton("RoV x NVC (Variabilidade estática)");
-		
-		painelMensagens.add(button3);
-
-		JButton button5 = new JButton("Nleaf x DTMax (largura x profundidade) Tree");
-		
-		painelMensagens.add(button5);
-		
-		JButton button6 = new JButton("Nleaf x DTMax (largura x profundidade)");
-		
-		painelMensagens.add(button6);
-		
-		JButton button7 = new JButton("FoC");
-		
-		painelMensagens.add(button7);
-		
-		JButton button8 = new JButton("FEX");
-		
-		painelMensagens.add(button8);
-		
-		JButton button9 = new JButton("NF / NA / NO / NM (tamanho do modelo)");
-		
-		painelMensagens.add(button9);
-		
-		JButton button10 = new JButton("Variabilidade Adaptativa");
-		
-		painelMensagens.add(button10);
-		
-		JButton button11 = new JButton("Complexidade Estrutural");
-		
-		painelMensagens.add(button11);
-		
-		JButton button12 = new JButton("And");
-		
-		painelMensagens.add(button12);
 		
 		medidas = new JButton("Measures");
 		
@@ -140,7 +95,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 		refresh = new JButton("Refresh");
 		
 		painelBotaoOpen.add(refresh);
-		
+
 		mDefaultTableModel = new DefaultTableModel(new String[][]{}, colunas);
 		
 		tabela = new JTable(mDefaultTableModel);
@@ -166,134 +121,6 @@ public class ViewerPanelResultFeatures extends JPanel {
 					mensagemSelecionarLinha();
 			}
 		});
-		
-		listarMedidas.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				int selecao = tabela.getSelectedRow();
-				if(selecao > -1){
-					SchemeXml selecionado = listaItens.get(selecao);
-					ViewerPanelResultFeatures.this.main.ComparacaoContextos(selecionado);
-				}else
-					mensagemSelecionarLinha();
-			}
-		});
-		
-		button.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				ViewerPanelResultFeatures.this.main.numeroDeFeatures(listaItens);
-			}
-		});
-		
-		button2.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				int selecao = tabela.getSelectedRow();
-				if(selecao > -1){
-					SchemeXml selecionado = listaItens.get(selecao);
-					ViewerPanelResultFeatures.this.main.comparacaoContextosLine(selecionado);
-				}else
-					mensagemSelecionarLinha();
-			}
-		});
-		
-		button3.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				ViewerPanelResultFeatures.this.main.bubble(listaItens);
-			}
-		});
-		
-		button5.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				ViewerPanelResultFeatures.this.main.abrirD3Tree(listaItens);
-			}
-		});
-		
-		button6.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				ViewerPanelResultFeatures.this.main.abrirD3Bubble(listaItens);
-			}
-		});
-		
-		button7.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				ViewerPanelResultFeatures.this.main.abrirD3FoC(listaItens);
-			}
-		});
-
-		button8.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				ViewerPanelResultFeatures.this.main.abrirD3FEX(listaItens);
-			}
-		});
-		
-		button9.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				int [] selecao = tabela.getSelectedRows();
-				if(selecao.length >= 2){
-					List<SchemeXml> list = new ArrayList<>();
-					for(int i=0; i < selecao.length; i++)
-						list.add(listaItens.get(selecao[i]));
-					ViewerPanelResultFeatures.this.main.getD3TreeMapEvolucao(list);
-				}else
-					JOptionPane.showMessageDialog(null, "Selecione os modelos na tabela");
-			}
-		});
-		
-		button10.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				int selecao = tabela.getSelectedRow();
-				if(selecao > -1){
-					SchemeXml selecionado = listaItens.get(selecao);
-					ViewerPanelResultFeatures.this.main.variabilidadeAdaptativa(selecionado);
-				}else
-					mensagemSelecionarLinha();
-			}
-		});
-		
-		button11.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				int [] selecao = tabela.getSelectedRows();
-			
-				if(selecao.length >= 2){
-					List<SchemeXml> list = new ArrayList<>();
-					for(int i=0; i < selecao.length; i++)
-						list.add(listaItens.get(selecao[i]));
-					ViewerPanelResultFeatures.this.main.getRadarVariabilidadeAdaptativa(list);
-				}else
-					JOptionPane.showMessageDialog(null, "Selecione os modelos na tabela");
-				
-				
-			}
-		});
-		
-		button12.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				main.getAnd();
-			}
-		});	
 		
 		open.addActionListener(new ActionListener() {
 			
@@ -393,9 +220,9 @@ public class ViewerPanelResultFeatures extends JPanel {
 	
 	private void setBotoes(boolean status){
 		open.setEnabled(status);
-		listarMedidas.setEnabled(status);
 		edit.setEnabled(status);
 		delete.setEnabled(status);
+		medidas.setEnabled(status);
 	}
 	
 	private int getWidthByNumber(Integer count){
@@ -423,6 +250,34 @@ public class ViewerPanelResultFeatures extends JPanel {
 			JOptionPane.showMessageDialog(null, "Ocorreu algum problema na conexão");
 		}
 				
+	}
+	
+	public List<SchemeXml> getAllSelectedItensList(){
+		
+		int [] selecao = tabela.getSelectedRows();
+		
+		if(selecao.length >= 2){
+			List<SchemeXml> list = new ArrayList<>();
+			for(int i=0; i < selecao.length; i++)
+				list.add(listaItens.get(selecao[i]));
+			return list;
+		}
+		
+		return null;
+	}
+	
+	public List<SchemeXml> getAllItensList(){
+		return listaItens;
+	}
+	
+	public SchemeXml getOneItemList(){
+		int selecao = tabela.getSelectedRow();
+		if(selecao > -1){
+			SchemeXml selecionado = listaItens.get(selecao);
+			return selecionado;
+		}
+		
+		return null;
 	}
 	
 	private void mensagemSelecionarLinha(){

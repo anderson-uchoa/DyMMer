@@ -16,17 +16,10 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.teamdev.jxbrowser.chromium.Browser;
-import com.teamdev.jxbrowser.chromium.a;
 import com.teamdev.jxbrowser.chromium.events.ConsoleEvent;
 import com.teamdev.jxbrowser.chromium.events.ConsoleListener;
-import com.teamdev.jxbrowser.chromium.events.FailLoadingEvent;
 import com.teamdev.jxbrowser.chromium.events.FinishLoadingEvent;
-import com.teamdev.jxbrowser.chromium.events.FrameLoadEvent;
 import com.teamdev.jxbrowser.chromium.events.LoadAdapter;
-import com.teamdev.jxbrowser.chromium.events.LoadEvent;
-import com.teamdev.jxbrowser.chromium.events.LoadListener;
-import com.teamdev.jxbrowser.chromium.events.ProvisionalLoadingEvent;
-import com.teamdev.jxbrowser.chromium.events.StartLoadingEvent;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
 import br.ufc.lps.model.visualization.chartjs.config.AxesSet;

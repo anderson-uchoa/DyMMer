@@ -81,13 +81,13 @@ public class MenuFactory {
 			return showMenuGroupCreateNewModel();
 
 		case MANDATORY:
-			return showMenuRootFeature();
+			return showMenuMandatoryFeatureCreateNewModel();
 
 		case OPTIONAL:
-			return showMenuRootFeature();
+			return showMenuMandatoryFeatureCreateNewModel();
 
 		case GROUPED_FEATURE:
-			return showMenuRootFeature();
+			return showMenuGroupedFeatureNewModel();
 
 		default:
 
@@ -396,11 +396,11 @@ public class MenuFactory {
 
 		remove.addActionListener(editorPanel);
 
-		menu.add(separator);
 		menu.add(addOptionalFeature);
 		menu.add(addMandatoryFeature);
 		menu.add(addXORGroup);
 		menu.add(addORGroup);
+		menu.add(separator);
 		menu.add(remove);
 
 		return menu;
@@ -640,4 +640,42 @@ public class MenuFactory {
 		return menu;
 	}
 
+	public JPopupMenu showMenuGroupedFeatureNewModel() {
+
+		JPopupMenu menu = new JPopupMenu();
+
+		JSeparator separator = new JSeparator();
+
+		JMenuItem addOptionalFeature = new JMenuItem("Add a Optional Feature");
+		JMenuItem addMandatoryFeature = new JMenuItem("Add a Mandatory Feature");
+		JMenuItem addXORGroup = new JMenuItem("Add a XOR Group");
+		JMenuItem addORGroup = new JMenuItem("Add a OR Group");
+		
+		JMenuItem remove = new JMenuItem("Remove");
+
+		addOptionalFeature.setActionCommand("addOptionalFeature");
+		addMandatoryFeature.setActionCommand("addMandatoryFeature");
+		addXORGroup.setActionCommand("addXORGroup");
+		addORGroup.setActionCommand("addORGroup");
+
+		remove.setActionCommand("remove");
+
+		addOptionalFeature.addActionListener(editorPanel);
+		addMandatoryFeature.addActionListener(editorPanel);
+		addXORGroup.addActionListener(editorPanel);
+		addORGroup.addActionListener(editorPanel);
+
+		remove.addActionListener(editorPanel);
+
+		menu.add(addOptionalFeature);
+		menu.add(addMandatoryFeature);
+		menu.add(addXORGroup);
+		menu.add(addORGroup);
+		menu.add(separator);
+		menu.add(remove);
+
+
+		return menu;
+	}
+	
 }

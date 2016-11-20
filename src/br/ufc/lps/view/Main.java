@@ -67,7 +67,6 @@ public class Main extends JFrame {
 				        }
 				    }
 				    
-
 					NimbusLookAndFeel laf = new NimbusLookAndFeel();
 					
 					UIDefaults defs = laf.getDefaults();
@@ -314,7 +313,7 @@ public class Main extends JFrame {
 		mntmEditSplotModel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				/*JFileChooser fileChooser = new JFileChooser();
+				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.setFileFilter(new FileFilter() {
 					
 					@Override
@@ -342,13 +341,13 @@ public class Main extends JFrame {
 				
 				int returnValue = fileChooser.showOpenDialog(null);
 				if(returnValue == JFileChooser.APPROVE_OPTION){
-					*/
-					String path = "md.xml";//fileChooser.getSelectedFile().getAbsolutePath();
+					
+					String path = fileChooser.getSelectedFile().getAbsolutePath();
 					IModel model = new SplotModel(path);
 					final EditorPanel editor = new EditorPanel(model, ModelID.SPLOT_MODEL.getId(), path, null, Main.this);
 					
 					createTab(editor, editor.getModelName());
-				//}
+				}
 			}
 		});
 		

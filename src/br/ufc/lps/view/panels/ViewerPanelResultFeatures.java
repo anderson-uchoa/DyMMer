@@ -95,6 +95,10 @@ public class ViewerPanelResultFeatures extends JPanel {
 		refresh = new JButton("Refresh");
 		
 		painelBotaoOpen.add(refresh);
+		
+		painelBotaoOpen.add(loader);
+		
+		loader.setEnabled(true);
 
 		mDefaultTableModel = new DefaultTableModel(new String[][]{}, colunas);
 		

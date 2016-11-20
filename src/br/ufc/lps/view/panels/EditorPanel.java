@@ -1357,7 +1357,12 @@ public class EditorPanel extends JPanel implements ActionListener {
 				public void actionPerformed(ActionEvent e) {
 	
 					if(constraintsRnf != null && constraintsRnf.getIdFeature()!=null){
-						constraintsRnf.setIdRnf(node.toString());
+						DefaultMutableTreeNode pai = (DefaultMutableTreeNode) node.getParent();
+						
+						if(pai==null)
+							return;
+						
+						constraintsRnf.setIdRnf(pai.toString()+"."+node.toString());
 						constraintsRnf.setTerminate(true);
 						txtAddConstraintRnf.setText(constraintsRnf.toString());
 					}
@@ -1529,7 +1534,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 		} else if(e.getActionCommand().equals("AddtoConstraintRNF++")){
 
 			constraintsRnf = new ValorContextoRnf();
-			
+
 			constraintsRnf.setIdFeature(selectedNode.getID());
 			constraintsRnf.setNomeFeature(selectedNode.getName());
 			constraintsRnf.setImpacto(NameImpacto.getImpactoByName("++"));

@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -22,6 +23,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -54,6 +56,8 @@ import br.ufc.lps.splar.core.constraints.PropositionalFormula;
 import br.ufc.lps.splar.core.fm.FeatureModel;
 import br.ufc.lps.splar.core.fm.FeatureTreeNode;
 import br.ufc.lps.view.Main;
+import br.ufc.lps.view.list.ConstraintsListModel;
+import br.ufc.lps.view.list.ConstraintsListModelAdaptations;
 import br.ufc.lps.view.trees.FeaturesTreeCellRenderer;
 import br.ufc.lps.view.trees.FeaturesTreePerfuseControl;
 import br.ufc.lps.view.trees.FeaturesTreeViewPerfuse;
@@ -83,6 +87,8 @@ public class ViewerPanel extends JPanel {
 	private TextArea constraintsPanelRnf;
 	private Main main;
 	private Tree treeP;
+	private JList listaPossibilidadesAdaptacoes;
+	private ConstraintsListModelAdaptations listModelAdaptations;
 	private JScrollPane scrollPane;
 	private JPanel panelBotoesLayoutTree;
 	private JTree treeAdaptation;
@@ -123,7 +129,22 @@ public class ViewerPanel extends JPanel {
 		resultReasoningPanel.add(lblResult);
 		
 		lblResultReasoning = new JLabel("Choose one measure");
+		listaPossibilidadesAdaptacoes = new JList<String>();
+		
 		resultReasoningPanel.add(lblResultReasoning);
+		
+		//LISTA DE POSSIBILIDADES DE ADAPTAÇÔES
+		
+		List<br.ufc.lps.model.adaptation.Adaptacao> adap = new ArrayList<>();
+		for (String key: model.getAdaptacoes().keySet()) {
+		    System.out.println("key : " + key);
+		    adap.add(model.getAdaptacoes().get(key));
+		}
+		
+		listModelAdaptations = new ConstraintsListModelAdaptations(adap);
+		listaPossibilidadesAdaptacoes = new JList<String>(listModelAdaptations);
+		//listaPossibilidadesAdaptacoes.setComponentPopupMenu(getComponentPopupMenuConstraintsList());
+		//listaPossibilidadesAdaptacoes.addMouseListener(getMouseListener());
 		
 		//PAINEL PARA ADICIONAR INFORMAÇÕES DA ARVORES
 		JPanel panelTrees = new JPanel();
@@ -178,7 +199,7 @@ public class ViewerPanel extends JPanel {
 		
 		//Painel para a arvore;
 		panelTree = new JPanel();
-		panelTree.setLayout(new GridLayout(1,0, 2, 2));
+		panelTree.setLayout(new GridLayout(1, 0, 2, 2));
 		panelTree.add(painelTreeFeatures);
 		panelTree.add(painelTreeFeaturesRnf);
 		panelTree.add(painelTreeFeaturesAdap);
@@ -276,6 +297,8 @@ public class ViewerPanel extends JPanel {
 		//panelInfoContexts.add(scrollPane);
 		
 		JPanel panelInfoConstraints = new JPanel(new GridLayout(0, 1));
+		
+		panelInfos.add(listaPossibilidadesAdaptacoes, BorderLayout.CENTER);
 		
 		panelInfos.add(panelInfoConstraints, BorderLayout.SOUTH);
 		

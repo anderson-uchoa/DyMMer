@@ -5,6 +5,8 @@ import java.util.List;
 import javax.swing.AbstractListModel;
 
 import br.ufc.lps.model.adaptation.Adaptacao;
+import br.ufc.lps.model.adaptation.ContextoAdaptacao;
+import br.ufc.lps.model.adaptation.ValorAdaptacao;
 
 public class ConstraintsListModelAdaptations extends AbstractListModel<String>{
 
@@ -16,7 +18,16 @@ public class ConstraintsListModelAdaptations extends AbstractListModel<String>{
 
 	@Override
 	public String getElementAt(int position) {
-		return "Configuration "+position;
+		
+		String mostragem = "";
+		for(ContextoAdaptacao valor: adaptations.get(position).getValorAdaptacao()){
+			mostragem = mostragem+valor.getNome()+"\n";
+			for(ValorAdaptacao ada : valor.getValorAdaptacao()){
+				mostragem = mostragem+"\t"+ada.getNome()+"\n";
+			}
+		}
+		
+		return "Scenarios "+(position+1)+" \n"+mostragem;
 	}
 
 	@Override

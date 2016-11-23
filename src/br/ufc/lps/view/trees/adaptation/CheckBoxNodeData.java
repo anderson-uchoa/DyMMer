@@ -1,9 +1,12 @@
 package br.ufc.lps.view.trees.adaptation;
 
+import br.ufc.lps.model.ValueQuantification;
+
 public class CheckBoxNodeData {
 
 	private String text;
 	private boolean checked;
+	private ValueQuantification valueQuantification;
 
 	public CheckBoxNodeData(final String text, final boolean checked) {
 		this.text = text;
@@ -24,6 +27,14 @@ public class CheckBoxNodeData {
 
 	public void setText(final String text) {
 		this.text = text;
+	}
+	
+	public ValueQuantification getValueQuantification() {
+		return valueQuantification;
+	}
+
+	public void setValueQuantification(ValueQuantification valueQuantification) {
+		this.valueQuantification = valueQuantification;
 	}
 
 	@Override

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- This model was created online using SPLOT's Feature Model Editor (http://www.splot-research.org) on Thu, May 7, 2015 - 12:45 AM  --><feature_model name="MobiHome">
+<meta>
+<data name="description">MOBIHOME</data>
+<data name="creator">Gabriel Goulart</data>
+<data name="address"/>
+<data name="email">gabrielgoulart@great.ufc.br</data>
+<data name="phone"/>
+<data name="website"/>
+<data name="organization">GREAT - UFC</data>
+<data name="department"/>
+<data name="date"/>
+<data name="reference"/>
+</meta>
+<feature_tree>
+:r MobiHome(_r)
+	:m View(_r_1)
+	:m Controler(_r_3)
+		:o TV Controller(_r_3_4)
+			:g (_r_3_4_15) [1,1] 
+				: Wifi(_r_3_4_15_16)
+				: Bluetooth(_r_3_4_15_17)
+		:o Multimedia(_r_3_5)
+			:m Multimedia mpI(_r_3_5_14)
+		:o Video Provider(_r_3_6)
+			:g (_r_3_6_7) [1,1] 
+				: Local(_r_3_6_7_8)
+					:m Video ImpI(_r_3_6_7_8_13)
+				: Remote(_r_3_6_7_9)
+					:g (_r_3_6_7_9_10) [1,1] 
+						: Low Qualitity(_r_3_6_7_9_10_11)
+						: High Quality(_r_3_6_7_9_10_12)
+</feature_tree>
+<constraints>
+constraint_1:~_r_3_5 or _r_3_6
+</constraints>
+<context name="RemoteTransmition">
+<resolution feature="View" id="_r_1" status="true"/>
+<resolution feature="Controler" id="_r_3" status="true"/>
+<resolution feature="TV Controller" id="_r_3_4" status="true"/>
+<resolution feature="Wifi" id="_r_3_4_15_16" status="false"/>
+<resolution feature="Bluetooth" id="_r_3_4_15_17" status="true"/>
+<resolution feature="Multimedia" id="_r_3_5" status="true"/>
+<resolution feature="Multimedia mpI" id="_r_3_5_14" status="true"/>
+<resolution feature="Video Provider" id="_r_3_6" status="true"/>
+<resolution feature="Local" id="_r_3_6_7_8" status="false"/>
+<resolution feature="Video ImpI" id="_r_3_6_7_8_13" status="false"/>
+<resolution feature="Remote" id="_r_3_6_7_9" status="true"/>
+<resolution feature="Low Qualitity" id="_r_3_6_7_9_10_11" status="true"/>
+<resolution feature="High Quality" id="_r_3_6_7_9_10_12" status="false"/>
+<constraints/>
+</context>
+
+<context name="LocalTransmition">
+<resolution feature="View" id="_r_1" status="true"/>
+<resolution feature="Controler" id="_r_3" status="true"/>
+<resolution feature="TV Controller" id="_r_3_4" status="false"/>
+<resolution feature="Wifi" id="_r_3_4_15_16" status="false"/>
+<resolution feature="Bluetooth" id="_r_3_4_15_17" status="false"/>
+<resolution feature="Multimedia" id="_r_3_5" status="true"/>
+<resolution feature="Multimedia mpI" id="_r_3_5_14" status="true"/>
+<resolution feature="Video Provider" id="_r_3_6" status="true"/>
+<resolution feature="Local" id="_r_3_6_7_8" status="true"/>
+<resolution feature="Video ImpI" id="_r_3_6_7_8_13" status="true"/>
+<resolution feature="Remote" id="_r_3_6_7_9" status="false"/>
+<resolution feature="Low Qualitity" id="_r_3_6_7_9_10_11" status="false"/>
+<resolution feature="High Quality" id="_r_3_6_7_9_10_12" status="false"/>
+<constraints/>
+</context>
+
+</feature_model>

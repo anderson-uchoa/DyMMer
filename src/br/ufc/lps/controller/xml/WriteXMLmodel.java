@@ -8,6 +8,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import br.ufc.lps.model.ValueQuantificationBool;
+import br.ufc.lps.model.ValueQuantificationPadrao;
 import br.ufc.lps.model.contextaware.Resolution;
 import br.ufc.lps.model.rnf.ContextoRnf;
 import br.ufc.lps.model.rnf.ValorContextoRnf;
@@ -65,16 +67,42 @@ public class WriteXMLmodel {
 		for (int i = 0; i < contexto.getChildCount(); i++) {
 			DefaultMutableTreeNode filho = (DefaultMutableTreeNode) contexto.getChildAt(i);
 			CheckBoxNodeData dado = (CheckBoxNodeData) filho.getUserObject();
-			context.appendChild(getAdaptacaoContextoValor(doc, dado.getText(), dado.isChecked()));
+			context.appendChild(getAdaptacaoContextoValor(doc, dado.getText(), dado));
 		}
 		return context;
 	}
 
-	private static Node getAdaptacaoContextoValor(Document doc, String name, boolean status) {
+	private static Node getAdaptacaoContextoValor(Document doc, String name, CheckBoxNodeData check) {
 		Element node = doc.createElement("valor");
 		node.setAttribute("nome", name);
-		node.setAttribute("status", status ? "true" : "false");
+		node.setAttribute("status", check.isChecked() ? "true" : "false");
+		
+		if(check.getValueQuantification()==null)
+			return node;
+		
+			System.out.println(check.getValueQuantification().toString());
+		
+		if(check.getValueQuantification() instanceof ValueQuantificationBool){
+			ValueQuantificationBool vb = (ValueQuantificationBool) check.getValueQuantification();
+			node.setAttribute("type", "bool");
+			node.setAttribute("padrao", vb.getPadrao());
+			node.setAttribute("is_quantification", vb.getIsQuantification() ? "true" : "false");
+			if(vb.getIsQuantification())
+				node.setAttribute("value_quantification", vb.getValueQuantification());
+		}else{
+			ValueQuantificationPadrao vp = (ValueQuantificationPadrao) check.getValueQuantification();
+			node.setAttribute("type", "padrao");
+			node.setAttribute("padrao", vp.getPadrao());
+			node.setAttribute("value_quantification_1", vp.getValueQuantification1());
+			node.setAttribute("quantification_1", vp.getQuantification1());
 
+			if(vp.getIsInterval()){
+				node.setAttribute("quantification_2", vp.getQuantification2());
+				node.setAttribute("value_quantification_2", vp.getValueQuantification2());
+			}
+			
+			node.setAttribute("is_interval", vp.getIsInterval() ? "true" : "false");
+		}
 		return node;
 	}
 

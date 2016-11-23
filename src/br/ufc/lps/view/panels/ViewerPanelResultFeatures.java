@@ -42,6 +42,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 	public ViewerPanelResultFeatures(final Main main) {
 		
 		loader = new JLabel(new ImageIcon("images/ajax-loader.gif"), JLabel.CENTER);
+		isShowLoader(false);
 		
 		controladorXml = new ControladorXml();
 		this.main = main;
@@ -232,10 +233,15 @@ public class ViewerPanelResultFeatures extends JPanel {
 	private int getWidthByNumber(Integer count){
 		String numero = count.toString();
 		System.out.println(numero.length());
-		return numero.length()*15;
+		return numero.length()*18;
+	}
+	
+	public void isShowLoader(boolean val){
+		loader.setVisible(val);
 	}
 	
 	public synchronized void carregarItens(){
+		isShowLoader(true);
 		listaItens = controladorXml.getXml();
 		mDefaultTableModel.setRowCount(0);
 		int count = 1;
@@ -253,7 +259,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 			labelMensagens.setText("Ocorreu algum problema na conexão");
 			JOptionPane.showMessageDialog(null, "Ocorreu algum problema na conexão");
 		}
-				
+		isShowLoader(false);
 	}
 	
 	public List<SchemeXml> getAllSelectedItensList(){

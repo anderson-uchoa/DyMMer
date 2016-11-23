@@ -20,6 +20,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import br.ufc.lps.model.ModelFactory;
+import br.ufc.lps.model.ValueQuantification;
+import br.ufc.lps.model.ValueQuantificationBool;
+import br.ufc.lps.model.ValueQuantificationPadrao;
 import br.ufc.lps.model.adaptation.Adaptacao;
 import br.ufc.lps.model.adaptation.ContextoAdaptacao;
 import br.ufc.lps.model.adaptation.ValorAdaptacao;
@@ -243,7 +246,28 @@ public class ContextModel implements IContextModel {
 						Element elValor = (Element) valor.item(countRes);
 						
 						String nomeValor = elValor.getAttribute("nome");
+						String nomeType = elValor.getAttribute("type");
 						
+						System.out.println("passou");
+						
+						ValueQuantification valueQuantification = null;
+						
+						if(nomeType.equals("bool")){
+							ValueQuantificationBool valueQuantificationBool = new ValueQuantificationBool();
+							valueQuantificationBool.setIsQuantification(elValor.getAttribute("is_quantification").equals("true") ? true : false);
+							valueQuantificationBool.setPadrao(elValor.getAttribute("padrao"));
+							valueQuantificationBool.setValueQuantification(elValor.getAttribute("value_quantification"));
+							valueQuantification = valueQuantificationBool;
+						}else{
+							ValueQuantificationPadrao valueQuantificationPadrao = new ValueQuantificationPadrao();
+							valueQuantificationPadrao.setPadrao(elValor.getAttribute("padrao"));
+							valueQuantificationPadrao.setValueQuantification1(elValor.getAttribute("value_quantification_1"));
+							valueQuantificationPadrao.setQuantification2(elValor.getAttribute("value_quantification_2"));
+							valueQuantificationPadrao.setQuantification1(elValor.getAttribute("quantification_1"));
+							valueQuantificationPadrao.setQuantification2(elValor.getAttribute("quantification_2"));
+							valueQuantificationPadrao.setIsInterval(elValor.getAttribute("is_interval").equals("true") ? true : false);
+						}
+		
 						Boolean statusValor = false;
 						if (elValor.getAttribute("status").equals("true")) 
 							statusValor = true;
@@ -251,6 +275,7 @@ public class ContextModel implements IContextModel {
 						ValorAdaptacao valorAdap = new ValorAdaptacao();
 						valorAdap.setNome(nomeValor);
 						valorAdap.setStatus(statusValor);
+						valorAdap.setValueQuantification(valueQuantification);
 						
 						listaAdaptacoes.add(valorAdap);
 					}		

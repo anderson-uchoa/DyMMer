@@ -5,10 +5,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.ScrollPane;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -101,6 +104,7 @@ public class ViewerPanel extends JPanel {
     private Map<String, ContextoRnf> contextoRnf;
     private boolean primeira = true;
     private DefaultTreeModel treeModel;
+    List<br.ufc.lps.model.adaptation.Adaptacao> adaptacoesDisponiveis;
 	
 	private void inicializarTreePerfuse(){
 		this.treeP = new Tree();
@@ -134,17 +138,22 @@ public class ViewerPanel extends JPanel {
 		resultReasoningPanel.add(lblResultReasoning);
 		
 		//LISTA DE POSSIBILIDADES DE ADAPTAÇÔES
-		
-		List<br.ufc.lps.model.adaptation.Adaptacao> adap = new ArrayList<>();
+		adaptacoesDisponiveis = new ArrayList<>();
 		for (String key: model.getAdaptacoes().keySet()) {
 		    System.out.println("key : " + key);
-		    adap.add(model.getAdaptacoes().get(key));
+		    adaptacoesDisponiveis.add(model.getAdaptacoes().get(key));
 		}
-		
-		listModelAdaptations = new ConstraintsListModelAdaptations(adap);
+
+		listModelAdaptations = new ConstraintsListModelAdaptations(adaptacoesDisponiveis);
 		listaPossibilidadesAdaptacoes = new JList<String>(listModelAdaptations);
-		//listaPossibilidadesAdaptacoes.setComponentPopupMenu(getComponentPopupMenuConstraintsList());
-		//listaPossibilidadesAdaptacoes.addMouseListener(getMouseListener());
+		listaPossibilidadesAdaptacoes.addMouseListener(getMouseListener());
+		
+		JScrollPane scrollPaneListaAdaptations = new JScrollPane(listaPossibilidadesAdaptacoes, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		JPanel panelListaAdaptations = new JPanel(new BorderLayout());
+		
+		panelListaAdaptations.add(new JLabel("Cenários de Adaptações"), BorderLayout.NORTH);
+		panelListaAdaptations.add(scrollPaneListaAdaptations, BorderLayout.CENTER);
 		
 		//PAINEL PARA ADICIONAR INFORMAÇÕES DA ARVORES
 		JPanel panelTrees = new JPanel();
@@ -159,7 +168,7 @@ public class ViewerPanel extends JPanel {
 		
 		//ARVORE DA ADAPTAÇÃO
 		treeAdaptation = new JTree();
-		preenchendoArvore(model.getArvoreAdaptacao());
+		preenchendoArvore(model.getArvoreAdaptacao(), false);
 		final CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
 		treeAdaptation.setCellRenderer(renderer);
 		final CheckBoxNodeEditor editor = new CheckBoxNodeEditor(treeAdaptation);
@@ -298,7 +307,7 @@ public class ViewerPanel extends JPanel {
 		
 		JPanel panelInfoConstraints = new JPanel(new GridLayout(0, 1));
 		
-		panelInfos.add(listaPossibilidadesAdaptacoes, BorderLayout.CENTER);
+		panelInfos.add(panelListaAdaptations, BorderLayout.CENTER);
 		
 		panelInfos.add(panelInfoConstraints, BorderLayout.SOUTH);
 		
@@ -368,8 +377,36 @@ public class ViewerPanel extends JPanel {
 				}
 			}
 		});
-		String contextName = (String) comboBoxContexts.getItemAt(0);
-		setTreeVisualization(contextName);
+		//String contextName = (String) comboBoxContexts.getItemAt(0);
+		setTreeVisualization(ContextModel.DEFAULT_CONTEXT);
+	}
+ 	
+	private MouseListener getMouseListener() {
+		return new MouseAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent event) {
+				super.mousePressed(event);
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent event) {
+				// TODO Auto-generated method stub
+				super.mouseReleased(event);
+
+				if (event.getButton() == MouseEvent.BUTTON1) {
+
+					 if (event.getSource() == listaPossibilidadesAdaptacoes) {
+
+						int selectedConstraintIndex = listaPossibilidadesAdaptacoes.locationToIndex(event.getPoint());
+						listaPossibilidadesAdaptacoes.setSelectedIndex(selectedConstraintIndex);
+						System.out.println((selectedConstraintIndex));
+						ViewerPanel.this.preenchendoArvore(adaptacoesDisponiveis.get(selectedConstraintIndex), true);
+
+					}
+				}
+			}
+		};
 	}
 	
 	public void updateConstraintsPainel(Context context){
@@ -651,7 +688,7 @@ private void adicionarConstraintsDoContexto(Context contexto){
         return panel;
     }
 	  
-	private void preenchendoArvore(br.ufc.lps.model.adaptation.Adaptacao adaptacao){
+	private void preenchendoArvore(br.ufc.lps.model.adaptation.Adaptacao adaptacao, boolean selecteds){
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Context adaptations");
 		
 		if(adaptacao!=null && adaptacao.getValorAdaptacao()!=null){
@@ -659,8 +696,18 @@ private void adicionarConstraintsDoContexto(Context contexto){
 				Adaptacao contexto = new Adaptacao(contextoAdaptacao.getNome());
 				
 				for(br.ufc.lps.model.adaptation.ValorAdaptacao valorAdaptacao : contextoAdaptacao.getValorAdaptacao()){
-					CheckBoxNodeData data = new CheckBoxNodeData(valorAdaptacao.getNome(), false);
-					contexto.add(new br.ufc.lps.view.trees.adaptation.ValorAdaptacao(data));
+					CheckBoxNodeData data = null;
+					
+					if(!selecteds){
+						System.out.println(valorAdaptacao);
+						data = new CheckBoxNodeData(valorAdaptacao.getNome(), false);
+					}else{
+						
+						System.out.println(valorAdaptacao);
+						data = new CheckBoxNodeData(valorAdaptacao.getNome(), valorAdaptacao.getStatus());
+					}
+					
+						contexto.add(new br.ufc.lps.view.trees.adaptation.ValorAdaptacao(data));
 					
 				}
 				

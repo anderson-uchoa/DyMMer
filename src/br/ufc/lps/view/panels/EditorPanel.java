@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
@@ -120,6 +121,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 	
 	private JButton btnNewContext;
 	private JButton jbuttonSalvar;
+	private JButton jbuttonSalvarLocal;
 	
 	private JLabel lblNewContext;
 
@@ -235,7 +237,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 		//panelNewContext.add(textFieldNewContext);
 		//textFieldNewContext.setColumns(10);
 
-		btnNewContext = new JButton("Save");
+		btnNewContext = new JButton("Add cenário");
 
 		btnNewContext.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -275,6 +277,11 @@ public class EditorPanel extends JPanel implements ActionListener {
 		JSeparator separator = new JSeparator();
 		panelConstraint.add(separator);
 
+		//BOTAO PARA SALVAR NO Local
+		jbuttonSalvarLocal = new JButton("Save in Local");
+		jbuttonSalvarLocal.setHorizontalAlignment(SwingConstants.CENTER);
+		panelNewContext.add(jbuttonSalvarLocal);
+		
 		//BOTAO PARA SALVAR NO REPOSITORIO
 			jbuttonSalvar = new JButton("Save in repository");
 			jbuttonSalvar.setHorizontalAlignment(SwingConstants.CENTER);
@@ -318,7 +325,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 			JScrollPane scrollPaneListModel = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
-		//CONSTRAINTS RNFS DECLARAÇÔES
+			//CONSTRAINTS RNFS DECLARAÇÔES
 
 			txtAddConstraintRnf = new JTextField("Add Constraint Rnf...");
 			txtAddConstraintRnf.setEditable(false);
@@ -382,6 +389,40 @@ public class EditorPanel extends JPanel implements ActionListener {
 					JOptionPane.showMessageDialog(null, "Save Successfull");
 					EditorPanel.this.main.recarregarListaFeatures();
 				}
+			}
+		});
+		
+		jbuttonSalvarLocal.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				JFileChooser chooser = new JFileChooser(); 
+			    chooser.setCurrentDirectory(new java.io.File("."));
+			    chooser.setDialogTitle("Select the path");
+			    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			    
+			    chooser.setAcceptAllFileFilterUsed(false);
+			    
+			    if (chooser.showOpenDialog(EditorPanel.this) == JFileChooser.APPROVE_OPTION) { 
+			      System.out.println("getCurrentDirectory(): " 
+			         +  chooser.getCurrentDirectory());
+			      System.out.println("getSelectedFile() : " 
+			         +  chooser.getSelectedFile());
+			      
+			    
+			    	String nomeArquivo = JOptionPane.showInputDialog("Type the name of File");
+			    
+			    	if(nomeArquivo!=null && nomeArquivo.trim().equals(""))
+			    		System.out.println("nome incorreto");
+			    	
+			    	File file = new File(chooser.getSelectedFile()+"/"+nomeArquivo+".xml");
+			    	
+			    	EditorPanel.this.saveInLocalFile(file);
+			    
+				}else {
+			      System.out.println("No Selection ");
+			    }
 			}
 		});
 		
@@ -614,7 +655,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 						rootEle.appendChild(WriteXMLmodel.getContext(doc, nomeContexto,
 									EditorPanel.this.resolutions, new ArrayList<String>(constraints.values())));
 						
-						ContextoRnf contextoRnf = new ContextoRnf();
+						ContextoRnf contextoRnf = new ContextoRnf();	
 						
 						contextoRnf.setNome(nomeContexto);
 						contextoRnf.setValorContextoRnf(constraintsListRnf);
@@ -761,6 +802,47 @@ public class EditorPanel extends JPanel implements ActionListener {
 		
 		if(nome!=null)
 			setTreeVisualization(nome);
+	}
+	
+	private void saveInLocalFile(File file){
+		
+    	DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+		try {
+			
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			Document doc = db.parse(EditorPanel.this.pathModelFile);
+			
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			DOMSource source = new DOMSource(doc);
+			
+			StreamResult console = new StreamResult(new FileOutputStream(file));
+			transformer.transform(source, console);
+
+			EditorPanel.this.tree.updateUI();
+			JOptionPane.showMessageDialog(EditorPanel.this,
+					"Save Successfuly");
+
+		} catch (SAXException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (ParserConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (TransformerConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (TransformerFactoryConfigurationError e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (TransformerException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	
 	private MouseListener getMouseListener() {
@@ -1167,23 +1249,38 @@ public class EditorPanel extends JPanel implements ActionListener {
 			menu.show(treeAdaptation, e.getX(), e.getY());
 			
 		}else if(node.getLevel() == 1){
+			
 			JPopupMenu menu = new JPopupMenu("Value");
 			menu.add(new JLabel("Value Options:"));
 			menu.addSeparator();
-			JMenuItem adicionar = new JMenuItem("Add");
 			
-			menu.add(adicionar);
+			JMenuItem adicionarPadrao = new JMenuItem("Add quantificação padrão");
 			
-			adicionar.addActionListener(new ActionListener() {
+			menu.add(adicionarPadrao);
+			
+			adicionarPadrao.addActionListener(new ActionListener() {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					String valor = JOptionPane.showInputDialog("Add the name of value");
-					if(valor!=null && !valor.trim().isEmpty()){
-						CheckBoxNodeData check = new CheckBoxNodeData(valor, false);
-						node.add(new br.ufc.lps.view.trees.adaptation.ValorAdaptacao(check));
-						treeAdaptation.updateUI();
-					}
+					JOptionPaneQP jop = new JOptionPaneQP();
+					jop.displayGUI(main, node, treeAdaptation);
+					
+					treeAdaptation.updateUI();
+				}
+			});
+			
+			JMenuItem adicionarBooleana = new JMenuItem("Add quantificação Booleana");
+			
+			menu.add(adicionarBooleana);
+			
+			adicionarBooleana.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JOptionPaneQB jop = new JOptionPaneQB();
+					jop.displayGUI(main, node, treeAdaptation);
+					
+					treeAdaptation.updateUI();
 				}
 			});
 			

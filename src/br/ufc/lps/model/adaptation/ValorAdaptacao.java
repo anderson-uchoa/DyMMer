@@ -1,9 +1,11 @@
 package br.ufc.lps.model.adaptation;
 
+import br.ufc.lps.model.ValueQuantification;
 
 public class ValorAdaptacao {
 	private String nome;
 	private Boolean status;
+	private ValueQuantification valueQuantification;
 	
 	public String getNome() {
 		return nome;
@@ -18,5 +20,17 @@ public class ValorAdaptacao {
 		this.status = status;
 	}
 	
+	public ValueQuantification getValueQuantification() {
+		return valueQuantification;
+	}
+	
+	public void setValueQuantification(ValueQuantification valueQuantification) {
+		this.valueQuantification = valueQuantification;
+	}
+	
+	@Override
+	public String toString() {
+		return "ValorAdaptacao [nome=" + nome + ", status=" + status + "]";
+	}
 	
 }

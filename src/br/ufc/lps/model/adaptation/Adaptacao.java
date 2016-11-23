@@ -18,4 +18,6 @@ public class Adaptacao {
 	public void setValorAdaptacao(List<ContextoAdaptacao> valorAdaptacao) {
 		this.valorAdaptacao = valorAdaptacao;
 	}	
+	
+	
 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- This model was created online using SPLOT's Feature Model Editor (http://www.splot-research.org) on Thu, May 7, 2015 - 12:10 AM  --><feature_model name="robot experiment">
+<meta>
+<data name="description">An excerpt of the robot experiment features diagram.</data>
+<data name="creator">Gabriel Goulart</data>
+<data name="address"/>
+<data name="email">gabrielgoulart@great.ufc.br</data>
+<data name="phone"/>
+<data name="website"/>
+<data name="organization">GREAT-UFC</data>
+<data name="department"/>
+<data name="date"/>
+<data name="reference"/>
+</meta>
+<feature_tree>
+:r Robot(_r)
+	:m GoTO Point(_r_1)
+		:m Control Velocity(_r_1_2)
+		:m Rotate(_r_1_3)
+		:o Desviate Obstacle(_r_1_5)
+			:g (_r_1_5_6) [1,1] 
+				: Defaut Deviate(_r_1_5_6_7)
+				: Smart Deviate(_r_1_5_6_8)
+					:m Size Determination(_r_1_5_6_8_9)
+	:m Detect Obstacle(_r_10)
+	:m Sensor(_r_11)
+		:o Ultrasonic(_r_11_13)
+			:o Rotate sensor(_r_11_13_16)
+		:m Touch(_r_11_14)
+		:o Light(_r_11_15)
+	:m Motor(_r_12)
+</feature_tree>
+<constraints>
+constraint_1:~_r_1_5 or ~_r_10 or _r_11_13
+constraint_2:~_r_1_5_6_8_9 or _r_11_13_16
+</constraints>
+
+<context name="SmartDeviate">
+<resolution feature="GoTO Point" id="_r_1" status="true"/>
+<resolution feature="Control Velocity" id="_r_1_2" status="true"/>
+<resolution feature="Rotate" id="_r_1_3" status="true"/>
+<resolution feature="Desviate Obstacle" id="_r_1_5" status="true"/>
+<resolution feature="Defaut Deviate" id="_r_12" status="false"/>
+<resolution feature="Smart Deviate" id="_r_1_5_6_8" status="true"/>
+<resolution feature="Size Determination" id="_r_1_5_6_8_9" status="true"/>
+<resolution feature="Sensor" id="_r_11" status="true"/>
+<resolution feature="Light" id="_r_11_15" status="true"/>
+<resolution feature="Detect Obstacle" id="_r_10" status="true"/>
+<resolution feature="Ultrasonic" id="_r_11_13" status="true"/>
+<resolution feature="Rotate sensor" id="_r_11_13_16" status="true"/>
+<resolution feature="Touch" id="_r_11_14" status="true"/>
+<resolution feature="Motor" id="_r_12" status="true"/>
+<constraints/>
+</context>
+
+<context name="DefaultDeviate">
+<resolution feature="GoTO Point" id="_r_1" status="true"/>
+<resolution feature="Control Velocity" id="_r_1_2" status="true"/>
+<resolution feature="Rotate" id="_r_1_3" status="true"/>
+<resolution feature="Desviate Obstacle" id="_r_1_5" status="true"/>
+<resolution feature="Defaut Deviate" id="_r_12" status="true"/>
+<resolution feature="Smart Deviate" id="_r_1_5_6_8" status="false"/>
+<resolution feature="Size Determination" id="_r_1_5_6_8_9" status="false"/>
+<resolution feature="Sensor" id="_r_11" status="true"/>
+<resolution feature="Light" id="_r_11_15" status="true"/>
+<resolution feature="Detect Obstacle" id="_r_10" status="true"/>
+<resolution feature="Ultrasonic" id="_r_11_13" status="true"/>
+<resolution feature="Rotate sensor" id="_r_11_13_16" status="false"/>
+<resolution feature="Touch" id="_r_11_14" status="true"/>
+<resolution feature="Motor" id="_r_12" status="true"/>
+<constraints/>
+</context>
+
+</feature_model>

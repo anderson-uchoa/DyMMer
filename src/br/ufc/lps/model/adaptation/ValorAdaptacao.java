@@ -1,7 +1,5 @@
 package br.ufc.lps.model.adaptation;
 
-import br.ufc.lps.model.ValueQuantification;
-
 public class ValorAdaptacao {
 	private String nome;
 	private Boolean status;

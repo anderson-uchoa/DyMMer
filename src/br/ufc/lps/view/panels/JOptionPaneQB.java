@@ -23,9 +23,9 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import br.ufc.lps.model.ValueQuantification;
-import br.ufc.lps.model.ValueQuantificationBool;
-import br.ufc.lps.model.ValueQuantificationPadrao;
+import br.ufc.lps.model.adaptation.ValueQuantification;
+import br.ufc.lps.model.adaptation.ValueQuantificationBool;
+import br.ufc.lps.model.adaptation.ValueQuantificationPadrao;
 import br.ufc.lps.view.trees.adaptation.CheckBoxNodeData;
 
 public class JOptionPaneQB implements ActionListener{

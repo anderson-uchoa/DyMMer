@@ -1,4 +1,4 @@
-package br.ufc.lps.model;
+package br.ufc.lps.model.adaptation;
 
 public abstract class ValueQuantification {
 	private String padrao;

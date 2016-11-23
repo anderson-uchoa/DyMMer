@@ -35,6 +35,7 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 import br.ufc.lps.controller.browser.BrowserController;
 import br.ufc.lps.controller.export.ExportOfficeExcel;
+import br.ufc.lps.controller.tree.ControllerTree;
 import br.ufc.lps.model.context.SplotContextModel;
 import br.ufc.lps.model.normal.IModel;
 import br.ufc.lps.model.normal.SplotModel;
@@ -45,6 +46,7 @@ import br.ufc.lps.repository.SchemeXml;
 import br.ufc.lps.view.panels.CreatorPanel;
 import br.ufc.lps.view.panels.EditorPanel;
 import br.ufc.lps.view.panels.ViewerPanel;
+import br.ufc.lps.view.panels.ViewerPanelPreview;
 import br.ufc.lps.view.panels.ViewerPanelResultFeatures;
 import br.ufc.lps.view.panels.ViewerPanelResultMeasures;
 
@@ -52,6 +54,7 @@ public class Main extends JFrame {
 
 	private JTabbedPane tabbedPane;
 	private ViewerPanel currentViewer;
+	private ViewerPanelPreview currentViewerPreview;
 	private JMenu mnMeasures_1;
 	private JMenu mnVisualizations;
 	private ViewerPanelResultFeatures viewMain;
@@ -364,6 +367,16 @@ public class Main extends JFrame {
 		
 		createTab(viewer, schemeXml.getNameXml());
 		
+	}
+	
+	public void abrirPreview(String path){
+		
+		File file = new File(path);
+		
+		final ViewerPanelPreview viewer = new ViewerPanelPreview(new SplotContextModel(path), file, this);
+		currentViewerPreview = viewer;
+		
+		createTab(currentViewerPreview, "Preview");
 	}
 	
 	public void createModelFeature(String nameRoot){

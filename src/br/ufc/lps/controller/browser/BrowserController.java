@@ -1286,23 +1286,23 @@ public class BrowserController{
        
        public static String getJSON(String arquivo){
     	   JsonElement jsonObject;
-   		//Cria o parse de tratamento
-   		JsonParser parser = new JsonParser();
-   		try {
-			jsonObject = parser.parse(new FileReader("html/"+arquivo));
-			return jsonObject.toString();
-		} catch (JsonIOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonSyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-   		return null;
-    	   
-       }
+	   		//Cria o parse de tratamento
+	   		JsonParser parser = new JsonParser();
+	   		try {
+				jsonObject = parser.parse(new FileReader("html/"+arquivo));
+				return jsonObject.toString();
+			} catch (JsonIOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonSyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	   		return null;
+	    	   
+        }
  
 }

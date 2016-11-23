@@ -1,6 +1,6 @@
 package br.ufc.lps.view.trees.adaptation;
 
-import br.ufc.lps.model.ValueQuantification;
+import br.ufc.lps.model.adaptation.ValueQuantification;
 
 public class CheckBoxNodeData {
 

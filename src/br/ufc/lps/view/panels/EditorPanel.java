@@ -12,9 +12,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -122,6 +120,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 	private JButton btnNewContext;
 	private JButton jbuttonSalvar;
 	private JButton jbuttonSalvarLocal;
+	private JButton jbuttonPreview;
 	
 	private JLabel lblNewContext;
 
@@ -237,11 +236,14 @@ public class EditorPanel extends JPanel implements ActionListener {
 		//panelNewContext.add(textFieldNewContext);
 		//textFieldNewContext.setColumns(10);
 
-		btnNewContext = new JButton("Add cenário");
-
+		btnNewContext = new JButton("Add Scenario");
 		btnNewContext.setHorizontalAlignment(SwingConstants.CENTER);
-
 		panelNewContext.add(btnNewContext);
+		
+		//BOTAO PARA Preview
+		jbuttonPreview = new JButton("Preview");
+		jbuttonPreview.setHorizontalAlignment(SwingConstants.CENTER);
+		panelNewContext.add(jbuttonPreview);
 
 		JButton addTreeRnf = new JButton("Remove NFP");
 		addTreeRnf.setHorizontalAlignment(SwingConstants.CENTER);
@@ -283,16 +285,16 @@ public class EditorPanel extends JPanel implements ActionListener {
 		panelNewContext.add(jbuttonSalvarLocal);
 		
 		//BOTAO PARA SALVAR NO REPOSITORIO
-			jbuttonSalvar = new JButton("Save in repository");
-			jbuttonSalvar.setHorizontalAlignment(SwingConstants.CENTER);
-			panelNewContext.add(jbuttonSalvar);
-		
+		jbuttonSalvar = new JButton("Save in repository");
+		jbuttonSalvar.setHorizontalAlignment(SwingConstants.CENTER);
+		panelNewContext.add(jbuttonSalvar);
+	
 		//BOTAO PARA SALVAR SE MODELO FOR NOVO
-			JButton jbuttonSalvarNew = new JButton("Save in repository ( New Model )");
-			jbuttonSalvarNew.setHorizontalAlignment(SwingConstants.CENTER);
-			
-			if(schemeXml!=null)
-				panelNewContext.add(jbuttonSalvarNew);
+		JButton jbuttonSalvarNew = new JButton("Save in repository ( New Model )");
+		jbuttonSalvarNew.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		if(schemeXml!=null)
+			panelNewContext.add(jbuttonSalvarNew);
 		
 		
 		//CONSTRAINT DECLARAÇÔES
@@ -378,6 +380,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
+				prepareModel();
+				
 				String nome = null;
 				
 				if(schemeXml==null)
@@ -396,6 +400,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+				prepareModel();
 				
 				JFileChooser chooser = new JFileChooser(); 
 			    chooser.setCurrentDirectory(new java.io.File("."));
@@ -431,6 +437,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
+				prepareModel();
+				
 				String nome  = JOptionPane.showInputDialog("Type the name of new model:", schemeXml.getNameXml());
 				
 				if(nome.trim().equals("")){
@@ -453,6 +461,15 @@ public class EditorPanel extends JPanel implements ActionListener {
 			}
 		});
 		
+		jbuttonPreview.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				prepareModel();
+				EditorPanel.this.main.abrirPreview(EditorPanel.this.pathModelFile);
+			}
+		});
+		
 		btnAddConstraintRnf.addActionListener(new ActionListener() {
 
 			@Override
@@ -469,7 +486,6 @@ public class EditorPanel extends JPanel implements ActionListener {
 		});
 
 		btnRemoveConstraintRnf.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				constraintsRnf = null;
@@ -667,7 +683,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 						DOMSource source = new DOMSource(doc);
 						StreamResult console = new StreamResult(new FileOutputStream(EditorPanel.this.pathModelFile));
 						transformer.transform(source, console);
-
+						
 						//textFieldNewContext.setText("");
 						constraintLiterals.clear();
 						constraints.clear();
@@ -1340,11 +1356,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					String adaptacao = JOptionPane.showInputDialog("Type the characteristics name:");
-					if(adaptacao!=null && !adaptacao.trim().isEmpty()){
-						node.add(new DefaultMutableTreeNode(adaptacao));
-						treeRnf.updateUI();
-					}
+					JOptionPaneListItensRnfs lj = new JOptionPaneListItensRnfs();
+					lj.displayGUI(main, node, treeRnf, false, "Type the characteristics name:");
 				}
 			});
 			
@@ -1362,11 +1375,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					String valor = JOptionPane.showInputDialog("Type the subcharacteristics name:");
-					if(valor!=null && !valor.trim().isEmpty()){
-						node.add(new DefaultMutableTreeNode(valor));
-						treeRnf.updateUI();
-					}
+					JOptionPaneListItensRnfs lj = new JOptionPaneListItensRnfs();
+					lj.displayGUI(main, node, treeRnf, false, "Type the subcharacteristics name:");
 				}
 			});
 			
@@ -1399,11 +1409,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					String valor = JOptionPane.showInputDialog("Add the name of PNF");
-					if(valor!=null && !valor.trim().isEmpty()){
-						node.add(new DefaultMutableTreeNode(valor));
-						treeRnf.updateUI();
-					}
+					JOptionPaneListItensRnfs lj = new JOptionPaneListItensRnfs();
+					lj.displayGUI(main, node, treeRnf, true, "Add the name of PNF");
 				}
 			});
 			
@@ -1661,17 +1668,19 @@ public class EditorPanel extends JPanel implements ActionListener {
 		} 
 	}
 
-	private void criarModelo(){
+	private void prepareModel(){
 
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-	
+
 		try {
-	
+			
+			DefaultMutableTreeNode rootArvoreAdaptacao = (DefaultMutableTreeNode)treeAdaptation.getModel().getRoot();
+			
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc = db.parse(EditorPanel.this.pathModelFile);
-	
+
 			Element rootEle = doc.getDocumentElement();
-	
+
 			FeatureTreeNode root = (FeatureTreeNode)tree.getModel().getRoot();
 			
 			Node tree = null;
@@ -1679,38 +1688,35 @@ public class EditorPanel extends JPanel implements ActionListener {
 			for(int i=0; i < rootEle.getChildNodes().getLength(); i++){
 				tree = rootEle.getChildNodes().item(i);
 				if(tree.getNodeName().equals("feature_tree"))
-					break;
+					rootEle.removeChild(tree);
+				if(tree.getNodeName().equals("constraints"))
+					rootEle.removeChild(tree);
+				if(tree.getNodeName().equals("arvore_adaptacao"))
+					rootEle.removeChild(tree);
+				if(tree.getNodeName().equals("arvore_rnf"))
+					rootEle.removeChild(tree);
 			}
-			
-			for(int i=0; i < rootEle.getChildNodes().getLength(); i++){
-				Node tr = rootEle.getChildNodes().item(i);
-				if(tr.getNodeName().equals("constraints")){
-					rootEle.removeChild(tr);
-					break;
-				}
-					
-			}
-			
-			rootEle.removeChild(tree);
 			
 			controllerFeatures.drawTree(root);
-			controllerFeatures.getArvoreDesenhada();
 			
 			Node newTree = doc.createElement("feature_tree");
 			
 			newTree.appendChild(doc.createTextNode(controllerFeatures.getArvoreDesenhada()));
 			
 			rootEle.appendChild(newTree);
-	
+
+			rootEle.appendChild(WriteXMLmodel.getArvoreRnf(doc, (DefaultMutableTreeNode)treeRnf.getModel().getRoot()));
+			
+			rootEle.appendChild(WriteXMLmodel.getArvoreAdaptacao(doc, rootArvoreAdaptacao));
+									
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			DOMSource source = new DOMSource(doc);
 			StreamResult console = new StreamResult(new FileOutputStream(EditorPanel.this.pathModelFile));
 			transformer.transform(source, console);
-	
-			JOptionPane.showMessageDialog(EditorPanel.this,
-					"Your model has been saved. Now, open the file to see it.");
-	
+			
+			EditorPanel.this.tree.updateUI();
+
 		} catch (SAXException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -1730,7 +1736,6 @@ public class EditorPanel extends JPanel implements ActionListener {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
 		
 	}
 

@@ -8,8 +8,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import br.ufc.lps.model.ValueQuantificationBool;
-import br.ufc.lps.model.ValueQuantificationPadrao;
+import br.ufc.lps.model.adaptation.ValueQuantificationBool;
+import br.ufc.lps.model.adaptation.ValueQuantificationPadrao;
 import br.ufc.lps.model.contextaware.Resolution;
 import br.ufc.lps.model.rnf.ContextoRnf;
 import br.ufc.lps.model.rnf.ValorContextoRnf;

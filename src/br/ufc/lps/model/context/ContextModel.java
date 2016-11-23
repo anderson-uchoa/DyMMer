@@ -20,12 +20,12 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import br.ufc.lps.model.ModelFactory;
-import br.ufc.lps.model.ValueQuantification;
-import br.ufc.lps.model.ValueQuantificationBool;
-import br.ufc.lps.model.ValueQuantificationPadrao;
 import br.ufc.lps.model.adaptation.Adaptacao;
 import br.ufc.lps.model.adaptation.ContextoAdaptacao;
 import br.ufc.lps.model.adaptation.ValorAdaptacao;
+import br.ufc.lps.model.adaptation.ValueQuantification;
+import br.ufc.lps.model.adaptation.ValueQuantificationBool;
+import br.ufc.lps.model.adaptation.ValueQuantificationPadrao;
 import br.ufc.lps.model.contextaware.Constraint;
 import br.ufc.lps.model.contextaware.Context;
 import br.ufc.lps.model.contextaware.Resolution;
@@ -247,8 +247,6 @@ public class ContextModel implements IContextModel {
 						
 						String nomeValor = elValor.getAttribute("nome");
 						String nomeType = elValor.getAttribute("type");
-						
-						System.out.println("passou");
 						
 						ValueQuantification valueQuantification = null;
 						
@@ -889,16 +887,19 @@ public class ContextModel implements IContextModel {
 
 	@Override
 	public double depthOfTreeMedian() {
-		
-		List<FeatureTreeNode> nodesAtLevel = (List<FeatureTreeNode>) featureModel.getLeaves();
-		int leaves = nodesAtLevel.size();
-		if(leaves%2 == 1){
-			return featureModel.depth(nodesAtLevel.get((leaves/2)+1));
-		}
-		else {
-			int medianLeft = featureModel.depth(nodesAtLevel.get(leaves/2));
-			int medianRight = featureModel.depth(nodesAtLevel.get((leaves/2)+1));
-			return (medianLeft+medianRight)/2.0;
+		try{
+			List<FeatureTreeNode> nodesAtLevel = (List<FeatureTreeNode>) featureModel.getLeaves();
+			int leaves = nodesAtLevel.size();
+			if(leaves%2 == 1){
+				return featureModel.depth(nodesAtLevel.get((leaves/2)+1));
+			}
+			else {
+				int medianLeft = featureModel.depth(nodesAtLevel.get(leaves/2));
+				int medianRight = featureModel.depth(nodesAtLevel.get((leaves/2)+1));
+				return (medianLeft+medianRight)/2.0;
+			}
+		}catch (Exception e) {
+			return 0;
 		}
 	}
 

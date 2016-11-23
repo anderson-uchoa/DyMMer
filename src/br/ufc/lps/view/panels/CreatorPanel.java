@@ -108,7 +108,7 @@ public class CreatorPanel extends JPanel implements ActionListener {
 
 	public CreatorPanel(int modelID, Main main, String nameRoot) {
 		
-		setLayout(new GridLayout(1, 0));
+		setLayout(new BorderLayout());
 		this.main = main;
 		constraints = new HashMap<String, String>();
 		constraintLiterals = new ArrayList<Literal>();
@@ -147,10 +147,10 @@ public class CreatorPanel extends JPanel implements ActionListener {
 		panelTree.add(tituloTree, BorderLayout.NORTH);
 		JScrollPane scrollPane = new JScrollPane(panelTree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		add(scrollPane);
+		add(scrollPane, BorderLayout.CENTER);
 		
 		JPanel panelInfos = new JPanel();
-		add(panelInfos);
+		add(panelInfos, BorderLayout.LINE_END);
 		panelInfos.setLayout(new BorderLayout(1, 1));
 
 		JPanel panelNewContext = new JPanel();
@@ -186,7 +186,7 @@ public class CreatorPanel extends JPanel implements ActionListener {
 		JSeparator separator = new JSeparator();
 		panelConstraint.add(separator);
 
-		jbuttonSalvar = new JButton("Save in repository (NÃO FUNCIONANDO AINDA)");
+		jbuttonSalvar = new JButton("Save in repository");
 		jbuttonSalvar.setHorizontalAlignment(SwingConstants.CENTER);
 		panelConstraint.add(jbuttonSalvar);
 		
@@ -214,7 +214,7 @@ public class CreatorPanel extends JPanel implements ActionListener {
 			      
 			    
 			    	String nomeArquivo = JOptionPane.showInputDialog("Type the name of File");
-			    
+
 			    	if(nomeArquivo!=null && nomeArquivo.trim().equals(""))
 			    		System.out.println("nome incorreto");
 			    	
@@ -227,18 +227,23 @@ public class CreatorPanel extends JPanel implements ActionListener {
 				}else {
 			      System.out.println("No Selection ");
 			    }
-
-			   
 			}
 		});
 
-		
 		jbuttonSalvar.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				saveInFile(CreatorPanel.this.fileTemp);
-				Boolean resultado = ControladorXml.salvarXMLRepositorio(null, CreatorPanel.this.fileTemp, null);
+				
+				String nomeArquivo = JOptionPane.showInputDialog("Type the name of File");
+				
+				if(nomeArquivo!=null && nomeArquivo.trim().equals("")){
+		    		System.out.println("nome incorreto");
+		    		return;
+				}
+				
+				Boolean resultado = ControladorXml.salvarXMLRepositorio(nomeArquivo, CreatorPanel.this.fileTemp, null);
 				if (resultado) {
 					JOptionPane.showMessageDialog(null, "Save Successfull");
 					CreatorPanel.this.main.recarregarListaFeatures();
@@ -286,7 +291,7 @@ public class CreatorPanel extends JPanel implements ActionListener {
 
 			CreatorPanel.this.tree.updateUI();
 			JOptionPane.showMessageDialog(CreatorPanel.this,
-					"Your context has been saved. Now, open the file to see it.");
+					"Your Model has been saved. Now, open the file to see it.");
 
 		} catch (SAXException e1) {
 			// TODO Auto-generated catch block

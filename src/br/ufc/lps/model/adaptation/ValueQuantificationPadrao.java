@@ -50,11 +50,11 @@ public class ValueQuantificationPadrao extends ValueQuantification{
 	@Override
 	public boolean isComplete() {
 		
-		if(valueQuantification1.trim().isEmpty())
+		if(quantification1.trim().isEmpty())
 			return false;
 		
 		if(isInterval)
-			if(valueQuantification2.trim().isEmpty())
+			if(quantification2.trim().isEmpty())
 				return false;
 		
 		return (super.isComplete() && true);

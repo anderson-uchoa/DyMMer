@@ -90,6 +90,9 @@ import br.ufc.lps.splar.plugins.reasoners.bdd.javabdd.FMReasoningWithBDD;
 import br.ufc.lps.view.Main;
 import br.ufc.lps.view.list.ConstraintsListModel;
 import br.ufc.lps.view.list.ConstraintsRnfListModel;
+import br.ufc.lps.view.panels.dialogs.JOptionPaneListItensRnfs;
+import br.ufc.lps.view.panels.dialogs.JOptionPaneQB;
+import br.ufc.lps.view.panels.dialogs.JOptionPaneQP;
 import br.ufc.lps.view.trees.FeatureModelTree;
 import br.ufc.lps.view.trees.FeaturesTreeCellRenderer;
 import br.ufc.lps.view.trees.adaptation.Adaptacao;
@@ -97,6 +100,7 @@ import br.ufc.lps.view.trees.adaptation.CheckBoxNodeData;
 import br.ufc.lps.view.trees.adaptation.CheckBoxNodeEditor;
 import br.ufc.lps.view.trees.adaptation.CheckBoxNodeRenderer;
 import br.ufc.lps.view.trees.adaptation.ValorAdaptacao;
+import br.ufc.lps.view.trees.rnf.PNFValue;
 
 public class EditorPanel extends JPanel implements ActionListener {
 
@@ -684,19 +688,9 @@ public class EditorPanel extends JPanel implements ActionListener {
 						StreamResult console = new StreamResult(new FileOutputStream(EditorPanel.this.pathModelFile));
 						transformer.transform(source, console);
 						
-						//textFieldNewContext.setText("");
-						constraintLiterals.clear();
-						constraints.clear();
-						constraintsList.clear();
-						constraintsListModel.update();
-						txtAddTheFeatures.setText("");
-						resolutions.clear();
-						txtMessageText.setText("None for while...");
-						constraintNumber = 0;
-
 						EditorPanel.this.tree.updateUI();
 						JOptionPane.showMessageDialog(EditorPanel.this,
-								"Your context has been saved. Now, open the file to see it.");
+								"Your scenario has been saved. Now, open the file to see it.");
 
 					} catch (SAXException e1) {
 						// TODO Auto-generated catch block
@@ -985,6 +979,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 			txtAddTheFeatures.setText("");
 			txtAddTheFeatures.setText(toAdd);
 		} else
+			txtAddTheFeatures.setText(txtAddTheFeatures.getText() + " V " + toAdd);
 			/* if (toAdd.contains("~")  && txtAddTheFeatures.getText().contains("~") ){
 					
 				 txtAddTheFeatures.setText(txtAddTheFeatures.getText() + " excludes " + toAdd);
@@ -993,7 +988,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 				 
 				 txtAddTheFeatures.setText(txtAddTheFeatures.getText() + " requires " + toAdd);
 			 } */
-			txtAddTheFeatures.setText(txtAddTheFeatures.getText());
+			
 
 		constraintLiterals.add(literal);
 
@@ -1800,7 +1795,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 					carac.add(sub);
 					
 					for(PropriedadeNFuncional propriedadeNFuncional : subcaracteristica.getPropriedadeNFuncionais()){
-						DefaultMutableTreeNode pnf = new DefaultMutableTreeNode(propriedadeNFuncional.getPropriedade());
+						PNFValue pnf = new PNFValue(propriedadeNFuncional.getPropriedade(), propriedadeNFuncional.getPadrao());
 						sub.add(pnf);
 					}
 				}

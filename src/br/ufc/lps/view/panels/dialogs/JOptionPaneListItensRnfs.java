@@ -1,4 +1,4 @@
-package br.ufc.lps.view.panels;
+package br.ufc.lps.view.panels.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -30,13 +31,17 @@ import br.ufc.lps.controller.tree.ControllerTree;
 import br.ufc.lps.model.MappingItensRnfObjecJson;
 import br.ufc.lps.model.adaptation.ValueQuantificationBool;
 import br.ufc.lps.view.list.ConstraintsListModelItensRnfs;
+import br.ufc.lps.view.trees.rnf.PNFValue;
 
 public class JOptionPaneListItensRnfs{
 	
 		private JList<String> itens;
 		private JButton botaoOk;
 		private JDialog dialog;
+		private final String[] padraoStrings = {"Normal", "Baixo",  "Medio", "Alto"};
+		private String padraoSelecionado = "Normal";
 		private JCheckBox check;
+		private JComboBox<String> listaPadrao;
 
 		private DefaultMutableTreeNode node;
 		private String textoSelecionado;
@@ -51,6 +56,15 @@ public class JOptionPaneListItensRnfs{
 	 		 this.tree = tree;
 	 		 this.node = node;
 	 		 this.nivel = node.getLevel();
+	 		 this.listaPadrao = new JComboBox<>(padraoStrings);
+	 		 
+	 		 listaPadrao.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					padraoSelecionado = (String) ((JComboBox)e.getSource()).getSelectedItem();
+				}
+			});
 	 		 
 	 		 MappingItensRnfObjecJson node2 = ControllerTree.getMappingItensRnfObjectJson();
 	 		 
@@ -95,16 +109,16 @@ public class JOptionPaneListItensRnfs{
 					if(!lastNivel){
 						if(!verifyTextSelected())
 	    					return;
-						node.add(new DefaultMutableTreeNode(textoSelecionado));
+						node.add(new PNFValue(textoSelecionado, padraoSelecionado));
 					}else{
 						if(check.isSelected()){
 							if(!verifyTextChecked())
 								return;
-							node.add(new DefaultMutableTreeNode(novoItem.getText().trim()));
+							node.add(new PNFValue(novoItem.getText().trim(), padraoSelecionado));
 						}else{
 							if(!verifyTextSelected())
 								return;
-							node.add(new DefaultMutableTreeNode(textoSelecionado));
+							node.add(new PNFValue(textoSelecionado, padraoSelecionado));
 						}
 					}
 					dialog.dispose();
@@ -121,6 +135,7 @@ public class JOptionPaneListItensRnfs{
 	    	painelSouth.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
 	    	if(lastNivel){
+	    		painelSouth.add(listaPadrao, BorderLayout.NORTH);
 		    	painelSouth.add(check, BorderLayout.LINE_START);
 		    	painelSouth.add(novoItem, BorderLayout.CENTER);
 		    	painelSouth.add(botaoOk, BorderLayout.LINE_END);

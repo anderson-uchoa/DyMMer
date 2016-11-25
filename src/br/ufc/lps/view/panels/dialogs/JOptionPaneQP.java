@@ -1,4 +1,4 @@
-package br.ufc.lps.view.panels;
+package br.ufc.lps.view.panels.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -79,7 +79,12 @@ public class JOptionPaneQP implements ActionListener{
 						return;
 					}
 					
-					CheckBoxNodeData check = new CheckBoxNodeData(getDate().toString(), false);
+					CheckBoxNodeData check = new CheckBoxNodeData(
+					quantificationPadrao.getPadrao() + " " 
+					+ quantificationPadrao.getValueQuantification1() + " " 
+					+ quantificationPadrao.getQuantification1() 
+					+ (quantificationPadrao.getIsInterval() ? " AND " + quantificationPadrao.getValueQuantification2() + " " + quantificationPadrao.getQuantification2() : ""), false);
+					
 					check.setValueQuantification(getDate());
 					node.add(new br.ufc.lps.view.trees.adaptation.ValorAdaptacao(check));
 					
@@ -132,7 +137,7 @@ public class JOptionPaneQP implements ActionListener{
 			 JComboBox cb = (JComboBox)e.getSource();
 		     if(cb.equals(padrao)){
 		    	 padraoSelecionado = (String)cb.getSelectedItem();
-		    	 if(padraoSelecionado.equals("Não se aplica")){
+		    	 if(cb.getSelectedIndex() == 4){
 		    		 DefaultComboBoxModel model = new DefaultComboBoxModel( quantificadorStringsNA );
 		    		 cbqts1.setModel( model );
 		    		 changeType(false);
@@ -141,7 +146,7 @@ public class JOptionPaneQP implements ActionListener{
 		    		 DefaultComboBoxModel model = new DefaultComboBoxModel( quantificadorStrings );
 		    		 cbqts1.setModel( model );
 		    		 tipo.setEnabled(true);
-		    		 if(tipo.getSelectedItem().equals("Interval")){
+		    		 if(tipo.getSelectedIndex() == 1){
 		    			 changeType(true);
 		    		 }
 		    	 }
@@ -211,15 +216,25 @@ public class JOptionPaneQP implements ActionListener{
 			return panelFinal;
 		}
 		
-		public ValueQuantification getDate(){
+		public ValueQuantificationPadrao getDate(){
+			
+			System.out.println("padrão: "+padraoSelecionado);
+			System.out.println("intervalo: "+interval);
+			System.out.println("Quantification 1: "+ tfs1.getText());
+			System.out.println("Quantification 2: "+ tfs2.getText());
+			System.out.println("Value Quantification 1: "+ cbqts1.getSelectedItem().toString());
+			System.out.println("Value Quantification 2: "+ cbqts2.getSelectedItem().toString());
+			
 			quantificationPadrao.setPadrao(padraoSelecionado);
 			quantificationPadrao.setIsInterval(interval);
 			quantificationPadrao.setQuantification1(tfs1.getText());
 			quantificationPadrao.setValueQuantification1(cbqts1.getSelectedItem().toString());
+			
 			if(interval){
 				quantificationPadrao.setQuantification2(tfs2.getText());
 				quantificationPadrao.setValueQuantification2(cbqts2.getSelectedItem().toString());
 			}
+			
 			return quantificationPadrao;
 		}
 }

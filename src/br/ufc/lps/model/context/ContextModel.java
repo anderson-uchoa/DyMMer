@@ -498,10 +498,12 @@ public class ContextModel implements IContextModel {
 							Element elProp = (Element) prop.item(countProp);
 							
 							String nomeProp = elProp.getAttribute("nome");
+							String nomePadrao = elProp.getAttribute("padrao");
 							
 							PropriedadeNFuncional propriedadeNFuncional = new PropriedadeNFuncional();
 							
 							propriedadeNFuncional.setPropriedade(nomeProp);
+							propriedadeNFuncional.setPadrao(nomePadrao);
 							
 							propriedadeNFuncionais.add(propriedadeNFuncional);
 						}

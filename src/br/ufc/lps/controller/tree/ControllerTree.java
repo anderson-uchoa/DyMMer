@@ -3,12 +3,21 @@ package br.ufc.lps.controller.tree;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 import com.google.gson.Gson;
 
 import br.ufc.lps.controller.json.JsonController;
 import br.ufc.lps.model.MappingItensRnfObjecJson;
+import br.ufc.lps.model.adaptation.ContextoAdaptacao;
+import br.ufc.lps.model.rnf.Caracteristica;
+import br.ufc.lps.model.rnf.PropriedadeNFuncional;
+import br.ufc.lps.model.rnf.Rnf;
+import br.ufc.lps.model.rnf.Subcaracteristica;
+import br.ufc.lps.view.trees.adaptation.Adaptacao;
+import br.ufc.lps.view.trees.adaptation.CheckBoxNodeData;
 
 public class ControllerTree {
 	
@@ -90,6 +99,15 @@ public class ControllerTree {
 			}
 		}
 		return l;
-		
+	}
+
+	public static void expandAllNodes(JTree tree, int startingIndex, int rowCount){
+	    for(int i=startingIndex;i<rowCount;++i){
+	        tree.expandRow(i);
+	    }
+
+	    if(tree.getRowCount()!=rowCount){
+	        expandAllNodes(tree, rowCount, tree.getRowCount());
+	    }
 	}
 }

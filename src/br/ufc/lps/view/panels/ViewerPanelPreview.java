@@ -40,7 +40,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-
+import br.ufc.lps.controller.tree.ControllerTree;
 import br.ufc.lps.controller.xml.ControladorXml;
 import br.ufc.lps.model.adaptation.ContextoAdaptacao;
 import br.ufc.lps.model.context.ContextModel;
@@ -686,7 +686,7 @@ private void adicionarConstraintsDoContexto(Context contexto){
 		treeAdaptation = new JTree(treeModel);
 		treeAdaptation.setModel(treeModel);
 		treeAdaptation.updateUI();
-		expandAllNodes(treeAdaptation, 0, treeAdaptation.getRowCount());
+		ControllerTree.expandAllNodes(treeAdaptation, 0, treeAdaptation.getRowCount());
 	}
 	
 	private void preenchendoArvoreRnf(Rnf rnf){
@@ -715,16 +715,7 @@ private void adicionarConstraintsDoContexto(Context contexto){
 		treeRnf = new JTree(treeModel);
 		treeRnf.setModel(treeModel);
 		treeRnf.updateUI();
-		expandAllNodes(treeRnf, 0, treeRnf.getRowCount());
-	}
-	private void expandAllNodes(JTree tree, int startingIndex, int rowCount){
-	    for(int i=startingIndex;i<rowCount;++i){
-	        tree.expandRow(i);
-	    }
-
-	    if(tree.getRowCount()!=rowCount){
-	        expandAllNodes(tree, rowCount, tree.getRowCount());
-	    }
+		ControllerTree.expandAllNodes(treeRnf, 0, treeRnf.getRowCount());
 	}
 	
 	private void preenchendoContextosRnf(ContextoRnf contextoRnf){

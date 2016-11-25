@@ -1,4 +1,4 @@
-package br.ufc.lps.view.panels;
+package br.ufc.lps.view.panels.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -76,6 +76,9 @@ public class JOptionPaneQB implements ActionListener{
 					}
 					
 					CheckBoxNodeData check = new CheckBoxNodeData(getDate().toString(), false);
+					
+					check.setText(quantificationBool.getPadrao() + (quantificationBool.getIsQuantification() ? " = "+quantificationBool.getValueQuantification() : ""));
+					
 					check.setValueQuantification(getDate());
 					node.add(new br.ufc.lps.view.trees.adaptation.ValorAdaptacao(check));
 				
@@ -186,7 +189,7 @@ public class JOptionPaneQB implements ActionListener{
 			return mos1;
 		}
 		
-		public ValueQuantification getDate(){
+		public ValueQuantificationBool getDate(){
 			quantificationBool.setIsQuantification(seaplica);
 			quantificationBool.setPadrao(padraoSelecionado);
 			

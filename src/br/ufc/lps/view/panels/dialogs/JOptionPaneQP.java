@@ -27,14 +27,14 @@ import br.ufc.lps.view.trees.adaptation.CheckBoxNodeData;
 
 public class JOptionPaneQP implements ActionListener{
 		
-		final String[] padraoStrings = {"Normal", "Baixo",  "Medio", "Alto", "Não se aplica"};
+		final String[] padraoStrings = {"Normal", "Low",  "Medium", "High", "Not applicable"};
 		final String[] tipoStrings = {"Normal", "Interval"};
 		final String[] quantificadorStrings = {">", "<",  "<=",  ">=", "=", "<>"};
 		final String[] quantificadorStringsNA = {"="};
 		
 		private String padraoSelecionado = "Normal";
 		private boolean interval = false;
-		
+
 		private JDialog dialog;
 		
 		private JButton botaoOk;
@@ -51,6 +51,7 @@ public class JOptionPaneQP implements ActionListener{
 	
 		private JTree tree;
 		
+		// TODO ADICIONAR A OPÇÃO DE SER "OR" OR "AND" NA SELEÇÃO
 	 	public void displayGUI(JFrame frame, DefaultMutableTreeNode node, JTree tree) {
 	 		 this.tree = tree;
 	 		 this.node = node;
@@ -97,7 +98,7 @@ public class JOptionPaneQP implements ActionListener{
 	    	
 	    	JPanel forPadrao = new JPanel(new BorderLayout());
 	    	padrao = new JComboBox<>(padraoStrings);
-	    	forPadrao.add(new JLabel("Padrão"), BorderLayout.NORTH);
+	    	forPadrao.add(new JLabel("Pattern"), BorderLayout.NORTH);
 	    	forPadrao.add(padrao, BorderLayout.CENTER);
 	    	padrao.addActionListener(this);
 	    	
@@ -217,13 +218,6 @@ public class JOptionPaneQP implements ActionListener{
 		}
 		
 		public ValueQuantificationPadrao getDate(){
-			
-			System.out.println("padrão: "+padraoSelecionado);
-			System.out.println("intervalo: "+interval);
-			System.out.println("Quantification 1: "+ tfs1.getText());
-			System.out.println("Quantification 2: "+ tfs2.getText());
-			System.out.println("Value Quantification 1: "+ cbqts1.getSelectedItem().toString());
-			System.out.println("Value Quantification 2: "+ cbqts2.getSelectedItem().toString());
 			
 			quantificationPadrao.setPadrao(padraoSelecionado);
 			quantificationPadrao.setIsInterval(interval);

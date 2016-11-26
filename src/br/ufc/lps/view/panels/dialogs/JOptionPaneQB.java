@@ -31,7 +31,7 @@ import br.ufc.lps.view.trees.adaptation.CheckBoxNodeData;
 public class JOptionPaneQB implements ActionListener{
 	
 		private String[] padraoStrings = {"True", "False"};
-		private String[] tipoStrings = {"Não se aplica", " Se aplica"};
+		private String[] tipoStrings = {"Not applicable", "Applicable"};
 		
 		private String padraoSelecionado = "True";
 		private boolean seaplica = false;
@@ -97,7 +97,7 @@ public class JOptionPaneQB implements ActionListener{
 	    	forTipo = new JPanel(new BorderLayout());
 	    	forTipo.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 	    	tipo = new JComboBox<>(tipoStrings);
-	    	forTipo.add(new JLabel("Quantificação"), BorderLayout.NORTH);
+	    	forTipo.add(new JLabel("Quantification"), BorderLayout.NORTH);
 	    	forTipo.add(tipo, BorderLayout.CENTER);
 	    	tipo.addActionListener(this);
 	    	

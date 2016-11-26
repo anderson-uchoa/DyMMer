@@ -211,7 +211,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 			
 			JPanel panelTreeAdaptation = new JPanel(new BorderLayout());
 			panelTreeAdaptation.add(treeAdaptation, BorderLayout.CENTER);
-			JLabel tituloTreeAdaptation = new JLabel("Adaptation Context Feature Model");
+			JLabel tituloTreeAdaptation = new JLabel("Context adaptation scenarios");
 			panelTreeAdaptation.add(tituloTreeAdaptation, BorderLayout.NORTH);
 			JScrollPane scrollPaneAdaptation = new JScrollPane(panelTreeAdaptation, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -303,7 +303,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 		
 		//CONSTRAINT DECLARAÇÔES
 			
-			txtAddTheFeatures = new JTextField("Add the features...");
+			txtAddTheFeatures = new JTextField("Add Constraints ...");
 			txtAddTheFeatures.setEditable(false);
 			txtAddTheFeatures.setColumns(10);
 			
@@ -333,7 +333,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 		
 			//CONSTRAINTS RNFS DECLARAÇÔES
 
-			txtAddConstraintRnf = new JTextField("Add Constraint Rnf...");
+			txtAddConstraintRnf = new JTextField("Add Constraints ...");
 			txtAddConstraintRnf.setEditable(false);
 			txtAddConstraintRnf.setColumns(10);
 			
@@ -361,12 +361,12 @@ public class EditorPanel extends JPanel implements ActionListener {
 					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			
 			JPanel painelTxtConstraints = new JPanel(new BorderLayout());
-			painelTxtConstraints.add(new JLabel("Constraints"), BorderLayout.NORTH);
+			painelTxtConstraints.add(new JLabel("Composition constraints"), BorderLayout.NORTH);
 			painelConstraintButtons.add(scrollPaneListModel);
 			painelTxtConstraints.add(painelConstraintButtons, BorderLayout.CENTER);
 			
 			JPanel painelTxtConstraintsRnf = new JPanel(new BorderLayout());
-			painelTxtConstraintsRnf.add(new JLabel("Constraints NFP"), BorderLayout.NORTH);
+			painelTxtConstraintsRnf.add(new JLabel("Interdependencies constraints"), BorderLayout.NORTH);
 			painelConstraintRnfButtons.add(scrollPaneListModelRnf);
 			painelTxtConstraintsRnf.add(painelConstraintRnfButtons, BorderLayout.CENTER);
 
@@ -593,14 +593,14 @@ public class EditorPanel extends JPanel implements ActionListener {
 				JButton botao = ((JButton)e.getSource());
 				if(!treeRnfAdicionada){
 					if(!getComponent(1).equals(scrollPaneRnf)){
-						botao.setText("Remove RNF");
+						botao.setText("Remove NFP");
 						treeRnfAdicionada = true;
 						add(scrollPaneRnf, 1);
 						updateUI();
 					}
 				}else{
 					if(getComponent(1).equals(scrollPaneRnf)){
-						botao.setText("Add RNF");
+						botao.setText("Add NFP");
 						treeRnfAdicionada = false;
 						remove(1);
 						updateUI();
@@ -927,7 +927,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 	private JPopupMenu getComponentPopupMenuConstraintsListRnf() {
 
 		JPopupMenu menu = new JPopupMenu();
-		JMenuItem removeConstraint = new JMenuItem("Remove Constraint Rnf");
+		JMenuItem removeConstraint = new JMenuItem("Remove Constraint");
 
 		removeConstraint.addActionListener(new ActionListener() {
 
@@ -937,7 +937,6 @@ public class EditorPanel extends JPanel implements ActionListener {
 				String idConstraint = constraintsListRnf.get(selectedConstraintIndex).toString();
 				constraintsListRnf.remove(selectedConstraintIndex);
 				constraintsRnfListModel.update();
-				System.out.println("Rnf Constraint Removed: " + idConstraint);
 			}
 		});
 
@@ -1261,11 +1260,10 @@ public class EditorPanel extends JPanel implements ActionListener {
 			
 		}else if(node.getLevel() == 1){
 			
-			JPopupMenu menu = new JPopupMenu("Value");
 			menu.add(new JLabel("Value Options:"));
 			menu.addSeparator();
 			
-			JMenuItem adicionarPadrao = new JMenuItem("Add quantificação padrão");
+			JMenuItem adicionarPadrao = new JMenuItem("Add standard quantification");
 			
 			menu.add(adicionarPadrao);
 			
@@ -1280,7 +1278,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 				}
 			});
 			
-			JMenuItem adicionarBooleana = new JMenuItem("Add quantificação Booleana");
+			JMenuItem adicionarBooleana = new JMenuItem("Add boolean quantification");
 			
 			menu.add(adicionarBooleana);
 			
@@ -1341,7 +1339,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 		
 		if(node.getLevel() == 0){
 			JPopupMenu menu = new JPopupMenu();
-			menu.add(new JLabel("Options for characteristics of quality:"));
+			menu.add(new JLabel("Options to quality characteristics:"));
 			menu.addSeparator();
 			JMenuItem adicionar = new JMenuItem("Add");
 			
@@ -1360,7 +1358,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 			
 		}else if(node.getLevel() == 1){
 			JPopupMenu menu = new JPopupMenu("Value");
-			menu.add(new JLabel("Options for subcharacteristics of quality:"));
+			menu.add(new JLabel("Options to quality subcharacteristics:"));
 			menu.addSeparator();
 			JMenuItem adicionar = new JMenuItem("Add");
 			
@@ -1375,7 +1373,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 				}
 			});
 			
-			menu.add(new JLabel("Options for characteristics of quality:"));
+			menu.add(new JLabel("Options to quality characteristics:"));
 			menu.addSeparator();
 			JMenuItem remover = new JMenuItem("Remove");
 			
@@ -1405,11 +1403,11 @@ public class EditorPanel extends JPanel implements ActionListener {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					JOptionPaneListItensRnfs lj = new JOptionPaneListItensRnfs();
-					lj.displayGUI(main, node, treeRnf, true, "Add the name of PNF");
+					lj.displayGUI(main, node, treeRnf, true, "Add the name of NFP");
 				}
 			});
 			
-			menu.add(new JLabel("Options for subcharacteristics of quality:"));
+			menu.add(new JLabel("Options to quality subcharacteristics:"));
 			menu.addSeparator();
 			JMenuItem remover = new JMenuItem("Remove");
 			
@@ -1443,10 +1441,10 @@ public class EditorPanel extends JPanel implements ActionListener {
 				}
 			});
 			
-			menu.add(new JLabel("Options of RNF Contrainsts:"));
+			menu.add(new JLabel("Options of NFP Contrainsts:"));
 			menu.addSeparator();
 			
-			JMenuItem addToConstraint = new JMenuItem("Add to Constraint Feature Models");
+			JMenuItem addToConstraint = new JMenuItem("Add to Constraint Quality Feature Models");
 			
 			menu.add(addToConstraint);
 			
@@ -1795,7 +1793,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 					carac.add(sub);
 					
 					for(PropriedadeNFuncional propriedadeNFuncional : subcaracteristica.getPropriedadeNFuncionais()){
-						PNFValue pnf = new PNFValue(propriedadeNFuncional.getPropriedade(), propriedadeNFuncional.getPadrao());
+						PNFValue pnf = new PNFValue(propriedadeNFuncional.getPropriedade()+" "+propriedadeNFuncional.getPadrao(), propriedadeNFuncional.getPadrao());
 						sub.add(pnf);
 					}
 				}

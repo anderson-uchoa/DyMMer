@@ -38,7 +38,7 @@ public class JOptionPaneListItensRnfs{
 		private JList<String> itens;
 		private JButton botaoOk;
 		private JDialog dialog;
-		private final String[] padraoStrings = {"Normal", "Baixo",  "Medio", "Alto"};
+		private final String[] padraoStrings = {"Normal", "Low",  "Medium", "High"};
 		private String padraoSelecionado = "Normal";
 		private JCheckBox check;
 		private JComboBox<String> listaPadrao;

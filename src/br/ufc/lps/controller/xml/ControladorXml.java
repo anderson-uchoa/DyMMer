@@ -53,7 +53,7 @@ public class ControladorXml{
 			      .url(Connection.URL)
 			      .build();
 		
-		String resultado = repositorioXml.getStringBody(request);
+		String resultado = repositorioXml.requestString(request);
 		
 		if(resultado==null)
 			return null;
@@ -74,7 +74,7 @@ public class ControladorXml{
 		    .post(requestBody)
 		    .build();
 		
-		return repositorioXml.code200(request);
+		return repositorioXml.requestBoolean(request);
 	}
 	
 	public boolean delete(SchemeXml xml){
@@ -88,7 +88,7 @@ public class ControladorXml{
 		    .delete(requestBody)
 		    .build();
 		
-		return repositorioXml.code200(request);
+		return repositorioXml.requestBoolean(request);
 	}
 	
 	private String schemeXmlToJson(SchemeXml schemeXml){

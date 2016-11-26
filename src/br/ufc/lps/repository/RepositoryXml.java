@@ -13,10 +13,9 @@ private OkHttpClient http;
 		this.http = okHttpClient;
 	}
 	
-	public String getStringBody(Request request){
+	public String requestString(Request request){
 		try {
 			Response response = http.newCall(request).execute();
-			System.out.println(response.code());
 			String bodyString = response.body().string();
 			response.close();
 			return bodyString;
@@ -26,13 +25,11 @@ private OkHttpClient http;
 		}
 	}
 	
-	public boolean code200(Request request){
+	public boolean requestBoolean(Request request){
 		try {
 			Response response = http.newCall(request).execute();
-			System.out.println(response.code());
 			response.close();
-			boolean status = response.code()==200;
-			return status;
+			return response.code()==200;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;

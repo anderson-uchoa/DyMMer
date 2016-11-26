@@ -101,9 +101,11 @@ public class XMLFeatureModel extends FeatureModel {
 				// parse constraints
 				list = rootEle.getElementsByTagName("constraints");
 				Element constraintsEle = (Element)list.item(0);
-				String constraintsText = constraintsEle.getTextContent();
-				parseConstraints(constraintsText);	
 				
+				if(constraintsEle!=null){
+					String constraintsText = constraintsEle.getTextContent();
+					parseConstraints(constraintsText);	
+				}
 								
 			}
 			catch(FeatureModelException e) {
@@ -134,6 +136,7 @@ public class XMLFeatureModel extends FeatureModel {
 		}
 	}
 	
+	//MODIFICADO PARA NÃO VERIFICAR NA ÁRVORE SE EXISTE ALGUMA COISA RELACIOANDA
 	protected void parseConstraints(String constraints) throws FeatureModelException {
 		
 		CNFClauseParser cnfClauseParser = new CNFClauseParser();
@@ -151,7 +154,7 @@ public class XMLFeatureModel extends FeatureModel {
 						CNFClause cnfClause = cnfClauseParser.parse(constraintFormula);
 						for( BooleanVariableInterface var : cnfClause.getVariables() ) {
 							if ( getNodeByID(var.getID()) == null ) {
-								throw new FeatureModelException("Error parsing extra constraint labelled '" + constraintName + "' (variable id '" + var.getID() + "' used in the formula is not defined in the feature tree).");
+								//throw new FeatureModelException("Error parsing extra constraint labelled '" + constraintName + "' (variable id '" + var.getID() + "' used in the formula is not defined in the feature tree).");
 							}
 						}
 						addConstraint(new PropositionalFormula(constraintName, cnfClause.toString2()));

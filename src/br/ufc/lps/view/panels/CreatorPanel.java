@@ -278,9 +278,12 @@ public class CreatorPanel extends JPanel implements ActionListener {
 			
 			Node newTree = doc.createElement("feature_tree");
 			
+			Node constraints = doc.createElement("constraints");
+			
 			newTree.appendChild(doc.createTextNode(controllerFeatures.getArvoreDesenhada()));
 			
 			rootEle.appendChild(newTree);
+			rootEle.appendChild(constraints);
 			
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");

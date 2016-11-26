@@ -640,8 +640,6 @@ public class EditorPanel extends JPanel implements ActionListener {
 							tree = rootEle.getChildNodes().item(i);
 							if(tree.getNodeName().equals("feature_tree"))
 								rootEle.removeChild(tree);
-							if(tree.getNodeName().equals("constraints"))
-								rootEle.removeChild(tree);
 							if(tree.getNodeName().equals("arvore_adaptacao"))
 								rootEle.removeChild(tree);
 							if(tree.getNodeName().equals("arvore_rnf"))
@@ -1681,8 +1679,6 @@ public class EditorPanel extends JPanel implements ActionListener {
 			for(int i=0; i < rootEle.getChildNodes().getLength(); i++){
 				tree = rootEle.getChildNodes().item(i);
 				if(tree.getNodeName().equals("feature_tree"))
-					rootEle.removeChild(tree);
-				if(tree.getNodeName().equals("constraints"))
 					rootEle.removeChild(tree);
 				if(tree.getNodeName().equals("arvore_adaptacao"))
 					rootEle.removeChild(tree);

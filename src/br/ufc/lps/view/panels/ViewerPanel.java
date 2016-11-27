@@ -748,7 +748,7 @@ private void adicionarConstraintsDoContexto(Context contexto){
 		treeRnf.setModel(treeModel);
 		treeRnf.updateUI();
 		expandAllNodes(treeRnf, 0, treeRnf.getRowCount());
-	}
+	}	
 	private void expandAllNodes(JTree tree, int startingIndex, int rowCount){
 	    for(int i=startingIndex;i<rowCount;++i){
 	        tree.expandRow(i);

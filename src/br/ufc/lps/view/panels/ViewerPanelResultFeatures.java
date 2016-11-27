@@ -5,11 +5,14 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -17,9 +20,26 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
 import br.ufc.lps.controller.xml.ControladorXml;
 import br.ufc.lps.repository.SchemeXml;
+import br.ufc.lps.splar.core.fm.FeatureTreeNode;
 import br.ufc.lps.view.Main;
 
 public class ViewerPanelResultFeatures extends JPanel {
@@ -36,6 +56,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 	private JButton delete;
 	private JButton refresh;
 	private JButton medidas;
+	private JButton download;
 	private JLabel labelMensagens;
 	private JLabel loader;
 	
@@ -71,7 +92,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 		//BOTAO ABRIR
 		JPanel painelBotaoOpen = new JPanel();
 		painelOpcoes.add(painelBotaoOpen, BorderLayout.NORTH);
-		painelBotaoOpen.setLayout(new GridLayout(7, 0, 0, 0));
+		painelBotaoOpen.setLayout(new GridLayout(8, 0, 0, 0));
 		
 		open = new JButton("Open");
 		
@@ -94,7 +115,11 @@ public class ViewerPanelResultFeatures extends JPanel {
 		painelBotaoOpen.add(medidas);
 		
 		refresh = new JButton("Refresh");
+
+		download = new JButton("Download");
 		
+		painelBotaoOpen.add(download);
+
 		painelBotaoOpen.add(refresh);
 		
 		painelBotaoOpen.add(loader);
@@ -114,7 +139,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				int selecao = tabela.getSelectedRow();
 				if(selecao > -1){
-					int resp = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir esse modelo?");
+					int resp = JOptionPane.showConfirmDialog(null, "Are you sure that you want to delete this model?");
 					if(resp == JOptionPane.YES_OPTION){
 						SchemeXml selecionado = listaItens.get(selecao);
 						if(controladorXml.delete(selecionado)){
@@ -144,10 +169,50 @@ public class ViewerPanelResultFeatures extends JPanel {
 								main.abrirArquivosDoRepositorio(selecionado);
 							}
 						}else
-							JOptionPane.showMessageDialog(null, "Selecione uma faixa adequada de modelos na tabela (até 40 por vez)");
+							JOptionPane.showMessageDialog(null, "Select an appropriate range of models in the table (Up to 40 at a time)");
 					}
 				}).start();
 			
+			}
+		});
+		
+		download.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int selecao = tabela.getSelectedRow();
+				if(selecao > -1){
+					SchemeXml selecionado = listaItens.get(selecao);
+					File file = ControladorXml.createFileFromXml(selecionado.getXml());
+					
+						JFileChooser chooser = new JFileChooser(); 
+					   	chooser.setCurrentDirectory(new java.io.File("."));
+					    chooser.setDialogTitle("Select the path");
+					    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+					    
+					    chooser.setAcceptAllFileFilterUsed(false);
+					    
+					    if (chooser.showOpenDialog(ViewerPanelResultFeatures.this) == JFileChooser.APPROVE_OPTION) { 
+					      System.out.println("getCurrentDirectory(): " 
+					         +  chooser.getCurrentDirectory());
+					      System.out.println("getSelectedFile() : " 
+					         +  chooser.getSelectedFile());
+					      
+					    
+					    	String nomeArquivo = JOptionPane.showInputDialog("Type the name of File", selecionado.getNameXml());
+					    
+					    	File file2 = new File(chooser.getSelectedFile()+"/"+nomeArquivo+".xml");
+					    	
+
+							saveInLocalFile( file.getAbsolutePath(), file2);
+					    
+						}else {
+					      System.out.println("No Selection ");
+					    }
+					
+					
+				}else
+					mensagemSelecionarLinha();
 			}
 		});
 		
@@ -210,7 +275,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 								main.editarArquivosDoRepositorio(selecionado);
 							}
 						}else
-							JOptionPane.showMessageDialog(null, "Selecione uma faixa adequada de modelos na tabela (até 40 por vez)");
+							JOptionPane.showMessageDialog(null, "Select an appropriate range of models in the table (Up to 40 at a time)");
 					}
 				}).start();
 			}
@@ -256,8 +321,8 @@ public class ViewerPanelResultFeatures extends JPanel {
 			}
 			tabela.getColumnModel().getColumn(0).setMaxWidth(getWidthByNumber(count));
 		}else{
-			labelMensagens.setText("Ocorreu algum problema na conexão");
-			JOptionPane.showMessageDialog(null, "Ocorreu algum problema na conexão");
+			labelMensagens.setText("There was a problem connecting");
+			JOptionPane.showMessageDialog(null, "There was a problem connecting");
 		}
 		isShowLoader(false);
 	}
@@ -276,6 +341,19 @@ public class ViewerPanelResultFeatures extends JPanel {
 		return null;
 	}
 	
+	public List<SchemeXml> getAllSelectedItensPriorityList(){
+		
+		int [] selecao = tabela.getSelectedRows();
+		
+		if(selecao.length >= 2){
+			List<SchemeXml> list = new ArrayList<>();
+			for(int i=0; i < selecao.length; i++)
+				list.add(listaItens.get(selecao[i]));
+			return list;
+		}
+		return null;
+	}
+	
 	public List<SchemeXml> getAllItensList(){
 		return listaItens;
 	}
@@ -291,6 +369,47 @@ public class ViewerPanelResultFeatures extends JPanel {
 	}
 	
 	private void mensagemSelecionarLinha(){
-		JOptionPane.showMessageDialog(null, "Selecione um modelo na tabela");
+		JOptionPane.showMessageDialog(null, "Select a model in the table");
 	}
+	
+	private void saveInLocalFile(String path, File file){
+		
+    	DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+		try {
+			
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			Document doc = db.parse(path);
+			
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			DOMSource source = new DOMSource(doc);
+			
+			StreamResult console = new StreamResult(new FileOutputStream(file));
+			transformer.transform(source, console);
+
+			JOptionPane.showMessageDialog(ViewerPanelResultFeatures.this,
+					"Save Successfuly");
+
+		} catch (SAXException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (ParserConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (TransformerConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (TransformerFactoryConfigurationError e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (TransformerException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+
 }

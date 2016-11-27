@@ -103,6 +103,8 @@ public class ViewerPanel extends JPanel {
     private JPanel panelTree;
     private Map<String, ContextoRnf> contextoRnf;
     private boolean primeira = true;
+    private boolean rnfVazio = false;
+    private boolean adaptationVazio = false;
     private DefaultTreeModel treeModel;
     List<br.ufc.lps.model.adaptation.Adaptacao> adaptacoesDisponiveis;
 	
@@ -140,6 +142,7 @@ public class ViewerPanel extends JPanel {
 		//LISTA DE POSSIBILIDADES DE ADAPTAÇÔES
 		adaptacoesDisponiveis = new ArrayList<>();
 		for (String key: model.getAdaptacoes().keySet()) {
+			
 		    System.out.println("key : " + key);
 		    adaptacoesDisponiveis.add(model.getAdaptacoes().get(key));
 		}
@@ -199,18 +202,26 @@ public class ViewerPanel extends JPanel {
 		painelTreeFeatures.add(tree, BorderLayout.CENTER);
 		
 		JPanel painelTreeFeaturesRnf = new JPanel(new BorderLayout());
-		painelTreeFeaturesRnf.add(new JLabel("Quality Feature Model"), BorderLayout.NORTH);
-		painelTreeFeaturesRnf.add(treeRnf, BorderLayout.CENTER);
+		if(!rnfVazio){
+			painelTreeFeaturesRnf.add(new JLabel("Quality Feature Model"), BorderLayout.NORTH);
+			painelTreeFeaturesRnf.add(treeRnf, BorderLayout.CENTER);
+		}
 		
 		JPanel painelTreeFeaturesAdap = new JPanel(new BorderLayout());
-		painelTreeFeaturesAdap.add(new JLabel("Adaptaion Context Feature"), BorderLayout.NORTH);
-		painelTreeFeaturesAdap.add(treeAdaptation, BorderLayout.CENTER);
-		
+		if(!adaptationVazio){
+			painelTreeFeaturesAdap.add(new JLabel("Adaptaion Context Feature"), BorderLayout.NORTH);
+			painelTreeFeaturesAdap.add(treeAdaptation, BorderLayout.CENTER);
+		}
 		//Painel para a arvore;
 		panelTree = new JPanel();
 		panelTree.setLayout(new GridLayout(1, 0, 2, 2));
+		
 		panelTree.add(painelTreeFeatures);
+		
+		if(!rnfVazio)
 		panelTree.add(painelTreeFeaturesRnf);
+		
+		if(!adaptationVazio)
 		panelTree.add(painelTreeFeaturesAdap);
 
 		scrollPane = new JScrollPane(panelTree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -466,7 +477,7 @@ public class ViewerPanel extends JPanel {
 		}
 		
 		String nome = verificandoArvore((DefaultMutableTreeNode)treeModel.getRoot());
-		
+		System.out.println("MUDANDO ÁRVORE: contexto:"+nome);
 		if(nome!=null)
 			setTreeVisualization(nome);
 	}
@@ -508,7 +519,7 @@ public class ViewerPanel extends JPanel {
 		return modelName;
 	}
  
-	private void setTreeVisualization(final String contextName) {
+	private void setTreeVisualization(String contextName) {
 		
 		if(model.getContexts().isEmpty()){
 			JOptionPane.showMessageDialog(ViewerPanel.this, "It's not supported, because it does not have any context. Please, first edit it and add one context.");
@@ -517,8 +528,9 @@ public class ViewerPanel extends JPanel {
 		}	
 		
 		if(!model.getContexts().containsKey(contextName)){
+			System.out.println("não contain");
+			contextName = "default";
 			constraintsPanelRnf.setText("");
-			return;
 		}
 		
 		Context context = model.getContexts().get(contextName);
@@ -692,6 +704,10 @@ private void adicionarConstraintsDoContexto(Context contexto){
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Context adaptations");
 		
 		if(adaptacao!=null && adaptacao.getValorAdaptacao()!=null){
+			
+			if(adaptacao.getValorAdaptacao().size() == 0)
+					adaptationVazio = true;
+
 			for(ContextoAdaptacao contextoAdaptacao : adaptacao.getValorAdaptacao()){
 				Adaptacao contexto = new Adaptacao(contextoAdaptacao.getNome());
 				
@@ -726,6 +742,9 @@ private void adicionarConstraintsDoContexto(Context contexto){
 		
 		if(rnf!=null && rnf.getCaracteristicas()!=null){
 			
+			if(rnf.getCaracteristicas().size() == 0)
+					rnfVazio = true;
+			
 			for(Caracteristica caracteristica : rnf.getCaracteristicas()){
 				DefaultMutableTreeNode carac = new DefaultMutableTreeNode(caracteristica.getNome());
 				
@@ -743,6 +762,7 @@ private void adicionarConstraintsDoContexto(Context contexto){
 			}
 			
 		}
+		
 		treeModel = new DefaultTreeModel(root);
 		treeRnf = new JTree(treeModel);
 		treeRnf.setModel(treeModel);

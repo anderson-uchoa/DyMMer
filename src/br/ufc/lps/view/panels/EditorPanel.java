@@ -21,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -149,8 +150,6 @@ public class EditorPanel extends JPanel implements ActionListener {
 	private ControllerFeatures controllerFeatures;
 	private SplotContextModel splotContextModel;
 	private DefaultTreeModel treeModel;
-	private JPopupMenu menu;
-	
 	
 	public EditorPanel(IModel model, int modelID, String pathModelFile, SchemeXml schemeXml, Main main) {
 		setLayout(new GridLayout(1, 0));
@@ -162,8 +161,6 @@ public class EditorPanel extends JPanel implements ActionListener {
 		
 		splotContextModel = new SplotContextModel(pathModelFile);
 		
-		menu = new JPopupMenu();
-
 		constraintNumber = 0;
 
 		this.modelID = modelID;
@@ -622,6 +619,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 						String nomeContexto = verificandoArvore(rootArvoreAdaptacao);
 						
+						System.out.println("verificação: "+nomeContexto);
+						
 						if(nomeContexto==null){
 							JOptionPane.showMessageDialog(null, "Check someone item in Tree Adaptation");
 							return;
@@ -875,7 +874,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 							System.out.println("NOT NULL");
 
 							selectedNode = (FeatureTreeNode) pathForLocation.getLastPathComponent();
-
+							JPopupMenu menu = new JPopupMenu();
 							menu = MenuFactory.getIntance(EditorPanel.this, selectedNode)
 									.verificarMenuDeSelecao(selectedNode.getTypeFeature());
 
@@ -1233,9 +1232,9 @@ public class EditorPanel extends JPanel implements ActionListener {
 	}
 	
 	private void mouseClickArvoreAdaptacao(MouseEvent e){
+		JPopupMenu menu = new JPopupMenu();
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)treeAdaptation.getLastSelectedPathComponent();
 		if(node.getLevel() == 0){
-			JPopupMenu menu = new JPopupMenu();
 			menu.add(new JLabel("Adaptation Options:"));
 			menu.addSeparator();
 			JMenuItem adicionar = new JMenuItem("Add");
@@ -1309,7 +1308,6 @@ public class EditorPanel extends JPanel implements ActionListener {
 			menu.show(treeAdaptation, e.getX(), e.getY());
 			
 		}else{
-			JPopupMenu menu = new JPopupMenu("Adaptation");
 			menu.add(new JLabel("Value Options:"));
 			menu.addSeparator();
 			JMenuItem adicionar = new JMenuItem("Remove");

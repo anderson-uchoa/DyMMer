@@ -68,6 +68,9 @@ public class WriteXMLmodel {
 		for (int i = 0; i < contexto.getChildCount(); i++) {
 			DefaultMutableTreeNode filho = (DefaultMutableTreeNode) contexto.getChildAt(i);
 			CheckBoxNodeData dado = (CheckBoxNodeData) filho.getUserObject();
+			System.out.println("VAlor do check: "+dado.getValueQuantification());
+			System.out.println("Valor check: "+dado.isChecked());
+			System.out.println("nome do check: " + dado.getText());
 			context.appendChild(getAdaptacaoContextoValor(doc, dado.getText(), dado));
 		}
 		return context;
@@ -78,8 +81,10 @@ public class WriteXMLmodel {
 		node.setAttribute("nome", name);
 		node.setAttribute("status", check.isChecked() ? "true" : "false");
 		
-		if(check.getValueQuantification()==null)
+		if(check.getValueQuantification()==null){
+			System.out.println("check -> get Value in Quantification is NULL");
 			return node;
+		}
 		
 			System.out.println(check.getValueQuantification().toString());
 		

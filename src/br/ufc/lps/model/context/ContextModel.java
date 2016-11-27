@@ -256,7 +256,7 @@ public class ContextModel implements IContextModel {
 							valueQuantificationBool.setPadrao(elValor.getAttribute("padrao"));
 							valueQuantificationBool.setValueQuantification(elValor.getAttribute("value_quantification"));
 							valueQuantification = valueQuantificationBool;
-						}else{
+						}else if(nomeType.equals("padrao")){
 							ValueQuantificationPadrao valueQuantificationPadrao = new ValueQuantificationPadrao();
 							valueQuantificationPadrao.setPadrao(elValor.getAttribute("padrao"));
 							valueQuantificationPadrao.setValueQuantification1(elValor.getAttribute("value_quantification_1"));
@@ -264,6 +264,7 @@ public class ContextModel implements IContextModel {
 							valueQuantificationPadrao.setQuantification1(elValor.getAttribute("quantification_1"));
 							valueQuantificationPadrao.setQuantification2(elValor.getAttribute("quantification_2"));
 							valueQuantificationPadrao.setIsInterval(elValor.getAttribute("is_interval").equals("true") ? true : false);
+							valueQuantification = valueQuantificationPadrao;
 						}
 		
 						Boolean statusValor = false;

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- This model was created online using SPLOT's Feature Model Editor (http://www.splot-research.org) on Wed, May 6, 2015 - 11:21 PM  --><feature_model name="ADS">
+<meta>
+<data name="description">LPS para Assistência Domiciliar `a Saude .</data>
+<data name="creator">Gabriel Goulart</data>
+<data name="address"/>
+<data name="email">gabrielgoulart@great.ufc.br</data>
+<data name="phone"/>
+<data name="website"/>
+<data name="organization">GREAT_UFC</data>
+<data name="department"/>
+<data name="date"/>
+<data name="reference"/>
+</meta>
+
+<constraints>
+</constraints>
+<context name="Default">
+<resolution feature="Modulo de decisao" id="_r_1" status="true"/>
+<resolution feature="Dados coletados" id="_r_1_2" status="true"/>
+<resolution feature="Regras Medicas" id="_r_1_3" status="true"/>
+<resolution feature="Insuficiencia Cardiaca" id="_r_1_3_6" status="false"/>
+<resolution feature="Hipertensao" id="_r_1_3_7" status="false"/>
+<resolution feature="Perfil do Paciente" id="_r_1_4" status="true"/>
+<resolution feature="Alarme para Central" id="_r_8" status="true"/>
+<resolution feature="Sensores" id="_r_9" status="true"/>
+<resolution feature="Acelerometro" id="_r_9_10" status="false"/>
+<resolution feature="Botao do panico" id="_r_9_11" status="true"/>
+<resolution feature="Sensores Fisiologicos" id="_r_9_12" status="true"/>
+<resolution feature="Pessao Arterial" id="_r_9_12_17" status="true"/>
+<resolution feature="Frequencia Cardiaca" id="_r_9_12_18" status="false"/>
+<resolution feature="Balanca" id="_r_9_12_19" status="true"/>
+<resolution feature="Sensores Ambientes" id="_r_9_20" status="true"/>
+<resolution feature="Temperatura" id="_r_9_20_21" status="true"/>
+<resolution feature="Umidade" id="_r_9_20_22" status="false"/>
+<resolution feature="Plano de cuidados" id="_r_23" status="true"/>
+<resolution feature="Layout da casa" id="_r_24" status="true"/>
+<resolution feature="Servicos de contextos" id="_r_25" status="true"/>
+<resolution feature="Servico de Localizacao" id="_r_25_26" status="false"/>
+<resolution feature="Monitoramento" id="_r_25_27" status="true"/>
+<resolution feature="Descoberta de Recursos" id="_r_25_29" status="true"/>
+<resolution feature="Notificacao ao paciente" id="_r_30" status="true"/>
+<resolution feature="Dispositivos" id="_r_31" status="true"/>
+<resolution feature="Tv" id="_r_31_32" status="false"/>
+<resolution feature="Monitor da CSR" id="_r_31_34" status="true"/>
+<resolution feature="Celular" id="_r_31_35" status="true"/>
+<resolution feature="Comunicacao" id="_r_37" status="true"/>
+<resolution feature="Internet" id="_r_37_38" status="true"/>
+<resolution feature="Linha Fixa" id="_r_37_39" status="false"/>
+<resolution feature="Linha Celular" id="_r_37_40" status="true"/>
+<constraints/>
+</context>
+
+<context name="Idoso_supervisionado">
+<resolution feature="Modulo de decisao" id="_r_1" status="true"/>
+<resolution feature="Dados coletados" id="_r_1_2" status="true"/>
+<resolution feature="Regras Medicas" id="_r_1_3" status="true"/>
+<resolution feature="Insuficiencia Cardiaca" id="_r_1_3_6" status="true"/>
+<resolution feature="Hipertensao" id="_r_1_3_7" status="true"/>
+<resolution feature="Perfil do Paciente" id="_r_1_4" status="true"/>
+<resolution feature="Alarme para Central" id="_r_8" status="true"/>
+<resolution feature="Sensores" id="_r_9" status="true"/>
+<resolution feature="Acelerometro" id="_r_9_10" status="false"/>
+<resolution feature="Botao do panico" id="_r_9_11" status="true"/>
+<resolution feature="Sensores Fisiologicos" id="_r_9_12" status="true"/>
+<resolution feature="Pessao Arterial" id="_r_9_12_17" status="true"/>
+<resolution feature="Frequencia Cardiaca" id="_r_9_12_18" status="true"/>
+<resolution feature="Balanca" id="_r_9_12_19" status="true"/>
+<resolution feature="Sensores Ambientes" id="_r_9_20" status="true"/>
+<resolution feature="Temperatura" id="_r_9_20_21" status="true"/>
+<resolution feature="Umidade" id="_r_9_20_22" status="true"/>
+<resolution feature="Plano de cuidados" id="_r_23" status="true"/>
+<resolution feature="Layout da casa" id="_r_24" status="true"/>
+<resolution feature="Servicos de contextos" id="_r_25" status="true"/>
+<resolution feature="Servico de Localizacao" id="_r_25_26" status="false"/>
+<resolution feature="Monitoramento" id="_r_25_27" status="true"/>
+<resolution feature="Descoberta de Recursos" id="_r_25_29" status="true"/>
+<resolution feature="Notificacao ao paciente" id="_r_30" status="true"/>
+<resolution feature="Dispositivos" id="_r_31" status="true"/>
+<resolution feature="Tv" id="_r_31_32" status="true"/>
+<resolution feature="Monitor da CSR" id="_r_31_34" status="true"/>
+<resolution feature="Celular" id="_r_31_35" status="true"/>
+<resolution feature="Comunicacao" id="_r_37" status="true"/>
+<resolution feature="Internet" id="_r_37_38" status="true"/>
+<resolution feature="Linha Fixa" id="_r_37_39" status="true"/>
+<resolution feature="Linha Celular" id="_r_37_40" status="true"/>
+<constraints/>
+</context>
+
+
+
+
+
+<context name="teste1Normal&gt;asd">
+<constraints/>
+</context>
+
+
+
+
+
+
+
+
+
+
+<adaptacao nome="teste1Normal&gt;asd">
+<contexto nome="teste 1">
+<valor nome="Normal &gt; asd" status="true"/>
+</contexto>
+</adaptacao>
+<context name="teste1Normal&gt;asd">
+<resolution feature="Dados coletados" id="_r_1_2" status="true"/>
+<resolution feature="Sensores Fisiologicos" id="_r_9_12" status="false"/>
+<constraints/>
+</context>
+<contexto_rnf nome="teste1Normal&gt;asd"/>
+<feature_tree>
+:r ADS(_r)
+	:m Modulo de decisao(_r_1)
+		:m Dados coletados(_r_1_2)
+		:m Regras Medicas(_r_1_3)
+			:o Insuficiencia Cardiaca(_r_1_3_6)
+			:o Hipertensao(_r_1_3_7)
+		:o Perfil do Paciente(_r_1_4)
+	:m Alarme para Central(_r_8)
+	:m Sensores(_r_9)
+		:o Acelerometro(_r_9_10)
+		:o Botao do panico(_r_9_11)
+		:m Sensores Fisiologicos(_r_9_12)
+			:o Pessao Arterial(_r_9_12_17)
+			:o Frequencia Cardiaca(_r_9_12_18)
+			:o Balanca(_r_9_12_19)
+		:m Sensores Ambientes(_r_9_20)
+			:o Temperatura(_r_9_20_21)
+			:o Umidade(_r_9_20_22)
+	:m Plano de cuidados(_r_23)
+	:m Layout da casa(_r_24)
+	:m Servicos de contextos(_r_25)
+		:o Servico de Localizacao(_r_25_26)
+		:m Monitoramento(_r_25_27)
+		:m Descoberta de Recursos(_r_25_29)
+	:m Notificacao ao paciente(_r_30)
+	:m Dispositivos(_r_31)
+		:o Tv(_r_31_32)
+		:o Monitor da CSR(_r_31_34)
+		:o Celular(_r_31_35)
+	:m Comunicacao(_r_37)
+		:o Internet(_r_37_38)
+		:o Linha Fixa(_r_37_39)
+		:o Linha Celular(_r_37_40)
+</feature_tree>
+<arvore_rnf/>
+<arvore_adaptacao>
+<contexto nome="teste 1">
+<valor nome="Normal &gt; asd" status="true"/>
+</contexto>
+</arvore_adaptacao>
+</feature_model>

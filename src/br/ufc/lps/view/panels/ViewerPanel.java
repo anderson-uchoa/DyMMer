@@ -141,10 +141,11 @@ public class ViewerPanel extends JPanel {
 		
 		//LISTA DE POSSIBILIDADES DE ADAPTAÇÔES
 		adaptacoesDisponiveis = new ArrayList<>();
-		for (String key: model.getAdaptacoes().keySet()) {
-			
-		    System.out.println("key : " + key);
-		    adaptacoesDisponiveis.add(model.getAdaptacoes().get(key));
+		for ( Map.Entry<String, br.ufc.lps.model.adaptation.Adaptacao> entry : model.getAdaptacoes().entrySet()) {
+		    String key = entry.getKey();
+		    System.out.println(key);
+		    br.ufc.lps.model.adaptation.Adaptacao value = entry.getValue();
+		    adaptacoesDisponiveis.add(value);
 		}
 
 		listModelAdaptations = new ConstraintsListModelAdaptations(adaptacoesDisponiveis);

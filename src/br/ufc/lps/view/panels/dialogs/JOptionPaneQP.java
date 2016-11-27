@@ -24,6 +24,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import br.ufc.lps.model.adaptation.ValueQuantification;
 import br.ufc.lps.model.adaptation.ValueQuantificationPadrao;
 import br.ufc.lps.view.trees.adaptation.CheckBoxNodeData;
+import br.ufc.lps.view.trees.adaptation.ValorAdaptacao;
 
 public class JOptionPaneQP implements ActionListener{
 		
@@ -87,7 +88,10 @@ public class JOptionPaneQP implements ActionListener{
 					+ (quantificationPadrao.getIsInterval() ? " AND " + quantificationPadrao.getValueQuantification2() + " " + quantificationPadrao.getQuantification2() : ""), false);
 					
 					check.setValueQuantification(getDate());
-					node.add(new br.ufc.lps.view.trees.adaptation.ValorAdaptacao(check));
+					
+					ValorAdaptacao a = new br.ufc.lps.view.trees.adaptation.ValorAdaptacao(check);
+
+					node.add(a);
 					
 					tree.updateUI();
 					
@@ -98,13 +102,13 @@ public class JOptionPaneQP implements ActionListener{
 	    	
 	    	JPanel forPadrao = new JPanel(new BorderLayout());
 	    	padrao = new JComboBox<>(padraoStrings);
-	    	forPadrao.add(new JLabel("Pattern"), BorderLayout.NORTH);
+	    	forPadrao.add(new JLabel("Type Quantification"), BorderLayout.NORTH);
 	    	forPadrao.add(padrao, BorderLayout.CENTER);
 	    	padrao.addActionListener(this);
 	    	
 	    	JPanel forTipo = new JPanel(new BorderLayout());
 	    	tipo = new JComboBox<>(tipoStrings);
-	    	forTipo.add(new JLabel("Type Quantification"), BorderLayout.NORTH);
+	    	forTipo.add(new JLabel("Pattern"), BorderLayout.NORTH);
 	    	forTipo.add(tipo, BorderLayout.CENTER);
 	    	tipo.addActionListener(this);
 	    	

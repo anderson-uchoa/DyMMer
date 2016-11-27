@@ -643,6 +643,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 								rootEle.removeChild(tree);
 							if(tree.getNodeName().equals("arvore_rnf"))
 								rootEle.removeChild(tree);
+							if(tree.getNodeName().equals("context"))
+								rootEle.removeChild(tree);
 							if(tree.getNodeName().equals("adaptacao"))
 								rootEle.removeChild(tree);
 							if(tree.getNodeName().equals("contexto_rnf")){

@@ -46,6 +46,7 @@ public class JOptionPaneListItensRnfs{
 		private DefaultMutableTreeNode node;
 		private String textoSelecionado;
 		private JTree tree;
+		private boolean lastNivel;
 		
 		private int nivel;
 		
@@ -55,6 +56,7 @@ public class JOptionPaneListItensRnfs{
 
 	 		 this.tree = tree;
 	 		 this.node = node;
+	 		 this.lastNivel = lastNivel;
 	 		 this.nivel = node.getLevel();
 	 		 this.listaPadrao = new JComboBox<>(padraoStrings);
 	 		 
@@ -114,11 +116,11 @@ public class JOptionPaneListItensRnfs{
 						if(check.isSelected()){
 							if(!verifyTextChecked())
 								return;
-							node.add(new PNFValue(novoItem.getText().trim(), padraoSelecionado));
+							node.add(new PNFValue(novoItem.getText().trim() + " " + padraoSelecionado, padraoSelecionado));
 						}else{
 							if(!verifyTextSelected())
 								return;
-							node.add(new PNFValue(textoSelecionado, padraoSelecionado));
+							node.add(new PNFValue(textoSelecionado + " " + padraoSelecionado, padraoSelecionado));
 						}
 					}
 					dialog.dispose();

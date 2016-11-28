@@ -68,9 +68,6 @@ public class WriteXMLmodel {
 		for (int i = 0; i < contexto.getChildCount(); i++) {
 			DefaultMutableTreeNode filho = (DefaultMutableTreeNode) contexto.getChildAt(i);
 			CheckBoxNodeData dado = (CheckBoxNodeData) filho.getUserObject();
-			System.out.println("VAlor do check: "+dado.getValueQuantification());
-			System.out.println("Valor check: "+dado.isChecked());
-			System.out.println("nome do check: " + dado.getText());
 			context.appendChild(getAdaptacaoContextoValor(doc, dado.getText(), dado));
 		}
 		return context;
@@ -85,9 +82,7 @@ public class WriteXMLmodel {
 			System.out.println("check -> get Value in Quantification is NULL");
 			return node;
 		}
-		
-			System.out.println(check.getValueQuantification().toString());
-		
+
 		if(check.getValueQuantification() instanceof ValueQuantificationBool){
 			ValueQuantificationBool vb = (ValueQuantificationBool) check.getValueQuantification();
 			node.setAttribute("type", "bool");
@@ -95,7 +90,7 @@ public class WriteXMLmodel {
 			node.setAttribute("is_quantification", vb.getIsQuantification() ? "true" : "false");
 			if(vb.getIsQuantification())
 				node.setAttribute("value_quantification", vb.getValueQuantification());
-		}else{
+		}else if(check.getValueQuantification() instanceof ValueQuantificationPadrao){
 			ValueQuantificationPadrao vp = (ValueQuantificationPadrao) check.getValueQuantification();
 			node.setAttribute("type", "padrao");
 			node.setAttribute("padrao", vp.getPadrao());

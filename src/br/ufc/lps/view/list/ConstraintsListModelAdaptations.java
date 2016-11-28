@@ -21,13 +21,14 @@ public class ConstraintsListModelAdaptations extends AbstractListModel<String>{
 		
 		String mostragem = "";
 		for(ContextoAdaptacao valor: adaptations.get(position).getValorAdaptacao()){
-			mostragem = mostragem+valor.getNome()+"\n";
+			mostragem = mostragem+valor.getNome()+" \n";
 			for(ValorAdaptacao ada : valor.getValorAdaptacao()){
-				mostragem = mostragem+"\t"+ada.getNome()+"\n";
+				if(ada.getStatus())
+					mostragem = " \n"+mostragem+"\t"+ada.getNome()+" \n";
 			}
 		}
 		
-		return "Scenarios "+(position+1)+"teste \n"+mostragem;
+		return "Scenarios "+(position+1)+" \n"+mostragem;
 	}
 
 	@Override

@@ -106,6 +106,7 @@ public class ViewerPanel extends JPanel {
     private boolean rnfVazio = false;
     private boolean adaptationVazio = false;
     private DefaultTreeModel treeModel;
+    private DefaultTreeModel treeModelRnf;
     List<br.ufc.lps.model.adaptation.Adaptacao> adaptacoesDisponiveis;
 	
 	private void inicializarTreePerfuse(){
@@ -143,7 +144,7 @@ public class ViewerPanel extends JPanel {
 		adaptacoesDisponiveis = new ArrayList<>();
 		for ( Map.Entry<String, br.ufc.lps.model.adaptation.Adaptacao> entry : model.getAdaptacoes().entrySet()) {
 		    String key = entry.getKey();
-		    System.out.println(key);
+		    System.out.println("eita: "+key);
 		    br.ufc.lps.model.adaptation.Adaptacao value = entry.getValue();
 		    adaptacoesDisponiveis.add(value);
 		}
@@ -413,8 +414,10 @@ public class ViewerPanel extends JPanel {
 						int selectedConstraintIndex = listaPossibilidadesAdaptacoes.locationToIndex(event.getPoint());
 						listaPossibilidadesAdaptacoes.setSelectedIndex(selectedConstraintIndex);
 						System.out.println((selectedConstraintIndex));
-						ViewerPanel.this.preenchendoArvore(adaptacoesDisponiveis.get(selectedConstraintIndex), true);
-
+						System.out.println(adaptacoesDisponiveis.get(selectedConstraintIndex).getNome());
+						//ViewerPanel.this.preenchendoArvore(adaptacoesDisponiveis.get(selectedConstraintIndex), true);
+						ViewerPanel.this.alterandoArvore(adaptacoesDisponiveis.get(selectedConstraintIndex));
+						
 					}
 				}
 			}
@@ -700,7 +703,7 @@ private void adicionarConstraintsDoContexto(Context contexto){
         panel.add(panelBotoesLayoutTree, BorderLayout.NORTH);
         return panel;
     }
-	  
+	
 	private void preenchendoArvore(br.ufc.lps.model.adaptation.Adaptacao adaptacao, boolean selecteds){
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Context adaptations");
 		
@@ -716,11 +719,8 @@ private void adicionarConstraintsDoContexto(Context contexto){
 					CheckBoxNodeData data = null;
 					
 					if(!selecteds){
-						System.out.println(valorAdaptacao);
 						data = new CheckBoxNodeData(valorAdaptacao.getNome(), false);
 					}else{
-						
-						System.out.println(valorAdaptacao);
 						data = new CheckBoxNodeData(valorAdaptacao.getNome(), valorAdaptacao.getStatus());
 					}
 					
@@ -734,8 +734,38 @@ private void adicionarConstraintsDoContexto(Context contexto){
 		treeModel = new DefaultTreeModel(root);
 		treeAdaptation = new JTree(treeModel);
 		treeAdaptation.setModel(treeModel);
+		treeAdaptation.setRootVisible(false);
 		treeAdaptation.updateUI();
 		expandAllNodes(treeAdaptation, 0, treeAdaptation.getRowCount());
+	}
+	
+	private void alterandoArvore(br.ufc.lps.model.adaptation.Adaptacao adaptacao){
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Context adaptations");
+		
+		if(adaptacao!=null && adaptacao.getValorAdaptacao()!=null){
+			
+			if(adaptacao.getValorAdaptacao().size() == 0)
+					adaptationVazio = true;
+
+			for(ContextoAdaptacao contextoAdaptacao : adaptacao.getValorAdaptacao()){
+				Adaptacao contexto = new Adaptacao(contextoAdaptacao.getNome());
+				
+				for(br.ufc.lps.model.adaptation.ValorAdaptacao valorAdaptacao : contextoAdaptacao.getValorAdaptacao()){
+					CheckBoxNodeData data = null;
+					
+					data = new CheckBoxNodeData(valorAdaptacao.getNome(), valorAdaptacao.getStatus());
+					contexto.add(new br.ufc.lps.view.trees.adaptation.ValorAdaptacao(data));
+					
+				}
+				
+				root.add(contexto);
+			}
+		}
+		treeModel.setRoot(root);
+		treeAdaptation.updateUI();
+		
+		expandAllNodes(treeAdaptation, 0, treeAdaptation.getRowCount());
+		mudancaCheckBoxArvoreAdaptacao();
 	}
 	
 	private void preenchendoArvoreRnf(Rnf rnf){
@@ -764,12 +794,14 @@ private void adicionarConstraintsDoContexto(Context contexto){
 			
 		}
 		
-		treeModel = new DefaultTreeModel(root);
-		treeRnf = new JTree(treeModel);
-		treeRnf.setModel(treeModel);
+		treeModelRnf = new DefaultTreeModel(root);
+		treeRnf = new JTree(treeModelRnf);
+		treeRnf.setModel(treeModelRnf);
+		treeRnf.setRootVisible(false);
 		treeRnf.updateUI();
 		expandAllNodes(treeRnf, 0, treeRnf.getRowCount());
 	}	
+	
 	private void expandAllNodes(JTree tree, int startingIndex, int rowCount){
 	    for(int i=startingIndex;i<rowCount;++i){
 	        tree.expandRow(i);

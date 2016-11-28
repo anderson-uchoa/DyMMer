@@ -84,6 +84,7 @@ public class CheckBoxNodeRenderer implements TreeCellRenderer {
 
 		panel.label.setText(data.getText());
 		panel.check.setSelected(data.isChecked());
+		panel.quantification = data.getValueQuantification();
 
 		return panel;
 	}

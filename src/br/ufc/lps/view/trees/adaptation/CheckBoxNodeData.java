@@ -6,7 +6,7 @@ public class CheckBoxNodeData {
 
 	private String text;
 	private boolean checked;
-	private ValueQuantification valueQuantification;
+	private ValueQuantification valueQuantification = new ValueQuantification();
 
 	public CheckBoxNodeData(final String text, final boolean checked) {
 		this.text = text;

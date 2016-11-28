@@ -15,7 +15,7 @@ import javax.swing.tree.TreePath;
 public class CheckBoxNodeEditor extends AbstractCellEditor implements TreeCellEditor {
 
 	private final CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
-
+	
 	private final JTree theTree;
 
 	public CheckBoxNodeEditor(final JTree tree) {
@@ -27,6 +27,7 @@ public class CheckBoxNodeEditor extends AbstractCellEditor implements TreeCellEd
 		final CheckBoxNodePanel panel = renderer.getPanel();
 		final CheckBoxNodeData checkBoxNode =
 			new CheckBoxNodeData(panel.label.getText(), panel.check.isSelected());
+		checkBoxNode.setValueQuantification(panel.quantification);
 		return checkBoxNode;
 	}
 

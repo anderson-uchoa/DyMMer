@@ -351,6 +351,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 				list.add(listaItens.get(selecao[i]));
 			return list;
 		}
+		mensagemSelecionarMultiplasLinhas();
 		return null;
 	}
 	
@@ -364,11 +365,15 @@ public class ViewerPanelResultFeatures extends JPanel {
 			SchemeXml selecionado = listaItens.get(selecao);
 			return selecionado;
 		}
-		
+		mensagemSelecionarLinha();
 		return null;
 	}
 	
 	private void mensagemSelecionarLinha(){
+		JOptionPane.showMessageDialog(null, "Select a model in the table");
+	}
+	
+	private void mensagemSelecionarMultiplasLinhas(){
 		JOptionPane.showMessageDialog(null, "Select a model in the table");
 	}
 	

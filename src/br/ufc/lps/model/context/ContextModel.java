@@ -46,7 +46,6 @@ import br.ufc.lps.splar.core.heuristics.VariableOrderingHeuristic;
 import br.ufc.lps.splar.core.heuristics.VariableOrderingHeuristicsManager;
 import br.ufc.lps.splar.plugins.reasoners.bdd.javabdd.FMReasoningWithBDD;
 import br.ufc.lps.splar.plugins.reasoners.bdd.javabdd.ReasoningWithBDD;
-import br.ufc.lps.splar.plugins.reasoners.sat.sat4j.ReasoningWithSAT;
 
 
 
@@ -55,7 +54,6 @@ public class ContextModel implements IContextModel {
 	public static final String DEFAULT_CONTEXT = "default";
 	private FeatureModel featureModel;
 	private ReasoningWithBDD bddReasoner;
-	private ReasoningWithSAT satReasoner;
 	private FeatureModelStatistics featureModelStatistics;
 	private String pathModelFile;
 	private int modelID;
@@ -225,10 +223,12 @@ public class ContextModel implements IContextModel {
 			
 			//parse contexts
 			NodeList contexts = rootEle.getElementsByTagName("adaptacao");
-			String nomeAdaptacao = rootEle.getAttribute("nome");
+
+			
 			for(int i=0; i < contexts.getLength(); i++){
 				Element elContext = (Element) contexts.item(i);
 				String nameContext = elContext.getAttribute("nome");
+				
 				List<ContextoAdaptacao> contextos = new ArrayList<ContextoAdaptacao>();
 				
 				NodeList elsResolutions = elContext.getElementsByTagName("contexto");
@@ -241,9 +241,9 @@ public class ContextModel implements IContextModel {
 					contextoAdaptacao.setNome(nome);
 					
 					List<ValorAdaptacao> listaAdaptacoes = new ArrayList<ValorAdaptacao>();
-					NodeList valor = elContext.getElementsByTagName("contexto");
+					NodeList valor = elResolution.getElementsByTagName("valor");
 					for(int countValor = 0; countValor < valor.getLength(); countValor++){
-						Element elValor = (Element) valor.item(countRes);
+						Element elValor = (Element) valor.item(countValor);
 						
 						String nomeValor = elValor.getAttribute("nome");
 						String nomeType = elValor.getAttribute("type");
@@ -256,7 +256,7 @@ public class ContextModel implements IContextModel {
 							valueQuantificationBool.setPadrao(elValor.getAttribute("padrao"));
 							valueQuantificationBool.setValueQuantification(elValor.getAttribute("value_quantification"));
 							valueQuantification = valueQuantificationBool;
-						}else{
+						}else if(nomeType.equals("padrao")){
 							ValueQuantificationPadrao valueQuantificationPadrao = new ValueQuantificationPadrao();
 							valueQuantificationPadrao.setPadrao(elValor.getAttribute("padrao"));
 							valueQuantificationPadrao.setValueQuantification1(elValor.getAttribute("value_quantification_1"));
@@ -264,11 +264,13 @@ public class ContextModel implements IContextModel {
 							valueQuantificationPadrao.setQuantification1(elValor.getAttribute("quantification_1"));
 							valueQuantificationPadrao.setQuantification2(elValor.getAttribute("quantification_2"));
 							valueQuantificationPadrao.setIsInterval(elValor.getAttribute("is_interval").equals("true") ? true : false);
+							valueQuantification = valueQuantificationPadrao;
 						}
 		
 						Boolean statusValor = false;
-						if (elValor.getAttribute("status").equals("true")) 
+						if (elValor.getAttribute("status").equals("true")) {
 							statusValor = true;
+						}
 						
 						ValorAdaptacao valorAdap = new ValorAdaptacao();
 						valorAdap.setNome(nomeValor);
@@ -279,14 +281,16 @@ public class ContextModel implements IContextModel {
 					}		
 					
 					contextoAdaptacao.setValorAdaptacao(listaAdaptacoes);
+					contextos.add(contextoAdaptacao);
 				}
 				
 				Adaptacao adaptacao = new Adaptacao();
 				
-				adaptacao.setNome(nomeAdaptacao);
+				adaptacao.setNome(nameContext);
 				adaptacao.setValorAdaptacao(contextos);
 				
-				this.adaptacoes.put(nomeAdaptacao, adaptacao);	
+				this.adaptacoes.put(nameContext, adaptacao);	
+				
 			}	
 			
 		} catch (ParserConfigurationException e) {
@@ -300,6 +304,7 @@ public class ContextModel implements IContextModel {
 				e.printStackTrace();
 			}	
 		}
+	
 	private void parseXMLToGetArvoreAdaptacao(){
 	
 	DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -341,14 +346,36 @@ public class ContextModel implements IContextModel {
 					Element elValor = (Element) valor.item(countValor);
 					
 					String nomeValor = elValor.getAttribute("nome");
+					String nomeType = elValor.getAttribute("type");
 					
+					ValueQuantification valueQuantification = null;
+					
+					if(nomeType.equals("bool")){
+						ValueQuantificationBool valueQuantificationBool = new ValueQuantificationBool();
+						valueQuantificationBool.setIsQuantification(elValor.getAttribute("is_quantification").equals("true") ? true : false);
+						valueQuantificationBool.setPadrao(elValor.getAttribute("padrao"));
+						valueQuantificationBool.setValueQuantification(elValor.getAttribute("value_quantification"));
+						valueQuantification = valueQuantificationBool;
+					}else if(nomeType.equals("padrao")){
+						ValueQuantificationPadrao valueQuantificationPadrao = new ValueQuantificationPadrao();
+						valueQuantificationPadrao.setPadrao(elValor.getAttribute("padrao"));
+						valueQuantificationPadrao.setValueQuantification1(elValor.getAttribute("value_quantification_1"));
+						valueQuantificationPadrao.setQuantification2(elValor.getAttribute("value_quantification_2"));
+						valueQuantificationPadrao.setQuantification1(elValor.getAttribute("quantification_1"));
+						valueQuantificationPadrao.setQuantification2(elValor.getAttribute("quantification_2"));
+						valueQuantificationPadrao.setIsInterval(elValor.getAttribute("is_interval").equals("true") ? true : false);
+						valueQuantification = valueQuantificationPadrao;
+					}
+	
 					Boolean statusValor = false;
-					if (elValor.getAttribute("status").equals("true")) 
+					if (elValor.getAttribute("status").equals("true")) {
 						statusValor = true;
+					}
 					
 					ValorAdaptacao valorAdap = new ValorAdaptacao();
 					valorAdap.setNome(nomeValor);
 					valorAdap.setStatus(statusValor);
+					valorAdap.setValueQuantification(valueQuantification);
 					
 					listaAdaptacoes.add(valorAdap);
 				}		
@@ -440,7 +467,6 @@ public class ContextModel implements IContextModel {
 			e.printStackTrace();
 		}	
 	}
-	
 	
 	private void parseXMLToGetArvoreRnf(){
 

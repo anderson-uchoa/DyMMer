@@ -5,6 +5,4 @@ public class ValorAdaptacao extends DefaultMutableTreeNode{
 	public ValorAdaptacao(CheckBoxNodeData check) {
 		super(check);
 	}
-	
-	
 }

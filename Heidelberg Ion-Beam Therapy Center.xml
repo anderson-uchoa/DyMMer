@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- This model was created online using SPLOT's Feature Model Editor (http://www.splot-research.org) on Sat, May 23, 2015 - 5:52 PM  --><feature_model name="Heidelberg Ion-Beam Therapy Center">
+<meta>
+<data name="description">Software system of a complex medical device of radiotherapy.</data>
+<data name="creator">Jefferson da Silva Barbosa</data>
+<data name="address"/>
+<data name="email">jefferson.sb.es@gmail.com</data>
+<data name="phone"/>
+<data name="website"/>
+<data name="organization">Universidade Federal do Ceará</data>
+<data name="department"/>
+<data name="date">23-05-2015</data>
+<data name="reference"/>
+</meta>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<contexto_rnf nome="oeValueQuantificationPadrao[isInterval=false,quantification1=uhdsadsa,valueQuantification1=&gt;,quantification2=null,valueQuantification2=null]kkValueQuantificationBool[isQuantification=false,valueQuantification=null]"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<contexto_rnf nome="oeValueQuantificationPadrao[isInterval=false,quantification1=uhdsadsa,valueQuantification1=&gt;,quantification2=null,valueQuantification2=null]aBaixo&gt;100">
+<valor_rnf id_feature="_r_1_2_3_6" id_rnf="Completude Funcional.Completude" impacto="2" nome_feature="Mode2"/>
+</contexto_rnf>
+
+
+
+
+
+
+
+
+<contexto_rnf nome="kkValueQuantificationBool[isQuantification=false,valueQuantification=null]aBaixo&gt;100"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<contexto_rnf nome="aNormal&gt;dAND&gt;d"/>
+
+
+
+
+
+
+
+
+<contexto_rnf nome="aBaixo&gt;100"/>
+
+
+
+
+
+
+
+
+<contexto_rnf nome="asdaTrue"/>
+
+
+
+
+
+
+
+
+
+
+
+<contexto_rnf nome="asdaNormal&gt;eita"/>
+
+
+
+
+
+
+
+
+<contexto_rnf nome="oiLow&gt;xcvAND&lt;=sds"/>
+
+
+
+
+
+
+
+
+<contexto_rnf nome="oiNormal&gt;asdwtfNormal&gt;zueira"/>
+
+
+
+<adaptacao nome="oiLow&gt;xcvAND&lt;=sdswtfNormal&gt;zueira">
+<contexto nome="oi">
+<valor is_interval="false" nome="Normal &gt; asd" padrao="Normal" quantification_1="asd" status="false" type="padrao" value_quantification_1="&gt;"/>
+<valor is_interval="true" nome="Low &gt; xcv AND &lt;= sds" padrao="Low" quantification_1="xcv" quantification_2="sds" status="true" type="padrao" value_quantification_1="&gt;" value_quantification_2=""/>
+<valor is_quantification="false" nome="True" padrao="True" status="false" type="bool"/>
+</contexto>
+<contexto nome="wtf">
+<valor is_interval="false" nome="Normal &gt; zueira" padrao="Normal" quantification_1="zueira" status="true" type="padrao" value_quantification_1="&gt;"/>
+</contexto>
+</adaptacao>
+<context name="oiLow&gt;xcvAND&lt;=sdswtfNormal&gt;zueira">
+<resolution feature="AddRtbDelayTime" id="_r_1_11" status="true"/>
+<resolution feature="ErrorMonEn" id="_r_1_10" status="false"/>
+<resolution feature="RtbTimingEn" id="_r_1_9" status="true"/>
+<resolution feature="Mode4" id="_r_1_2_3_4" status="false"/>
+<resolution feature="Mode3" id="_r_1_2_3_5" status="false"/>
+<resolution feature="Mode2" id="_r_1_2_3_6" status="false"/>
+<resolution feature="Mode0" id="_r_1_2_3_8" status="false"/>
+<resolution feature="Mode1" id="_r_1_2_3_7" status="true"/>
+<resolution feature="MeasuringMode" id="_r_1_2" status="true"/>
+<resolution feature="RefValueTHoldMax" id="_r_13_15_16" status="true"/>
+<resolution feature="BeamRequest" id="_r_13_15_20" status="false"/>
+<resolution feature="DelayTimeActivate" id="_r_13_15_19" status="false"/>
+<constraints/>
+</context>
+<contexto_rnf nome="oiLow&gt;xcvAND&lt;=sdswtfNormal&gt;zueira"/>
+
+
+
+<feature_tree>
+:r DeviceControlUnit(_r)
+	:m DCUMasterParameter(_r_1)
+		:m MeasuringMode(_r_1_2)
+			:g (_r_1_2_3) [1,1]
+				: Mode4(_r_1_2_3_4)
+				: Mode3(_r_1_2_3_5)
+				: Mode2(_r_1_2_3_6)
+				: Mode1(_r_1_2_3_7)
+				: Mode0(_r_1_2_3_8)
+		:o RtbTimingEn(_r_1_9)
+		:o ErrorMonEn(_r_1_10)
+		:m AddRtbDelayTime(_r_1_11)
+		:m LowCurrentTimer(_r_1_12)
+	:m DCUTypeParameter(_r_13)
+		:m Name(_r_13_14)
+		:o DeviceControlParameter(_r_13_15)
+			:o RefValueTHoldMax(_r_13_15_16)
+			:m TimeoutFeedback(_r_13_15_17)
+			:m DelayTimeFeedback(_r_13_15_18)
+			:m DelayTimeActivate(_r_13_15_19)
+			:o BeamRequest(_r_13_15_20)
+			:o EnableShutdown(_r_13_15_21)
+			:o EnableSwitchOn(_r_13_15_22)
+		:m Checksum(_r_13_23)
+		:m Version(_r_13_24)
+		:o TimingMasterParameter(_r_13_25)
+			:o EnableGenRTBMasterClock(_r_13_25_50)
+			:o EnableSyncSupplyFequence(_r_13_25_51)
+	:m OperationMode(_r_26)
+		:g (_r_26_27) [1,1]
+			: QualityAssurance(_r_26_27_28)
+			: Adjustment(_r_26_27_29)
+			: Experiment(_r_26_27_30)
+			: Standby(_r_26_27_31)
+			: Therapy(_r_26_27_32)
+			: Manual(_r_26_27_33)
+			: Idle(_r_26_27_34)
+	:m DeviceController(_r_35)
+	:m Type(_r_36)
+		:g (_r_36_37) [1,1]
+			: Z(_r_36_37_38)
+			: SD(_r_36_37_39)
+			: DeviceControl(_r_36_37_40)
+				:g (_r_36_37_40_41) [1,1]
+					: Ramped(_r_36_37_40_41_42)
+						:g (_r_36_37_40_41_42_46) [1,1]
+							: RK(_r_36_37_40_41_42_46_47)
+							: RB(_r_36_37_40_41_42_46_48)
+							: R(_r_36_37_40_41_42_46_49)
+					: P(_r_36_37_40_41_43)
+					: T(_r_36_37_40_41_44)
+					: TS(_r_36_37_40_41_45)
+</feature_tree>
+<arvore_rnf>
+<caracteristica nome="Adequação funcional">
+<subcaracteristica nome="Completude Funcional">
+<propriedade_n_funcional nome="Completude Baixo Baixo Baixo Baixo" padrao="Baixo"/>
+</subcaracteristica>
+</caracteristica>
+</arvore_rnf>
+<arvore_adaptacao>
+<contexto nome="oi">
+<valor is_interval="false" nome="Normal &gt; asd" padrao="Normal" quantification_1="asd" status="false" type="padrao" value_quantification_1="&gt;"/>
+<valor is_interval="true" nome="Low &gt; xcv AND &lt;= sds" padrao="Low" quantification_1="xcv" quantification_2="sds" status="true" type="padrao" value_quantification_1="&gt;" value_quantification_2=""/>
+<valor is_quantification="false" nome="True" padrao="True" status="false" type="bool"/>
+</contexto>
+<contexto nome="wtf">
+<valor is_interval="false" nome="Normal &gt; zueira" padrao="Normal" quantification_1="zueira" status="true" type="padrao" value_quantification_1="&gt;"/>
+</contexto>
+</arvore_adaptacao>
+</feature_model>

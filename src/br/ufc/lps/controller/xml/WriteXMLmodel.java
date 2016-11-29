@@ -78,11 +78,11 @@ public class WriteXMLmodel {
 		node.setAttribute("nome", name);
 		node.setAttribute("status", check.isChecked() ? "true" : "false");
 		
-		if(check.getValueQuantification()==null)
+		if(check.getValueQuantification()==null){
+			System.out.println("check -> get Value in Quantification is NULL");
 			return node;
-		
-			System.out.println(check.getValueQuantification().toString());
-		
+		}
+
 		if(check.getValueQuantification() instanceof ValueQuantificationBool){
 			ValueQuantificationBool vb = (ValueQuantificationBool) check.getValueQuantification();
 			node.setAttribute("type", "bool");
@@ -90,7 +90,7 @@ public class WriteXMLmodel {
 			node.setAttribute("is_quantification", vb.getIsQuantification() ? "true" : "false");
 			if(vb.getIsQuantification())
 				node.setAttribute("value_quantification", vb.getValueQuantification());
-		}else{
+		}else if(check.getValueQuantification() instanceof ValueQuantificationPadrao){
 			ValueQuantificationPadrao vp = (ValueQuantificationPadrao) check.getValueQuantification();
 			node.setAttribute("type", "padrao");
 			node.setAttribute("padrao", vp.getPadrao());

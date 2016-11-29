@@ -6,8 +6,6 @@ import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
 
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-
 import br.ufc.lps.model.ModelFactory;
 import br.ufc.lps.splar.core.fm.FeatureModel;
 import br.ufc.lps.splar.core.fm.FeatureModelException;

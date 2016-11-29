@@ -21,7 +21,6 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -643,8 +642,24 @@ public class EditorPanel extends JPanel implements ActionListener {
 								rootEle.removeChild(tree);
 							if(tree.getNodeName().equals("arvore_rnf"))
 								rootEle.removeChild(tree);
-							if(tree.getNodeName().equals("adaptacao"))
-								rootEle.removeChild(tree);
+							if(tree.getNodeName().equals("context")){
+								for(int j=0; j < tree.getAttributes().getLength(); j++){
+									if(tree.getAttributes().getNamedItem("nome")!=null && 
+											tree.getAttributes().getNamedItem("nome").getNodeValue().equals(nomeContexto)){
+										System.out.println("tired");
+										rootEle.removeChild(tree);
+									}
+								}
+							}
+							if(tree.getNodeName().equals("adaptacao")){
+								for(int j=0; j < tree.getAttributes().getLength(); j++){
+									if(tree.getAttributes().getNamedItem("nome")!=null && 
+											tree.getAttributes().getNamedItem("nome").getNodeValue().equals(nomeContexto)){
+										System.out.println("tired");
+										rootEle.removeChild(tree);
+									}
+								}
+							}
 							if(tree.getNodeName().equals("contexto_rnf")){
 								for(int j=0; j < tree.getAttributes().getLength(); j++){
 									if(tree.getAttributes().getNamedItem("nome")!=null && 
@@ -687,7 +702,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 						
 						EditorPanel.this.tree.updateUI();
 						JOptionPane.showMessageDialog(EditorPanel.this,
-								"Your scenario has been saved. Now, open the file to see it.");
+								"Your scenario has been saved");
 
 					} catch (SAXException e1) {
 						// TODO Auto-generated catch block
@@ -1476,7 +1491,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 		}	
 		
 		if(!splotContextModel.getContexts().containsKey(contextName)){
-			constraintsListRnf.clear();
+			//constraintsListRnf.clear();
 			return;
 		}
 		
@@ -1485,7 +1500,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 			preenchendoContextosRnf(contextoRnf.get(contextName));
 			adicionarConstraintsDoContexto(context);
 		}else{
-			constraintsListRnf.clear();
+			//constraintsListRnf.clear();
 		}
 		
 		//Context context = splotContextModel.getContexts().get(contextName);
@@ -1760,8 +1775,8 @@ public class EditorPanel extends JPanel implements ActionListener {
 				
 				for(br.ufc.lps.model.adaptation.ValorAdaptacao valorAdaptacao : contextoAdaptacao.getValorAdaptacao()){
 					CheckBoxNodeData data = new CheckBoxNodeData(valorAdaptacao.getNome(), false);
+					data.setValueQuantification(valorAdaptacao.getValueQuantification());
 					contexto.add(new br.ufc.lps.view.trees.adaptation.ValorAdaptacao(data));
-					
 				}
 				
 				root.add(contexto);
@@ -1787,7 +1802,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 					carac.add(sub);
 					
 					for(PropriedadeNFuncional propriedadeNFuncional : subcaracteristica.getPropriedadeNFuncionais()){
-						PNFValue pnf = new PNFValue(propriedadeNFuncional.getPropriedade()+" "+propriedadeNFuncional.getPadrao(), propriedadeNFuncional.getPadrao());
+						PNFValue pnf = new PNFValue(propriedadeNFuncional.getPropriedade(), propriedadeNFuncional.getPadrao());
 						sub.add(pnf);
 					}
 				}

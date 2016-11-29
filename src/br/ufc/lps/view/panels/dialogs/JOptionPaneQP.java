@@ -98,13 +98,13 @@ public class JOptionPaneQP implements ActionListener{
 	    	
 	    	JPanel forPadrao = new JPanel(new BorderLayout());
 	    	padrao = new JComboBox<>(padraoStrings);
-	    	forPadrao.add(new JLabel("Pattern"), BorderLayout.NORTH);
+	    	forPadrao.add(new JLabel("Type of Quanlification"), BorderLayout.NORTH);
 	    	forPadrao.add(padrao, BorderLayout.CENTER);
 	    	padrao.addActionListener(this);
 	    	
 	    	JPanel forTipo = new JPanel(new BorderLayout());
 	    	tipo = new JComboBox<>(tipoStrings);
-	    	forTipo.add(new JLabel("Type Quantification"), BorderLayout.NORTH);
+	    	forTipo.add(new JLabel("Type of Quantification"), BorderLayout.NORTH);
 	    	forTipo.add(tipo, BorderLayout.CENTER);
 	    	tipo.addActionListener(this);
 	    	

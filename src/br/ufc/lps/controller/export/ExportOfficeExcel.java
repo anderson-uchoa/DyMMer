@@ -17,13 +17,8 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 
 import br.ufc.lps.model.context.ContextModel;
-import br.ufc.lps.model.context.IContextModel;
-import br.ufc.lps.model.context.MeeasuresWithContextCalcula;
 import br.ufc.lps.model.context.SplotContextModel;
 import br.ufc.lps.model.contextaware.Context;
-import br.ufc.lps.model.normal.IModel;
-import br.ufc.lps.model.normal.Model;
-import br.ufc.lps.model.normal.SplotModel;
 
 //TODO Needs to refactor this class
 public class ExportOfficeExcel {
@@ -31,7 +26,6 @@ public class ExportOfficeExcel {
 	private File files[];
 	private static final String PATH_EXPORT_DIRECTORY = "exported";
 	private List<ContextModel> modelsContext;
-	private List<Model> models;
 
 	private static final String[] METRICS = { "Number of features (NF)", "Number of Optional Features (NO)",
 			"Number of Mandatory Features (NM)", "Number of top features (NTop)", "Number of leaf Features (NLeaf)",
@@ -56,7 +50,6 @@ public class ExportOfficeExcel {
 
 		this.files = files;
 		modelsContext = new ArrayList<ContextModel>();
-		models = new ArrayList<Model>();
 		createModels();
 	}
 

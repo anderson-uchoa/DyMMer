@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.ScrollPane;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,7 +29,6 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -40,11 +38,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-
 import br.ufc.lps.controller.xml.ControladorXml;
 import br.ufc.lps.model.adaptation.ContextoAdaptacao;
 import br.ufc.lps.model.context.ContextModel;
-import br.ufc.lps.model.context.MeeasuresWithContextCalcula;
 import br.ufc.lps.model.contextaware.Context;
 import br.ufc.lps.model.rnf.Caracteristica;
 import br.ufc.lps.model.rnf.ContextoRnf;
@@ -59,7 +55,6 @@ import br.ufc.lps.splar.core.constraints.PropositionalFormula;
 import br.ufc.lps.splar.core.fm.FeatureModel;
 import br.ufc.lps.splar.core.fm.FeatureTreeNode;
 import br.ufc.lps.view.Main;
-import br.ufc.lps.view.list.ConstraintsListModel;
 import br.ufc.lps.view.list.ConstraintsListModelAdaptations;
 import br.ufc.lps.view.trees.FeaturesTreeCellRenderer;
 import br.ufc.lps.view.trees.FeaturesTreePerfuseControl;
@@ -103,8 +98,8 @@ public class ViewerPanel extends JPanel {
     private JPanel panelTree;
     private Map<String, ContextoRnf> contextoRnf;
     private boolean primeira = true;
-    private boolean rnfVazio = false;
-    private boolean adaptationVazio = false;
+    private boolean rnfVazio = true;
+    private boolean adaptationVazio = true;
     private DefaultTreeModel treeModel;
     private DefaultTreeModel treeModelRnf;
     List<br.ufc.lps.model.adaptation.Adaptacao> adaptacoesDisponiveis;
@@ -118,7 +113,7 @@ public class ViewerPanel extends JPanel {
 		table.addColumn("id", String.class);
 	}
    	
- 	public ViewerPanel(final ContextModel model, File file, SchemeXml schemeXml, Main main) {
+ 	public ViewerPanel(final ContextModel model, File file, SchemeXml schemeXml, Main main, boolean preview) {
 		
 		this.model = model;
 		this.main = main;
@@ -144,7 +139,6 @@ public class ViewerPanel extends JPanel {
 		adaptacoesDisponiveis = new ArrayList<>();
 		for ( Map.Entry<String, br.ufc.lps.model.adaptation.Adaptacao> entry : model.getAdaptacoes().entrySet()) {
 		    String key = entry.getKey();
-		    System.out.println("eita: "+key);
 		    br.ufc.lps.model.adaptation.Adaptacao value = entry.getValue();
 		    adaptacoesDisponiveis.add(value);
 		}
@@ -199,33 +193,29 @@ public class ViewerPanel extends JPanel {
 	
 		tree = new JTree();
 		
+		//Painel para a arvore;
+			panelTree = new JPanel();
+			panelTree.setLayout(new GridLayout(1, 0, 2, 2));
+		
 		JPanel painelTreeFeatures = new JPanel(new BorderLayout());
 		painelTreeFeatures.add(new JLabel("Feature Model"), BorderLayout.NORTH);
 		painelTreeFeatures.add(tree, BorderLayout.CENTER);
-		
-		JPanel painelTreeFeaturesRnf = new JPanel(new BorderLayout());
-		if(!rnfVazio){
-			painelTreeFeaturesRnf.add(new JLabel("Quality Feature Model"), BorderLayout.NORTH);
-			painelTreeFeaturesRnf.add(treeRnf, BorderLayout.CENTER);
-		}
-		
-		JPanel painelTreeFeaturesAdap = new JPanel(new BorderLayout());
-		if(!adaptationVazio){
-			painelTreeFeaturesAdap.add(new JLabel("Adaptaion Context Feature"), BorderLayout.NORTH);
-			painelTreeFeaturesAdap.add(treeAdaptation, BorderLayout.CENTER);
-		}
-		//Painel para a arvore;
-		panelTree = new JPanel();
-		panelTree.setLayout(new GridLayout(1, 0, 2, 2));
-		
 		panelTree.add(painelTreeFeatures);
 		
-		if(!rnfVazio)
-		panelTree.add(painelTreeFeaturesRnf);
+		if(!rnfVazio){
+			JPanel painelTreeFeaturesRnf = new JPanel(new BorderLayout());
+			painelTreeFeaturesRnf.add(new JLabel("Quality Feature Model"), BorderLayout.NORTH);
+			painelTreeFeaturesRnf.add(treeRnf, BorderLayout.CENTER);
+			panelTree.add(painelTreeFeaturesRnf);
+		}
 		
-		if(!adaptationVazio)
-		panelTree.add(painelTreeFeaturesAdap);
-
+		if(!adaptationVazio){
+			JPanel painelTreeFeaturesAdap = new JPanel(new BorderLayout());
+			painelTreeFeaturesAdap.add(new JLabel("Adaptaion Context Feature"), BorderLayout.NORTH);
+			painelTreeFeaturesAdap.add(treeAdaptation, BorderLayout.CENTER);
+			panelTree.add(painelTreeFeaturesAdap);
+		}
+		
 		scrollPane = new JScrollPane(panelTree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panelTrees.add(scrollPane, BorderLayout.CENTER);
 		
@@ -344,36 +334,38 @@ public class ViewerPanel extends JPanel {
 		}
 		//panelInfoContexts.add(comboBoxContexts);
 		
-		if(schemeXml==null){
-			JButton botaoSalvar = new JButton("Save");
-			
-			panelInfoContexts.add(botaoSalvar);
-			
-			botaoSalvar.addActionListener(new ActionListener() {
+		if(!preview){
+			if(schemeXml==null){
+				JButton botaoSalvar = new JButton("Save");
 				
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
+				panelInfoContexts.add(botaoSalvar);
+				
+				botaoSalvar.addActionListener(new ActionListener() {
 					
-					String nome = "";
-					
-					if(schemeXml!=null)
-						nome  = JOptionPane.showInputDialog("Type the new model name", schemeXml.getNameXml());
-					else
-						nome  = JOptionPane.showInputDialog("Type the new model name", model.getModelName());
-							
-					if(nome.equals("")){
-						JOptionPane.showMessageDialog(null, "You need at least one letter to the name");
-						return;
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						
+						String nome = "";
+						
+						if(schemeXml!=null)
+							nome  = JOptionPane.showInputDialog("Type the new model name", schemeXml.getNameXml());
+						else
+							nome  = JOptionPane.showInputDialog("Type the new model name", model.getModelName());
+								
+						if(nome.equals("")){
+							JOptionPane.showMessageDialog(null, "You need at least one letter to the name");
+							return;
+						}
+						
+						boolean resultado = ControladorXml.salvarXMLRepositorio(nome, file, null);
+						if(resultado){
+							botaoSalvar.setEnabled(false);
+							JOptionPane.showMessageDialog(null, "Saved successfully!");
+							ViewerPanel.this.main.recarregarListaFeatures();
+						}
 					}
-					
-					boolean resultado = ControladorXml.salvarXMLRepositorio(nome, file, null);
-					if(resultado){
-						botaoSalvar.setEnabled(false);
-						JOptionPane.showMessageDialog(null, "Saved successfully!");
-						ViewerPanel.this.main.recarregarListaFeatures();
-					}
-				}
-			});
+				});
+			}
 		}
 		
 		updateConstraintsPainel(model.getContexts().get(comboBoxContexts.getItemAt(0)));
@@ -709,9 +701,6 @@ private void adicionarConstraintsDoContexto(Context contexto){
 		
 		if(adaptacao!=null && adaptacao.getValorAdaptacao()!=null){
 			
-			if(adaptacao.getValorAdaptacao().size() == 0)
-					adaptationVazio = true;
-
 			for(ContextoAdaptacao contextoAdaptacao : adaptacao.getValorAdaptacao()){
 				Adaptacao contexto = new Adaptacao(contextoAdaptacao.getNome());
 				
@@ -727,7 +716,7 @@ private void adicionarConstraintsDoContexto(Context contexto){
 						contexto.add(new br.ufc.lps.view.trees.adaptation.ValorAdaptacao(data));
 					
 				}
-				
+				adaptationVazio = false;
 				root.add(contexto);
 			}
 		}
@@ -744,9 +733,6 @@ private void adicionarConstraintsDoContexto(Context contexto){
 		
 		if(adaptacao!=null && adaptacao.getValorAdaptacao()!=null){
 			
-			if(adaptacao.getValorAdaptacao().size() == 0)
-					adaptationVazio = true;
-
 			for(ContextoAdaptacao contextoAdaptacao : adaptacao.getValorAdaptacao()){
 				Adaptacao contexto = new Adaptacao(contextoAdaptacao.getNome());
 				
@@ -757,7 +743,6 @@ private void adicionarConstraintsDoContexto(Context contexto){
 					contexto.add(new br.ufc.lps.view.trees.adaptation.ValorAdaptacao(data));
 					
 				}
-				
 				root.add(contexto);
 			}
 		}
@@ -772,10 +757,7 @@ private void adicionarConstraintsDoContexto(Context contexto){
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Rnf");
 		
 		if(rnf!=null && rnf.getCaracteristicas()!=null){
-			
-			if(rnf.getCaracteristicas().size() == 0)
-					rnfVazio = true;
-			
+
 			for(Caracteristica caracteristica : rnf.getCaracteristicas()){
 				DefaultMutableTreeNode carac = new DefaultMutableTreeNode(caracteristica.getNome());
 				
@@ -788,7 +770,7 @@ private void adicionarConstraintsDoContexto(Context contexto){
 						sub.add(pnf);
 					}
 				}
-				
+				rnfVazio = false;
 				root.add(carac);
 			}
 			

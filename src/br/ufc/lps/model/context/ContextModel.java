@@ -46,7 +46,6 @@ import br.ufc.lps.splar.core.heuristics.VariableOrderingHeuristic;
 import br.ufc.lps.splar.core.heuristics.VariableOrderingHeuristicsManager;
 import br.ufc.lps.splar.plugins.reasoners.bdd.javabdd.FMReasoningWithBDD;
 import br.ufc.lps.splar.plugins.reasoners.bdd.javabdd.ReasoningWithBDD;
-import br.ufc.lps.splar.plugins.reasoners.sat.sat4j.ReasoningWithSAT;
 
 
 
@@ -55,7 +54,6 @@ public class ContextModel implements IContextModel {
 	public static final String DEFAULT_CONTEXT = "default";
 	private FeatureModel featureModel;
 	private ReasoningWithBDD bddReasoner;
-	private ReasoningWithSAT satReasoner;
 	private FeatureModelStatistics featureModelStatistics;
 	private String pathModelFile;
 	private int modelID;

@@ -55,6 +55,7 @@ import br.ufc.lps.splar.core.constraints.PropositionalFormula;
 import br.ufc.lps.splar.core.fm.FeatureModel;
 import br.ufc.lps.splar.core.fm.FeatureTreeNode;
 import br.ufc.lps.view.Main;
+import br.ufc.lps.view.list.CellRenderList;
 import br.ufc.lps.view.list.ConstraintsListModelAdaptations;
 import br.ufc.lps.view.trees.FeaturesRnfTreeCellRenderer;
 import br.ufc.lps.view.trees.FeaturesTreeCellRenderer;

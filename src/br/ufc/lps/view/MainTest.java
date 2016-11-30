@@ -318,7 +318,7 @@ public class MainTest extends JPanel implements ListSelectionListener{
 	     */
 	    private static void createAndShowGUI() {
 	        //Make sure we have nice window decorations.
-	        JFrame.setDefaultLookAndFeelDecorated(true);
+	       // JFrame.setDefaultLookAndFeelDecorated(true);
 
 	        //Create and set up the window.
 	        JFrame frame = new JFrame("ListDataEventDemo");

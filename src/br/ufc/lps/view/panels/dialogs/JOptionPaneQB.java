@@ -39,6 +39,7 @@ public class JOptionPaneQB implements ActionListener{
 		private JComboBox padrao, tipo;
 		private JButton botaoOk;
 		private JDialog dialog;
+		public boolean ok;
 
 		private ValueQuantificationBool quantificationBool;
 		
@@ -59,7 +60,7 @@ public class JOptionPaneQB implements ActionListener{
 	         dialog.setLocationRelativeTo(frame);
 	         dialog.setVisible(true);
 	    }
-
+	 	
 	    private JPanel getPanel() {
 	    	quantificationBool = new ValueQuantificationBool();
 	    	tfs1 = new JTextField();

@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -41,6 +42,8 @@ import br.ufc.lps.controller.xml.ControladorXml;
 import br.ufc.lps.repository.SchemeXml;
 import br.ufc.lps.splar.core.fm.FeatureTreeNode;
 import br.ufc.lps.view.Main;
+import br.ufc.lps.view.Main.listItens;
+import br.ufc.lps.view.panels.dialogs.JOptionPaneListItensSelectOrderModelsVersion;
 
 public class ViewerPanelResultFeatures extends JPanel {
 	
@@ -346,7 +349,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 		return null;
 	}
 	
-	public List<SchemeXml> getAllSelectedItensPriorityList(){
+	public void getAllSelectedItensPriorityList(listItens ready){
 		
 		int [] selecao = tabela.getSelectedRows();
 		
@@ -354,10 +357,10 @@ public class ViewerPanelResultFeatures extends JPanel {
 			List<SchemeXml> list = new ArrayList<>();
 			for(int i=0; i < selecao.length; i++)
 				list.add(listaItens.get(selecao[i]));
-			return list;
+			
+			JOptionPaneListItensSelectOrderModelsVersion modelv = new JOptionPaneListItensSelectOrderModelsVersion();
+			modelv.displayGUI(main, list, ready);
 		}
-		mensagemSelecionarMultiplasLinhas();
-		return null;
 	}
 	
 	public List<SchemeXml> getAllItensList(){

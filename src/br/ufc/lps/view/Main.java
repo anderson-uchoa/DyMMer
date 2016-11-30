@@ -916,22 +916,6 @@ public class Main extends JFrame {
 		
 		//visualization.add(VariabilidadeAdaptativa);
 		
-		JMenuItem ComplexidadeEstrutural = new JMenuItem("Complexidade Estrutural");
-		
-		ComplexidadeEstrutural.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				List<SchemeXml> s = viewMain.getAllSelectedItensList();
-				System.out.println(s);
-				if(s!=null){
-					Main.this.getRadarVariabilidadeAdaptativa(s);
-				}
-			}
-		});
-		
-		//visualization.add(ComplexidadeEstrutural);
-		
 		/*JMenuItem And = new JMenuItem("And");
 		
 		And.addActionListener(new ActionListener() {
@@ -979,8 +963,14 @@ public class Main extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				List<SchemeXml> s = viewMain.getAllSelectedItensList();
-				Main.this.getRadarImpactoQ2(s);
+				listItens list = new listItens() {
+					
+					@Override
+					public void ready(List<SchemeXml> lista) {
+						Main.this.getRadarImpactoQ2(lista);
+					}
+				};
+				viewMain.getAllSelectedItensPriorityList(list);
 			}
 		});
 		
@@ -992,8 +982,15 @@ public class Main extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				List<SchemeXml> s = viewMain.getAllSelectedItensList();
-				Main.this.getRadarImpactoQ2(s);
+				listItens list = new listItens() {
+					
+					@Override
+					public void ready(List<SchemeXml> lista) {
+						Main.this.getRadarImpactoQ2(lista);
+					}
+				};
+				
+				viewMain.getAllSelectedItensPriorityList(list);
 			}
 		});
 		
@@ -1005,8 +1002,14 @@ public class Main extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				List<SchemeXml> s = viewMain.getAllSelectedItensList();
-				Main.this.getLineStaticVariability(s);
+				listItens list = new listItens() {
+					
+					@Override
+					public void ready(List<SchemeXml> lista) {
+						Main.this.getLineStaticVariability(lista);
+					}
+				};
+				viewMain.getAllSelectedItensPriorityList(list);
 			}
 		});
 		
@@ -1018,8 +1021,14 @@ public class Main extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				List<SchemeXml> s = viewMain.getAllSelectedItensList();
-				Main.this.getRadarImpactoQ2(s);
+				listItens list = new listItens() {
+					
+					@Override
+					public void ready(List<SchemeXml> lista) {
+						Main.this.getRadarImpactoQ2(lista);
+					}
+				};
+				viewMain.getAllSelectedItensPriorityList(list);
 			}
 		});
 		
@@ -1447,6 +1456,9 @@ public class Main extends JFrame {
 		});
 	}
 	
+	public interface listItens{
+		public void ready(List<SchemeXml> lista);
+	}
 	
 	
 

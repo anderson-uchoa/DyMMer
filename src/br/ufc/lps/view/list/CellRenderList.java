@@ -1,4 +1,4 @@
-package br.ufc.lps.view.panels;
+package br.ufc.lps.view.list;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

@@ -233,6 +233,7 @@ public class ControladorXml{
 			medida.setActivatedFeaturesByContextAdaptation(model.activatedFeaturesByContextAdaptation());
 			medida.setDesactivatedFeaturesByContextAdaptation(model.desactivatedFeaturesByContextAdaptation());
 			medida.setNonContextFeatures(model.contextFeatures());
+			medida.setContextFeaturesContraints(model.contextFeaturesContraints());
 			
 			listaDeMedidasPorContexto.add(medida);
 		}

@@ -358,31 +358,55 @@ public class Main extends JFrame {
 	
 	public void abrirArquivosDoRepositorio(SchemeXml schemeXml){
 		
-		String path = schemeXml.getFile().getAbsolutePath();
-		final ViewerPanel viewer = new ViewerPanel(new SplotContextModel(path), null, schemeXml, this, false);
-		
-		currentViewer = viewer;
-		
-		createTab(viewer, schemeXml.getNameXml());
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				viewMain.isShowLoader(true);
+				
+				String path = schemeXml.getFile().getAbsolutePath();
+				final ViewerPanel viewer = new ViewerPanel(new SplotContextModel(path), null, schemeXml, Main.this, false);
+				
+				currentViewer = viewer;
+				
+				createTab(viewer, schemeXml.getNameXml());
+				
+				viewMain.isShowLoader(false);
+			}
+		}).start();
+	
 		
 	}
 	
 	public void abrirPreview(String path){
 		
-		File file = new File(path);
-		
-		final ViewerPanel viewer = new ViewerPanel(new SplotContextModel(path), file, null, this, true);
-		currentViewerPreview = viewer;
-		
-		createTab(currentViewerPreview, "Preview");
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				viewMain.isShowLoader(true);
+				
+				File file = new File(path);
+				
+				final ViewerPanel viewer = new ViewerPanel(new SplotContextModel(path), file, null, Main.this, true);
+				currentViewerPreview = viewer;
+				
+				createTab(currentViewerPreview, "Preview");
+				viewMain.isShowLoader(false);
+			}
+		}).start();
 	}
 	
 	public void createModelFeature(String nameRoot){
 		
-		final CreatorPanel viewer = new CreatorPanel(ModelID.SPLOT_MODEL.getId(), this, nameRoot);
-		
-		createTab(viewer,  "Creating new Model");
-		
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				viewMain.isShowLoader(true);
+				final CreatorPanel viewer = new CreatorPanel(ModelID.SPLOT_MODEL.getId(), Main.this, nameRoot);
+				
+				createTab(viewer,  "Creating new Model");
+				viewMain.isShowLoader(false);
+			}
+		}).start();
 	}
 	
 	private void createTab(Component panel, String nameTab){
@@ -424,10 +448,19 @@ public class Main extends JFrame {
 	
 	public void editarArquivosDoRepositorio(SchemeXml schemeXml){
 		
-		String path = schemeXml.getFile().getAbsolutePath();
-		final EditorPanel viewer = new EditorPanel(new SplotModel(path), ModelID.SPLOT_MODEL.getId(), path, schemeXml, this);
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				viewMain.isShowLoader(true);
+				String path = schemeXml.getFile().getAbsolutePath();
+				final EditorPanel viewer = new EditorPanel(new SplotModel(path), ModelID.SPLOT_MODEL.getId(), path, schemeXml, Main.this);
+				
+				createTab(viewer, schemeXml.getNameXml());				
+				viewMain.isShowLoader(false);
+			}
+		}).start();
 		
-		createTab(viewer, schemeXml.getNameXml());
+		
 	}
 	
 	public void recarregarListaFeatures(){
@@ -510,12 +543,16 @@ public class Main extends JFrame {
 		}).start();
 	}
 	
-	public void variabilidadeAdaptativa( SchemeXml schema){
+	public void variabilidadeDinamica( SchemeXml schema){
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				Component a = BrowserController.getD3TreeVariabilidadeAdaptativa(schema);
-				createTab(a, "Variabilidade Adaptativa");
+				if(schema!=null){
+					viewMain.isShowLoader(true);
+					Component a = BrowserController.getD3TreeDynamicVariabilidade(schema);
+					createTab(a, "Dynamic Variability");
+					viewMain.isShowLoader(false);
+				}
 			}
 		}).start();
 	}
@@ -524,8 +561,12 @@ public class Main extends JFrame {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				Component a = BrowserController.getRadarVariabilidadeAdaptativa(schema);
-				createTab(a, "Complexidade Estrutural");
+				if(schema!=null){
+					viewMain.isShowLoader(true);
+					Component a = BrowserController.getRadarVariabilidadeAdaptativa(schema);
+					createTab(a, "Estrutural complexity");
+					viewMain.isShowLoader(false);
+				}
 			}
 		}).start();
 	}
@@ -594,8 +635,12 @@ public class Main extends JFrame {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				Component a = BrowserController.getD3FEX(schema);
-				createTab(a, "FEX (Analisabilidade)");
+				if(schema!=null){
+					viewMain.isShowLoader(true);
+					Component a = BrowserController.getD3FEX(schema);
+					createTab(a, "FEX (Extensibility of Model)");
+					viewMain.isShowLoader(false);
+				}
 			}
 		}).start();
 	}
@@ -604,18 +649,54 @@ public class Main extends JFrame {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				Component a = BrowserController.getD3TreeMapEvolucao(schema);
-				createTab(a, "NF / NA / NO / NM (tamanho do modelo)");
+				if(schema!=null){
+					viewMain.isShowLoader(true);
+					Component a = BrowserController.getD3TreeMapEvolucao(schema);
+					createTab(a, "NF / NA / NO / NM (tamanho do modelo)");
+					viewMain.isShowLoader(false);
+				}
 			}
 		}).start();
 	}
 	
-	public void getD3TreeNumberOfConfigurations( List<SchemeXml> schema){
+	public void getLineStaticVariability( List<SchemeXml> schema){
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				Component a = BrowserController.getBarNumberConfigurations(schema);
-				createTab(a, "Number of Configurations");
+				if(schema!=null){
+					viewMain.isShowLoader(true);
+					Component a = BrowserController.getLineStaticVariability(schema);
+					createTab(a, "Static Variability");
+					viewMain.isShowLoader(false);
+				}
+			}
+		}).start();
+	}
+	
+	public void getImpactoLinha( List<SchemeXml> schema){
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				if(schema!=null){
+					viewMain.isShowLoader(true);
+					Component a = BrowserController.getBarNumberImpactoLinha(schema);
+					createTab(a, "Number of Configurations");
+					viewMain.isShowLoader(false);
+				}
+			}
+		}).start();
+	}
+	
+	public void getRadarImpactoQ2( List<SchemeXml> schema){
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				if(schema!=null){
+					viewMain.isShowLoader(true);
+					Component a = BrowserController.getRadarImpactoQ2(schema);
+					createTab(a, "Impacto na Complexidade Estrutural");
+					viewMain.isShowLoader(false);
+				}
 			}
 		}).start();
 	}
@@ -624,8 +705,12 @@ public class Main extends JFrame {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				Component a = BrowserController.getBarComplexity(schema);
-				createTab(a, "Number of Configurations");
+				if(schema!=null){
+					viewMain.isShowLoader(true);
+					Component a = BrowserController.getBarComplexity(schema);
+					createTab(a, "Number of Configurations");
+					viewMain.isShowLoader(false);
+				}
 			}
 		}).start();
 	}
@@ -676,6 +761,14 @@ public class Main extends JFrame {
 	
 	private void constructVisualizationsMenu(JMenu visualization){
 		
+		JMenu oneModel = new JMenu("For Single Models");
+		JMenu selectedModels = new JMenu("For Selected Models");
+		JMenu allModels = new JMenu("For All Models");
+		
+		visualization.add(oneModel);
+		visualization.add(selectedModels);
+		visualization.add(allModels);
+		
 		JMenuItem CompararContextosDeUmModelo = new JMenuItem("Comparar Contextos de um modelo");
 		
 		CompararContextosDeUmModelo.addActionListener(new ActionListener() {
@@ -690,7 +783,7 @@ public class Main extends JFrame {
 			}
 		});
 		
-		visualization.add(CompararContextosDeUmModelo);
+		//visualization.add(CompararContextosDeUmModelo);
 		
 		JMenuItem CompararFeaturesEntreModelos = new JMenuItem("Comparar Features entre modelos");
 		
@@ -703,7 +796,7 @@ public class Main extends JFrame {
 			}
 		});
 		
-		visualization.add(CompararFeaturesEntreModelos);
+		//visualization.add(CompararFeaturesEntreModelos);
 		
 		JMenuItem EvolucaoDeContextos = new JMenuItem("Evolução entre contextos");
 		
@@ -719,7 +812,7 @@ public class Main extends JFrame {
 			}
 		});
 		
-		visualization.add(EvolucaoDeContextos);
+		//visualization.add(EvolucaoDeContextos);
 		
 		JMenuItem RoVxNVC = new JMenuItem("RoV x NVC (Variabilidade estática)");
 		
@@ -732,7 +825,7 @@ public class Main extends JFrame {
 			}
 		});
 		
-		visualization.add(RoVxNVC);
+		//visualization.add(RoVxNVC);
 
 		/*
 	    JMenuItem NLeafxDTMaxTree = new JMenuItem("Nleaf x DTMax (largura x profundidade) Tree");
@@ -761,7 +854,7 @@ public class Main extends JFrame {
 			}
 		});
 		
-		visualization.add(NLeafxDTMax);
+		//visualization.add(NLeafxDTMax);
 		
 		/*JMenuItem FoC = new JMenuItem("FoC");
 		
@@ -805,7 +898,7 @@ public class Main extends JFrame {
 			}
 		});
 		
-		visualization.add(TamanhoDoModelo);
+		//visualization.add(TamanhoDoModelo);
 		
 		JMenuItem VariabilidadeAdaptativa = new JMenuItem("Variabilidade Adaptativa");
 		
@@ -816,12 +909,12 @@ public class Main extends JFrame {
 				SchemeXml s = viewMain.getOneItemList();
 				System.out.println(s);
 				if(s!=null){
-					Main.this.variabilidadeAdaptativa(s);
+					Main.this.variabilidadeDinamica(s);
 				}
 			}
 		});
 		
-		visualization.add(VariabilidadeAdaptativa);
+		//visualization.add(VariabilidadeAdaptativa);
 		
 		JMenuItem ComplexidadeEstrutural = new JMenuItem("Complexidade Estrutural");
 		
@@ -837,7 +930,7 @@ public class Main extends JFrame {
 			}
 		});
 		
-		visualization.add(ComplexidadeEstrutural);
+		//visualization.add(ComplexidadeEstrutural);
 		
 		/*JMenuItem And = new JMenuItem("And");
 		
@@ -886,12 +979,12 @@ public class Main extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SchemeXml s = viewMain.getOneItemList();
-				Main.this.getRadarComplexity(s);
+				List<SchemeXml> s = viewMain.getAllSelectedItensList();
+				Main.this.getRadarImpactoQ2(s);
 			}
 		});
 		
-		visualization.add(p2);
+		selectedModels.add(p2);
 		
 		JMenuItem p9 = new JMenuItem("Qual o impacto que a linha sofreria ao extender uma determinada feature?");
 		
@@ -899,12 +992,12 @@ public class Main extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SchemeXml s = viewMain.getOneItemList();
-				Main.this.getRadarComplexity(s);
+				List<SchemeXml> s = viewMain.getAllSelectedItensList();
+				Main.this.getRadarImpactoQ2(s);
 			}
 		});
 		
-		visualization.add(p9);
+		selectedModels.add(p9);
 		
 		JMenuItem p10 = new JMenuItem("Qual o aumento no número de configurações a partir da inclusão de novas features?");
 		
@@ -913,11 +1006,11 @@ public class Main extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				List<SchemeXml> s = viewMain.getAllSelectedItensList();
-				Main.this.getD3TreeNumberOfConfigurations(s);
+				Main.this.getLineStaticVariability(s);
 			}
 		});
 		
-		visualization.add(p10);
+		selectedModels.add(p10);
 		
 		JMenuItem p11 = new JMenuItem("Qual a evolução da complexidade do modelo de features quando uma feature é adicionada ou removida?");
 		
@@ -925,12 +1018,12 @@ public class Main extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SchemeXml s = viewMain.getOneItemList();
-				Main.this.getRadarComplexity(s);
+				List<SchemeXml> s = viewMain.getAllSelectedItensList();
+				Main.this.getRadarImpactoQ2(s);
 			}
 		});
 		
-		visualization.add(p11);
+		selectedModels.add(p11);
 		
 		JMenuItem p15 = new JMenuItem("Qual dos contextos presentes em um modelo de features, possui mais dinamicidade em termos de ativação e desativação?");
 		
@@ -939,11 +1032,11 @@ public class Main extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SchemeXml s = viewMain.getOneItemList();
-				Main.this.getRadarComplexity(s);
+				Main.this.variabilidadeDinamica(s);
 			}
 		});
 		
-		visualization.add(p15);
+		oneModel.add(p15);
 		
 		JMenuItem p16 = new JMenuItem("Qual a complexidade do modelo de features?");
 		
@@ -956,7 +1049,7 @@ public class Main extends JFrame {
 			}
 		});
 		
-		visualization.add(p16);
+		oneModel.add(p16);
 		
 		JMenuItem p17 = new JMenuItem("Qual a variabilidade dinâmica do modelo de features?");
 		
@@ -965,11 +1058,11 @@ public class Main extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SchemeXml s = viewMain.getOneItemList();
-				Main.this.getRadarComplexity(s);
+				Main.this.variabilidadeDinamica(s);
 			}
 		});
 		
-		visualization.add(p17);
+		oneModel.add(p17);
 		
 		JMenuItem p18 = new JMenuItem("O modelo de features é de fácil extensibilidade?");
 		
@@ -982,7 +1075,7 @@ public class Main extends JFrame {
 			}
 		});
 		
-		visualization.add(p18);
+		allModels.add(p18);
 	}
 
 

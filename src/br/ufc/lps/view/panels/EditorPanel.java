@@ -94,13 +94,16 @@ import br.ufc.lps.view.panels.dialogs.JOptionPaneListItensRnfs;
 import br.ufc.lps.view.panels.dialogs.JOptionPaneQB;
 import br.ufc.lps.view.panels.dialogs.JOptionPaneQP;
 import br.ufc.lps.view.trees.FeatureModelTree;
+import br.ufc.lps.view.trees.FeaturesRnfTreeCellRenderer;
 import br.ufc.lps.view.trees.FeaturesTreeCellRenderer;
 import br.ufc.lps.view.trees.adaptation.Adaptacao;
 import br.ufc.lps.view.trees.adaptation.CheckBoxNodeData;
 import br.ufc.lps.view.trees.adaptation.CheckBoxNodeEditor;
 import br.ufc.lps.view.trees.adaptation.CheckBoxNodeRenderer;
 import br.ufc.lps.view.trees.adaptation.ValorAdaptacao;
-import br.ufc.lps.view.trees.rnf.PNFValue;
+import br.ufc.lps.view.trees.rnf.Characteristic;
+import br.ufc.lps.view.trees.rnf.NFP;
+import br.ufc.lps.view.trees.rnf.SubCharacteristic;
 
 public class EditorPanel extends JPanel implements ActionListener {
 
@@ -173,13 +176,11 @@ public class EditorPanel extends JPanel implements ActionListener {
 		//ARVORE FEATURE
 		tree = new JTree();
 		tree.setModel(new FeatureModelTree(model.getFeatureModel().getRoot()));
-		tree.setEditable(true);
 		tree.setComponentPopupMenu(getComponentPopupMenu());
 		tree.addMouseListener(getMouseListener());
 	
 		//ARVORE RNF
 		treeRnf = new JTree();
-		treeRnf.setEditable(true);
 		preenchendoArvoreRnf(splotContextModel.getArvoreRnf());
 		
 		adaptacoes = splotContextModel.getAdaptacoes();
@@ -618,8 +619,6 @@ public class EditorPanel extends JPanel implements ActionListener {
 
 						String nomeContexto = verificandoArvore(rootArvoreAdaptacao);
 						
-						System.out.println("verificação: "+nomeContexto);
-						
 						if(nomeContexto==null){
 							JOptionPane.showMessageDialog(null, "Check someone item in Tree Adaptation");
 							return;
@@ -842,7 +841,7 @@ public class EditorPanel extends JPanel implements ActionListener {
 			StreamResult console = new StreamResult(new FileOutputStream(file));
 			transformer.transform(source, console);
 
-			EditorPanel.this.tree.updateUI();
+			tree.updateUI();
 			JOptionPane.showMessageDialog(EditorPanel.this,
 					"Save Successfuly");
 
@@ -1039,7 +1038,11 @@ public class EditorPanel extends JPanel implements ActionListener {
 		constraintsPanel.setText(constraints);
 	}*/
 	
-	private void adicionarConstraintsDoContexto(Context contexto){
+	private void adicionarConstraintsDoContexto(Context contexto, boolean clean){
+		
+		if(clean)
+			constraintsList.clear();
+		
 		System.out.println("entrou");
 		//updateConstraintsPainel(contexto);
 		
@@ -1491,26 +1494,27 @@ public class EditorPanel extends JPanel implements ActionListener {
 		}	
 		
 		if(!splotContextModel.getContexts().containsKey(contextName)){
-			//constraintsListRnf.clear();
+			constraintsListRnf.clear();
 			return;
 		}
 		
 		if(contextoRnf.containsKey(contextName)){
 			Context context = splotContextModel.getContexts().get(contextName);
 			preenchendoContextosRnf(contextoRnf.get(contextName));
-			adicionarConstraintsDoContexto(context);
+			adicionarConstraintsDoContexto(context, true);
 		}else{
-			//constraintsListRnf.clear();
+			constraintsListRnf.clear();
 		}
 		
 		//Context context = splotContextModel.getContexts().get(contextName);
 		//FeatureModel featureModel = splotContextModel.setFeatureModel(context);
 		//String modelName = featureModel.getName();
 		
-		//tree.setModel(featureModel);	
-		//tree.setEditable(true);
 		//tree.setCellRenderer(new FeaturesTreeCellRenderer(context));
-		//expandAllNodes(tree, 0, tree.getRowCount());
+		//tree.setModel(featureModel);	
+		
+		//tree.setCellRenderer(new FeaturesTreeCellRenderer(context));		
+		expandAllNodes(tree, 0, tree.getRowCount());
 	}
 	
 	@Override
@@ -1795,24 +1799,23 @@ public class EditorPanel extends JPanel implements ActionListener {
 		if(rnf!=null && rnf.getCaracteristicas()!=null){
 			
 			for(Caracteristica caracteristica : rnf.getCaracteristicas()){
-				DefaultMutableTreeNode carac = new DefaultMutableTreeNode(caracteristica.getNome());
+				Characteristic carac = new Characteristic(caracteristica.getNome());
 				
 				for(Subcaracteristica subcaracteristica : caracteristica.getSubcaracteristicas()){
-					DefaultMutableTreeNode sub = new DefaultMutableTreeNode(subcaracteristica.getNome());
+					SubCharacteristic sub = new SubCharacteristic(subcaracteristica.getNome());
 					carac.add(sub);
 					
 					for(PropriedadeNFuncional propriedadeNFuncional : subcaracteristica.getPropriedadeNFuncionais()){
-						PNFValue pnf = new PNFValue(propriedadeNFuncional.getPropriedade(), propriedadeNFuncional.getPadrao());
+						NFP pnf = new NFP(propriedadeNFuncional.getPropriedade(), propriedadeNFuncional.getPadrao());
 						sub.add(pnf);
 					}
 				}
-				
 				root.add(carac);
 			}
-			
 		}
 		treeModel = new DefaultTreeModel(root);
 		treeRnf = new JTree(treeModel);
+		treeRnf.setCellRenderer(new FeaturesRnfTreeCellRenderer());
 		treeRnf.setModel(treeModel);
 		treeRnf.updateUI();
 		expandAllNodes(treeRnf, 0, treeRnf.getRowCount());

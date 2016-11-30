@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<title>Bubble</title>
+    <script type="text/javascript" src="../js/d3.v3.js"></script>
+    <script type="text/javascript" src="../js/jquery-3.1.0.min.js"></script>
+
+<style type="text/css">
+  text {
+    font: 8px tahoma;
+  }
+
+  body {
+      margin: 0;
+      overflow: hidden;
+      font-size: 8px;
+      font-family: "Helvetica Neue", Helvetica;
+  }
+  .svg-container {
+      display: inline-block;
+      position: relative;
+      width: 100%;
+      padding-bottom: 100%; /* aspect ratio */
+      vertical-align: top;
+      overflow: hidden;
+  }
+  .svg-content-responsive {
+      display: inline-block;
+      position: absolute;
+      top: 10px;
+      left: 0;
+  }
+</style>
+</head>
+
+<body>
+<center style=" font-size: 30px; margin-top:19px;">Extensibility of Models</center>
+<center>
+	<div id="body"></div>
+</center>
+</body>
+<script type="text/javascript">
+
+var diameter = 960,
+ 	chartWidth = 680,
+    chartHeight = 340,
+    format = d3.format(",d"),
+
+    color = d3.scale.linear().domain([0,50]).range([0,1])
+      .interpolate(d3.interpolateHcl)
+      .range([d3.rgb("#D0D3D4"), d3.rgb('#CB4335')]);
+
+var bubble = d3.layout.pack()
+    .size([chartWidth, chartHeight]);
+
+var svg = d3.select("#body")
+	   .append("div")
+	   .classed("svg-container", true) //container class to make it responsive
+	   .append("svg")
+	   //responsive SVG needs these 2 attributes and no width and height attr
+	   .attr("preserveAspectRatio", "xMinYMin meet")
+	   .attr("viewBox", "0 0 700 340")
+	   //class to make it responsive
+	   .classed("svg-content-responsive", true);
+
+//d3.json("flare.json", function(error, root) {
+ // if (error) throw error;
+
+function receber(config){
+
+	var root = JSON.parse(config);
+	root = root.root;
+
+ 	var node = svg.selectAll(".node")
+      .data(bubble.nodes(classes(root))
+      .filter(function(d) { return !d.children; }))
+    .enter().append("g")
+      .attr("class", "node")
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+      .on("mouseover", function(d){
+			showToolTip(" "+d.className+"<br>"+d.value+" ",d.x+d3.mouse(this)[0]+50,d.y+d3.mouse(this)[1],true);
+	   })
+	   .on("mouseout", function()
+	   {
+			showToolTip(" ",0,0,false);
+	   });
+
+  //node.append("title")
+    //  .text(function(d) { return d.className + ": " + d.value });
+
+  //para mudar a cor de acordo com o titulo mudar o value para packageName
+
+  node.append("circle")
+      .attr("r", function(d) { return d.r; })
+      .style("fill", function(d, i) { return color(d.r); });
+
+  node.append("text")
+      .attr("dy", ".3em")
+      .style("text-anchor", "middle")
+      .text(function(d) { return d.className.substring(0, d.r / 3); });
+//});
+}
+// Returns a flattened hierarchy containing all leaf nodes under the root.
+function classes(root) {
+  var classes = [];
+
+  function recurse(name, node) {
+    if (node.children) node.children.forEach(function(child) { recurse(node.name, child); });
+    else classes.push({packageName: name, className: node.name, value: node.size});
+  }
+
+  recurse(null, root);
+  return {children: classes};
+}
+
+d3.select(self.frameElement).style("height", chartHeight + "px");
+
+function showToolTip(pMessage,pX,pY,pShow)
+{
+  if (typeof(tooltipDivID)=="undefined")
+  {
+             tooltipDivID = $('<div id="messageToolTipDiv" style="position:absolute;display:block;z-index:10000;border:2px solid black;background-color:rgba(0,0,0,0.8);margin:auto;padding:3px 5px 3px 5px;color:white;font-size:12px;font-family:arial;border-radius: 5px;vertical-align: middle;text-align: center;min-width:50px;overflow:auto;"></div>');
+
+		$('#body').append(tooltipDivID);
+  }
+  if (!pShow) { tooltipDivID.hide(); return;}
+  //MT.tooltipDivID.empty().append(pMessage);
+  tooltipDivID.html(pMessage);
+  tooltipDivID.css({top:pY,left:pX});
+  tooltipDivID.show();
+}
+</script>
+</html>

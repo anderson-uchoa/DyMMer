@@ -9,12 +9,14 @@ import javax.swing.JTree;
 import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.TreeCellRenderer;import org.apache.commons.math3.random.ISAACRandom;
 
 public class CheckBoxNodeRenderer implements TreeCellRenderer {
 
 	private final CheckBoxNodePanel panel = new CheckBoxNodePanel();
-	private Icon contexto = new ImageIcon("images/contexto.png");
+	private Icon contexto = new ImageIcon("images/context.png");
+	private Icon normal = new ImageIcon("images/normal.png");
+	private boolean isRoot = false;
 
 	private final DefaultTreeCellRenderer defaultRenderer =
 		new DefaultTreeCellRenderer();
@@ -49,11 +51,30 @@ public class CheckBoxNodeRenderer implements TreeCellRenderer {
 	{
 		CheckBoxNodeData data = null;
 		if (value instanceof DefaultMutableTreeNode) {
+			
+			if(((DefaultMutableTreeNode) value).isRoot())
+				isRoot = true;
+			
 			final DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
 			final Object userObject = node.getUserObject();
 			if (userObject instanceof CheckBoxNodeData) {
 				data = (CheckBoxNodeData) userObject;
 			}
+		}
+		
+		if (data == null) {
+			
+			defaultRenderer.getTreeCellRendererComponent(tree, value,
+				selected, expanded, leaf, row, hasFocus);
+			
+			if(isRoot)
+				defaultRenderer.setIcon(normal);
+			else
+				defaultRenderer.setIcon(contexto);
+			
+			isRoot = false;
+			
+			return defaultRenderer;
 		}
 
 		final String stringValue =
@@ -74,12 +95,6 @@ public class CheckBoxNodeRenderer implements TreeCellRenderer {
 			panel.setBackground(textBackground);
 			panel.label.setForeground(textForeground);
 			panel.label.setBackground(textBackground);
-		}
-
-		if (data == null) {
-			defaultRenderer.setIcon(contexto);
-			return defaultRenderer.getTreeCellRendererComponent(tree, value,
-				selected, expanded, leaf, row, hasFocus);
 		}
 
 		panel.label.setText(data.getText());

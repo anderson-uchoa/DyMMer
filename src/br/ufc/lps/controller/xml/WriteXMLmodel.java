@@ -14,7 +14,7 @@ import br.ufc.lps.model.contextaware.Resolution;
 import br.ufc.lps.model.rnf.ContextoRnf;
 import br.ufc.lps.model.rnf.ValorContextoRnf;
 import br.ufc.lps.view.trees.adaptation.CheckBoxNodeData;
-import br.ufc.lps.view.trees.rnf.PNFValue;
+import br.ufc.lps.view.trees.rnf.NFP;
 
 public class WriteXMLmodel {
 
@@ -152,7 +152,7 @@ public class WriteXMLmodel {
 	
 	private static Node getPropriedadeNFuncionalRnf(Document doc, DefaultMutableTreeNode pnf) {
 		
-		PNFValue vpnf = (PNFValue) pnf;
+		NFP vpnf = (NFP) pnf;
 		
 		Element propriedadenf = doc.createElement("propriedade_n_funcional");
 		propriedadenf.setAttribute("nome", pnf.toString());

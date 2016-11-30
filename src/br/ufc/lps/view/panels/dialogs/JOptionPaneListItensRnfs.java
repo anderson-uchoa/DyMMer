@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -19,19 +17,16 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTree;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import com.teamdev.jxbrowser.chromium.bo;
-
 import br.ufc.lps.controller.tree.ControllerTree;
 import br.ufc.lps.model.MappingItensRnfObjecJson;
-import br.ufc.lps.model.adaptation.ValueQuantificationBool;
 import br.ufc.lps.view.list.ConstraintsListModelItensRnfs;
-import br.ufc.lps.view.trees.rnf.PNFValue;
+import br.ufc.lps.view.trees.rnf.Characteristic;
+import br.ufc.lps.view.trees.rnf.NFP;
+import br.ufc.lps.view.trees.rnf.SubCharacteristic;
 
 public class JOptionPaneListItensRnfs{
 	
@@ -111,16 +106,20 @@ public class JOptionPaneListItensRnfs{
 					if(!lastNivel){
 						if(!verifyTextSelected())
 	    					return;
-						node.add(new PNFValue(textoSelecionado, padraoSelecionado));
+						if(nivel==0){
+							node.add(new Characteristic(novoItem.getText().trim() + " " + padraoSelecionado));
+						}else{
+							node.add(new SubCharacteristic(novoItem.getText().trim() + " " + padraoSelecionado));
+						}
 					}else{
 						if(check.isSelected()){
 							if(!verifyTextChecked())
 								return;
-							node.add(new PNFValue(novoItem.getText().trim() + " " + padraoSelecionado, padraoSelecionado));
+							node.add(new NFP(novoItem.getText().trim() + " " + padraoSelecionado, padraoSelecionado));
 						}else{
 							if(!verifyTextSelected())
 								return;
-							node.add(new PNFValue(textoSelecionado + " " + padraoSelecionado, padraoSelecionado));
+							node.add(new NFP(textoSelecionado + " " + padraoSelecionado, padraoSelecionado));
 						}
 					}
 					dialog.dispose();

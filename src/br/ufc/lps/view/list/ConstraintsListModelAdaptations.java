@@ -8,7 +8,7 @@ import br.ufc.lps.model.adaptation.Adaptacao;
 import br.ufc.lps.model.adaptation.ContextoAdaptacao;
 import br.ufc.lps.model.adaptation.ValorAdaptacao;
 
-public class ConstraintsListModelAdaptations extends AbstractListModel<String>{
+public class ConstraintsListModelAdaptations extends AbstractListModel<Adaptacao>{
 
 	private List<Adaptacao> adaptations;
 	
@@ -17,18 +17,18 @@ public class ConstraintsListModelAdaptations extends AbstractListModel<String>{
 	}
 
 	@Override
-	public String getElementAt(int position) {
+	public Adaptacao getElementAt(int position) {
 		
-		String mostragem = "";
+		/*String mostragem = "";
 		for(ContextoAdaptacao valor: adaptations.get(position).getValorAdaptacao()){
 			mostragem = mostragem+valor.getNome()+" \n";
 			for(ValorAdaptacao ada : valor.getValorAdaptacao()){
 				if(ada.getStatus())
 					mostragem = " \n"+mostragem+"\t"+ada.getNome()+" \n";
 			}
-		}
+		}*/
 		
-		return "Scenarios "+(position+1)+" \n"+mostragem;
+	    return adaptations.get(position);
 	}
 
 	@Override

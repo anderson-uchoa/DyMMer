@@ -2,15 +2,15 @@ package br.ufc.lps.view.trees.rnf;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-public class PNFValue extends DefaultMutableTreeNode{
+public class NFP extends DefaultMutableTreeNode{
 	private String padrao;
 	
-	public PNFValue(String name, String padrao) {
+	public NFP(String name, String padrao) {
 		super(name);
 		this.padrao = padrao;
 	}
 	
-	public PNFValue() {}
+	public NFP() {}
 	
 	public String getPadrao() {
 		return padrao;

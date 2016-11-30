@@ -56,6 +56,7 @@ import br.ufc.lps.splar.core.fm.FeatureModel;
 import br.ufc.lps.splar.core.fm.FeatureTreeNode;
 import br.ufc.lps.view.Main;
 import br.ufc.lps.view.list.ConstraintsListModelAdaptations;
+import br.ufc.lps.view.trees.FeaturesRnfTreeCellRenderer;
 import br.ufc.lps.view.trees.FeaturesTreeCellRenderer;
 import br.ufc.lps.view.trees.FeaturesTreePerfuseControl;
 import br.ufc.lps.view.trees.FeaturesTreeViewPerfuse;
@@ -64,6 +65,9 @@ import br.ufc.lps.view.trees.adaptation.CheckBoxNodeData;
 import br.ufc.lps.view.trees.adaptation.CheckBoxNodeEditor;
 import br.ufc.lps.view.trees.adaptation.CheckBoxNodeRenderer;
 import br.ufc.lps.view.trees.adaptation.ValorAdaptacao;
+import br.ufc.lps.view.trees.rnf.Characteristic;
+import br.ufc.lps.view.trees.rnf.NFP;
+import br.ufc.lps.view.trees.rnf.SubCharacteristic;
 import prefuse.Constants;
 import prefuse.Visualization;
 import prefuse.controls.ControlAdapter;
@@ -85,7 +89,7 @@ public class ViewerPanel extends JPanel {
 	private TextArea constraintsPanelRnf;
 	private Main main;
 	private Tree treeP;
-	private JList listaPossibilidadesAdaptacoes;
+	private JList<br.ufc.lps.model.adaptation.Adaptacao> listaPossibilidadesAdaptacoes;
 	private ConstraintsListModelAdaptations listModelAdaptations;
 	private JScrollPane scrollPane;
 	private JPanel panelBotoesLayoutTree;
@@ -131,7 +135,7 @@ public class ViewerPanel extends JPanel {
 		resultReasoningPanel.add(lblResult);
 		
 		lblResultReasoning = new JLabel("Choose one measure");
-		listaPossibilidadesAdaptacoes = new JList<String>();
+		listaPossibilidadesAdaptacoes = new JList<br.ufc.lps.model.adaptation.Adaptacao>();
 		
 		resultReasoningPanel.add(lblResultReasoning);
 		
@@ -144,14 +148,16 @@ public class ViewerPanel extends JPanel {
 		}
 
 		listModelAdaptations = new ConstraintsListModelAdaptations(adaptacoesDisponiveis);
-		listaPossibilidadesAdaptacoes = new JList<String>(listModelAdaptations);
+		
+		listaPossibilidadesAdaptacoes = new JList<br.ufc.lps.model.adaptation.Adaptacao>(listModelAdaptations);
+		listaPossibilidadesAdaptacoes.setCellRenderer(new CellRenderList());
 		listaPossibilidadesAdaptacoes.addMouseListener(getMouseListener());
 		
 		JScrollPane scrollPaneListaAdaptations = new JScrollPane(listaPossibilidadesAdaptacoes, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		JPanel panelListaAdaptations = new JPanel(new BorderLayout());
 		
-		panelListaAdaptations.add(new JLabel("Cenários de Adaptações"), BorderLayout.NORTH);
+		panelListaAdaptations.add(new JLabel("Adaptations Scenarios"), BorderLayout.NORTH);
 		panelListaAdaptations.add(scrollPaneListaAdaptations, BorderLayout.CENTER);
 		
 		//PAINEL PARA ADICIONAR INFORMAÇÕES DA ARVORES
@@ -289,7 +295,7 @@ public class ViewerPanel extends JPanel {
 		panelBotoesLayoutTree.add(butaoMudarLayout4);
 		
 		JPanel panelInfos = new JPanel();
-		add(panelInfos, BorderLayout.EAST);
+		add(panelInfos, BorderLayout.AFTER_LINE_ENDS);
 		panelInfos.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panelInfoContexts = new JPanel();
@@ -310,7 +316,8 @@ public class ViewerPanel extends JPanel {
 		
 		JPanel panelInfoConstraints = new JPanel(new GridLayout(0, 1));
 		
-		panelInfos.add(panelListaAdaptations, BorderLayout.CENTER);
+		if(adaptacoesDisponiveis.size() > 0)
+			panelInfos.add(panelListaAdaptations, BorderLayout.CENTER);
 		
 		panelInfos.add(panelInfoConstraints, BorderLayout.SOUTH);
 		
@@ -759,14 +766,14 @@ private void adicionarConstraintsDoContexto(Context contexto){
 		if(rnf!=null && rnf.getCaracteristicas()!=null){
 
 			for(Caracteristica caracteristica : rnf.getCaracteristicas()){
-				DefaultMutableTreeNode carac = new DefaultMutableTreeNode(caracteristica.getNome());
+				Characteristic carac = new Characteristic(caracteristica.getNome());
 				
 				for(Subcaracteristica subcaracteristica : caracteristica.getSubcaracteristicas()){
-					DefaultMutableTreeNode sub = new DefaultMutableTreeNode(subcaracteristica.getNome());
+					SubCharacteristic sub = new SubCharacteristic(subcaracteristica.getNome());
 					carac.add(sub);
 					
 					for(PropriedadeNFuncional propriedadeNFuncional : subcaracteristica.getPropriedadeNFuncionais()){
-						DefaultMutableTreeNode pnf = new DefaultMutableTreeNode(propriedadeNFuncional.getPropriedade());
+						NFP pnf = new NFP(propriedadeNFuncional.getPropriedade(), propriedadeNFuncional.getPadrao());
 						sub.add(pnf);
 					}
 				}
@@ -778,6 +785,7 @@ private void adicionarConstraintsDoContexto(Context contexto){
 		
 		treeModelRnf = new DefaultTreeModel(root);
 		treeRnf = new JTree(treeModelRnf);
+		treeRnf.setCellRenderer(new FeaturesRnfTreeCellRenderer());
 		treeRnf.setModel(treeModelRnf);
 		treeRnf.setRootVisible(false);
 		treeRnf.updateUI();

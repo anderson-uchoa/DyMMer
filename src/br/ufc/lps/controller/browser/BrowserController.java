@@ -16,6 +16,7 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.cr;
 import com.teamdev.jxbrowser.chromium.events.ConsoleEvent;
 import com.teamdev.jxbrowser.chromium.events.ConsoleListener;
 import com.teamdev.jxbrowser.chromium.events.FinishLoadingEvent;
@@ -255,7 +256,113 @@ public class BrowserController{
     	   return new BrowserView(browser);
     	   
        }
+       //Q 2 9
+       public static Component getBarNumberImpactoLinha(List<SchemeXml> scheme){
+    	   
+    	   Browser browser = new Browser();
+    	   ConfigSet cnf = new ConfigSet();
+    	   
+    	   cnf.setType("radar");
+    	   
+    	   BuyerData buyerData = new BuyerData();
+    	   
+    	   List<String> labels = Arrays.asList("Número de Features (NF), Número de Features Mandatórias (NM), Número de Features Top (Ntop), Restrições Cross-tree (CTC)");
+    	   
+    	   buyerData.setLabels(labels);
+    	   
+    	   List<DataSet> datasets = new ArrayList<>();
+    	   
+    	   List<String> coresBackground = new ArrayList<>();
+    	   List<String> coresHoverBackground = new ArrayList<>();
+    	   
+    	   Random rand = new Random();
+    	   for(int i=0; i < scheme.size(); i++){
+    		   int r = rand.nextInt(255);
+    		   int g = rand.nextInt(255);
+    		   	   int b = rand.nextInt(255);
+    		   String rgbBack = "rgba("+r+", "+g+", "+b+", 0.5)";
+    		   String rgbHover = "rgba("+r+", "+g+", "+b+", 1)";
+    		   coresBackground.add(rgbBack);
+    		   coresHoverBackground.add(rgbHover);
+    	   }
+    	   
+    	   List<Double> listaData = null;
+    	   DataSetBar dataSet = null;
+    	   
+    	   for(int j=0; j < scheme.size(); j++){
+    		   
+    		   SchemeXml medida = scheme.get(j);
+    		   
+    		   dataSet = new DataSetBar	();
+	    	   dataSet.setBorderWidth(3);
+	    	   	
+	    	   listaData = new ArrayList<>();
+    		   dataSet.setLabel(medida.getNameXml());
+    		   
+	    	   listaData.add(Double.parseDouble(medida.getNumberOfFeatures().toString()));
+	    	   listaData.add(Double.parseDouble(medida.getNumberOfMandatoryFeatures().toString()));
+	    	   listaData.add(Double.parseDouble(medida.getNumberOfTopFeatures().toString()));
+	    	   listaData.add(Double.parseDouble(medida.getCrossTreeConstraintsRate().toString()));
+	    	   
+    		   dataSet.setData(listaData);
+    		   List<String> coresBackground2 = new ArrayList<>();
+        	   List<String> coresHoverBackground2 = new ArrayList<>();
+    		   for(int i=0; i < 6; i++){
+	    		   coresBackground2.add(coresBackground.get(j));
+	    		   coresHoverBackground2.add(coresHoverBackground.get(j));
+    		   }
+    		   dataSet.setBackgroundColor(coresBackground2);
+    		   dataSet.setHoverBackgroundColor(coresHoverBackground2);
+	    	   datasets.add(dataSet);
+	    	  
+    	   }
+    	   
+    	   OptionsSet optionsSet = new OptionsSet();
+    	   TitleSet titleSet = new TitleSet();
+    	   titleSet.setDisplay(true);
+    	   titleSet.setText("Impacto dos Modelos de Features");
+    	   titleSet.setFontSize(20);
+    	   optionsSet.setTitle(titleSet);
+    	   
+    	   //LEGEND OF OPTIONS
+    	   LegendSet legend = new LegendSet();
+    	   legend.setPosition("bottom");
+    	   optionsSet.setLegend(legend);
 
+    	   
+    	   cnf.setOptions(optionsSet);
+    	   
+    	   buyerData.setDatasets(datasets);
+    	   cnf.setData(buyerData);
+    	   
+    	   Gson g = new Gson();
+    	   String saida = g.toJson(cnf);
+    	   System.out.println(saida);
+    	   
+    	   
+    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/generic.html");
+      	  
+    	   browser.addLoadListener(new LoadAdapter() {
+               @Override
+               public void onFinishLoadingFrame(FinishLoadingEvent event) {
+                   if (event.isMainFrame()) {
+                       event.getBrowser().executeJavaScript("preencherGrafico('"+saida+"')");
+                   }
+               }
+           });
+    	   
+    	   browser.addConsoleListener(new ConsoleListener() {
+			
+			@Override
+			public void onMessage(ConsoleEvent arg0) {
+				System.out.println(arg0.getMessage());
+			}
+		});
+    	 
+    	   return new BrowserView(browser);
+    	   
+       }
+       
        public static Component getBarComplexity(SchemeXml scheme){
     	   
     	   Browser browser = new Browser();
@@ -670,6 +777,177 @@ public class BrowserController{
     	   
        }
        
+       public static Component getRadarImpactoQ2(List<SchemeXml> scheme){
+    	   
+    	   Browser browser = new Browser();
+    	   ConfigSet cnf = new ConfigSet();
+    	   
+    	   cnf.setType("radar");
+    	   
+    	   BuyerData buyerData = new BuyerData();
+    	   
+    	   List<String> labels = Arrays.asList(
+    			   "Number of Top features features removed",
+    			   "Number of mandatory features removed",
+    			   "Number of features removed",
+    			   
+    			   "Cross-tree constraints",
+    			   "Number of Top features features adicioned",
+    			   "Number of mandatory features adicioned",
+    			   "Number of features adicioned");
+    	   
+    	   buyerData.setLabels(labels);
+    	   
+    	   List<DataSet> datasets = new ArrayList<>();
+    	   
+    	   List<String> coresBackground = new ArrayList<>();
+    	   List<String> coresHoverBackground = new ArrayList<>();
+    	   
+    	   Random rand = new Random();
+    	   for(int i=0; i < scheme.size(); i++){
+    		   int r = rand.nextInt(255);
+    		   int g = rand.nextInt(255);
+    		   	   int b = rand.nextInt(255);
+    		   String rgbBack = "rgba("+r+", "+g+", "+b+", 0.4)";
+    		   String rgbHover = "rgba("+r+", "+g+", "+b+", 1)";
+    		   coresBackground.add(rgbBack);
+    		   coresHoverBackground.add(rgbHover);
+    	   }
+    	   
+    	   List<Double> listaData = null;
+    	   DataSetBar dataSet = null;
+    	   
+    	   int removedTop = 0;
+    	   int removedNF = 0;
+    	   int removedNM = 0;
+    	   
+    	   int cross = 0;
+    	   int adicionedTop = 0;
+    	   int adicionedNF = 0;
+    	   int adicionedNM = 0;
+    	   
+    	   for(int i=1; i < scheme.size(); i++){
+    		   
+    		   if((i+1) < scheme.size()){
+    			   int result = 0;
+    			   
+    			   result = scheme.get(i+1).getNumberOfTopFeatures()!=null ? scheme.get(i+1).getNumberOfTopFeatures() : 1  - (scheme.get(i).getNumberOfTopFeatures()!=null ? scheme.get(i).getNumberOfTopFeatures() : 2);
+    			   
+    			   System.out.println(result);
+    			   
+    			   if(result < 0)
+    				   removedTop+=(result*-1);
+    			   else if(result > 0)
+    				   adicionedTop+=result;
+    			   
+    			   result = scheme.get(i+1).getNumberOfFeatures() - scheme.get(i).getNumberOfFeatures();
+
+    			   System.out.println(result);
+
+    			   if(result < 0)
+    				   removedNF+=(result*-1);
+    			   else if(result > 0)
+    				   adicionedNF+=result;
+    			   
+    			   result = scheme.get(i+1).getNumberOfMandatoryFeatures() - scheme.get(i).getNumberOfMandatoryFeatures();
+    			   
+    			   System.out.println(result);
+    			   
+    			   if(result < 0)
+    				   removedNM+=(result*-1);
+    			   else if(result > 0)
+    				   adicionedNM+=result;
+    			   
+    			   cross = Integer.parseInt(scheme.get(i).getCrossTreeConstraintsRate() != null ? scheme.get(i).getCrossTreeConstraintsRate().toString() : "0");
+    		   }
+    		   
+    		   dataSet = new DataSetBar();
+	    	   dataSet.setBorderWidth(2);
+	    	   	
+	    	   listaData = new ArrayList<>();
+    		   dataSet.setLabel(scheme.get(i).getNameXml());
+    		   
+	    	   listaData.add(Double.parseDouble(removedTop+""));
+	    	   listaData.add(Double.parseDouble(removedNM+""));
+	    	   listaData.add(Double.parseDouble(removedNF+""));
+	    	   
+	    	   listaData.add(Double.parseDouble(cross+""));
+	    	   listaData.add(Double.parseDouble(adicionedTop+""));
+	    	   listaData.add(Double.parseDouble(adicionedNM+""));
+	    	   listaData.add(Double.parseDouble(adicionedNF+""));
+	    	   
+	    	   dataSet.setData(listaData);
+	    	   
+	    	   List<String> coresBackground2 = new ArrayList<>();
+        	   List<String> coresHoverBackground2 = new ArrayList<>();
+        	   
+    		   for(int j=0; j < 8; j++){
+	    		   coresBackground2.add(coresBackground.get(i));
+	    		   coresHoverBackground2.add(coresHoverBackground.get(i));
+    		   }
+    		   
+    		   dataSet.setBackgroundColor(coresBackground2);
+    		   dataSet.setHoverBackgroundColor(coresHoverBackground2);
+	    	
+	    	   
+	    	   removedTop = 0;
+	    	   removedNF = 0;
+	    	   removedNM = 0;
+	    	   
+	    	   cross = 0;
+	    	   adicionedTop = 0;
+	    	   adicionedNF = 0;
+	    	   adicionedNM = 0;
+	    	   
+	    	   datasets.add(dataSet);
+    	   }
+    	   
+    	   OptionsSet optionsSet = new OptionsSet();
+    	   TitleSet titleSet = new TitleSet();
+    	   titleSet.setDisplay(true);
+    	   titleSet.setText("Complexidade Estrutural: "+scheme.get(0).getNameXml());
+    	   titleSet.setFontSize(20);
+    	   optionsSet.setTitle(titleSet);
+    	   
+    	   //LEGEND OF OPTIONS
+    	   LegendSet legend = new LegendSet();
+    	   legend.setPosition("bottom");
+    	   optionsSet.setLegend(legend);
+
+    	   
+    	   cnf.setOptions(optionsSet);
+    	   
+    	   buyerData.setDatasets(datasets);
+    	   cnf.setData(buyerData);
+    	   
+    	   Gson g = new Gson();
+    	   String saida = g.toJson(cnf);
+    	   System.out.println(saida);
+    	   
+    	   
+    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/generic.html");
+      	  
+    	   browser.addLoadListener(new LoadAdapter() {
+               @Override
+               public void onFinishLoadingFrame(FinishLoadingEvent event) {
+                   if (event.isMainFrame()) {
+                       event.getBrowser().executeJavaScript("preencherGrafico('"+saida+"')");
+                   }
+               }
+           });
+    	   
+    	   browser.addConsoleListener(new ConsoleListener() {
+			
+			@Override
+			public void onMessage(ConsoleEvent arg0) {
+				System.out.println(arg0.getMessage());
+			}
+		});
+    	 
+    	   return new BrowserView(browser);
+    	   
+       }
+       
        public static JComponent getLine(SchemeXml scheme){
     	   Browser browser = new Browser();
     	   ConfigSet cnf = new ConfigSet();
@@ -759,6 +1037,98 @@ public class BrowserController{
     	   
     	   return new BrowserView(browser);
        }
+
+       public static JComponent getLineStaticVariability(List<SchemeXml> schemes){
+    	   Browser browser = new Browser();
+    	   ConfigSet cnf = new ConfigSet();
+    	   
+    	   cnf.setType("line");
+    	   
+    	   BuyerData buyerData = new BuyerData();
+    	   
+    	   
+    	   List<String> labels = Arrays.asList("Number of Valid Configuration (NVC)", "Ratio of Variability (RoV)",
+    			   "Number of Optional Features (NO)");
+    	   
+    	   buyerData.setLabels(labels);
+    	   
+    	   List<DataSet> datasets = new ArrayList<>();
+    	   
+    	   List<String> coresBackground = new ArrayList<>();
+    	   List<String> coresHoverBackground = new ArrayList<>();
+    	   
+    	   Random rand = new Random();
+    	   for(int i=0; i < schemes.size(); i++){
+    		   int r = rand.nextInt(255);
+    		   int g = rand.nextInt(255);
+    		   int b = rand.nextInt(255);
+    		   String rgbBack = "rgba("+r+", "+g+", "+b+", 1)";
+    		   String rgbHover = "rgba("+r+", "+g+", "+b+", 0.5)";
+    		   coresBackground.add(rgbBack);
+    		   coresHoverBackground.add(rgbHover);
+    	   }
+    	   
+    	   List<Double> listaData = null;
+    	   DataSetLine dataSet = null;
+    	   
+    	   for(int j=0; j < schemes.size(); j++){
+    		   
+    		   SchemeXml medida = schemes.get(j);
+    		   
+    		   dataSet = new DataSetLine();
+	    	   dataSet.setBorderWidth(3);
+	    	   	
+	    	   listaData = new ArrayList<>();
+    		   dataSet.setLabel(medida.getNameXml());
+    		   
+	    	   listaData.add(Double.parseDouble(medida.getNumberOfValidConfigurations().toString()));
+	    	   listaData.add(Double.parseDouble(medida.getRatioOfVariability().toString()));
+	    	   listaData.add(Double.parseDouble(medida.getNumberOfOptionalFeatures().toString()));
+    		   dataSet.setData(listaData);
+    		   
+    		   dataSet.setBackgroundColor(coresBackground.get(j));
+    		   dataSet.setFill(false);
+    		   dataSet.setBorderColor(coresHoverBackground.get(j));
+    		   
+	    	   datasets.add(dataSet);
+	    	  
+    	   }
+    	   
+    	   OptionsSet optionsSet = new OptionsSet();
+    	   TitleSet titleSet = new TitleSet();
+    	   titleSet.setDisplay(true);
+    	   titleSet.setText("Static Variability");
+    	   titleSet.setFontSize(20);
+    	   optionsSet.setTitle(titleSet);
+    	   
+    	   cnf.setOptions(optionsSet);
+    	   
+    	   //LEGEND OF OPTIONS
+    	   LegendSet legend = new LegendSet();
+    	   legend.setPosition("bottom");
+    	   optionsSet.setLegend(legend);
+    	   
+    	   buyerData.setDatasets(datasets);
+    	   cnf.setData(buyerData);
+    	   
+    	   Gson g = new Gson();
+    	   String saida = g.toJson(cnf);
+    	   System.out.println(saida);
+    	   
+    	   
+    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/generic.html");
+    	   browser.addLoadListener(new LoadAdapter() {
+               @Override
+               public void onFinishLoadingFrame(FinishLoadingEvent event) {
+                   if (event.isMainFrame()) {
+                       event.getBrowser().executeJavaScript("preencherGrafico('"+saida+"')");
+                   }
+               }
+           });
+    	   
+    	   return new BrowserView(browser);
+       }
+       
        
        private static String getRamdomColor(int transparencia){
     	   Random rand = new Random();
@@ -1223,7 +1593,7 @@ public class BrowserController{
     	   
     	   Config config = new Config();
     	   Children c = new Children();
-    	   c.setName("FEX Analisabilidade");
+    	   c.setName("FEX Extensibility");
     	   config.setRoot(c);
     	   
     	   List<Children> foc = new ArrayList<>();
@@ -1244,7 +1614,7 @@ public class BrowserController{
     	   System.out.println(saida);
     	   
     	   
-    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/d3Bubble.html");
+    	   browser.loadURL("File://"+System.getProperty("user.dir")+"/html/visualization/d3Bubble.html");
     	   
     	   browser.addLoadListener(new LoadAdapter() {
                @Override
@@ -1397,13 +1767,12 @@ public class BrowserController{
     	   
        }
        
-       
-       public static JComponent getD3TreeVariabilidadeAdaptativa(SchemeXml scheme){
+       public static JComponent getD3TreeDynamicVariabilidade(SchemeXml scheme){
     	   Browser browser = new Browser();
     	  
     	   Config config = new Config();
     	   Children c = new Children();
-    	   c.setName("Variabilidade Adaptativa - "+scheme.getNameXml());
+    	   c.setName("Dynamic Variability - "+scheme.getNameXml()+ " ( NC = "+scheme.getNumberOfContexts()+" )");
     	   config.setRoot(c);
     	   
     	   List<Children> contextos = new ArrayList<>();
@@ -1422,29 +1791,40 @@ public class BrowserController{
     		   addC.setChildren(variabilidade);
     		   addC.setName(sch.getNameContext());
     		   
+    		   //
     		   Children addC2 = new Children();
-    		   addC2.setName("NcF = "+sch.getNonContextFeatures());
-    		   addC2.setSize(Double.parseDouble(sch.getNonContextFeatures()+""));
-			   
+    		   addC2.setName("CFC = "+(sch.getContextFeaturesContraints()!=null ? sch.getContextFeaturesContraints() : "0"));
+    		   addC2.setSize(Double.parseDouble((sch.getContextFeaturesContraints()!=null ? sch.getContextFeaturesContraints()+"" : "0")));
+    		   
+    		   //
     		   Children addC3 = new Children();
-    		   addC3.setName("NaF = "+sch.getNumberOfActivatedFeatures());
+    		   addC3.setName("NAF = "+sch.getNumberOfActivatedFeatures());
     		   addC3.setSize(Double.parseDouble(sch.getNumberOfActivatedFeatures()+""));
     		   
+    		   //
     		   Children addC4 = new Children();
-    		   addC4.setName("NdF = "+sch.getNumberOfDeactivatedFeatures());
+    		   addC4.setName("NDF = "+sch.getNumberOfDeactivatedFeatures());
     		   addC4.setSize(Double.parseDouble(sch.getNumberOfDeactivatedFeatures()+""));
 
+    		   //
     		   Children addC5 = new Children();
-    		   addC5.setName("NcC = "+sch.getNumberOfContextConstraints());
+    		   addC5.setName("NCC = "+sch.getNumberOfContextConstraints());
     		   addC5.setSize(Double.parseDouble(sch.getNumberOfContextConstraints()+""));
 		
+    		   //
     		   Children addC6 = new Children();
     		   addC6.setName("DFCA = "+sch.getDesactivatedFeaturesByContextAdaptation());
     		   addC6.setSize(Double.parseDouble(sch.getDesactivatedFeaturesByContextAdaptation()+""));
     		   
+    		   //
     		   Children addC7 = new Children();
     		   addC7.setName("AFCA = "+sch.getActivatedFeaturesByContextAdaptation());
     		   addC7.setSize(Double.parseDouble(sch.getActivatedFeaturesByContextAdaptation()+""));
+    		   
+    		   //
+    		   Children addC8 = new Children();
+    		   addC8.setName("CF = "+sch.getNumberOfFeatures());
+    		   addC8.setSize(Double.parseDouble(sch.getNumberOfFeatures()+""));
     		   
     		   variabilidade.add(addC2);
     		   variabilidade.add(addC3);
@@ -1452,6 +1832,7 @@ public class BrowserController{
     		   variabilidade.add(addC5);
     		   variabilidade.add(addC6);
     		   variabilidade.add(addC7);
+    		   variabilidade.add(addC8);
     		   
     		   contextos.add(addC);
     	   }

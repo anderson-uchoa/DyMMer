@@ -76,12 +76,20 @@ public class MeasuresContexts {
 	private Double desactivatedFeaturesByContextAdaptation;
 	@Expose
 	private Integer nonContextFeatures;
+	@Expose
+	private Integer contextFeaturesContraints;
 	
 	public String getNameContext() {
 		return nameContext;
 	}
 	public void setNameContext(String nameContext) {
 		this.nameContext = nameContext;
+	}
+	public Integer getContextFeaturesContraints() {
+		return contextFeaturesContraints;
+	}
+	public void setContextFeaturesContraints(Integer contextFeaturesContraints) {
+		this.contextFeaturesContraints = contextFeaturesContraints;
 	}
 	public Integer getNumberOfFeatures() {
 		return numberOfFeatures;

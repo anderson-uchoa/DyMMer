@@ -61,7 +61,6 @@ public class FeatureModelTree implements TreeModel {
 	@Override
 	public void valueForPathChanged(TreePath path, Object newValue) {
 		// TODO Auto-generated method stub
-		
 	}
-
+	
 }

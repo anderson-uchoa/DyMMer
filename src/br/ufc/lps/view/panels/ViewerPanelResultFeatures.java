@@ -126,7 +126,12 @@ public class ViewerPanelResultFeatures extends JPanel {
 		
 		loader.setEnabled(true);
 
-		mDefaultTableModel = new DefaultTableModel(new String[][]{}, colunas);
+		mDefaultTableModel = new DefaultTableModel(new String[][]{}, colunas){
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 		
 		tabela = new JTable(mDefaultTableModel);
 		JScrollPane barraRolagem = new JScrollPane(tabela);
@@ -337,7 +342,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 				list.add(listaItens.get(selecao[i]));
 			return list;
 		}
-		
+		mensagemSelecionarMultiplasLinhas();
 		return null;
 	}
 	
@@ -374,7 +379,7 @@ public class ViewerPanelResultFeatures extends JPanel {
 	}
 	
 	private void mensagemSelecionarMultiplasLinhas(){
-		JOptionPane.showMessageDialog(null, "Select a model in the table");
+		JOptionPane.showMessageDialog(null, "Select the models in the table");
 	}
 	
 	private void saveInLocalFile(String path, File file){

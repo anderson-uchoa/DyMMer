@@ -107,9 +107,9 @@ public class JOptionPaneListItensRnfs{
 						if(!verifyTextSelected())
 	    					return;
 						if(nivel==0){
-							node.add(new Characteristic(novoItem.getText().trim() + " " + padraoSelecionado));
+							node.add(new Characteristic(textoSelecionado));
 						}else{
-							node.add(new SubCharacteristic(novoItem.getText().trim() + " " + padraoSelecionado));
+							node.add(new SubCharacteristic(textoSelecionado));
 						}
 					}else{
 						if(check.isSelected()){

@@ -1,7 +1,6 @@
 package br.ufc.lps.view.trees;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -17,13 +16,13 @@ import prefuse.data.parser.DataParseException;
 import prefuse.data.parser.DataParser;
 import prefuse.data.parser.ParserFactory;
 
-public class FeaturesTreePerfuseControl {
+public class FeaturesTreePrefuseControl {
 	
 	private HashMap<String, Node> listaDeNosArvore;
 	private ParserFactory parser;
 	boolean entrou = false;
 	
-	public FeaturesTreePerfuseControl() {
+	public FeaturesTreePrefuseControl() {
 		listaDeNosArvore = new HashMap<>();
 	    parser = ParserFactory.getDefaultFactory();
 	}

@@ -682,13 +682,10 @@ public class ContextModel implements IContextModel {
 			}
 		}
 		
-		
 		//Deleta os n�s da arvore
 		for(FeatureTreeNode node : nodesToDelete){
 			otherModel.removeNodeFromParent(node);
-			
 		}
-		
 		
 		//Deleta todos os n�s e constraints registrados
 		otherModel.getNodes().removeAll(nodesToDelete);

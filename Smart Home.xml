@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- This model was created online using SPLOT's Feature Model Editor (http://www.splot-research.org) on Mon, Jul 20, 2015 - 1:11 PM  --><feature_model name="Smart Home">
+<meta>
+<data name="description">A  smart  home  system  DSPL  described  in  terms  of  a  FM</data>
+<data name="creator">Jefferson da Silva Barbosa</data>
+<data name="address"/>
+<data name="email">jefferson.sb.es@gmail.com</data>
+<data name="phone"/>
+<data name="website"/>
+<data name="organization">Universidade Federal do Ceará</data>
+<data name="department"/>
+<data name="date"/>
+<data name="reference"/>
+</meta>
+
+
+
+<context name="Video_on_demand_inactive">
+<resolution feature="Lighting" id="_r_1" status="true"/>
+<resolution feature="ControlSystem" id="_r_2" status="true"/>
+<resolution feature="CellPhone" id="_r_2_8_9" status="true"/>
+<resolution feature="ControlPanel" id="_r_2_8_10" status="false"/>
+<resolution feature="Anti-theftAlarm" id="_r_3" status="false"/>
+<resolution feature="MoviePlayers" id="_r_4" status="true"/>
+<resolution feature="Contents" id="_r_5" status="true"/>
+<resolution feature="Internet" id="_r_11" status="false"/>
+<resolution feature="HDTV42" id="_r_4_17_18" status="true"/>
+<resolution feature="PCPlayer" id="_r_4_17_19" status="false"/>
+<resolution feature="HDTV32" id="_r_4_17_20" status="false"/>
+<resolution feature="VideoOnDemand" id="_r_5_21_22" status="false"/>
+<resolution feature="Providers" id="_r_5_21_22_24" status="false"/>
+<resolution feature="ProviderA" id="_r_5_21_22_24_26_27" status="false"/>
+<resolution feature="ProviderB" id="_r_5_21_22_24_26_28" status="false"/>
+<resolution feature="Cache" id="_r_5_21_22_25" status="false"/>
+<resolution feature="Digital Media Server" id="_r_5_21_23" status="true"/>
+<resolution feature="Ethernet" id="_r_11_12_13" status="false"/>
+<resolution feature="3G" id="_r_11_12_14" status="false"/>
+<resolution feature="Wifi-b" id="_r_11_12_15" status="false"/>
+<resolution feature="Wifi-n" id="_r_11_12_16" status="false"/>
+<constraints/>
+</context>
+
+<context name="Video_on_demand_active">
+<resolution feature="Lighting" id="_r_1" status="true"/>
+<resolution feature="ControlSystem" id="_r_2" status="true"/>
+<resolution feature="CellPhone" id="_r_2_8_9" status="true"/>
+<resolution feature="ControlPanel" id="_r_2_8_10" status="true"/>
+<resolution feature="Anti-theftAlarm" id="_r_3" status="true"/>
+<resolution feature="MoviePlayers" id="_r_4" status="true"/>
+<resolution feature="Contents" id="_r_5" status="true"/>
+<resolution feature="Internet" id="_r_11" status="true"/>
+<resolution feature="HDTV42" id="_r_4_17_18" status="true"/>
+<resolution feature="PCPlayer" id="_r_4_17_19" status="false"/>
+<resolution feature="HDTV32" id="_r_4_17_20" status="false"/>
+<resolution feature="VideoOnDemand" id="_r_5_21_22" status="true"/>
+<resolution feature="Providers" id="_r_5_21_22_24" status="false"/>
+<resolution feature="ProviderA" id="_r_5_21_22_24_26_27" status="false"/>
+<resolution feature="ProviderB" id="_r_5_21_22_24_26_28" status="false"/>
+<resolution feature="Cache" id="_r_5_21_22_25" status="false"/>
+<resolution feature="Digital Media Server" id="_r_5_21_23" status="true"/>
+<resolution feature="Ethernet" id="_r_11_12_13" status="true"/>
+<resolution feature="3G" id="_r_11_12_14" status="true"/>
+<resolution feature="Wifi-b" id="_r_11_12_15" status="true"/>
+<resolution feature="Wifi-n" id="_r_11_12_16" status="false"/>
+<constraints/>
+</context>
+
+<contexto_rnf nome="AcontextAvalueBcontextAvalue"/>
+
+
+
+<adaptacao nome="AcontextLow&gt;150BcontextTrue">
+<contexto nome="A context">
+<valor is_interval="false" nome="Low &gt; 150" padrao="Low" quantification_1="150" status="true" type="padrao" value_quantification_1="&gt;"/>
+<valor is_interval="true" nome="Medium &gt; 200 AND &lt; 300" padrao="Medium" quantification_1="200" quantification_2="300" status="false" type="padrao" value_quantification_1="&gt;" value_quantification_2="&lt;"/>
+</contexto>
+<contexto nome="B context">
+<valor is_quantification="false" nome="True" padrao="True" status="true" type="bool"/>
+<valor is_quantification="false" nome="False" padrao="False" status="false" type="bool"/>
+</contexto>
+</adaptacao>
+<context name="AcontextLow&gt;150BcontextTrue">
+<constraints/>
+</context>
+<contexto_rnf nome="AcontextLow&gt;150BcontextTrue"/>
+<feature_tree>
+:r SmartHome(_r)
+	:m Lighting(_r_1)
+	:m ControlSystem(_r_2)
+		:g (_r_2_8) [1,*]
+			: CellPhone(_r_2_8_9)
+			: ControlPanel(_r_2_8_10)
+	:o Anti-theftAlarm(_r_3)
+	:o MoviePlayers(_r_4)
+		:g (_r_4_17) [1,*]
+			: HDTV42(_r_4_17_18)
+			: PCPlayer(_r_4_17_19)
+			: HDTV32(_r_4_17_20)
+	:o Contents(_r_5)
+		:g (_r_5_21) [1,*]
+			: VideoOnDemand(_r_5_21_22)
+				:m Providers(_r_5_21_22_24)
+					:g (_r_5_21_22_24_26) [1,*]
+						: ProviderA(_r_5_21_22_24_26_27)
+						: ProviderB(_r_5_21_22_24_26_28)
+				:o Cache(_r_5_21_22_25)
+			: Digital Media Server(_r_5_21_23)
+	:o Internet(_r_11)
+		:g (_r_11_12) [1,*]
+			: Ethernet(_r_11_12_13)
+			: 3G(_r_11_12_14)
+			: Wifi-b(_r_11_12_15)
+			: Wifi-n(_r_11_12_16)
+</feature_tree>
+<arvore_rnf>
+<caracteristica nome="A characteristic">
+<subcaracteristica nome="A subcharacteristic">
+<propriedade_n_funcional nome="A PNF" padrao=""/>
+<propriedade_n_funcional nome="B PNF" padrao=""/>
+</subcaracteristica>
+<subcaracteristica nome="B subcharacteristic">
+<propriedade_n_funcional nome="A PNF" padrao=""/>
+<propriedade_n_funcional nome="B PNF" padrao=""/>
+</subcaracteristica>
+</caracteristica>
+<caracteristica nome="B characteristic">
+<subcaracteristica nome="B subcharacteristic">
+<propriedade_n_funcional nome="A PNF" padrao=""/>
+<propriedade_n_funcional nome="A PNF" padrao=""/>
+</subcaracteristica>
+<subcaracteristica nome="A subcharacteristic">
+<propriedade_n_funcional nome="A PNF" padrao=""/>
+<propriedade_n_funcional nome="A PNF" padrao=""/>
+</subcaracteristica>
+</caracteristica>
+</arvore_rnf>
+<arvore_adaptacao>
+<contexto nome="A context">
+<valor is_interval="false" nome="Low &gt; 150" padrao="Low" quantification_1="150" status="true" type="padrao" value_quantification_1="&gt;"/>
+<valor is_interval="true" nome="Medium &gt; 200 AND &lt; 300" padrao="Medium" quantification_1="200" quantification_2="300" status="false" type="padrao" value_quantification_1="&gt;" value_quantification_2="&lt;"/>
+</contexto>
+<contexto nome="B context">
+<valor is_quantification="false" nome="True" padrao="True" status="true" type="bool"/>
+<valor is_quantification="false" nome="False" padrao="False" status="false" type="bool"/>
+</contexto>
+</arvore_adaptacao>
+</feature_model>

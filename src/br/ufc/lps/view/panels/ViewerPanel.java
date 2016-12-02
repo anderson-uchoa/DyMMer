@@ -59,7 +59,7 @@ import br.ufc.lps.view.list.CellRenderList;
 import br.ufc.lps.view.list.ConstraintsListModelAdaptations;
 import br.ufc.lps.view.trees.FeaturesRnfTreeCellRenderer;
 import br.ufc.lps.view.trees.FeaturesTreeCellRenderer;
-import br.ufc.lps.view.trees.FeaturesTreePerfuseControl;
+import br.ufc.lps.view.trees.FeaturesTreePrefuseControl;
 import br.ufc.lps.view.trees.FeaturesTreeViewPerfuse;
 import br.ufc.lps.view.trees.adaptation.Adaptacao;
 import br.ufc.lps.view.trees.adaptation.CheckBoxNodeData;
@@ -548,7 +548,7 @@ public class ViewerPanel extends JPanel {
 		
 		inicializarTreePerfuse();
 		
-		FeaturesTreePerfuseControl fpc = new FeaturesTreePerfuseControl();
+		FeaturesTreePrefuseControl fpc = new FeaturesTreePrefuseControl();
 		fpc.getTree(context, treeP, null ,model.getFeatureModel().getRoot());
 		
 		if(contextoRnf.containsKey(contextName))

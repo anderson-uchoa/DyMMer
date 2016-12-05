@@ -63,6 +63,7 @@ public class ControladorXml{
 	}
 	
 	public boolean save(SchemeXml xml){
+		System.out.println(xml.toString());
 		System.out.println(this.schemeXmlToJson(xml));
 		RequestBody requestBody = new FormBody.Builder()
 			.add("scheme", this.schemeXmlToJson(xml))
@@ -232,7 +233,9 @@ public class ControladorXml{
 			medida.setActivatedFeaturesByContextAdaptation(model.activatedFeaturesByContextAdaptation());
 			medida.setDesactivatedFeaturesByContextAdaptation(model.desactivatedFeaturesByContextAdaptation());
 			medida.setNonContextFeatures(model.contextFeatures());
-			//medida.setContextFeaturesContraints(model.contextFeaturesContraints());
+			medida.setContextFeaturesContraints(model.contextFeaturesContraints());
+			
+			
 			
 			listaDeMedidasPorContexto.add(medida);
 		}

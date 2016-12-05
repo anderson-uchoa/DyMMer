@@ -887,6 +887,7 @@ public class ContextModel implements IContextModel {
 			sum += node.getChildCount();		
 		
 		
+		if((nodes.size()-numberOfLeafFeatures()) <= 0) return 0;
 		return sum/(nodes.size()-numberOfLeafFeatures());
 		
 		//return numberOfValidConfigurations()/(Math.pow(2, numberOfFeatures()));

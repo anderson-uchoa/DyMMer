@@ -905,7 +905,7 @@ public class BrowserController{
     	   OptionsSet optionsSet = new OptionsSet();
     	   TitleSet titleSet = new TitleSet();
     	   titleSet.setDisplay(true);
-    	   titleSet.setText("Complexidade Estrutural: "+scheme.get(0).getNameXml());
+    	   titleSet.setText("Structural Complexity: "+scheme.get(0).getNameXml());
     	   titleSet.setFontSize(20);
     	   optionsSet.setTitle(titleSet);
     	   

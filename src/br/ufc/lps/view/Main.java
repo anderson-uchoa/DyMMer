@@ -564,7 +564,7 @@ public class Main extends JFrame {
 				if(schema!=null){
 					viewMain.isShowLoader(true);
 					Component a = BrowserController.getRadarVariabilidadeAdaptativa(schema);
-					createTab(a, "Estrutural complexity");
+					createTab(a, "Structural Complexity");
 					viewMain.isShowLoader(false);
 				}
 			}
@@ -694,7 +694,7 @@ public class Main extends JFrame {
 				if(schema!=null){
 					viewMain.isShowLoader(true);
 					Component a = BrowserController.getRadarImpactoQ2(schema);
-					createTab(a, "Impacto na Complexidade Estrutural");
+					createTab(a, "Impact on Structural Complexity");
 					viewMain.isShowLoader(false);
 				}
 			}
@@ -708,7 +708,7 @@ public class Main extends JFrame {
 				if(schema!=null){
 					viewMain.isShowLoader(true);
 					Component a = BrowserController.getBarComplexity(schema);
-					createTab(a, "Number of Configurations");
+					createTab(a, "Structural Complexity of Model");
 					viewMain.isShowLoader(false);
 				}
 			}
@@ -761,7 +761,7 @@ public class Main extends JFrame {
 	
 	private void constructVisualizationsMenu(JMenu visualization){
 		
-		JMenu oneModel = new JMenu("For Single Models");
+		JMenu oneModel = new JMenu("For Single Model");
 		JMenu selectedModels = new JMenu("For Selected Models");
 		JMenu allModels = new JMenu("For All Models");
 		

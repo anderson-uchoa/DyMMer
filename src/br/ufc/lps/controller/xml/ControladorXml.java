@@ -155,7 +155,6 @@ public class ControladorXml{
 		model.setFeatureModel(model.getContexts().get(ContextModel.DEFAULT_CONTEXT));	
 		
 		scheme.setNumberOfFeatures(model.numberOfFeatures());
-		System.out.println("numero de f:  "+model.numberOfFeatures());
 		scheme.setNumberOfOptionalFeatures(model.numberOfOptionalFeatures());
 		scheme.setNumberOfMandatoryFeatures(model.numberOfMandatoryFeatures());
 		scheme.setNumberOfTopFeatures(model.numberOfTopFeatures());
@@ -233,7 +232,7 @@ public class ControladorXml{
 			medida.setActivatedFeaturesByContextAdaptation(model.activatedFeaturesByContextAdaptation());
 			medida.setDesactivatedFeaturesByContextAdaptation(model.desactivatedFeaturesByContextAdaptation());
 			medida.setNonContextFeatures(model.contextFeatures());
-			medida.setContextFeaturesContraints(model.contextFeaturesContraints());
+			//medida.setContextFeaturesContraints(model.contextFeaturesContraints());
 			
 			listaDeMedidasPorContexto.add(medida);
 		}

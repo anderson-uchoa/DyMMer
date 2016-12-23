@@ -1,6 +1,7 @@
 package br.ufc.lps.model.rnf;
 
 public class NameImpacto {
+	
 	public static String getNameByImpacto(int impacto){
 		if(impacto == 1)
 			return "+";

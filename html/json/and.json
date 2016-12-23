@@ -2,115 +2,115 @@
   "name": "Root",
   "children": [
     {
-      "name": "Adequação funcional",
+      "name": "Functional suitability",
       "children": [
         {
-          "name": "Completude Funcional",
+          "name": "Functional completeness",
           "children": [
             {
-              "name": "Completude"
+              "name": "Completeness"
             }
           ]
         },
         {
-          "name": "Corretude Funcional",
+          "name": "Functional correctness",
           "children": [
             {
-              "name": "Precisão"
+              "name": "Accuracy"
             },
             {
-              "name": "Precisão de Pocisão"
+              "name": "Position accuracy"
             }
           ]
         },
         {
-          "name": "Adequação Funcional",
+          "name": "Functional appropriateness",
           "children": [
             {
-              "name": "Satisfação do Cliente"
+              "name": "Customer satisfaction"
             }
           ]
         }
       ]
     },
     {
-      "name": "Eficiência de Desempenho",
+      "name": "Performance efficiency",
       "children": [
         {
-          "name": "Comportamento de Tempo",
+          "name": "Time behaviour",
           "children": [
             {
-              "name": "Tempo de Resposta da Expedição"
+              "name": "Dispatch response time"
             },
             {
-              "name": "Tempo Mínimo de Espera"
+              "name": "Minimum waiting time"
             },
             {
-              "name": "Tempo de Resposta"
+              "name": "Response time"
+            },
+            {		
+              "name": "Execution time"
             },
             {
-              "name": "Tempo de Execução"
+              "name": "Latency"
             },
             {
-              "name": "Latência"
+              "name": "Recognition time"
             },
             {
-              "name": "Tempo de Reconhencimento"
+              "name": "Speed"
             },
             {
-              "name": "Velocidade"
-            },
-            {
-              "name": "Taxa de Transferência"
+              "name": "Transfer rate"
             }
           ]
         },
         {
-          "name": "Utilização de Recurso",
+          "name": "Resource utilization",
           "children": [
             {
-              "name": "Consumo de Memória"
+              "name": "Memory consumption"
             },
             {
-              "name": "Consumo de CPU"
+              "name": "CPU consumption"
             },
             {
-              "name": "Consumo de Energia"
+              "name": "Energy consumption"
             },
             {
-              "name": "CPU Disponíveis"
+              "name": "Available CPU"
             },
             {
-              "name": "Eficiência Energética"
+              "name": "Energy efficiency"
             },
             {
-              "name": "Economia de Energia"
+              "name": "Save energy"
             },
             {
-              "name": "Espaço - Memória Principal"
+              "name": "Space - main memory"
             },
             {
-              "name": "Espaço - Memória Secundária"
+              "name": "Space - secondary storage"
             }
           ]
         },
         {
-          "name": "Capacidade",
+          "name": "Capacity",
           "children": [
             {
-              "name": "Capacidade de Canal/Latência"
+              "name": "Channel capacity/latency"
             },
             {
-              "name": "Tamanho do Arquivo"
+              "name": "File size"
             },
             {
-              "name": "Tamanho da Mensagem"
+              "name": "Message size"
             },
             {
-              "name": "Peso"
+              "name": "Weight"
             },
             {
-              "name": "Largura de Banda"
+              "name": "WLAN bandwidth"
             }
           ]
         }
@@ -118,168 +118,100 @@
       "dependsOn": []
     },
     {
-      "name": "Compatibilidade",
+      "name": "Usability",
       "children": [
         {
-          "name": "Interoperabilidade"
-        },
-        {
-          "name": "Coexistência"
-        }
-      ],
-      "dependsOn": []
-    },
-    {
-      "name": "Usabilidade",
-      "children": [
-        {
-          "name": "Adequação de Identificabilidade",
-          "children": []
-        },
-        {
-          "name": "Aprendibilidade",
-          "children": []
-        },
-        {
-          "name": "Operabilidade",
+          "name": "Operability",
           "children": [
             {
-              "name": "Uso Conveniente do Sistema"
+              "name": "Convenient use of the system"
             },
             {
-              "name": "Esforço"
+              "name": "Effort"
             },
             {
-              "name": "Facilidade de Uso"
+              "name": "Ease of use"
             }
           ]
         },
         {
-          "name": "Proteção de Erro do Usuário"
-        },
-        {
-          "name": "Estética da Interface do Usuário",
+          "name": "User interface aesthetics",
           "children": [
             {
-              "name": "Interface de Usuário Amigável"
+              "name": "Friendly user interface"
             },
             {
-              "name": "Conforto"
+              "name": "Comfort"
             }
           ]
         },
         {
-          "name": "Acessibilidade",
+          "name": "Accessibility",
           "children": [
             {
-              "name": "Usabilidade para Deficientes"
+              "name": "Usability for handicapped"
             }
           ]
         }
       ]
     },
     {
-      "name": "Confiabilidade",
+      "name": "Reliability",
       "children": [
+        
         {
-          "name": "Maturidade"
-        },
-        {
-          "name": "Disponibilidade",
+          "name": "Availability",
           "children": [
             {
-              "name": "Tempo de Serviço"
+              "name": "Service time"
             },
             {
-              "name": "Disponibilidade"
+              "name": "Availability"
             }
           ]
         },
         {
-          "name": "Tolerância a Falhas",
+          "name": "Fault tolerance",
           "children": [
             {
-              "name": "Gravidade de Falhas do Produto"
+              "name": "Severity of product failures"
             },
             {
-              "name": "Tolerância a Falhas"
-            }
-          ]
-        },
-        {
-          "name": "Recuperabilidade"
-        }
-      ]
-    },
-    {
-      "name": "Segurança",
-      "children": [
-        {
-          "name": "Não-Repúdio"
-        },
-        {
-          "name": "Responsabilização"
-        },
-        {
-          "name": "Autenticidade",
-          "children": [
-            {
-              "name": "Segurança de Acesso a Dados"
-            }
-          ]
-        },
-        {
-          "name": "Confidencialidade",
-          "children": [
-            {
-              "name": "Confidencialidade"
-            },
-            {
-              "name": "Privacidade"
-            }
-          ]
-        },
-        {
-          "name": "Integridade",
-          "children": [
-            {
-              "name": "Integridade"
+              "name": "Fault tolerance"
             }
           ]
         }
       ]
     },
     {
-      "name": "Manutenibilidade",
+      "name": "Security",
       "children": [
         {
-          "name": "Modularidade"
+          "name": "Authenticity",
+          "children": [
+            {
+              "name": "Data access security"
+            }
+          ]
         },
         {
-          "name": "Reusabilidade"
+          "name": "Confidentiality",
+          "children": [
+            {
+              "name": "Confidentiality"
+            },
+            {
+              "name": "Privacy"
+            }
+          ]
         },
         {
-          "name": "Analisabilidade"
-        },
-        {
-          "name": "Modificabilidade"
-        },
-        {
-          "name": "Estabilidade"
-        }
-      ]
-    },
-    {
-      "name": "Portabilidade",
-      "children": [
-        {
-          "name": "Adaptabilidade"
-        },
-        {
-          "name": "Instabilidade"
-        },
-        {
-          "name": "Substituibilidade"
+          "name": "Integrity",
+          "children": [
+            {
+              "name": "Integrity"
+            }
+          ]
         }
       ]
     }

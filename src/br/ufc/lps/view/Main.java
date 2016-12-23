@@ -916,7 +916,7 @@ public class Main extends JFrame {
 		
 		//visualization.add(VariabilidadeAdaptativa);
 		
-		/*JMenuItem And = new JMenuItem("And");
+		JMenuItem And = new JMenuItem("And");
 		
 		And.addActionListener(new ActionListener() {
 			
@@ -927,7 +927,7 @@ public class Main extends JFrame {
 		});
 		
 		visualization.add(And);
-		*/
+	
 		
 		/*JMenuItem novc = new JMenuItem("Number of Configurations");
 		

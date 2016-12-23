@@ -27,19 +27,19 @@
 
 
 
+
+
+
+
+
+
+
+
+
 <feature_tree>
 :r MobiLine(_r)
 	:m Mostrar Mapa(_r_1)
 	:o Mostrar Compatibilidade Perfil(_r_2)
-	:m Trocar Mensagem(_r_3)
-		:m Tipo de Troca(_r_3_2)
-			:g (_r_3_2_1) [1,1]
-				: Sincrono(_r_3_2_1_1)
-					:o RPC(_r_3_2_1_1_1)
-				: Assincrono(_r_3_2_1_2)
-					:g (_r_3_2_1_2_1) [1,1]
-						: Tupla(_r_3_2_1_2_1_1)
-						: Evento(_r_3_2_1_2_1_2)
 	:m Mostrar Perfil Ambiente(_r_4)
 		:m Listar Itens(_r_4_1)
 			:m Mostrar Documentos(_r_4_1_1)

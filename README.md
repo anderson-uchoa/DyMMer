@@ -21,8 +21,8 @@ DyMMer-NFP was created at Federal University of Ceará by Anderson Uchôa, Luan 
 
 The main branches in the DyMMer-NFP Git:
 
-* ``dev``, is the source code for DyMMer-NFP
-* ``master``, is the original source code for DyMMer
+* ``dev``, is the source code of the DyMMer-NFP tool
+* ``master``, is the original source code of the DyMMer tool
 
 
 Distributed under the MIT license. See ``LICENSE`` for more information.

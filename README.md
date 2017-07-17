@@ -9,7 +9,7 @@ DyMMer-NFP tool is an extension of the DyMMer tool to support the modeling of NF
 DyMMer-NFP was created at Federal University of Ceará by Anderson Uchôa, Luan Lima with the supervision of Dra. Carla I. M. Bezerra and is now jointly and openly managed by STRATEGy Group (SofTware Reuse and QuAliTy Group) at Federal University of Ceará, Quixadá, Brazil.
 
 
-###Contributors
+### Contributors
 
 - Anderson G. Uchôa (Federal University of Ceará, Brazil)
 - Luan P. Lima (Federal University of Ceará, Brazil)

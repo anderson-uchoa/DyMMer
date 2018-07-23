@@ -1,97 +1,144 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>DyMMer project</title>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<title>DyMMer-NFP project</title>
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/github-light.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
+<link rel="stylesheet" href="stylesheets/styles.css">
+<link rel="stylesheet" href="stylesheets/github-light.css">
+<script src="javascripts/scale.fix.js"></script>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, user-scalable=no">
+<!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1 class="header">DyMMer project</h1>
-        <p class="header">feature models, variability, dynamic software product lines, quality measures, automated reasoning, non-functional requirements, visualization measures</p>
+</head>
+<body>
+	<div class="wrapper">
+		<header>
+			<h1 class="header">DyMMer-NFP project</h1>
+			<p class="header">feature models, variability, dynamic software
+				product lines, quality measures, automated reasoning, non-functional
+				requirements, visualization measures</p>
 
-        <ul>
-             <li><a class="buttons github" href="https://github.com/anderson-uchoa/DyMMer">View On GitHub</a></li>
-        </ul>
-
-
-      </header>
-      <section>
-        <p><strong>DyMMer</strong> tool was developed to extract measures from different feature models, which can be described using the file format proposed by the S.P.L.O.T. feature models repository. The S.P.L.O.T. repository has over 600 models entered by SPL community to download, edit or product configuration. In S.P.L.O.T, a feature model is represented by a XML format and stored as a file. These files contain a header and the feature model relations (body). The header contains information about authorship, authorship contact and affiliation, besides the feature model creation date. However, the header information is not mandatory, it can be left in blank. The body of the file is mandatory and comprises the feature model structure and its integrity constraints. So, DyMMer receives as input XML files. The DyMMer process a feature model le and creates an in memory model that make possible to compute the quality measures values. Currently, DyMMer tool is able to collect 41 different quality measures in an automatic manner.</p>
-
-<p>DyMMer was created at Federal University of Ceará by Anderson Uchôa, Luan Lima and Holanda Freitas with the supervision of <a href="http://lattes.cnpq.br/4277471687235814">Dra. Carla I. M. Bezerra</a>   and is now jointly and openly managed by STRATEGy Group (SofTware Reuse and QuAliTy Group) at <a href="http://www.quixada.ufc.br">Federal University of Ceará</a>, Quixadá, Brazil.</p>
-
-<p>Dear academics/scientists, please cite DyMMer with the following bibliographical entry:</p>
-
-<blockquote>
-<p>@inproceedings{DyMMer,
- author = {Bezerra, Carla I. M. and Barbosa, Jefferson and Freires, Joao Holanda and Andrade, Rossana M. C. and Monteiro, Jos{\'e} Maria},
- title = {DyMMer: A Measurement-based Tool to Support Quality Evaluation of DSPL Feature Models},
- booktitle = {Proceedings of the 20th International Systems and Software Product Line Conference},
- series = {SPLC '16},
- year = {2016},
- isbn = {978-1-4503-4050-2},
- location = {Beijing, China},
- pages = {314--317},
- numpages = {4},
- url = {<a href="http://doi.acm.org/10.1145/2934466.2962730">http://doi.acm.org/10.1145/2934466.2962730</a>},
- doi = {10.1145/2934466.2962730},
- acmid = {2962730},
- publisher = {ACM},
- address = {New York, NY, USA},
- keywords = {dynamic software product lines, feature models, quality measures},
-} </p>
-</blockquote>
-
-<h3>
-<a id="news" class="anchor" href="#news" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>News</h3>
-
-<ul>
-<li>We are migrating to github and the repos/pages will be regularly updated in the next few days; and</li>
-<li>DyMMer was part of a tutorial at Software Product Line Conference 2016 (SPLC'16).</li>
-</ul>
-
-<h3>
-<a id="instructions" class="anchor" href="#instructions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Instructions</h3>
-
-<p>As stated above, we are moving to github. Meanwhile, you can play with DyMMer following the instructions located here:</p>
+			<ul>
+				<li><a class="buttons github"
+					href="https://github.com/anderson-uchoa/DyMMer">View On GitHub</a></li>
+			</ul>
 
 
-<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+		</header>
+		<section>
+			<p>
+				<strong>DyMMer-NFP</strong> tool is an extension of the DyMMer tool
+				to support the modeling of NFPs and multiple contextual adaptation
+				scenarios in feature models. DyMMer-NFP uses a catalog with 39 NFPs.
+				Each NFP in this catalog were mapped according to each quality
+				characteristic and sub-characteristics presented in the ISO/IEC
+				25010 SQuaRE product quality model. To specify the interdependencies
+				between NFPs and features, DyMMer-NFP has used the concept of
+				contribution links. In order to make it easier to evaluate
+				DyMMer-NFP two datasets, called AFFOgaTO and ESPREssO, were made
+				available for free.".
+			</p>
 
-<p>Persons involved in the development of DyMMer are (in alphabetical order):</p>
+			<p>
+				DyMMer was created at Federal University of Ceará by Anderson Uchôa,
+				Luan Lima and Holanda Freitas with the supervision of <a
+					href="http://lattes.cnpq.br/4277471687235814">Dra. Carla I. M.
+					Bezerra</a> and is now jointly and openly managed by STRATEGy Group
+				(SofTware Reuse and QuAliTy Group) at <a
+					href="http://www.quixada.ufc.br">Federal University of Ceará</a>,
+				Quixadá, Brazil.
+			</p>
 
-<ul>
-<li>Anderson G. Uchôa (Federal University of Ceará, Brazil)</li>
-<li>Carla I. M. Bezerra (Federal University of Ceará, Brazil)</li>
-<li>Jefferson Barbosa (Federal University of Ceará, Brazil)</li>
-<li>João Holanda Freires (Federal University of Ceará, Brazil)</li>
-<li>José Maria Monteiro (Federal University of Ceará, Brazil)</li>
-<li>Rossana M. C. Andrade (Federal University of Ceará, Brazil)</li>
-<li>Luan P. Lima (Federal University of Ceará, Brazil) </li>
-</ul>
+			<p>Dear academics/scientists, please cite DyMMer-NFP with the
+				following bibliographical entry:</p>
 
-<p><strong>Do not hesitate to contact us in case of questions or other requests.</strong></p>
+			<blockquote>
+				<p>@inproceedings{uchoa2017dymmer, title={DyMMer-NFP: Modeling
+					Non-functional Properties and Multiple Context Adaptation Scenarios
+					in Software Product Lines}, author={Uch{\^o}a, Anderson G and Lima,
+					Luan P and Bezerra, Carla IM and Monteiro, Jos{\'e} Maria and
+					Andrade, Rossana MC}, booktitle={Proceedings of the 16th
+					nternational Conference on Software Reuse (ICSR)},
+					pages={175--183},
+					url={https://doi.org/10.1007/978-3-319-56856-0\_12},
+					doi={10.1007/978-3-319-56856-0\_12}, year={2017},
+					publisher={Springer International Publishing}, address={Cham}</p>
+			</blockquote>
 
-<h3>
-<a id="publications" class="anchor" href="#publications" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Publications</h3>
+			<h3>
+				<a id="news" class="anchor" href="#news" aria-hidden="true"><span
+					aria-hidden="true" class="octicon octicon-link"></span></a>News
+			</h3>
 
-<p>Bezerra, Carla IM, et al. "DyMMer: a measurement-based tool to support quality evaluation of DSPL feature models." Proceedings of the 20th International Systems and Software Product Line Conference. ACM, 2016.</p>
-      </section>
-      <footer>
-        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
-      </footer>
-    </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-		
-  </body>
+			<ul>
+				<li>We are migrating to github and the repos/pages will be
+					regularly updated in the next few days; and</li>
+				<li>DyMMer was part of a tutorial at Software Product Line
+					Conference 2016 (SPLC'16).</li>
+			</ul>
+
+			<h3>
+				<a id="instructions" class="anchor" href="#instructions"
+					aria-hidden="true"><span aria-hidden="true"
+					class="octicon octicon-link"></span></a>Instructions
+			</h3>
+
+			<p>As stated above, we are moving to github. Meanwhile, you can
+				play with DyMMer-NFP following the instructions located here:</p>
+
+
+			<a id="authors-and-contributors" class="anchor"
+				href="#authors-and-contributors" aria-hidden="true"><span
+				aria-hidden="true" class="octicon octicon-link"></span></a>Authors and
+			Contributors
+			</h3>
+
+			<p>Persons involved in the development of DyMMer-NFP are (in
+				alphabetical order):</p>
+
+			<ul>
+				<li>Anderson G. Uchôa (Federal University of Ceará, Brazil)</li>
+				<li>Carla I. M. Bezerra (Federal University of Ceará, Brazil)</li>
+				<li>Jefferson Barbosa (Federal University of Ceará, Brazil)</li>
+				<li>João Holanda Freires (Federal University of Ceará, Brazil)</li>
+				<li>José Maria Monteiro (Federal University of Ceará, Brazil)</li>
+				<li>Rossana M. C. Andrade (Federal University of Ceará, Brazil)</li>
+				<li>Luan P. Lima (Federal University of Ceará, Brazil)</li>
+			</ul>
+
+			<p>
+				<strong>Do not hesitate to contact us in case of questions
+					or other requests.</strong>
+			</p>
+
+			<h3>
+				<a id="publications" class="anchor" href="#publications"
+					aria-hidden="true"><span aria-hidden="true"
+					class="octicon octicon-link"></span></a>Publications
+			</h3>
+			<p>Uchôa, A. G., Lima, L. P., Bezerra, C. I., Monteiro, J. M., &
+				Andrade, R. M. DyMMer-NFP: Modeling Non-functional Properties and
+				Multiple Context Adaptation Scenarios in Software Product Lines. In
+				International Conference on Software Reuse. Springer, Cham, 2017.
+				pp. 175-183</p>
+			<p>Bezerra, Carla IM, et al. "DyMMer: a measurement-based tool to
+				support quality evaluation of DSPL feature models." Proceedings of
+				the 20th International Systems and Software Product Line Conference.
+				ACM, 2016.</p>
+		</section>
+		<footer>
+			<p>
+				<small>Hosted on <a href="https://pages.github.com">GitHub
+						Pages</a> using the Dinky theme
+				</small>
+			</p>
+		</footer>
+	</div>
+	<!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+</body>
 </html>
